@@ -20,7 +20,7 @@ class MoveCommand(Command):
 
 
     def initialize(self):
-        offset = self.distance * float(Config('DriveTrain/ticksPerInch'))
+        offset = self.distance * Config('DriveTrain/ticksPerInch')
         targetPositions = []
         sign = 1
         for position in subsystems.drivetrain.getPositions():

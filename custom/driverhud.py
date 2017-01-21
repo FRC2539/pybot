@@ -3,7 +3,6 @@ The DriveHUD displays useful information on the driver dashboard, and can read
 information from the dashboard and provide it to the program.
 '''
 
-
 from wpilib.sendablechooser import SendableChooser
 from wpilib.smartdashboard import SmartDashboard
 from wpilib.command import Scheduler

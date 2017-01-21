@@ -4,6 +4,7 @@ from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 
 from custom import driverhud
+from controller import layout
 import subsystems
 
 
@@ -14,6 +15,7 @@ class KryptonBot(CommandBasedRobot):
         '''Set up everything we need for a working robot.'''
 
         subsystems.init()
+        layout.init()
         driverhud.init()
 
 
