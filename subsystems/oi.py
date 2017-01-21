@@ -6,6 +6,7 @@ from controller import logicalaxes
 from custom.config import Config
 
 from commands.drivecommand import DriveCommand
+from commands.movecommand import MoveCommand
 
 class OI(Subsystem):
     '''Handles joystick (operator input) interaction with the commands.'''
@@ -28,6 +29,7 @@ class OI(Subsystem):
         logicalaxes.driveY = self.mainController.LeftY
         logicalaxes.driveRotate = self.mainController.RightX
 
-        self.mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseMaxSpeed')))
+        self.mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+        self.mainController.Y.whenPressed(MoveCommand(24))
 
         self.backupController = LogitechDualShock(1)
