@@ -4,18 +4,19 @@ from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 
 from custom import driverhud
-from controller import layout
+import controller.layout
 import subsystems
 
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
 
+
     def robotInit(self):
         '''Set up everything we need for a working robot.'''
 
         subsystems.init()
-        layout.init()
+        controller.layout.init()
         driverhud.init()
 
 
@@ -23,6 +24,7 @@ class KryptonBot(CommandBasedRobot):
         '''This function is called each time autonomous mode starts.'''
 
         # Schedule the autonomous command
+        print("autonomous")
         driverhud.getAutonomousProgram().start()
 
 

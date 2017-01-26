@@ -5,6 +5,7 @@ from custom.config import Config
 
 from commands.drivecommand import DriveCommand
 from commands.autonomous.movecommand import MoveCommand
+from commands.autonomous.turncommand import TurnCommand
 
 def init():
     '''

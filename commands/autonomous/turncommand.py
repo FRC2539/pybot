@@ -16,12 +16,12 @@ class TurnCommand(MoveCommand):
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
 
-        newPositions = []
-        displacement = self._calculateDisplacement()
+        offset = self._calculateDisplacement()
+        targetPositions = []
         for position in subsystems.drivetrain.getPositions():
-            newPositions.append(position + displacement)
+            targetPositions.append(position + offset)
 
-        subsystems.drivetrain.setPositions(newPositions)
+        subsystems.drivetrain.setPositions(targetPositions)
 
 
     def _calculateDisplacement(self):
