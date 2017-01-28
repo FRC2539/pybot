@@ -11,7 +11,6 @@ import subsystems
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
 
-
     def robotInit(self):
         '''Set up everything we need for a working robot.'''
 
@@ -24,7 +23,6 @@ class KryptonBot(CommandBasedRobot):
         '''This function is called each time autonomous mode starts.'''
 
         # Schedule the autonomous command
-        print("autonomous")
         driverhud.getAutonomousProgram().start()
 
 

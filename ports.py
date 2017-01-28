@@ -9,9 +9,13 @@ class PortsList:
     pass
 
 drivetrain = PortsList()
+shooter = PortsList()
+pickup = PortsList()
 
 '''CAN IDs for motors'''
 drivetrain.frontLeftMotorID = 1
 drivetrain.frontRightMotorID = 3
 drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
+shooter.motorID = 5
+pickup.motorID = 6

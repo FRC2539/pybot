@@ -8,16 +8,20 @@ from wpilib.robotbase import RobotBase
 
 from .drivetrain import DriveTrain
 from .monitor import Monitor
+from .shooter import shooter
+from .pickup import Pickup
 
 drivetrain = None
 monitor = None
+shooter = None
+pickup = None
 
 def init():
     '''
     Creates all subsystems. You must run this before any commands are
     instantiated. Do not run it more than once.
     '''
-    global drivetrain, monitor
+    global drivetrain, monitor, shooter, pickup
 
     '''
     The default tests that are run before deploy call startCompetition multiple
@@ -29,3 +33,5 @@ def init():
 
     drivetrain = DriveTrain()
     monitor = Monitor()
+    shooter = Shooter()
+    pickup = Pickup()

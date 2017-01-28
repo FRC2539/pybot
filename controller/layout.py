@@ -4,6 +4,8 @@ from . import logicalaxes
 from custom.config import Config
 
 from commands.drivecommand import DriveCommand
+from commands.shootercommand import ShooterCommand
+from commands.pickupcommand import PickupCommand
 from commands.autonomous.movecommand import MoveCommand
 from commands.autonomous.turncommand import TurnCommand
 
@@ -26,5 +28,7 @@ def init():
 
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     mainController.Y.whenPressed(MoveCommand(24))
+    mainController.B.toggleWhenPressed(ShooterCommand(Config('Shooter/shooterSpeed')))
+    mainController.A.toggleWhenPressed(PickupCommand())
 
     backupController = LogitechDualShock(1)
