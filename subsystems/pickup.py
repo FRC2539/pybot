@@ -10,8 +10,8 @@ class Pickup(DebuggableSubsystem):
     A subsystem designed for picking up balls from the floor.
     '''
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self):
+        super().__init__('Pickup')
 
         self.motors = [
             CANTalon(ports.pickup.motorID)

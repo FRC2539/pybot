@@ -8,7 +8,7 @@ from wpilib.robotbase import RobotBase
 
 from .drivetrain import DriveTrain
 from .monitor import Monitor
-from .shooter import shooter
+from .shooter import Shooter
 from .pickup import Pickup
 
 drivetrain = None

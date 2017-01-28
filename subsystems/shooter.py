@@ -10,8 +10,8 @@ class Shooter(DebuggableSubsystem):
     A system designed for shooting balls into high goal.
     '''
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self):
+        super().__init__('Shooter')
 
         self.motors = [
             CANTalon(ports.shooter.motorID)
@@ -30,7 +30,7 @@ class Shooter(DebuggableSubsystem):
         self._configureMotors()
         for motor in self.activeMotors:
             motor.setControlMode(CANTalon.ControlMode.Speed)
-            motor.setPIDF(0, 0, 0, .9)
+            motor.setPID(0, 0, 0, .9)
 
 
     def setShooterSpeed(self, speed):

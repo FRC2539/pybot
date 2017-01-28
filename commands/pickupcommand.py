@@ -5,7 +5,7 @@ import subsystems
 class PickupCommand(Command):
     # Initialize the named command.
     def __init__(self):
-        super().__init__('PickupCommand)
+        super().__init__('PickupCommand')
 
         self.requires(subsystems.pickup)
 
