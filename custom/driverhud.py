@@ -8,8 +8,6 @@ from wpilib.smartdashboard import SmartDashboard
 from wpilib.command import Scheduler
 
 from commands.autonomous.default import DefaultAutonomousCommandGroup
-from commands.autonomous.movecommand import MoveCommand
-from commands.autonomous.turncommand import TurnCommand
 from commands.clearalertcommand import ClearAlertCommand
 
 autonChooser = None
@@ -35,9 +33,6 @@ def init():
     '''
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', DefaultAutonomousCommandGroup())
-    autonChooser.addObject('Turn Left', TurnCommand(-90))
-    autonChooser.addObject('Turn Right', TurnCommand(90))
-    autonChooser.addObject('Drive Forward', MoveCommand(48))
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 

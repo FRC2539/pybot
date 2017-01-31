@@ -28,7 +28,7 @@ def init():
 
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     mainController.Y.whenPressed(MoveCommand(24))
-    mainController.B.toggleWhenPressed(ShooterCommand(Config('Shooter/shooterSpeed')))
+    mainController.B.toggleWhenPressed(ShooterCommand(Config('Shooter/speed')))
     mainController.A.toggleWhenPressed(PickupCommand())
 
     backupController = LogitechDualShock(1)
