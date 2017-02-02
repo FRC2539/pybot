@@ -4,7 +4,6 @@ from networktables import NetworkTable
 
 from robotpy_ext.common_drivers.navx.ahrs import AHRS
 from custom.config import Config
-from commands.drivecommand import DriveCommand
 import ports
 
 class BaseDrive(DebuggableSubsystem):
@@ -68,6 +67,8 @@ class BaseDrive(DebuggableSubsystem):
         subsystem, we will drive via joystick using the max speed stored in
         Config.
         '''
+        from commands.drivecommand import DriveCommand
+
         self.setDefaultCommand(DriveCommand(Config('DriveTrain/manualMaxSpeed')))
 
 

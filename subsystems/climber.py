@@ -1,0 +1,29 @@
+from .debuggablesubsystem import DebuggableSubsystem
+from ctre import CANTalon
+
+import ports
+
+class Climber(DebuggableSubsystem):
+    '''
+    A subsystem designed to climb a rope.
+    '''
+
+    def __init__(self):
+        super().__init__('Climber')
+
+        self.motor = CANTalon(ports.climber.motorID)
+        self.motor.enableBrakeMode(True)
+        self.motor.setSafetyEnabled(False)
+        self.motor.setControlMode(CANTalon.ControlMode.PercentVbus)
+
+
+    def startClimbing(self):
+        self.motor.set(1)
+
+
+    def stop(self):
+        self.motor.set(0)
+
+
+    def atTop(self):
+        return False
