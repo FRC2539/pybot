@@ -30,3 +30,13 @@ pickup.motorID = 6
 climber = PortsList()
 
 climber.motorID = 7
+climber.sensorID = 0
+
+feeder = PortsList()
+
+feeder.motorID = 8
+feeder.sensorID = 1
+
+gear = PortsList()
+
+gear.sensorID = 2

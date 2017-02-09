@@ -1,5 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
+from wpilib.digitalinput import DigitalInput
 
 import ports
 
@@ -15,6 +16,7 @@ class Climber(DebuggableSubsystem):
         self.motor.enableBrakeMode(True)
         self.motor.setSafetyEnabled(False)
         self.motor.setControlMode(CANTalon.ControlMode.PercentVbus)
+        self.sensor = DigitalInput(ports.climber.sensorID)
 
 
     def startClimbing(self):
@@ -26,4 +28,7 @@ class Climber(DebuggableSubsystem):
 
 
     def atTop(self):
-        return False
+        if self.sensor.get() == False:
+            return False
+        else:
+            return True

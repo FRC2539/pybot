@@ -11,19 +11,23 @@ from .monitor import Monitor
 from .shooter import Shooter
 from .pickup import Pickup
 from .climber import Climber
+from .feeder import Feeder
+from .gear import Gear
 
 drivetrain = None
 monitor = None
 shooter = None
 pickup = None
 climber = None
+feeder = None
+gear = None
 
 def init():
     '''
     Creates all subsystems. You must run this before any commands are
     instantiated. Do not run it more than once.
     '''
-    global drivetrain, monitor, shooter, pickup, climber
+    global drivetrain, monitor, shooter, pickup, climber, feeder, gear
 
     '''
     The default tests that are run before deploy call startCompetition multiple
@@ -38,3 +42,5 @@ def init():
     shooter = Shooter()
     pickup = Pickup()
     climber = Climber()
+    feeder = Feeder()
+    gear = Gear()
