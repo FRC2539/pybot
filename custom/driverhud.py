@@ -9,6 +9,7 @@ from wpilib.command import Scheduler
 
 from commands.autonomous.default import DefaultAutonomousCommandGroup
 from commands.clearalertcommand import ClearAlertCommand
+from commands.autonomous.movecommand import MoveCommand
 
 autonChooser = None
 clearer = ClearAlertCommand()
@@ -33,6 +34,7 @@ def init():
     '''
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', DefaultAutonomousCommandGroup())
+    autonChooser.addObject('Cross Baseline', MoveCommand(60)) #Check Later
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
