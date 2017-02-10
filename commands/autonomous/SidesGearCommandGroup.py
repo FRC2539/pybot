@@ -9,7 +9,7 @@ class SidesGearCommandGroup(CommandGroup):
         '''self.AddSequential(MoveCommand())
         self.AddSequential(TurnCommand(Config("Autonomous/robotLocation")))
         self.AddSequential(MoveCommand(NetworkTables(cameraTarget)))
-        self.AddSequential(releaseGear)'''
+        self.AddSequential(moveToLiftCommand())'''
 
 
 

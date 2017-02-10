@@ -32,6 +32,17 @@ class Shooter(DebuggableSubsystem):
             motor.setControlMode(CANTalon.ControlMode.Speed)
             motor.setPID(0, 0, 0, .9)
 
+        self.boilerVision = NetworkTables.getTable('cameraTarget')
+
+
+    def IsTargetVisible(self):
+        return self.boilerVision.getBoolean('boilerVisible')
+
+    def offsetFromTarget(self):
+        return self.boilerVision.getValue('boilerCenter')
+
+    def distanceToTarget(self):
+        return self.boilerVision.getValue('boilerDistance')
 
     def setShooterSpeed(self, speed):
         self.shooterSpeed = speed

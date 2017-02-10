@@ -1,6 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from networktables import NetworkTables
 from custom.config import Config
+from subsystems.drivetrain import DriveTrain
 import ports
 
 class Gear(DebuggableSubsystem):
@@ -15,10 +16,12 @@ class Gear(DebuggableSubsystem):
 
     def hasGear(self):
         return ports.gear.sensorID
-    def visionStuff(self):
-        if self.liftVision.getBoolean('liftVisible'):
-            return True
-        if self.liftVision.getValue('liftCenter') < 0:
-            return True
-        if self.liftVision.getValue('liftDistance') < 10:
-            return True
+
+    def IsTargetVisible(self):
+        return self.liftVision.getBoolean('liftVisible')
+
+    def offsetFromTarget(self):
+        return self.liftVision.getValue('liftCenter')
+
+    def distanceToTarget(self):
+        return self.liftVision.getValue('liftDistance')
