@@ -3,3 +3,4 @@ __pycache__
 *.kdev4
 tests
 .deploy_cfg
+*_cache

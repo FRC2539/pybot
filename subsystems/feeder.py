@@ -31,7 +31,7 @@ class Feeder(DebuggableSubsystem):
 
     def isEmpty(self):
         ports.feeder.sensorID
-    def feedBalls(self):
+    def start(self):
         for motor in self.activeMotors:
             motor.set(self.motorVoltage)
     def stop(self):

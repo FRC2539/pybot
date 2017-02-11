@@ -4,18 +4,13 @@ from custom.config import Config
 
 from ..drive.movecommand import MoveCommand
 from ..drive.turncommand import TurnCommand
-from ..drive.gotoliftcommand import GoToLiftCommand
+from commands.gear.gotoliftcommand import GoToLiftCommand
+from commands.gear.turntoliftcommand import TurnToLiftCommand
 
 class HangGearCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('HangGearCommandGroup')
 
-        self.addSequential(MoveCommand(48))
-        self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
+        self.addSequential(TurnToLiftCommand())
         self.addSequential(GoToLiftCommand())
-
-
-
-
-

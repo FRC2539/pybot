@@ -17,6 +17,11 @@ class FireCommand(Command):
         subsystems.shooter.setShooterSpeed(self.shootingSpeed)
         subsystems.feeder.start()
 
+    def execute(self):
+        if subsystems.shooter.getShooterSpeed() == self.shootingSpeed:
+            subsystems.feeder.start()
+        else:
+            subsystems.feeder.stop()
 
     def isFinished(self):
         return subsystems.feeder.isEmpty()
