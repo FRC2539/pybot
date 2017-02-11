@@ -1,12 +1,14 @@
 from wpilib.command import Command
+
 from .turncommand import TurnCommand
 from .movecommand import MoveCommand
+
 import subsystems
 
-class moveToLiftCommand(Command):
+class GoToLiftCommand(Command):
 
     def __init__(self):
-        super().__init__('MoveToLiftCommand')
+        super().__init__('GoToLiftCommand')
 
 
     def initialize(self):

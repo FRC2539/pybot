@@ -2,6 +2,7 @@
 
 from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
+from wpilib.robotbase import RobotBase
 
 from custom import driverhud
 import controller.layout
@@ -13,6 +14,9 @@ class KryptonBot(CommandBasedRobot):
 
     def robotInit(self):
         '''Set up everything we need for a working robot.'''
+
+        if RobotBase.isSimulation():
+            import mockdata
 
         subsystems.init()
         controller.layout.init()

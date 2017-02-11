@@ -1,6 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
-from networktables import NetworkTable
+from networktables import NetworkTables
 
 from custom.config import Config
 import ports

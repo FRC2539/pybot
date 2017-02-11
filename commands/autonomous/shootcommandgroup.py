@@ -1,9 +1,10 @@
 from wpilib.command import CommandGroup
-from .movecommand import MoveCommand
-from .turncommand import TurnCommand
+
+from commands.shooter.firecommand import FireCommand
 
 class ShootCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('ShootCommandGroup')
-        '''self.AddSequential(Shoot())'''
+
+        self.addSequential(FireCommand())

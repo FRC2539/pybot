@@ -7,9 +7,10 @@ from wpilib.sendablechooser import SendableChooser
 from wpilib.smartdashboard import SmartDashboard
 from wpilib.command import Scheduler
 
-from commands.autonomous.default import DefaultAutonomousCommandGroup
+from wpilib.command import InstantCommand
 from commands.clearalertcommand import ClearAlertCommand
-from commands.autonomous.movecommand import MoveCommand
+from commands.drive.movecommand import MoveCommand
+from commands.autonomous.hanggearcommandgroup import HangGearCommandGroup
 
 autonChooser = None
 clearer = ClearAlertCommand()
@@ -33,8 +34,9 @@ def init():
     at the wrong time as the default command.
     '''
     autonChooser = SendableChooser()
-    autonChooser.addDefault('Do Nothing', DefaultAutonomousCommandGroup())
-    autonChooser.addObject('Cross Baseline', MoveCommand(60)) #Check Later
+    autonChooser.addDefault('Do Nothing', InstantCommand())
+    autonChooser.addObject('Cross Baseline', MoveCommand(82))
+    autonChooser.addObject('Hang Gear', HangGearCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
