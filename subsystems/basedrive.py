@@ -34,6 +34,7 @@ class BaseDrive(DebuggableSubsystem):
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
+        self.number = 0
         self.activeMotors = []
         self._configureMotors()
 
@@ -146,6 +147,10 @@ class BaseDrive(DebuggableSubsystem):
 
         error /= len(self.activeMotors)
 
+        if self.number == 0:
+            self.number = 25
+            print(error)
+        self.number -= 1
         return error <= tolerance
 
 
@@ -224,7 +229,7 @@ class BaseDrive(DebuggableSubsystem):
             self.maxSpeed = speed
 
         '''If we can't use encoders, attempt to approximate that speed.'''
-        self.maxPercentVBus = speed / self.maxSpeed
+        self.maxPercentVBus = speed / 100
 
         if self.useEncoders:
             self._setMode(CANTalon.ControlMode.Speed)

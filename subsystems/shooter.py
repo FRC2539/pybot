@@ -35,7 +35,7 @@ class Shooter(DebuggableSubsystem):
         self.boilerVision = NetworkTables.getTable('cameraTarget')
 
 
-    def IsTargetVisible(self):
+    def isVisible(self):
         return self.boilerVision.getBoolean('boilerVisible')
 
     def offsetFromTarget(self):

@@ -21,10 +21,19 @@ class DriveCommand(Command):
 
 
     def execute(self):
+        x = logicalaxes.driveX.get()
+        y = logicalaxes.driveY.get()
+        rotate = logicalaxes.driveRotate.get()
+        if x > .05:
+            x = .25 + .75 * x
+        if y > .05:
+            y = .25 + .75 * y
+        if rotate > .05:
+            rotate = .35 +.65 * rotate
         subsystems.drivetrain.move(
-            logicalaxes.driveX.get(),
-            logicalaxes.driveY.get(),
-            logicalaxes.driveRotate.get()
+            x,
+            y,
+            rotate
         )
 
 

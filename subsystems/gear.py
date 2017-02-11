@@ -17,7 +17,8 @@ class Gear(DebuggableSubsystem):
     def hasGear(self):
         return ports.gear.sensorID
 
-    def IsTargetVisible(self):
+    def isVisible(self):
+        print(self.liftVision.getBoolean('liftVisible'))
         return self.liftVision.getBoolean('liftVisible')
 
     def offsetFromTarget(self):

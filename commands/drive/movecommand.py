@@ -13,7 +13,7 @@ class MoveCommand(Command):
         if name is None:
             name = 'Move %f inches' % distance
 
-        super().__init__(name, 0.2)
+        super().__init__(name, .2)
 
         self.distance = distance
         self.requires(subsystems.drivetrain)

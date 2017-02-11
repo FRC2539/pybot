@@ -9,14 +9,14 @@ import math
 class TurnCommand(MoveCommand):
     '''Allows autonomous turning using the drive base encoders.'''
 
-    def __init__(self, degrees):
+    def __init__(self, degrees, name=None):
         super().__init__(degrees, 'Turn %f degrees' % degrees)
 
 
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
 
-        offset = self._calculateDisplacement()
+        offset = self._calculateDisplacement() * 3
         targetPositions = []
         for position in subsystems.drivetrain.getPositions():
             targetPositions.append(position + offset)
@@ -24,6 +24,9 @@ class TurnCommand(MoveCommand):
         subsystems.drivetrain.setPositions(targetPositions)
 
 
+    def end(self):
+        print("Successful End")
+        super().end()
     def _calculateDisplacement(self):
         '''
         In order to avoid having a separate ticksPerDegree, we calculate it

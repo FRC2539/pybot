@@ -10,7 +10,7 @@ from wpilib.command import Scheduler
 from wpilib.command import InstantCommand
 from commands.clearalertcommand import ClearAlertCommand
 from commands.drive.movecommand import MoveCommand
-from commands.autonomous.hanggearcommandgroup import HangGearCommandGroup
+from commands.gear.startwithgearcommandgroup import StartWithGearCommandGroup
 
 autonChooser = None
 clearer = ClearAlertCommand()
@@ -36,7 +36,7 @@ def init():
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', InstantCommand())
     autonChooser.addObject('Cross Baseline', MoveCommand(82))
-    autonChooser.addObject('Hang Gear', HangGearCommandGroup())
+    autonChooser.addObject('Hang Gear', StartWithGearCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 

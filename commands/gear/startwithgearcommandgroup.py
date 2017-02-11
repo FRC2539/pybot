@@ -12,8 +12,8 @@ from commands.gear.checkforgearcommand import CheckForGearCommand
 class StartWithGearCommandGroup(CommandGroup):
 
     def __init__(self):
-        super().__init__('HangGearCommandGroup')
+        super().__init__('StartWithGearCommandGroup')
 
-        self.addSequential(MoveCommand(48))
+        #self.addSequential(MoveCommand(48))
         self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
         self.addSequential(CheckForGearCommand())

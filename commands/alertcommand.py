@@ -1,11 +1,12 @@
 from wpilib.command import InstantCommand
 
-import custom.driverhud as driverhud
+from custom import driverhud
 
 class AlertCommand(InstantCommand):
 
     def __init__(self, msg):
         '''Show an alert on the dashboard'''
+        super().__init__('Alert: %s' % msg)
 
         self.msg = msg
 
