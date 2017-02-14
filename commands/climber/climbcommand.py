@@ -10,9 +10,10 @@ class PickupCommand(Command):
         self.requires(subsystems.climber)
 
     def initialize(self):
-        subsystems.climber.startClimbing()
+        subsystems.climber.start()
 
     def isFinished(self):
         return subsystems.climber.atTop()
+
     def end(self):
         subsystems.climber.stop()

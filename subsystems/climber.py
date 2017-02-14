@@ -19,7 +19,7 @@ class Climber(DebuggableSubsystem):
         self.sensor = DigitalInput(ports.climber.sensorID)
 
 
-    def startClimbing(self):
+    def start(self):
         self.motor.set(1)
 
 

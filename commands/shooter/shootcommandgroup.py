@@ -1,8 +1,8 @@
 from wpilib.command import CommandGroup
 
 from commands.shooter.firecommand import FireCommand
-from commands.drive.gotoboilercommand import GoToBoilerCommand
-from commands.drive.turntoboilercommand import TurnToBoilerCommand
+from commands.shooter.gotoboilercommand import GoToBoilerCommand
+from commands.shooter.turntoboilercommand import TurnToBoilerCommand
 
 class ShootCommandGroup(CommandGroup):
 

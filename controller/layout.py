@@ -6,6 +6,7 @@ from custom.config import Config
 from commands.drive.drivecommand import DriveCommand
 from commands.pickup.pickupcommand import PickupCommand
 from commands.shooter.firecommand import FireCommand
+from commands.gear.hanggearcommandgroup import HangGearCommandGroup
 
 def init():
     '''
@@ -25,7 +26,8 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-    mainController.B.whileHeld(FireCommand(Config('Shooter/speed')))
+    mainController.RightTrigger.whileHeld(FireCommand(Config('Shooter/speed')))
     mainController.A.toggleWhenPressed(PickupCommand())
+    mainController.Y.whenPressed(HangGearCommandGroup())
 
     backupController = LogitechDualShock(1)

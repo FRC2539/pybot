@@ -1,4 +1,4 @@
-from .movecommand import MoveCommand
+from commands.drive.movecommand import MoveCommand
 
 import subsystems
 

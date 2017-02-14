@@ -1,4 +1,4 @@
-from .turncommand import TurnCommand
+from commands.drive.turncommand import TurnCommand
 
 import subsystems
 

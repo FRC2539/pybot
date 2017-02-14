@@ -30,7 +30,7 @@ class Shooter(DebuggableSubsystem):
         self._configureMotors()
         for motor in self.activeMotors:
             motor.setControlMode(CANTalon.ControlMode.Speed)
-            motor.setPID(0, 0, 0, .9)
+            motor.setPID(Config('Shooter/Speed/P'), Config('Shooter/Speed/I'), Config('Shooter/Speed/D'), Config('Shooter/Speed/F'))
 
         self.boilerVision = NetworkTables.getTable('cameraTarget')
 
