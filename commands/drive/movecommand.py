@@ -31,8 +31,9 @@ class MoveCommand(Command):
 
 
     def isFinished(self):
-        return self.isTimedOut() and subsystems.drivetrain.atPosition()
+        return self.isTimedOut() and subsystems.drivetrain.atPosition(100)
 
 
     def end(self):
+        print("Successful End")
         subsystems.drivetrain.stop()

@@ -148,8 +148,10 @@ class BaseDrive(DebuggableSubsystem):
         error /= len(self.activeMotors)
 
         if self.number == 0:
-            self.number = 25
-            print(error)
+            self.number = 4
+            error1 = self.activeMotors[0].getError()
+            error2 = self.activeMotors[1].getError()
+            print("%s : %s" % (error1, error2))
         self.number -= 1
         return error <= tolerance
 

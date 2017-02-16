@@ -34,7 +34,7 @@ def init():
     at the wrong time as the default command.
     '''
     autonChooser = SendableChooser()
-    autonChooser.addDefault('Do Nothing', InstantCommand())
+    autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
     autonChooser.addObject('Cross Baseline', MoveCommand(82))
     autonChooser.addObject('Hang Gear', StartWithGearCommandGroup())
 
