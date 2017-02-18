@@ -2,7 +2,7 @@ from wpilib.command import Command
 
 import subsystems
 
-class PickupCommand(Command):
+class ClimbCommand(Command):
     # Initialize the named command.
     def __init__(self):
         super().__init__('PickupCommand')

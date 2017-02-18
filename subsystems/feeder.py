@@ -30,7 +30,8 @@ class Feeder(DebuggableSubsystem):
             motor.setControlMode(CANTalon.ControlMode.PercentVbus)
 
     def isEmpty(self):
-        ports.feeder.sensorID
+        return False
+        #return ports.feeder.sensorID
     def start(self):
         for motor in self.activeMotors:
             motor.set(self.motorVoltage)

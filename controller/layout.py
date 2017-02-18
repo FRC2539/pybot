@@ -7,6 +7,7 @@ from commands.drive.drivecommand import DriveCommand
 from commands.pickup.pickupcommand import PickupCommand
 from commands.shooter.firecommand import FireCommand
 from commands.gear.hanggearcommandgroup import HangGearCommandGroup
+from commands.climber.climbcommand import ClimbCommand
 
 def init():
     '''
@@ -29,5 +30,6 @@ def init():
     mainController.RightTrigger.whileHeld(FireCommand(Config('Shooter/speed')))
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.Y.whenPressed(HangGearCommandGroup())
+    mainController.LeftTrigger.whileHeld(ClimbCommand())
 
     backupController = LogitechDualShock(1)

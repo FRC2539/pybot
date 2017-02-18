@@ -17,12 +17,14 @@ class Shooter(DebuggableSubsystem):
             CANTalon(ports.shooter.motorID)
         ]
 
-        self.shooterSpeed = 10000
+        self.shooterSpeed = Config('Shooter/speed')
 
         for motor in self.motors:
             motor.setSafetyEnabled(False)
             motor.enableBrakeMode(False)
+            motor.reverseSensor(True)
 
+        self.number = 5
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
@@ -31,7 +33,6 @@ class Shooter(DebuggableSubsystem):
         for motor in self.activeMotors:
             motor.setControlMode(CANTalon.ControlMode.Speed)
             motor.setPID(Config('Shooter/Speed/P'), Config('Shooter/Speed/I'), Config('Shooter/Speed/D'), Config('Shooter/Speed/F'))
-
         self.boilerVision = NetworkTables.getTable('cameraTarget')
 
 
@@ -48,6 +49,12 @@ class Shooter(DebuggableSubsystem):
         self.shooterSpeed = speed
 
     def getShooterSpeed(self):
+
+        if self.number == 0:
+            self.number = 1
+            error1 = self.activeMotors[0].getError()
+            print(error1)
+        self.number -= 1
         return self.activeMotors[0].getSpeed()
 
     def startShooting(self):

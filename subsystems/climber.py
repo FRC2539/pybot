@@ -28,7 +28,8 @@ class Climber(DebuggableSubsystem):
 
 
     def atTop(self):
-        if self.sensor.get() == False:
-            return False
-        else:
-            return True
+        return False
+        #if self.sensor.get() == False:
+        #   return False
+        #else:
+        #  return True
