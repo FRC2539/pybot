@@ -10,11 +10,14 @@ class PortsList:
 
 drivetrain = PortsList()
 
-'''CAN IDs for motors'''
+# CAN IDs for motors
 drivetrain.frontLeftMotorID = 1
 drivetrain.frontRightMotorID = 3
 drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
+
+# Analog Input
+drivetrain.ultrasonicPort = 3
 
 
 shooter = PortsList()
@@ -32,10 +35,12 @@ climber = PortsList()
 climber.motorID = 7
 climber.sensorID = 0
 
+
 feeder = PortsList()
 
 feeder.motorID = 8
 feeder.sensorID = 1
+
 
 gear = PortsList()
 
