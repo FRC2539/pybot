@@ -5,7 +5,7 @@ import subsystems
 class ClimbCommand(Command):
     # Initialize the named command.
     def __init__(self):
-        super().__init__('PickupCommand')
+        super().__init__('Climb')
 
         self.requires(subsystems.climber)
 

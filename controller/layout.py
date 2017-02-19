@@ -5,9 +5,10 @@ from custom.config import Config
 
 from commands.drive.drivecommand import DriveCommand
 from commands.pickup.pickupcommand import PickupCommand
-from commands.shooter.firecommand import FireCommand
+from commands.shooter.shootcommandgroup import ShootCommandGroup
 from commands.gear.hanggearcommandgroup import HangGearCommandGroup
 from commands.climber.climbcommand import ClimbCommand
+from commands.gear.gearinbotcommand import GearInBotCommand
 
 def init():
     '''
@@ -27,9 +28,9 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-    mainController.RightTrigger.whileHeld(FireCommand(Config('Shooter/speed')))
+    mainController.RightTrigger.toggleWhenPressed(ShootCommandGroup())
     mainController.A.toggleWhenPressed(PickupCommand())
-    mainController.Y.whenPressed(HangGearCommandGroup())
-    mainController.LeftTrigger.whileHeld(ClimbCommand())
+    mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
+    mainController.LeftBumper.whenPressed(GearInBotCommand())
 
     backupController = LogitechDualShock(1)

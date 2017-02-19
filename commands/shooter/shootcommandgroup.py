@@ -1,8 +1,10 @@
 from wpilib.command import CommandGroup
+from custom.config import Config
 
 from commands.shooter.firecommand import FireCommand
 from commands.shooter.gotoboilercommand import GoToBoilerCommand
 from commands.shooter.turntoboilercommand import TurnToBoilerCommand
+
 
 class ShootCommandGroup(CommandGroup):
 
@@ -11,4 +13,4 @@ class ShootCommandGroup(CommandGroup):
 
         self.addSequential(TurnToBoilerCommand())
         self.addSequential(GoToBoilerCommand())
-        self.addSequential(FireCommand())
+        self.addSequential(FireCommand(Config('Shooter/speed')))

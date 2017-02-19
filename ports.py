@@ -17,7 +17,7 @@ drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
 
 # Analog Input
-drivetrain.ultrasonicPort = 3
+drivetrain.ultrasonicPort = 4
 
 
 shooter = PortsList()
@@ -33,15 +33,15 @@ pickup.motorID = 6
 climber = PortsList()
 
 climber.motorID = 7
-climber.sensorID = 0
+climber.sensorID = 1
 
 
 feeder = PortsList()
 
 feeder.motorID = 8
-feeder.sensorID = 1
+feeder.sensorID = 2
 
 
 gear = PortsList()
 
-gear.sensorID = 2
+gear.sensorID = 3

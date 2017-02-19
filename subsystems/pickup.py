@@ -17,11 +17,12 @@ class Pickup(DebuggableSubsystem):
             CANTalon(ports.pickup.motorID)
         ]
 
-        self.motorVoltage = -.7
+        self.motorVoltage = .7
 
         for motor in self.motors:
             motor.setSafetyEnabled(False)
             motor.enableBrakeMode(False)
+            motor.setInverted(True)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -30,7 +31,6 @@ class Pickup(DebuggableSubsystem):
         self._configureMotors()
         for motor in self.activeMotors:
             motor.setControlMode(CANTalon.ControlMode.PercentVbus)
-            motor.reverseOutput(True)
 
     def startBallPickup(self):
         for motor in self.activeMotors:

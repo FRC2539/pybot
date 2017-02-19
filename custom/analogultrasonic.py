@@ -4,7 +4,7 @@ class AnalogUltrasonic(AnalogInput):
     '''Simple wrapper to treat an analog signal like a distance sensor.'''
 
     def __init__(self, channel):
-        super().__init(channel)
+        super().__init__(channel)
 
         self.scalingFactor = 102.40655401945725
 

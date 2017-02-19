@@ -29,7 +29,7 @@ class DriveCommand(Command):
         if y > .05:
             y = .25 + .75 * y
         if rotate > .05:
-            rotate = .25 +.65 * rotate
+            rotate = .20 +.65 * rotate
         subsystems.drivetrain.move(
             x,
             y,
