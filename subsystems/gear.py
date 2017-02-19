@@ -26,3 +26,24 @@ class Gear(DebuggableSubsystem):
 
     def distanceToTarget(self):
         return self.liftVision.getValue('liftDistance')
+
+
+    def isLiftVisible(self):
+        try:
+            return self.liftVision.getBoolean('liftVisible')
+        except KeyError:
+            return False
+
+
+    def getLiftDistance(self):
+        if self.isLiftVisible():
+            return self.liftVision.getValue('liftDistance')
+
+        return None
+
+
+    def getLiftCenter(self):
+        if self.isLiftVisible():
+            return self.liftVision.getValue('liftCenter')
+
+        return None

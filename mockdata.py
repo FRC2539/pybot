@@ -11,6 +11,10 @@ defaults = {
 def fakeConfig(self):
     global defaults
 
-    return defaults[self.key]
+    if self.key in defaults:
+        return defaults[self.key]
 
+    return self._getValue()
+
+Config._getValue = Config.getValue
 Config.getValue = fakeConfig
