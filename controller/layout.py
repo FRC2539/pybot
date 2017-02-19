@@ -5,7 +5,7 @@ from custom.config import Config
 
 from commands.drive.drivecommand import DriveCommand
 from commands.pickup.pickupcommand import PickupCommand
-from commands.shooter.shootcommandgroup import ShootCommandGroup
+from commands.shooter.firecommand import FireCommand
 from commands.gear.hanggearcommandgroup import HangGearCommandGroup
 from commands.climber.climbcommand import ClimbCommand
 from commands.gear.gearinbotcommand import GearInBotCommand
@@ -28,7 +28,7 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-    mainController.RightTrigger.toggleWhenPressed(ShootCommandGroup())
+    mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
     mainController.LeftBumper.whenPressed(GearInBotCommand())

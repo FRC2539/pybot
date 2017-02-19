@@ -7,12 +7,21 @@ import subsystems
 class ScoreGearCommand(ConditionalCommand):
 
     def __init__(self):
+        self.alert = AlertCommand('Unknown error')
         super().__init__(
             'Score Gear',
             ScoreGearCommandGroup(),
-            AlertCommand('Lift is not visible')
+            self.alert
         )
 
 
     def condition(self):
-        return subsystems.gear.isLiftVisible()
+        if not subsystems.gear.hasGear():
+            self.alert.setMessage('No gear loaded')
+            return False
+
+        if not subsystems.gear.isLiftVisible():
+            self.alert.setMessage('Lift not visible')
+            return False
+
+        return True

@@ -2,6 +2,7 @@ from commands.drive.movecommand import MoveCommand
 
 import subsystems
 
+# Move to the lift.
 class GoToLiftCommand(MoveCommand):
 
     def __init__(self):
@@ -9,5 +10,5 @@ class GoToLiftCommand(MoveCommand):
 
 
     def initialize(self):
-        self.distance = subsystems.gear.distanceToTarget() - 12
+        self.distance = subsystems.gear.distanceToTarget() - 3
         super().initialize()

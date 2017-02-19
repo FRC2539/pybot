@@ -13,3 +13,7 @@ class AlertCommand(InstantCommand):
 
     def initialize(self):
         driverhud.showAlert(self.msg)
+
+
+    def setMessage(self, msg):
+        self.msg = msg

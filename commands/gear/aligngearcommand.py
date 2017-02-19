@@ -46,13 +46,13 @@ class AlignGearCommand(Command):
 
             self._finished = False
 
-        subsystem.drivetrain.move(0, self.speed, rotate)
+        subsystems.drivetrain.move(0, self.speed, rotate)
 
 
     def isFinished(self):
         if self.lostCount > 5:
             if self.getGroup() is not None:
-                self.getGroup().Cancel()
+                self.getGroup().cancel()
 
             driverhud.showAlert('Lost Sight of Lift')
             return True

@@ -4,6 +4,7 @@ from .hanggearcommandgroup import HangGearCommandGroup
 
 import subsystems
 
+# Check whether the robot sees a lift.
 class CheckForGearCommand(ConditionalCommand):
     def __init__(self):
         super().__init__("CheckForGearCommand", HangGearCommandGroup(), AlertCommand("Lift not found."))
