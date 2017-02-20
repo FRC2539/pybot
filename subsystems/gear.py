@@ -1,8 +1,10 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from wpilib.relay import Relay
+from wpilib.digitalinput import DigitalInput
 from networktables import NetworkTables
+
+from .debuggablesubsystem import DebuggableSubsystem
 from custom.config import Config
 from subsystems.drivetrain import DriveTrain
-from wpilib.digitalinput import DigitalInput
 import ports
 
 class Gear(DebuggableSubsystem):
@@ -15,9 +17,18 @@ class Gear(DebuggableSubsystem):
 
         self.liftVision = NetworkTables.getTable('cameraTarget')
         self.sensor = DigitalInput(ports.gear.sensorID)
+        self.lightRing = Relay(ports.gear.lightRingPort)
+
+
+    def initDefaultCommand(self):
+        from commands.gear.smartlightcommand import SmartLightCommand
+
+        self.setDefaultCommand(SmartLightCommand())
+
 
     def hasGear(self):
         return self.sensor.get()
+
 
     def isVisible(self):
         print(self.liftVision.getBoolean('liftVisible'))
@@ -49,3 +60,15 @@ class Gear(DebuggableSubsystem):
             return self.liftVision.getValue('liftCenter')
 
         return None
+
+
+    def isLightOn(self):
+        return self.lightRing.get() == Relay.Value.kOn
+
+
+    def turnOnLight(self):
+        self.lightRing.set(Relay.Value.kOn)
+
+
+    def turnOffLight(self):
+        self.lightRing.set(Relay.Value.kOff)

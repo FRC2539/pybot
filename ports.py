@@ -44,4 +44,8 @@ feeder.sensorID = 2
 
 gear = PortsList()
 
+# Optical gear sensor in DIO
 gear.sensorID = 3
+
+# PWM Relay
+gear.lightRingPort = 0
