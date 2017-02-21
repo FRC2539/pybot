@@ -9,6 +9,7 @@ from commands.shooter.firecommand import FireCommand
 from commands.gear.hanggearcommandgroup import HangGearCommandGroup
 from commands.climber.climbcommand import ClimbCommand
 from commands.gear.gearinbotcommand import GearInBotCommand
+from commands.gear.togglelightcommand import ToggleLightCommand
 
 def init():
     '''
@@ -32,5 +33,6 @@ def init():
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
     mainController.LeftBumper.whenPressed(GearInBotCommand())
+    mainController.B.whenPressed(ToggleLightCommand())
 
     backupController = LogitechDualShock(1)

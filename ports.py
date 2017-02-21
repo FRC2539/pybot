@@ -1,7 +1,7 @@
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
-Values other than port numbers should be stored in Preferences.
+Values other than port numbers should be stored in Config.
 '''
 
 class PortsList:
@@ -17,7 +17,7 @@ drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
 
 # Analog Input
-drivetrain.ultrasonicPort = 4
+drivetrain.ultrasonicPort = 0
 
 
 shooter = PortsList()
@@ -47,5 +47,5 @@ gear = PortsList()
 # Optical gear sensor in DIO
 gear.sensorID = 3
 
-# PWM Relay
+# Relay for LED light ring
 gear.lightRingPort = 0

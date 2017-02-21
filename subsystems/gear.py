@@ -29,7 +29,6 @@ class Gear(DebuggableSubsystem):
     def hasGear(self):
         return self.sensor.get()
 
-
     def isVisible(self):
         print(self.liftVision.getBoolean('liftVisible'))
         return self.liftVision.getBoolean('liftVisible')
