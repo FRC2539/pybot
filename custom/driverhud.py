@@ -8,12 +8,10 @@ from wpilib.smartdashboard import SmartDashboard
 from wpilib.command import Scheduler
 
 from wpilib.command import InstantCommand
-from commands.clearalertcommand import ClearAlertCommand
 from commands.drive.movecommand import MoveCommand
 from commands.gear.startwithgearcommandgroup import StartWithGearCommandGroup
 
 autonChooser = None
-clearer = ClearAlertCommand()
 
 from wpilib.robotbase import RobotBase
 
@@ -43,9 +41,6 @@ def init():
     '''Display all currently running commands.'''
     SmartDashboard.putData('Active Commands', Scheduler.getInstance())
 
-    '''Notices to show to the driver.'''
-    SmartDashboard.putString('Alerts', '')
-
 
 def getAutonomousProgram():
     '''
@@ -61,16 +56,16 @@ def getAutonomousProgram():
     return autonChooser.getSelected()
 
 
-def showAlert(msg):
-    '''
-    Display an alert on the dashboard. It will disappear after a short time.
-    '''
+def showAlert(msg, type='Alerts'):
+    '''Display a text notification on the dashboard.'''
 
-    global clearer
+    messages = SmartDashboard.getStringArray(type, [])
+    messages.append(msg)
+    SmartDashboard.putStringArray(
+        type,
+        messages
+    )
 
-    SmartDashboard.putString('Alerts', msg)
-    if clearer.isRunning():
-        clearer.cancel()
 
-    clearer.start()
-
+def showInfo(msg):
+    showAlert(msg, 'Info')

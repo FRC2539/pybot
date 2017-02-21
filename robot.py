@@ -28,7 +28,7 @@ class KryptonBot(CommandBasedRobot):
 
         # Schedule the autonomous command
         driverhud.getAutonomousProgram().start()
-        driverhud.showAlert("Starting %s" % driverhud.getAutonomousProgram())
+        driverhud.showInfo("Starting %s" % driverhud.getAutonomousProgram())
 
 
     def handleCrash(self, error):

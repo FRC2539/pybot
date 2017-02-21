@@ -4,15 +4,16 @@ from custom import driverhud
 
 class AlertCommand(InstantCommand):
 
-    def __init__(self, msg):
+    def __init__(self, msg, type='Alerts'):
         '''Show an alert on the dashboard'''
         super().__init__('Alert: %s' % msg)
 
         self.msg = msg
+        self.type = type
 
 
     def initialize(self):
-        driverhud.showAlert(self.msg)
+        driverhud.showAlert(self.msg, self.type)
 
 
     def setMessage(self, msg):
