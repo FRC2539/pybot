@@ -33,7 +33,7 @@ def init():
     '''
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
-    autonChooser.addObject('Cross Baseline', MoveCommand(84))
+    autonChooser.addObject('Cross Baseline', MoveCommand(95))
     autonChooser.addObject('Hang Gear', StartWithGearCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
@@ -60,6 +60,7 @@ def showAlert(msg, type='Alerts'):
     '''Display a text notification on the dashboard.'''
 
     messages = SmartDashboard.getStringArray(type, [])
+    messages = [x for x in messages if x]
     messages.append(msg)
     SmartDashboard.putStringArray(
         type,

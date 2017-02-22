@@ -16,5 +16,5 @@ class ScoreGearCommandGroup(CommandGroup):
         self.addParallel(PickupCommand())
         self.addSequential(SetSpeedCommand(500))
         self.addSequential(AlignGearCommand(Config('Gear/HandOffDistance', 36)))
-        self.addSequential(GoToWallCommand())
+        #self.addSequential(GoToWallCommand())
         self.addSequential(StopCommand(self))

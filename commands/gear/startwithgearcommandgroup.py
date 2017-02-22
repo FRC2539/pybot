@@ -13,7 +13,7 @@ class StartWithGearCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('StartWithGearCommandGroup')
 
-        self.addSequential(MoveCommand(96))
+        self.addSequential(MoveCommand(50))
         self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
         self.addSequential(WaitForLiftCommand())
         self.addSequential(ScoreGearCommand())

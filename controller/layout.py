@@ -11,6 +11,8 @@ from commands.climber.climbcommand import ClimbCommand
 from commands.gear.gearinbotcommand import GearInBotCommand
 from commands.gear.togglelightcommand import ToggleLightCommand
 from commands.drive.gotowallcommandgroup import GoToWallCommandGroup
+from commands.gear.scoregearcommand import ScoreGearCommand
+from commands.alertcommand import AlertCommand
 
 def init():
     '''
@@ -33,9 +35,8 @@ def init():
     mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
-    mainController.LeftBumper.whenPressed(GearInBotCommand())
     mainController.B.whenPressed(ToggleLightCommand())
 
-    mainController.Y.whenPressed(GoToWallCommandGroup())
+    mainController.RightBumper.whenPressed(ScoreGearCommand())
 
     backupController = LogitechDualShock(1)

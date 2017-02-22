@@ -18,10 +18,12 @@ class ScoreGearCommand(ConditionalCommand):
     def condition(self):
         if not subsystems.gear.hasGear():
             self.alert.setMessage('No gear loaded')
+            print('no gear loaded')
             return False
 
         if not subsystems.gear.isLiftVisible():
             self.alert.setMessage('Lift not visible')
+            print('Lift not visible')
             return False
 
         return True
