@@ -5,7 +5,8 @@ defaults = {
     '/DriveTrain/manualMaxSpeed': 100,
     '/DriveTrain/preciseSpeed': 150,
     '/Shooter/speed': 100,
-    '/Autonomous/robotLocation': 0
+    '/Autonomous/robotLocation': 0,
+    '/Gear/HandOffDistance': 36
 }
 
 def fakeConfig(self):

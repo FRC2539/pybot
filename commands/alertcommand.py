@@ -8,6 +8,8 @@ class AlertCommand(InstantCommand):
         '''Show an alert on the dashboard'''
         super().__init__('Alert: %s' % msg)
 
+        self.setRunWhenDisabled(True)
+
         self.msg = msg
         self.type = type
 

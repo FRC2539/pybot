@@ -8,10 +8,10 @@ from .waitforliftcommand import WaitForLiftCommand
 from .scoregearcommand import ScoreGearCommand
 
 # Initiate procedure for hanging the gear at the beginning of the match.
-class StartWithGearCommandGroup(CommandGroup):
+class GearAutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
-        super().__init__('StartWithGearCommandGroup')
+        super().__init__('Score a Gear Autonomously')
 
         self.addSequential(MoveCommand(50))
         self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))

@@ -13,4 +13,9 @@ class ResetCommand(InstantCommand):
     def __init__(self):
         '''Require all active subsystems here.'''
 
+        super().__init__('Reset')
+
         self.requires(subsystems.drivetrain)
+        self.requires(subsystems.climber)
+        self.requires(subsystems.pickup)
+        self.requires(subsystems.shooter)

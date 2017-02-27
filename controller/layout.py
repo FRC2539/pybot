@@ -4,15 +4,12 @@ from . import logicalaxes
 from custom.config import Config
 
 from commands.drive.drivecommand import DriveCommand
+from commands.resetcommand import ResetCommand
 from commands.pickup.pickupcommand import PickupCommand
 from commands.shooter.firecommand import FireCommand
-from commands.gear.hanggearcommandgroup import HangGearCommandGroup
 from commands.climber.climbcommand import ClimbCommand
-from commands.gear.gearinbotcommand import GearInBotCommand
 from commands.gear.togglelightcommand import ToggleLightCommand
-from commands.drive.gotowallcommandgroup import GoToWallCommandGroup
 from commands.gear.scoregearcommand import ScoreGearCommand
-from commands.alertcommand import AlertCommand
 
 def init():
     '''
@@ -36,6 +33,7 @@ def init():
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
     mainController.B.whenPressed(ToggleLightCommand())
+    mainController.Back.whenPressed(ResetCommand())
 
     mainController.RightBumper.whenPressed(ScoreGearCommand())
 

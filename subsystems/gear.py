@@ -29,16 +29,6 @@ class Gear(DebuggableSubsystem):
     def hasGear(self):
         return not self.sensor.get()
 
-    def isVisible(self):
-        print(self.liftVision.getBoolean('liftVisible'))
-        return self.liftVision.getBoolean('liftVisible')
-
-    def offsetFromTarget(self):
-        return self.liftVision.getValue('liftCenter') - 30
-
-    def distanceToTarget(self):
-        return self.liftVision.getValue('liftDistance')
-
 
     def isLiftVisible(self):
         try:
