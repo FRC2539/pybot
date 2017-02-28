@@ -1,4 +1,5 @@
 from wpilib.command import CommandGroup
+from wpilib.command.conditionalcommand import ConditionalCommand
 
 from custom.config import Config
 
@@ -13,7 +14,9 @@ class GearAutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Score a Gear Autonomously')
 
-        self.addSequential(MoveCommand(50))
+        move = ConditionalCommand('Move Toward Lift', MoveCommand(50))
+        move.condition = lambda: Config("Autonomous/robotLocation") != 0
+        self.addSequential(move)
         self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
         self.addSequential(WaitForLiftCommand())
         self.addSequential(ScoreGearCommand())
