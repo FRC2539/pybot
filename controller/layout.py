@@ -10,6 +10,7 @@ from commands.shooter.firecommand import FireCommand
 from commands.climber.climbcommand import ClimbCommand
 from commands.gear.togglelightcommand import ToggleLightCommand
 from commands.gear.scoregearcommand import ScoreGearCommand
+from commands.printultrasonic import PrintUltrasonic
 
 def init():
     '''
@@ -33,6 +34,7 @@ def init():
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
     mainController.B.whenPressed(ToggleLightCommand())
+    mainController.Y.whenPressed(PrintUltrasonic())
     mainController.Back.whenPressed(ResetCommand())
 
     mainController.RightBumper.whenPressed(ScoreGearCommand())

@@ -33,11 +33,11 @@ class AlignGearCommand(Command):
         rotate = 0
 
         if center < -5:
-            rotate = -0.2
+            rotate = -0.1
             onTarget = False
 
         elif center > 5:
-            rotate = 0.2
+            rotate = 0.1
             onTarget = False
 
         if not onTarget:

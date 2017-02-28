@@ -16,7 +16,7 @@ class Feeder(DebuggableSubsystem):
             CANTalon(ports.feeder.motorID)
         ]
 
-        self.motorVoltage = .7
+        self.motorVoltage = .9
         for motor in self.motors:
             motor.setSafetyEnabled(False)
             motor.enableBrakeMode(False)
