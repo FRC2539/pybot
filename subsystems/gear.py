@@ -52,11 +52,11 @@ class Gear(DebuggableSubsystem):
 
 
     def isLightOn(self):
-        return self.lightRing.get() == Relay.Value.kOn
+        return self.lightRing.get() == Relay.Value.kReverse
 
 
     def turnOnLight(self):
-        self.lightRing.set(Relay.Value.kOn)
+        self.lightRing.set(Relay.Value.kReverse)
 
 
     def turnOffLight(self):
