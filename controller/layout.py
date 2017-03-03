@@ -29,14 +29,20 @@ def init():
     logicalaxes.driveY = mainController.LeftY
     logicalaxes.driveRotate = mainController.RightX
 
-    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-    mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
-    mainController.A.toggleWhenPressed(PickupCommand())
     mainController.LeftTrigger.toggleWhenPressed(ClimbCommand())
+    mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
+    mainController.RightBumper.whenPressed(ScoreGearCommand())
+    mainController.A.toggleWhenPressed(PickupCommand())
     mainController.B.whenPressed(ToggleLightCommand())
+    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     mainController.Y.whenPressed(PrintUltrasonic())
     mainController.Back.whenPressed(ResetCommand())
 
-    mainController.RightBumper.whenPressed(ScoreGearCommand())
 
     backupController = LogitechDualShock(1)
+
+    backupController.LeftTrigger.toggleWhenPressed(ClimbCommand())
+    backupController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
+    backupController.RightBumper.whenPressed(ScoreGearCommand())
+    backupController.A.toggleWhenPressed(PickupCommand())
+    backupController.B.whenPressed(ToggleLightCommand())

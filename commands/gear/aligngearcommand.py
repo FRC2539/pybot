@@ -25,6 +25,7 @@ class AlignGearCommand(Command):
         self.lostCount = 0
 
         distanceToLift = subsystems.gear.getLiftDistance()
+        print("%s : %f" % (distanceToLift, self.handOffDistance))
         remainingDistance = distanceToLift - self.handOffDistance
 
         self._finished = remainingDistance < 0

@@ -35,5 +35,4 @@ class MoveCommand(Command):
 
 
     def end(self):
-        print("Successful End")
         subsystems.drivetrain.stop()

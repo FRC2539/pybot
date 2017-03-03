@@ -16,17 +16,13 @@ class TurnCommand(MoveCommand):
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
 
-        offset = self._calculateDisplacement() * 3
+        offset = self._calculateDisplacement()
         targetPositions = []
         for position in subsystems.drivetrain.getPositions():
             targetPositions.append(position + offset)
 
         subsystems.drivetrain.setPositions(targetPositions)
 
-
-    def end(self):
-        print("Successful End")
-        super().end()
     def _calculateDisplacement(self):
         '''
         In order to avoid having a separate ticksPerDegree, we calculate it
