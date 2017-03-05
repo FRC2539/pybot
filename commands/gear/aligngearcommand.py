@@ -13,6 +13,7 @@ class AlignGearCommand(Command):
 
     def initialize(self):
         self.lostCount = 0
+        self.bogusCount = 0
         self._finished = False
         self.speed = 1
 
@@ -25,10 +26,16 @@ class AlignGearCommand(Command):
         self.lostCount = 0
 
         distanceToLift = subsystems.gear.getLiftDistance()
-        print("%s : %f" % (distanceToLift, self.handOffDistance))
         remainingDistance = distanceToLift - self.handOffDistance
 
         self._finished = remainingDistance < 0
+
+        if remainingDistance > 10 and self.speed < 0.8:
+            self.bogusCount += 1
+            if self.bogusCount >= 10:
+                self.speed = 1
+        else:
+            self.bogusCount = 0
 
         onTarget = True
         rotate = 0

@@ -38,8 +38,8 @@ climber.sensorID = 1
 
 feeder = PortsList()
 
-feeder.motorID = 8
-feeder.sensorID = 2
+feeder.gateID = 0
+#feeder.sensorID = 0
 
 
 gear = PortsList()

@@ -18,11 +18,10 @@ class FireCommand(Command):
         subsystems.shooter.startShooting()
 
     def execute(self):
-        subsystems.shooter.getShooterSpeed()
-        #if subsystems.shooter.getShooterSpeed() == self.shootingSpeed:
-        #    subsystems.feeder.start()
-        #else:
-        #    subsystems.feeder.stop()
+        if abs(subsystems.shooter.getShooterSpeed() - self.shootingSpeed) < 100:
+            subsystems.feeder.open()
+        else:
+            subsystems.feeder.close()
 
     #def isFinished(self):
     #    return subsystems.feeder.isEmpty()
@@ -30,4 +29,4 @@ class FireCommand(Command):
 
     def end(self):
         subsystems.shooter.stop()
-        subsystems.feeder.stop()
+        subsystems.feeder.close()

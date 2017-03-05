@@ -2,6 +2,7 @@ from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
 from networktables import NetworkTable
 from custom.config import Config
+from wpilib.servo import Servo
 import ports
 
 class Feeder(DebuggableSubsystem):
@@ -12,7 +13,8 @@ class Feeder(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Feeder')
 
-        self.motors = [
+        self.gate = Servo(ports.feeder.gateID)
+        """self.motors = [
             CANTalon(ports.feeder.motorID)
         ]
 
@@ -27,21 +29,19 @@ class Feeder(DebuggableSubsystem):
         self.activeMotors = []
         self._configureMotors()
         for motor in self.activeMotors:
-            motor.setControlMode(CANTalon.ControlMode.PercentVbus)
+            motor.setControlMode(CANTalon.ControlMode.PercentVbus)"""
 
-    def isEmpty(self):
+    """def isEmpty(self):
         return False
-        #return ports.feeder.sensorID
-    def start(self):
-        for motor in self.activeMotors:
-            motor.set(self.motorVoltage)
-    def stop(self):
-        for motor in self.activeMotors:
-            motor.set(0)
-    def _configureMotors(self):
+        #return ports.feeder.sensorID"""
+
+    def open(self):
+        self.gate.set(1)
+    def close(self):
+        self.gate.set(.8)
+    """def _configureMotors(self):
         '''
         Make any necessary changes to the motors and define self.activeMotors.
         '''
 
-        self.activeMotors = self.motors
-
+        self.activeMotors = self.motors"""

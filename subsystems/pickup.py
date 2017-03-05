@@ -35,6 +35,10 @@ class Pickup(DebuggableSubsystem):
     def startBallPickup(self):
         for motor in self.activeMotors:
             motor.set(self.motorVoltage)
+
+    def reverseBallPickup(self):
+        for motor in self.activeMotors:
+            motor.set(-self.motorVoltage)
     def stop(self):
         for motor in self.activeMotors:
             motor.set(0)

@@ -19,3 +19,11 @@ class ResetCommand(InstantCommand):
         self.requires(subsystems.climber)
         self.requires(subsystems.pickup)
         self.requires(subsystems.shooter)
+
+
+    def initialize(self):
+        subsystems.drivetrain.stop()
+        subsystems.climber.stop()
+        subsystems.pickup.stop()
+        subsystems.shooter.stop()
+        subsystems.feeder.close()

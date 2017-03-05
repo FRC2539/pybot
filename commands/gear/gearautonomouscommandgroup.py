@@ -15,7 +15,7 @@ class GearAutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Score a Gear Autonomously')
 
-        move = ConditionalCommand('Move Toward Lift', MoveCommand(90))
+        move = ConditionalCommand('Move Toward Lift', MoveCommand(80))
         move.condition = lambda: Config("Autonomous/robotLocation") != 0
         self.addSequential(move)
         self.addSequential(WaitCommand(.5))

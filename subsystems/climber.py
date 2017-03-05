@@ -16,7 +16,6 @@ class Climber(DebuggableSubsystem):
         self.motor.enableBrakeMode(True)
         self.motor.setSafetyEnabled(False)
         self.motor.setControlMode(CANTalon.ControlMode.PercentVbus)
-        self.sensor = DigitalInput(ports.climber.sensorID)
 
 
     def start(self):
@@ -28,4 +27,4 @@ class Climber(DebuggableSubsystem):
 
 
     def atTop(self):
-        return self.sensor.get()
+        return False
