@@ -2,14 +2,15 @@ from wpilib.command.conditionalcommand import ConditionalCommand
 
 from .scoregearcommandgroup import ScoreGearCommandGroup
 from ..alertcommand import AlertCommand
+from commands.drive.movecommand import MoveCommand
 import subsystems
 
 class ScoreGearCommand(ConditionalCommand):
 
-    def __init__(self):
+    def __init__(self, distance=0):
         self.alert = AlertCommand('Unknown error')
         super().__init__(
-            'Score Gear',
+            MoveCommand(distance),
             ScoreGearCommandGroup(),
             self.alert
         )

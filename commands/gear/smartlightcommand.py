@@ -37,13 +37,13 @@ class SmartLightCommand(Command):
 
             return
 
-        if distance < 48:
+        if distance < 88:
             self.timer.reset()
 
             if self.on:
                 self.on = False
                 subsystems.gear.turnOffLight()
 
-        elif not self.on and distance > 50:
+        elif not self.on and distance > 90:
             self.on = True
             subsystems.gear.turnOnLight()
