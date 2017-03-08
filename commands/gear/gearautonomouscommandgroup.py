@@ -19,10 +19,9 @@ class GearAutonomousCommandGroup(CommandGroup):
         distance = 80
         if Config("Autonomous/robotLocation") != 0:
             distance = 30
-
         move.condition = lambda: Config("Autonomous/robotLocation") != 0
         self.addSequential(move)
         self.addSequential(WaitCommand(.5))
         self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
         self.addSequential(WaitForLiftCommand())
-        self.addSequential(ScoreGearCommand())
+        self.addSequential(ScoreGearCommand(distance))

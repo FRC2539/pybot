@@ -17,7 +17,7 @@ class Pickup(DebuggableSubsystem):
             CANTalon(ports.pickup.motorID)
         ]
 
-        self.motorVoltage = .9
+        self.motorVoltage = .5
 
         for motor in self.motors:
             motor.setSafetyEnabled(False)

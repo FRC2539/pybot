@@ -46,4 +46,4 @@ def init():
     backupController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
     backupController.RightBumper.whenPressed(ScoreGearCommand())
     backupController.A.toggleWhenPressed(PickupCommand())
-    backupController.B.whenPressed(ToggleLightCommand())
+    backupController.B.toggleWhenPressed(ReversePickupCommand())
