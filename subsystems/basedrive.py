@@ -179,6 +179,12 @@ class BaseDrive(DebuggableSubsystem):
         return (self.navX.getYaw() + self.gyroOffset) % 360
 
 
+    def getAcceleration(self):
+        '''Reads acceleration from NavX MXP.'''
+
+        return self.navX.getLinearWorldAccelX()
+
+
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
 

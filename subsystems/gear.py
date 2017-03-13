@@ -9,7 +9,7 @@ import ports
 
 class Gear(DebuggableSubsystem):
     '''
-    A subsystem designed for feeding balls to the shooter.
+    A subsystem designed for hanging gears on the lifts.
     '''
 
     def __init__(self):
@@ -23,7 +23,7 @@ class Gear(DebuggableSubsystem):
     def initDefaultCommand(self):
         from commands.gear.smartlightcommand import SmartLightCommand
 
-        self.setDefaultCommand(SmartLightCommand())
+        #self.setDefaultCommand(SmartLightCommand())
 
 
     def hasGear(self):

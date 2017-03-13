@@ -2,15 +2,17 @@ from wpilib.command import Command
 
 import subsystems
 
-class ReversePickupCommand(Command):
-    # Initialize the named command.
+class ClearFuelCommand(Command):
+
     def __init__(self):
-        super().__init__('ReversePickupCommand')
+        super().__init__('Clear Fuel')
 
         self.requires(subsystems.pickup)
 
+
     def initialize(self):
-        subsystems.pickup.reverseBallPickup()
+        subsystems.pickup.run(-0.5)
+
 
     def end(self):
         subsystems.pickup.stop()

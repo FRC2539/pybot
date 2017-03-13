@@ -36,6 +36,5 @@ class KryptonBot(CommandBasedRobot):
         driverhud.showAlert('Fatal Error: %s' % error)
 
 
-
 if __name__ == '__main__':
     run(KryptonBot)

@@ -11,7 +11,7 @@ from commands.climber.climbcommand import ClimbCommand
 from commands.gear.togglelightcommand import ToggleLightCommand
 from commands.gear.scoregearcommand import ScoreGearCommand
 from commands.printultrasonic import PrintUltrasonic
-from commands.pickup.reversepickupcommand import ReversePickupCommand
+from commands.pickup.clearfuelcommand import ClearFuelCommand
 
 def init():
     '''
@@ -34,7 +34,7 @@ def init():
     mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
     mainController.RightBumper.whenPressed(ScoreGearCommand())
     mainController.A.toggleWhenPressed(PickupCommand())
-    mainController.B.toggleWhenPressed(ReversePickupCommand())
+    mainController.B.toggleWhenPressed(ClearFuelCommand())
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     mainController.Y.whenPressed(PrintUltrasonic())
     mainController.Back.whenPressed(ResetCommand())
@@ -46,4 +46,4 @@ def init():
     backupController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
     backupController.RightBumper.whenPressed(ScoreGearCommand())
     backupController.A.toggleWhenPressed(PickupCommand())
-    backupController.B.toggleWhenPressed(ReversePickupCommand())
+    backupController.B.toggleWhenPressed(ClearFuelCommand())

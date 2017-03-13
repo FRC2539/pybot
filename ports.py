@@ -33,13 +33,12 @@ pickup.motorID = 6
 climber = PortsList()
 
 climber.motorID = 7
-climber.sensorID = 1
 
 
 feeder = PortsList()
 
+# Servo PWM Port
 feeder.gateID = 0
-#feeder.sensorID = 0
 
 
 gear = PortsList()

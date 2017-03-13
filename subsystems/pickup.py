@@ -1,8 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
-from networktables import NetworkTable
 
-from custom.config import Config
 import ports
 
 class Pickup(DebuggableSubsystem):
@@ -13,38 +11,16 @@ class Pickup(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Pickup')
 
-        self.motors = [
-            CANTalon(ports.pickup.motorID)
-        ]
+        self.motor = CANTalon(ports.pickup.motorID)
+        self.motor.setSafetyEnabled(False)
+        self.motor.enableBrakeMode(False)
+        self.motor.setInverted(True)
+        self. motor.setControlMode(CANTalon.ControlMode.PercentVbus)
 
-        self.motorVoltage = .5
 
-        for motor in self.motors:
-            motor.setSafetyEnabled(False)
-            motor.enableBrakeMode(False)
-            motor.setInverted(True)
+    def run(self, speed):
+        self.motor.set(speed)
 
-        '''
-        Subclasses should configure motors correctly and populate activeMotors.
-        '''
-        self.activeMotors = []
-        self._configureMotors()
-        for motor in self.activeMotors:
-            motor.setControlMode(CANTalon.ControlMode.PercentVbus)
 
-    def startBallPickup(self):
-        for motor in self.activeMotors:
-            motor.set(self.motorVoltage)
-
-    def reverseBallPickup(self):
-        for motor in self.activeMotors:
-            motor.set(-self.motorVoltage)
     def stop(self):
-        for motor in self.activeMotors:
-            motor.set(0)
-    def _configureMotors(self):
-        '''
-        Make any necessary changes to the motors and define self.activeMotors.
-        '''
-
-        self.activeMotors = self.motors
+        self.motor.set(0)
