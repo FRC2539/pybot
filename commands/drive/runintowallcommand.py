@@ -13,7 +13,8 @@ class RunIntoWallCommand(Command):
 
 
     def initialize(self):
-        subsystems.drivetrain.move(0, self.speed, 0)
+        subsystems.drivetrain.setSpeedLimit(self.speed)
+        subsystems.drivetrain.move(0, 1, 0)
 
 
     def isFinished(self):
