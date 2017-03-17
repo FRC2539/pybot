@@ -3,9 +3,10 @@ from commandbased.stopcommand import StopCommand
 
 from ..alertcommand import AlertCommand
 from ..pickup.pickupcommand import PickupCommand
+from ..drive.setspeedcommand import SetSpeedCommand
 from ..drive.runintowallcommand import RunIntoWallCommand
 
-class BlindHangCommand(CommandGroup):
+class BlindHangCommandGroup(CommandGroup):
     '''
     Runs if the autonomous program can't see a gear. Turns on pickup and drives
     forward until it hits something.
@@ -17,5 +18,6 @@ class BlindHangCommand(CommandGroup):
         pickup = PickupCommand()
         self.addParallel(pickup)
         self.addSequential(AlertCommand('Attempting Blind Hang'))
-        self.addSequential(RunIntoWallCommand(300))
+        self.addSequential(SetSpeedCommand(300))
+        self.addSequential(RunIntoWallCommand())
         self.addSequential(StopCommand(pickup))

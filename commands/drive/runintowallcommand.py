@@ -5,15 +5,13 @@ import subsystems
 class RunIntoWallCommand(Command):
     '''Drives the robot at a steady speed until it crashes into something.'''
 
-    def __init__(self, speed):
+    def __init__(self):
         super().__init__('Run Into Wall')
 
         self.requires(subsystems.drivetrain)
-        self.speed = speed
 
 
     def initialize(self):
-        subsystems.drivetrain.setSpeedLimit(self.speed)
         subsystems.drivetrain.move(0, 1, 0)
 
 

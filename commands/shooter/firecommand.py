@@ -14,8 +14,7 @@ class FireCommand(Command):
 
 
     def initialize(self):
-        subsystems.shooter.setShooterSpeed(self.shootingSpeed)
-        subsystems.shooter.startShooting()
+        subsystems.shooter.startShooting(self.shootingSpeed)
         subsystems.feeder.close()
         self.open = False
 

@@ -9,7 +9,7 @@ from ..drive.movecommand import MoveCommand
 from ..drive.turncommand import TurnCommand
 from .waitforliftcommand import WaitForLiftCommand
 from .scoregearcommand import ScoreGearCommand
-from .blindhangcommand import BlindHangCommand
+from .blindhangcommandgroup import BlindHangCommandGroup
 from .waitonpilotcommand import WaitOnPilotCommand
 from ..alertcommand import AlertCommand
 
@@ -25,7 +25,7 @@ class GearAutonomousCommandGroup(CommandGroup):
         scoreAnyway = ConditionalCommand(
             'Attempt to Score',
             ScoreGearCommand(),
-            BlindHangCommand()
+            BlindHangCommandGroup()
         )
         scoreAnyway.condition = lambda: subsystems.gear.isLiftVisible()
 

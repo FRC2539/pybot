@@ -34,7 +34,7 @@ def init():
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
     autonChooser.addObject('Cross Baseline', MoveCommand(95))
-    autonChooser.addObject('Hit Hopper', MoveCommand(200))
+    autonChooser.addObject('Dump Hopper', MoveCommand(200))
     autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)

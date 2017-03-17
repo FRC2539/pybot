@@ -10,7 +10,7 @@ class ScoreGearCommand(ConditionalCommand):
         self.alert = AlertCommand('Unknown error')
 
         super().__init__(
-            self,
+            'ScoreGearCommand',
             ScoreGearCommandGroup(),
             self.alert
         )

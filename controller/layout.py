@@ -47,3 +47,4 @@ def init():
     backupController.RightBumper.whenPressed(ScoreGearCommand())
     backupController.A.toggleWhenPressed(PickupCommand())
     backupController.B.toggleWhenPressed(ClearFuelCommand())
+    backupController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
