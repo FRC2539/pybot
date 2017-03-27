@@ -1,22 +1,28 @@
-from wpilib.command.command import Command
+from wpilib.command import Command
 
 import subsystems
 
 class RunIntoWallCommand(Command):
     '''Drives the robot at a steady speed until it crashes into something.'''
 
-    def __init__(self):
-        super().__init__('Run Into Wall')
+    def __init__(self, speedLimit, timelimit):
+        super().__init__('Run Into Wall', timelimit)
 
         self.requires(subsystems.drivetrain)
+        self.speedLimit = speedLimit
 
 
     def initialize(self):
+        subsystems.drivetrain.setUseEncoders(False)
+
+        subsystems.drivetrain.setSpeedLimit(self.speedLimit)
         subsystems.drivetrain.move(0, 1, 0)
 
 
+
     def isFinished(self):
-        return abs(subsystems.drivetrain.getAcceleration()) > 0.5
+        return self.isTimedOut()
+        # return abs(subsystems.drivetrain.getAcceleration()) > 0.5
 
 
     def end(self):

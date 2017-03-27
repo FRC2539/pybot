@@ -5,6 +5,7 @@ from ..alertcommand import AlertCommand
 from ..pickup.pickupcommand import PickupCommand
 from ..drive.setspeedcommand import SetSpeedCommand
 from ..drive.runintowallcommand import RunIntoWallCommand
+from wpilib.command.waitcommand import WaitCommand
 
 class BlindHangCommandGroup(CommandGroup):
     '''
@@ -15,9 +16,10 @@ class BlindHangCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Blind Gear Hang')
 
-        pickup = PickupCommand()
-        self.addParallel(pickup)
+        #pickup = PickupCommand()
+        #self.addParallel(pickup)
         self.addSequential(AlertCommand('Attempting Blind Hang'))
         self.addSequential(SetSpeedCommand(300))
-        self.addSequential(RunIntoWallCommand())
-        self.addSequential(StopCommand(pickup))
+        self.addSequential(RunIntoWallCommand(35, 7))
+        self.addSequential(AlertCommand('Finished Blind Hang'))
+        #self.addSequential(StopCommand(pickup))

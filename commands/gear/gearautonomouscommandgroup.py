@@ -37,4 +37,4 @@ class GearAutonomousCommandGroup(CommandGroup):
         self.addSequential(WaitOnPilotCommand())
         self.addSequential(AlertCommand('Gear removed', 'Info'))
         self.addSequential(WaitCommand(0.5))
-        self.addSequential(MoveCommand(-24))
+        #self.addSequential(MoveCommand(-24))

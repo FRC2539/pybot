@@ -17,13 +17,15 @@ class FireCommand(Command):
         subsystems.shooter.startShooting(self.shootingSpeed)
         subsystems.feeder.close()
         self.open = False
+        self.stayOpen = 0
 
 
     def execute(self):
-        if self.open:
+        if self.open and self.stayOpen < 3:
             if not subsystems.shooter.isReadyToFire():
                 self.open = False
                 subsystems.feeder.close()
+                self.stayOpen += 1
         else:
             if subsystems.shooter.isReadyToFire():
                 self.open = True

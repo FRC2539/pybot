@@ -11,7 +11,7 @@ class PickupCommand(Command):
 
 
     def initialize(self):
-        subsystems.pickup.run(0.7)
+        subsystems.pickup.run(0.9)
 
 
     def end(self):

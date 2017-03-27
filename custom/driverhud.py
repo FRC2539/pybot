@@ -10,6 +10,7 @@ from wpilib.command import Scheduler
 from wpilib.command import InstantCommand
 from commands.drive.movecommand import MoveCommand
 from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
+from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
 
 autonChooser = None
 
@@ -35,6 +36,7 @@ def init():
     autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
     autonChooser.addObject('Cross Baseline', MoveCommand(95))
     autonChooser.addObject('Dump Hopper', MoveCommand(200))
+    autonChooser.addObject('Run Into wall', BlindHangCommandGroup())
     autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
