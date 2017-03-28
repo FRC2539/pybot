@@ -11,6 +11,7 @@ from wpilib.command import InstantCommand
 from commands.drive.movecommand import MoveCommand
 from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
 from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
+from commands.shooter.startwithshootercommandgroup import StartWithShooterCommandGroup
 
 autonChooser = None
 
@@ -38,6 +39,7 @@ def init():
     autonChooser.addObject('Dump Hopper', MoveCommand(200))
     autonChooser.addObject('Run Into wall', BlindHangCommandGroup())
     autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
+    autonChooser.addObject('Go For Boiler', StartWithShooterCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
