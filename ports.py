@@ -24,6 +24,8 @@ shooter = PortsList()
 
 shooter.motorID = 5
 
+shooter.agitatorPort = 1
+
 
 pickup = PortsList()
 

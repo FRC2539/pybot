@@ -10,8 +10,9 @@ from commands.shooter.firecommand import FireCommand
 from commands.climber.climbcommand import ClimbCommand
 from commands.gear.togglelightcommand import ToggleLightCommand
 from commands.gear.scoregearcommand import ScoreGearCommand
-from commands.printultrasonic import PrintUltrasonic
+from commands.test.printultrasonic import PrintUltrasonic
 from commands.pickup.clearfuelcommand import ClearFuelCommand
+from commands.test.getaccel import GetAccel
 
 def init():
     '''
@@ -36,7 +37,7 @@ def init():
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.B.toggleWhenPressed(ClearFuelCommand())
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-    mainController.Y.whenPressed(PrintUltrasonic())
+    mainController.Y.whenPressed(GetAccel())
     mainController.Back.whenPressed(ResetCommand())
 
 

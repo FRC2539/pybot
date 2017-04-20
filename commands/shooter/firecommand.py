@@ -14,8 +14,8 @@ class FireCommand(Command):
 
 
     def initialize(self):
-        subsystems.shooter.startShooting(self.shootingSpeed)
         subsystems.feeder.close()
+        subsystems.shooter.startShooting(self.shootingSpeed)
         self.open = False
         self.stayOpen = 0
 
@@ -25,13 +25,20 @@ class FireCommand(Command):
             if not subsystems.shooter.isReadyToFire():
                 self.open = False
                 subsystems.feeder.close()
+                subsystems.feeder.stopAgitator()
                 self.stayOpen += 1
         else:
             if subsystems.shooter.isReadyToFire():
                 self.open = True
                 subsystems.feeder.open()
+                if self.stayOpen > 3:
+                    subsystems.feeder.startAgitator()
+            elif self.open:
+                self.open = False
+                self.stayOpen += 1
 
 
     def end(self):
-        subsystems.shooter.stop()
         subsystems.feeder.close()
+        subsystems.feeder.stopAgitator()
+        subsystems.shooter.stop()

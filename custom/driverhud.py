@@ -1,6 +1,6 @@
 '''
 The DriveHUD displays useful information on the driver dashboard, and can read
-information from the dashboard and provide it to thehellohellohellohello bob program.
+information from the dashboard and provide it to the program.
 '''
 
 from wpilib.sendablechooser import SendableChooser
@@ -11,7 +11,8 @@ from wpilib.command import InstantCommand
 from commands.drive.movecommand import MoveCommand
 from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
 from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
-from commands.shooter.startwithshootercommandgroup import StartWithShooterCommandGroup
+from commands.shooter.startwithshooterrightcommandgroup import StartWithShooterRightCommandGroup
+from commands.shooter.startwithshooterleftcommandgroup import StartWithShooterLeftCommandGroup
 
 autonChooser = None
 
@@ -35,11 +36,12 @@ def init():
     '''
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
-    autonChooser.addObject('Cross Baseline', MoveCommand(95))
+    autonChooser.addObject('Cross Baseline', MoveCommand(82))
     autonChooser.addObject('Dump Hopper', MoveCommand(200))
     autonChooser.addObject('Run Into wall', BlindHangCommandGroup())
     autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
-    autonChooser.addObject('Go For Boiler', StartWithShooterCommandGroup())
+    autonChooser.addObject('Go For Boiler - right', StartWithShooterRightCommandGroup())
+    autonChooser.addObject('Go for boiler - left', StartWithShooterLeftCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 

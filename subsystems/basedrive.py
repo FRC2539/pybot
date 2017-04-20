@@ -181,8 +181,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def getAcceleration(self):
         '''Reads acceleration from NavX MXP.'''
-
-        return self.navX.getLinearWorldAccelX()
+        return self.navX.getWorldLinearAccelY()
 
 
     def getSpeeds(self):
@@ -252,7 +251,7 @@ class BaseDrive(DebuggableSubsystem):
 
             if mode == CANTalon.ControlMode.Position:
                 motor.setProfile(1)
-                motor.configMaxOutputVoltage(maxVoltage / 2)
+                motor.configMaxOutputVoltage(maxVoltage / 4)
 
             elif mode == CANTalon.ControlMode.Speed:
                 motor.setProfile(0)

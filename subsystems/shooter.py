@@ -47,6 +47,7 @@ class Shooter(DebuggableSubsystem):
             Config('Shooter/Speed/D'),
             Config('Shooter/Speed/F')
         )
+
         self.motor.setControlMode(CANTalon.ControlMode.Speed)
         self.motor.clearIaccum()
         self.motor.set(speed)
