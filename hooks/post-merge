@@ -1,0 +1,5 @@
+# Keep repository up-to-date with changes
+
+# Install any new git hooks
+root=`git rev-parse --show-toplevel`
+ln -sf $root/hooks/* $root/.git/hooks/

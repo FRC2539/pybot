@@ -5,10 +5,8 @@ __pycache__
 # KDevelop
 *.kdev4
 
-# RobotPy WPILib
+# RobotPy
 tests
-
-# robotpy-installer
 .deploy_cfg
 *_cache
 
