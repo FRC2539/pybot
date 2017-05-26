@@ -1,6 +1,16 @@
+# Optimized Code
 *.py[cod]
 __pycache__
+
+# KDevelop
 *.kdev4
+
+# RobotPy WPILib
 tests
+
+# robotpy-installer
 .deploy_cfg
 *_cache
+
+# virtualenv
+.venv
