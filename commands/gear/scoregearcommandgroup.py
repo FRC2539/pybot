@@ -1,5 +1,5 @@
 from wpilib.command.commandgroup import CommandGroup
-from commandbased.stopcommand import StopCommand
+from commandbased.cancelcommand import CancelCommand
 
 from .aligngearcommand import AlignGearCommand
 from ..drive.setspeedcommand import SetSpeedCommand
@@ -19,4 +19,4 @@ class ScoreGearCommandGroup(CommandGroup):
         self.addSequential(SetSpeedCommand(300))
         self.addSequential(AlignGearCommand(Config('Gear/HandOffDistance')))
         self.addSequential(GoToWallCommand())
-        self.addSequential(StopCommand(pickup))
+        self.addSequential(CancelCommand(pickup))
