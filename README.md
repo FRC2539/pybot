@@ -39,7 +39,7 @@ You must use a Unix-like shell, such as the Linux terminal, the Mac OS X termina
 
 Complete instructions will be made available once we have a Windows machine to test against. The short version is clone the repository and install the modules in requirements.txt.
 
-Running the program
+Using the program
 --
 All of the functionality of the project can be run through the robot.py file. There are three modes:
 
