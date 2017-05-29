@@ -19,21 +19,27 @@ function doUpdate
         fi
     fi
 
-    sleep 1 # HACK: Without this sleep, .pipup isn't created
-
     # Update all modules
     pip list --outdated --format=freeze --disable-pip-version-check | grep -v '^\-e' > .pipup
 
-    if [[ `cat .pipup | wc -l` -gt 0 ]]; then
+    if [[ $? -eq 0 ]]; then
         cat .pipup | cut -d = -f 1  | xargs -n1 pip install -U --disable-pip-version-check > /dev/null
     fi
 
-    rm .pipup
+    rm -f .pipup
 }
 
 if [[ "$1" == "envrc" ]]; then
     # Called from .envrc to update pip packages
     doUpdate envrc
 else
+    if [[ "$1" != "force" ]]; then
+        changedHook="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep "^hooks/post-merge$")"
+        if [[ $changedHook ]]; then
+            root=`git rev-parse --show-toplevel`
+            bash $root/$changedHook force
+            exit
+        fi
+    fi
     doUpdate &
 fi
