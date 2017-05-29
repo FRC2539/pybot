@@ -12,3 +12,6 @@ tests
 
 # virtualenv
 .venv
+
+# Pip
+.pipup

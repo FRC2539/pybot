@@ -16,7 +16,7 @@ exec 1>&2
 # them from being added to the repository. We exploit the fact that the
 # printable range starts at the space character and ends with tilde.
 if test $(git diff --cached --name-only --diff-filter=A -z $against |
-          LC_ALL=C tr -d '[ -~]\0' | wc -c) != 0
+          LC_ALL=C tr -d '[[ -~]]\0' | wc -c) != 0
 then
         cat <<\EOF
 Error: You may not commit a file with a non-ASCII filename
@@ -34,13 +34,13 @@ cp -r $root $newroot
 cd $newroot/$repo
 git checkout -- .
 git clean -fqdx
-if [ ! -d "$newroot/tests" ]; then
+if [[ ! -d "$newroot/tests" ]]; then
     ln -s $root/tests $newroot/$repo/
 fi
 # NOTE: In testing this continues using the repo's virtualenv, but it's possible
 # that won't always happen.
 ./robot.py test 1> /dev/null 2> "$newroot/test-output.txt"
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
     cat "$newroot/test-output.txt"
     cd - > /dev/null
     rm -rf "$newroot"

@@ -1,5 +1,28 @@
 # Keep repository up-to-date with changes
 
-# Install any new git hooks
-root=`git rev-parse --show-toplevel`
-ln -sf $root/hooks/* $root/.git/hooks/
+function doUpdate
+{
+    if [[ "$1" != "update" ]]; then
+        # Install any new git hooks
+        root=`git rev-parse --show-toplevel`
+        ln -sf $root/hooks/* $root/.git/hooks/
+
+        # Install any new requirements
+        pip install -r $PWD/requirements.txt > /dev/null
+    fi
+
+    # Update all modules
+    pip list --outdated --format=freeze --disable-pip-version-check | grep -v '^\-e' > .pipup
+
+    if [[ `cat .pipup | wc -l` -gt 0 ]]; then
+        cat .pipup | cut -d = -f 1  | xargs -n1 pip install -U --disable-pip-version-check > /dev/null
+    fi
+
+    rm .pipup
+}
+
+if [[ "$1" == "update" ]]; then
+    doUpdate update
+else
+    doUpdate &
+fi
