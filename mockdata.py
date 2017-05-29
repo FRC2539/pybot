@@ -4,6 +4,7 @@ defaults = {
     '/DriveTrain/maxSpeed': 950,
     '/DriveTrain/manualMaxSpeed': 100,
     '/DriveTrain/preciseSpeed': 150,
+    '/DriveTrain/ticksPerInch': 750,
     '/Shooter/speed': 100,
     '/Autonomous/robotLocation': 0,
     '/Gear/HandOffDistance': 36

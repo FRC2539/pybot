@@ -34,8 +34,10 @@ if [[ "$1" == "envrc" ]]; then
     doUpdate envrc
 else
     if [[ "$1" != "force" ]]; then
+        # This is an actual pull. See if the post-merge hook has changed.
         changedHook="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep "^hooks/post-merge$")"
         if [[ $changedHook ]]; then
+            # The hook has changed. Run the new one and stop this one.
             root=`git rev-parse --show-toplevel`
             bash $root/$changedHook force
             exit

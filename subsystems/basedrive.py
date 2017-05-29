@@ -46,7 +46,8 @@ class BaseDrive(DebuggableSubsystem):
         self.lastInputs = None
 
         self.setUseEncoders()
-        self.maxSpeed = 1
+        self.speedLimit = Config('DriveTrain/maxSpeed')
+        self.maxSpeed = self.speedLimit
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
