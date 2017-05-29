@@ -9,6 +9,14 @@ function doUpdate
 
         # Install any new requirements
         pip install -r $PWD/requirements.txt > /dev/null
+
+        # Re-enable direnv if there were .envrc changes
+        if [[ `which direnv` ]]; then
+            if [[ `direnv status | grep 'Found RC allowed false'` ]]; then
+                direnv allow
+                return
+            fi
+        fi
     fi
 
     # Update all modules
@@ -24,11 +32,5 @@ function doUpdate
 if [[ "$1" == "update" ]]; then
     doUpdate update
 else
-    if [[ `which direnv` ]]; then
-        if [[ `direnv status | grep 'Found RC allowed false'` ]]; then
-            direnv allow
-        fi
-    fi
-
     doUpdate &
 fi
