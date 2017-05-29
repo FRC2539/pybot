@@ -2,7 +2,7 @@
 
 function doUpdate
 {
-    if [[ "$1" != "update" ]]; then
+    if [[ "$1" != "envrc" ]]; then
         # Install any new git hooks
         root=`git rev-parse --show-toplevel`
         ln -sf $root/hooks/* $root/.git/hooks/
@@ -19,6 +19,8 @@ function doUpdate
         fi
     fi
 
+    sleep 1 # HACK: Without this sleep, .pipup isn't created
+
     # Update all modules
     pip list --outdated --format=freeze --disable-pip-version-check | grep -v '^\-e' > .pipup
 
@@ -29,8 +31,9 @@ function doUpdate
     rm .pipup
 }
 
-if [[ "$1" == "update" ]]; then
-    doUpdate update
+if [[ "$1" == "envrc" ]]; then
+    # Called from .envrc to update pip packages
+    doUpdate envrc
 else
     doUpdate &
 fi
