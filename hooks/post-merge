@@ -24,5 +24,11 @@ function doUpdate
 if [[ "$1" == "update" ]]; then
     doUpdate update
 else
+    if [[ `which direnv` ]]; then
+        if [[ `direnv status | grep 'Found RC allowed false'` ]]; then
+            direnv allow
+        fi
+    fi
+
     doUpdate &
 fi
