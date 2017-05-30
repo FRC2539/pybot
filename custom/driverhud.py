@@ -13,6 +13,7 @@ from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
 from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
 from commands.shooter.startwithshooterrightcommandgroup import StartWithShooterRightCommandGroup
 from commands.shooter.startwithshooterleftcommandgroup import StartWithShooterLeftCommandGroup
+from commands.test.systemCheck import SystemCheck
 
 autonChooser = None
 
@@ -42,6 +43,7 @@ def init():
     autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
     autonChooser.addObject('Go For Boiler - right', StartWithShooterRightCommandGroup())
     autonChooser.addObject('Go for boiler - left', StartWithShooterLeftCommandGroup())
+    autonChooser.addObject('System Check', SystemCheck())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
