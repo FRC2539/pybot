@@ -8,12 +8,6 @@ from wpilib.smartdashboard import SmartDashboard
 from wpilib.command import Scheduler
 
 from wpilib.command import InstantCommand
-from commands.drive.movecommand import MoveCommand
-from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
-from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
-from commands.shooter.startwithshooterrightcommandgroup import StartWithShooterRightCommandGroup
-from commands.shooter.startwithshooterleftcommandgroup import StartWithShooterLeftCommandGroup
-from commands.test.systemCheck import SystemCheck
 
 autonChooser = None
 
@@ -29,6 +23,14 @@ def init():
 
     if autonChooser is not None and not RobotBase.isSimulation():
         raise RuntimeError('Driver HUD has already been initialized')
+
+    # Import here to avoid circular import
+    from commands.drive.movecommand import MoveCommand
+    from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
+    from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
+    from commands.shooter.startwithshooterrightcommandgroup import StartWithShooterRightCommandGroup
+    from commands.shooter.startwithshooterleftcommandgroup import StartWithShooterLeftCommandGroup
+    from commands.test.systemCheck import SystemCheck
 
     '''
     Add commands to the autonChooser to make them available for selection by the
