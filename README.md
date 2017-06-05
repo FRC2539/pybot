@@ -6,7 +6,7 @@ This repository holds the control program for our robot. It is written in python
 
 Setting up your environment:
 --
-If you want more in-depth step-by-step instructions for installing this project on various operating systems, check out our [wiki](/FRC2539/pybot/wiki).
+If you want more in-depth step-by-step instructions for installing this project on various operating systems, check out our [wiki](https://github.com/FRC2539/pybot/wiki).
 
 
 **Prerequisites**
@@ -15,7 +15,7 @@ You must have [python 3](https://www.python.org/downloads/) and [pip 3](https://
 
 **The simple way**
 
-You must use a Unix-like shell, such as the Linux terminal, the Mac OS X terminal, or the Linux Subsystem on Windows to setup your environment using this method. This will not work in Windows Command Prompt or Powershell. See [the wiki](/FRC2539/pybot/wiki/Windows-Setup) for Windows installation instructions.
+You must use a Unix-like shell, such as the Linux terminal, the Mac OS X terminal, or the Linux Subsystem on Windows to setup your environment using this method. This will not work in Windows Command Prompt or Powershell. See [the wiki](https://github.com/FRC2539/pybot/wiki/Windows-Setup) for Windows installation instructions.
 
 _The direnv setup script relies on the presence of common utilies like `which` and `wget`, in addition to `python3` and `pip3`_
 
