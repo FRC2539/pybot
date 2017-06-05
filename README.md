@@ -6,7 +6,7 @@ This repository holds the control program for our robot. It is written in python
 
 Setting up your environment:
 --
-If you want more in-depth step-by-step instructions for installing this project on various operating systems, check out our [wiki](https://github.com/FRC2539/pybot/wiki).
+If you want more in-depth step-by-step instructions for installing this project on various operating systems, check out our [wiki](https://github.com/FRC2539/pybot/wiki/Prepare-Your-Computer).
 
 
 **Prerequisites**

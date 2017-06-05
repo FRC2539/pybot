@@ -1,7 +1,7 @@
 # Keep repository up-to-date with changes
 function checkOnline
 {
-    wget -q --tries=10 --timeout=20 --spider http://google.com
+    curl --silent --retry 3 --retry-delay 1 --head http://google.com > /dev/null
     if [[ "$?" -ne 0 ]]; then
         exit
     fi
