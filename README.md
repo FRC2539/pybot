@@ -6,16 +6,21 @@ This repository holds the control program for our robot. It is written in python
 
 Setting up your environment:
 --
+If you want more in-depth step-by-step instructions for installing this project on various operating systems, check out our [wiki](/FRC2539/pybot/wiki).
+
+
 **Prerequisites**
 
 You must have [python 3](https://www.python.org/downloads/) and [pip 3](https://pip.pypa.io/en/stable/installing/) installed on your system to use this project. Consult your system's documentation for the proper way to install them.
 
 **The simple way**
 
-You must use a Unix-like shell, such as the Linux terminal, the Mac OS X terminal, or the Linux Subsystem on Windows to setup your environment using this method. This will not work in Windows Command Prompt or Powershell. See [the Windows way](#windows) instead.
+You must use a Unix-like shell, such as the Linux terminal, the Mac OS X terminal, or the Linux Subsystem on Windows to setup your environment using this method. This will not work in Windows Command Prompt or Powershell. See [the wiki](/FRC2539/pybot/wiki/Windows-Setup) for Windows installation instructions.
+
+_The direnv setup script relies on the presence of common utilies like `which` and `wget`, in addition to `python3` and `pip3`_
 
  1. Install [direnv](https://direnv.net/).
- 2. Setup direnv for your shell as described in its documentation. If you don't know which shell you are using, the following should usually work:
+ 2. Setup direnv for your shell as described in its documentation. If you don't know which shell you are using, run the following and restart your shell:
 
     `echo -e '\neval "$(direnv hook bash)"' >> ~/.bashrc`
 
@@ -34,10 +39,6 @@ You must use a Unix-like shell, such as the Linux terminal, the Mac OS X termina
  6. Enjoy your completely set-up development environment
 
 > Note: If direnv is not available for your system and you don't want to compile it yourself, you can run `source .envrc` to setup your environment. However, you must remember to do this every time you want to use the project, whereas direnv will automatically do this whenever you are inside the repository.
-
-**<a name="windows"></a>The Windows &reg; way**
-
-Complete instructions will be made available once we have a Windows machine to test against. The short version is clone the repository and install the modules in requirements.txt.
 
 Using the program
 --
