@@ -45,12 +45,14 @@ def init():
     autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
     autonChooser.addObject('Go For Boiler - right', StartWithShooterRightCommandGroup())
     autonChooser.addObject('Go for boiler - left', StartWithShooterLeftCommandGroup())
-    autonChooser.addObject('System Check', SystemCheck())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
     '''Display all currently running commands.'''
     SmartDashboard.putData('Active Commands', Scheduler.getInstance())
+
+    '''Comands to display on dashboard. This is good for testing.'''
+    showCommand(SystemCheck())
 
 
 def getAutonomousProgram():
@@ -65,6 +67,13 @@ def getAutonomousProgram():
         raise RuntimeError('Cannot select auton before HUD initializiation')
 
     return autonChooser.getSelected()
+
+def showCommand(cmd):
+    '''Display the given command on the dashboard.'''
+
+    name = str(cmd)
+    name.replace('/', '_')
+    SmartDashboard.putData('Commands/%s' % name, cmd)
 
 
 def showAlert(msg, type='Alerts'):
