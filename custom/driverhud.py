@@ -30,7 +30,7 @@ def init():
     from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
     from commands.shooter.startwithshooterrightcommandgroup import StartWithShooterRightCommandGroup
     from commands.shooter.startwithshooterleftcommandgroup import StartWithShooterLeftCommandGroup
-    from commands.test.systemCheck import SystemCheck
+    from commands.test.systemcheckcommand import SystemCheckCommand
 
     '''
     Add commands to the autonChooser to make them available for selection by the
@@ -52,7 +52,7 @@ def init():
     SmartDashboard.putData('Active Commands', Scheduler.getInstance())
 
     '''Comands to display on dashboard. This is good for testing.'''
-    showCommand(SystemCheck())
+    showCommand(SystemCheckCommand())
 
 
 def getAutonomousProgram():

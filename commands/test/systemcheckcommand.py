@@ -1,10 +1,10 @@
-from wpilib.command import Command
+from wpilib.command.instantcommand import InstantCommand
 from ctre import CANTalon
 import subsystems
 import ports
 
 # Perform a general system check on the robot.
-class SystemCheck(Command):
+class SystemCheckCommand(InstantCommand):
 
     def initialize(self):
         # Print information about connection to each system
