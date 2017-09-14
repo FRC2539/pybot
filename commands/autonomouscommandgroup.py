@@ -6,13 +6,14 @@ from commands.gear.waitonpilotcommand import WaitOnPilotCommand
 from commands.drive.movecommand import MoveCommand
 from wpilib.driverstation import DriverStation
 from commands.drive.turncommand import TurnCommand
+
 class AutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('autonomous')
 
         @fc.IF(lambda: subsystems.gear.isLiftVisible())
         def centerPosition(self):
-           @fc.IF(lambda: subsystems.gear.hasGear())
+            @fc.IF(lambda: subsystems.gear.hasGear())
             def hangCenter(self):
                 self.addSequential(ScoreGearCommandGroup())
                 self.addSequential(WaitOnPilotCommand())
@@ -35,3 +36,11 @@ class AutonomousCommandGroup(CommandGroup):
             @fc.ELSE
             def crossBaseline(self):
                 self.addSequential(MoveCommand(50))
+
+        @fc.ELIF(lambda: subsystems.shooter.isVisible())
+        def shootingFuel(self):
+            pass
+
+        @fc.ELSE
+        def sides(self):
+            pass

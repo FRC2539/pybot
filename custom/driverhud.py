@@ -26,10 +26,7 @@ def init():
 
     # Import here to avoid circular import
     from commands.drive.movecommand import MoveCommand
-    from commands.gear.gearautonomouscommandgroup import GearAutonomousCommandGroup
-    from commands.gear.blindhangcommandgroup import BlindHangCommandGroup
-    from commands.shooter.startwithshooterrightcommandgroup import StartWithShooterRightCommandGroup
-    from commands.shooter.startwithshooterleftcommandgroup import StartWithShooterLeftCommandGroup
+    from commands.autonomouscommandgroup import AutonomousCommandGroup
     from commands.test.systemcheckcommand import SystemCheckCommand
 
     '''
@@ -39,12 +36,7 @@ def init():
     '''
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
-    autonChooser.addObject('Cross Baseline', MoveCommand(82))
-    autonChooser.addObject('Dump Hopper', MoveCommand(200))
-    autonChooser.addObject('Run Into wall', BlindHangCommandGroup())
-    autonChooser.addObject('Hang Gear', GearAutonomousCommandGroup())
-    autonChooser.addObject('Go For Boiler - right', StartWithShooterRightCommandGroup())
-    autonChooser.addObject('Go for boiler - left', StartWithShooterLeftCommandGroup())
+    autonChooser.addObject('Do Everything', AutonomousCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
