@@ -17,25 +17,15 @@ class DriveCommand(Command):
 
     def initialize(self):
         subsystems.drivetrain.setSpeedLimit(self.speedLimit)
-        subsystems.drivetrain.setUseEncoders(False)
 
 
     def execute(self):
         x = logicalaxes.driveX.get()
         y = logicalaxes.driveY.get()
         rotate = logicalaxes.driveRotate.get()
-        if x > .05:
-            x = .25 + .75 * x
-        if y > .05:
-            y = .25 + .75 * y
-        if rotate > .05:
-            rotate = .15 +.45 * rotate
+
         subsystems.drivetrain.move(
             x,
             y,
             rotate
         )
-
-
-    def end(self):
-        subsystems.drivetrain.setUseEncoders()
