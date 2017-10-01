@@ -1,3 +1,5 @@
+#! /bin/bash
+
 # Some basic sanity checks to keep our code base sane
 # You can see all possible hooks in the .git/hooks directory
 

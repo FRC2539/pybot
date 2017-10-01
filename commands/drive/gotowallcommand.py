@@ -25,6 +25,10 @@ class GoToWallCommand(Command):
 
 
     def isFinished(self):
+        # Stop if collision detected
+        if abs(subsystems.drivetrain.getAcceleration()) > 0.5:
+            return True
+
         return self._finished
 
 

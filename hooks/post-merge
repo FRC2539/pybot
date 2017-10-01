@@ -1,3 +1,5 @@
+#! /bin/bash
+
 # Keep repository up-to-date with changes
 function checkOnline
 {
