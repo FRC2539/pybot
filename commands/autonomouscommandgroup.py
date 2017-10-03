@@ -48,11 +48,9 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
-                self.addSequential(MoveCommand(20))
+                self.addSequential(MoveCommand(15))
                 self.addSequential(AlertCommand("Step 1"))
-                self.addSequential(TurnCommand(10))
-                self.addSequential(MoveCommand(20))
-                self.addSequential(TurnCommand(80))
+                self.addSequential(TurnCommand(5))
                 self.addSequential(MoveCommand(20))
 
 
