@@ -7,6 +7,7 @@ from commands.drive.movecommand import MoveCommand
 from wpilib.driverstation import DriverStation
 from commands.drive.turncommand import TurnCommand
 from commands.shooter.firecommand import FireCommand
+from commands.alertcommand import AlertCommand
 from custom.config import Config
 
 
@@ -43,19 +44,17 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.ELIF(lambda: subsystems.shooter.isVisible())
         def shootingFuel(self):
-            self.addSequential(FireCommand(Config('Shooter/speed')), 8)
+            #self.addSequential(FireCommand(Config('Shooter/speed')), 8)
 
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
-                self.addSequential(MoveCommand(-20))
-                self.addSequential(TurnCommand(10))
-                self.addSequential(MoveCommand(5))
-                self.addSequential(TurnCommand(20))
-                self.addSequential(MoveCommand(5))
-                self.addSequential(TurnCommand(20))
                 self.addSequential(MoveCommand(20))
-                self.addSequential(TurnCommand(-90))
-                self.addSequential(MoveCommand(25))
+                self.addSequential(AlertCommand("Step 1"))
+                self.addSequential(TurnCommand(10))
+                self.addSequential(MoveCommand(20))
+                self.addSequential(TurnCommand(80))
+                self.addSequential(MoveCommand(20))
+
 
             @fc.ELSE
             def turnLeft(self):
