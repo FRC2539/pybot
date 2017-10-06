@@ -36,3 +36,4 @@ class MoveCommand(Command):
 
     def end(self):
         subsystems.drivetrain.stop()
+        print('I finished')

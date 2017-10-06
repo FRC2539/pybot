@@ -85,13 +85,14 @@ class BaseDrive(DebuggableSubsystem):
             return
 
         self.lastInputs = [x, y, rotate]
+        print('%f, %f, %f' % (x, y, rotate))
 
         # Prevent drift caused by small input values
-        if abs(x) < .01:
+        if abs(x) < .5:
             x = 0
-        if abs(y) < .01:
+        if abs(y) < .5:
             y = 0
-        if abs(rotate) < .01:
+        if abs(rotate) < .5:
             rotate = 0
 
         speeds = self._calculateSpeeds(x, y, rotate)
