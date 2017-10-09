@@ -22,6 +22,18 @@ class Feeder(DebuggableSubsystem):
     def close(self):
         self.gate.set(.8)
 
+    def isClosed(self):
+        return self.gate.get() > .9 or self.gate.get() < .7
+
+    def initDefaultCommand(self):
+        '''
+        By default, unless another command is running that requires this
+        subsystem, we will drive via joystick using the max speed stored in
+        Config.
+        '''
+        from commands.shooter.stayclosedcommand import StayClosedCommand
+
+        self.setDefaultCommand(StayClosedCommand())
 
     def startAgitator(self):
         self.agitator.set(Relay.Value.kForward)
