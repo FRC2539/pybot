@@ -6,7 +6,7 @@ class WaitOnPilotCommand(Command):
     '''Keeps the robot in place while the gear is removed.'''
 
     def __init__(self):
-        super().__init__('Wait on Pilot', 4)
+        super().__init__('Wait on Pilot', 2)
         self.requires(subsystems.drivetrain)
 
 

@@ -1,6 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
 from networktables import NetworkTable
+import math
 
 from robotpy_ext.common_drivers.navx.ahrs import AHRS
 from custom.config import Config
@@ -48,6 +49,7 @@ class BaseDrive(DebuggableSubsystem):
         self.setUseEncoders()
         self.speedLimit = Config('DriveTrain/maxSpeed')
         self.maxSpeed = self.speedLimit
+        self.deadband = Config('DriveTrain/deadband', 0.05)
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
@@ -71,7 +73,7 @@ class BaseDrive(DebuggableSubsystem):
         '''
         from commands.drive.drivecommand import DriveCommand
 
-        self.setDefaultCommand(DriveCommand(Config('DriveTrain/manualMaxSpeed')))
+        self.setDefaultCommand(DriveCommand(self.maxSpeed))
 
 
     def move(self, x, y, rotate):
@@ -85,15 +87,12 @@ class BaseDrive(DebuggableSubsystem):
             return
 
         self.lastInputs = [x, y, rotate]
-        print('%f, %f, %f' % (x, y, rotate))
 
-        # Prevent drift caused by small input values
-        if abs(x) < .5:
-            x = 0
-        if abs(y) < .5:
-            y = 0
-        if abs(rotate) < .5:
-            rotate = 0
+        '''Prevent drift caused by small input values'''
+        if self.useEncoders:
+            x = math.copysign(max(abs(x) - self.deadband, 0), x)
+            y = math.copysign(max(abs(y) - self.deadband, 0), y)
+            rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
@@ -107,7 +106,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
-            if all(abs(x) < 0.1 for x in speeds):
+            if not any(speeds):
                 '''
                 When we are trying to stop, clearing the I accumulator can
                 reduce overshooting, thereby shortening the time required to
@@ -232,7 +231,7 @@ class BaseDrive(DebuggableSubsystem):
             self.maxSpeed = speed
 
         '''If we can't use encoders, attempt to approximate that speed.'''
-        self.maxPercentVBus = speed / 100
+        self.maxPercentVBus = speed / self.maxSpeed
 
         if self.useEncoders:
             self._setMode(CANTalon.ControlMode.Speed)
@@ -312,7 +311,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def _configureMotors(self):
         '''
-        Make any necessary changes to the motors and define self.activeMotors.
+        Make any necessary changes to the motors and populate self.activeMotors.
         '''
 
         raise NotImplementedError()

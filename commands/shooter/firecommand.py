@@ -3,39 +3,45 @@ from wpilib.command import Command
 import subsystems
 
 class FireCommand(Command):
-    # Initialize the named command.
-    def __init__(self, shootingSpeed):
+
+    def __init__(self, shootingSpeed, maxFuel=None):
         super().__init__('ShootingCommand %s' % (shootingSpeed))
 
         self.requires(subsystems.shooter)
         self.requires(subsystems.feeder)
 
         self.shootingSpeed = shootingSpeed
+        self.maxFuel = maxFuel
 
 
     def initialize(self):
-        subsystems.feeder.close()
         subsystems.shooter.startShooting(self.shootingSpeed)
         self.open = False
-        self.stayOpen = 0
+        self.ticksWithoutFuel = 0
+        self.fuelLaunched = 0
 
 
     def execute(self):
-        if self.open and self.stayOpen < 3:
-            if not subsystems.shooter.isReadyToFire():
+        if self.open:
+            if subsystems.shooter.isReadyToFire():
+                if self.ticksWithoutFuel > 10:
+                    subsystems.feeder.startAgitator()
+                self.ticksWithoutFuel += 1
+
+            else:
                 self.open = False
                 subsystems.feeder.close()
                 subsystems.feeder.stopAgitator()
-                self.stayOpen += 1
-        else:
-            if subsystems.shooter.isReadyToFire():
-                self.open = True
-                subsystems.feeder.open()
-                if self.stayOpen > 3:
-                    subsystems.feeder.startAgitator()
-            elif self.open:
-                self.open = False
-                self.stayOpen += 1
+                self.fuelLaunched += 1
+
+        elif subsystems.shooter.isReadyToFire():
+            self.open = True
+            subsystems.feeder.open()
+            self.ticksWithoutFuel = 0
+
+
+    def isFinished(self):
+        return self.maxFuel and self.maxFuel <= self.fuelLaunched
 
 
     def end(self):
