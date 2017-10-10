@@ -2,6 +2,7 @@ from wpilib.command.commandgroup import CommandGroup
 from wpilib.command.waitcommand import WaitCommand
 import custom.flowcontrol as fc
 import subsystems
+from wpilib.command.printcommand import PrintCommand
 
 from commands.gear.scoregearcommandgroup import ScoreGearCommandGroup
 from commands.gear.waitonpilotcommand import WaitOnPilotCommand
@@ -45,14 +46,18 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.ELIF(lambda: subsystems.shooter.isVisible())
         def shootingFuel(self):
-            #self.addSequential(FireCommand(Config('Shooter/speed')), 8)
+            self.addSequential(FireCommand(Config('Shooter/speed')), 8)
 
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
                 self.addSequential(MoveCommand(25))
+
                 self.addSequential(WaitCommand(0.1))
+                self.addSequential(PrintCommand('Hi'))
                 self.addSequential(TurnCommand(25))
+                self.addSequential(PrintCommand('Hi Again'))
                 self.addSequential(MoveCommand(10))
+                self.addSequential(WaitCommand(0.1))
                 self.addSequential(TurnCommand(70))
 
             @fc.ELSE
@@ -61,6 +66,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(WaitCommand(0.1))
                 self.addSequential(TurnCommand(-25))
                 self.addSequential(MoveCommand(-10))
+                self.addSequential(WaitCommand(0.1))
                 self.addSequential(TurnCommand(-70))
 
             @fc.IF(lambda: subsystems.gear.isLiftVisible())

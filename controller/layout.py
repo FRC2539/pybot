@@ -13,6 +13,7 @@ from commands.gear.scoregearcommand import ScoreGearCommand
 from commands.test.printultrasonic import PrintUltrasonic
 from commands.pickup.clearfuelcommand import ClearFuelCommand
 from commands.test.getaccel import GetAccel
+from commands.drive.runintowallcommand import RunIntoWallCommand
 
 def init():
     '''
@@ -39,6 +40,7 @@ def init():
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     mainController.Y.whenPressed(GetAccel())
     mainController.Back.whenPressed(ResetCommand())
+    mainController.DPadUp.whenPressed(RunIntoWallCommand(600))
 
 
     backupController = LogitechDualShock(1)

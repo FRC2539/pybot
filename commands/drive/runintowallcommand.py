@@ -5,7 +5,7 @@ import subsystems
 class RunIntoWallCommand(Command):
     '''Drives the robot at a steady speed until it crashes into something.'''
 
-    def __init__(self, speedLimit, timelimit):
+    def __init__(self, speedLimit, timelimit=None):
         super().__init__('Run Into Wall', timelimit)
 
         self.requires(subsystems.drivetrain)
@@ -19,10 +19,8 @@ class RunIntoWallCommand(Command):
         subsystems.drivetrain.move(0, 1, 0)
 
 
-
     def isFinished(self):
-        return self.isTimedOut()
-        # return abs(subsystems.drivetrain.getAcceleration()) > 0.5
+        return abs(subsystems.drivetrain.getAcceleration()) > 0.5
 
 
     def end(self):

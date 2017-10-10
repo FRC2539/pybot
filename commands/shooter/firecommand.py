@@ -30,7 +30,7 @@ class FireCommand(Command):
 
             else:
                 self.open = False
-                subsystems.feeder.close()
+                #subsystems.feeder.close()
                 subsystems.feeder.stopAgitator()
                 self.fuelLaunched += 1
 
