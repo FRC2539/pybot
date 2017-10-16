@@ -1,16 +1,13 @@
-from wpilib.command.timedcommand import TimedCommand
+from wpilib.command.command import Command
 
 import subsystems
 
-class WaitForLiftCommand(TimedCommand):
-    '''
-    Pauses until the lift is visible in the camera. If the lift does not appear
-    by the timeout, the command finished anyhow.
-    '''
+class WaitForLiftCommand(Command):
+    '''Pauses until the lift is visible in the camera'''
 
-    def __init__(self, timeout=2):
-        super().__init__('Wait Until Lift Is Visible', timeout)
+    def __init__(self):
+        super().__init__('Wait Until Lift Is Visible')
 
 
     def isFinished(self):
-        return subsystems.gear.isLiftVisible() or super().isFinished()
+        return subsystems.gear.isLiftVisible()

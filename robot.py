@@ -22,6 +22,9 @@ class KryptonBot(CommandBasedRobot):
         controller.layout.init()
         driverhud.init()
 
+        from commands.setconfigcommand import SetConfigCommand
+        self.resetAuto = SetConfigCommand('/Autonomous/robotLocation', 0)
+
 
     def autonomousInit(self):
         '''This function is called each time autonomous mode starts.'''
@@ -29,6 +32,11 @@ class KryptonBot(CommandBasedRobot):
         # Schedule the autonomous command
         driverhud.getAutonomousProgram().start()
         driverhud.showInfo("Starting %s" % driverhud.getAutonomousProgram())
+
+
+    def teleopInit(self):
+        '''Reset autonomous settings'''
+        self.resetAuto.start()
 
 
     def handleCrash(self, error):

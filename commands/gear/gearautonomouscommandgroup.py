@@ -32,7 +32,7 @@ class GearAutonomousCommandGroup(CommandGroup):
         self.addSequential(move)
         self.addSequential(WaitCommand(.5))
         self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
-        self.addSequential(WaitForLiftCommand())
+        self.addSequential(WaitForLiftCommand(), 2)
         self.addSequential(scoreAnyway)
         self.addSequential(WaitOnPilotCommand())
         self.addSequential(AlertCommand('Gear removed', 'Info'))
