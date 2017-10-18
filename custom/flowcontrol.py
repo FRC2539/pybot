@@ -197,7 +197,7 @@ def WHILE(condition):
 
         cond = ConditionalCommand('flowcontrolWHILE', cg)
         cond.condition = condition
-        cond.isFinished = _restartWhile
+        cond.isFinished = _restartWhile.__get__(cond)
         cond._parentLoop = parentLoop
 
         parent.addSequential(cond)
