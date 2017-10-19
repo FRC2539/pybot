@@ -1,5 +1,5 @@
 from wpilib.command.commandgroup import CommandGroup
-from wpilib.command.conditionalcommand import ConditionalCommand
+from commands.conditionalcommand import ConditionalCommand
 from wpilib.command.instantcommand import InstantCommand
 from commandbased.cancelcommand import CancelCommand
 
@@ -75,6 +75,70 @@ def _restartWhile(self):
     return finished
 
 
+def _popIfStack(cg):
+    '''
+    We buffer conditionals until the last moment so we don't have trouble with
+    Commands being locked when they're added to a CommandGroup.
+    '''
+    if cg._ifStack:
+        top = cg._ifStack.pop(0)
+        cmd = None
+        for x in reversed(cg._ifStack):
+            if x[0]:
+                cmd = ConditionalCommand('flowcontrolELIF', x[1], cmd)
+                cmd.condition = x[0]
+
+            else:
+                cmd = x[1]
+
+        cmd = ConditionalCommand('flowcontrolIF', top[1], cmd)
+        cmd.condition = top[0]
+
+        cg._addSequential(cmd)
+        cg._ifStack = None
+
+
+# These _hook methods ensure we always add our buffered conditions
+def _hookSequential(self, cmd, timeout=None):
+    _popIfStack(self)
+    self._addSequential(cmd, timeout)
+
+
+def _hookParallel(self, cmd, timeout=None):
+    _popIfStack(self)
+    self._addParallel(cmd, timeout)
+
+
+def _hookStart(self):
+    _popIfStack(self)
+    self._start()
+
+
+def _hookParent(self, parent):
+    _popIfStack(self)
+    self._setParent(parent)
+
+
+def _hookCommandGroup(cg):
+    '''Override some methods of the CommandGroup to add buffered commands'''
+
+    try:
+        cg._ifStack
+        return
+    except AttributeError:
+        pass
+
+    cg._addSequential = cg.addSequential
+    cg._addParallel = cg.addParallel
+    cg._start = cg.start
+    cg._setParent = cg.setParent
+
+    cg.addSequential = _hookSequential.__get__(cg)
+    cg.addParallel = _hookParallel.__get__(cg)
+    cg.start = _hookStart.__get__(cg)
+    cg.setParent = _hookParent.__get__(cg)
+
+
 def IF(condition):
     '''
     Use as a decorator for a function. That function will be placed into a
@@ -85,15 +149,10 @@ def IF(condition):
 
     def flowcontrolIF(func):
         parent = _getCommandGroup()
+        _hookCommandGroup(parent)
 
         cg = _buildCommandGroup(func, parent)
-
-        cond = ConditionalCommand('flowcontrolIF', cg)
-        cond.condition = condition
-
-        parent.addSequential(cond)
-
-        parent._ifStack = [cond]
+        parent._ifStack = [(condition, cg)]
 
     return flowcontrolIF
 
@@ -109,33 +168,8 @@ def ELIF(condition):
     def flowcontrolELIF(func):
         parent = _getCommandGroup()
 
-        # Determine which conditional command to branch from
-        try:
-            cond = parent._ifStack[-1]
-        except AttributeError:
-            raise ValueError('Cannot have an ELIF without an active IF')
-
-        try:
-            branchCmd = parent.commands[-1].command
-        except KeyError:
-            raise ValueError('Cannot perform ELIF before IF')
-
-        if branchCmd is not parent._ifStack[0]:
-            raise ValueError('There cannot be Commands between IF and ELIF')
-
-        # Create new command group with decorated function
         cg = _buildCommandGroup(func, parent)
-
-        # Add command group to a new conditional command
-        elseCond = ConditionalCommand('flowcontrolELIF', cg)
-        elseCond.condition = condition
-
-        # Make the new conditional command the "false" branch of the conditional
-        # command we found earlier.
-        cond.onFalse = elseCond
-
-        # Store new conditional command so we can branch off it more if needed
-        parent._ifStack.append(elseCond)
+        parent._ifStack.append((condition, cg))
 
     return flowcontrolELIF
 
@@ -148,26 +182,10 @@ def ELSE(func):
     '''
 
     parent = _getCommandGroup()
-
-    try:
-        cond = parent._ifStack[-1]
-    except AttributeError:
-        raise ValueError('Cannot have an ELSE without an active IF')
-
-    try:
-        branchCmd = parent.commands[-1].command
-    except KeyError:
-        raise ValueError('Cannot perform ELSE before IF')
-
-    if branchCmd is not parent._ifStack[0]:
-        raise ValueError('There cannot be Commands between IF and ELSE')
-
     cg = _buildCommandGroup(func, parent)
+    parent._ifStack.append((None, cg))
 
-    cond.onFalse = cg
-
-    # Prevent any other ELSE or ELIF from using this ConditionalCommand
-    del parent._ifStack
+    _popIfStack(parent)
 
 
 def WHILE(condition):
