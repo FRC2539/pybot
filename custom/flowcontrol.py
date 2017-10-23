@@ -1,3 +1,4 @@
+from wpilib.command.command import Command
 from wpilib.command.commandgroup import CommandGroup
 from commands.conditionalcommand import ConditionalCommand
 from wpilib.command.instantcommand import InstantCommand
@@ -65,11 +66,15 @@ def _restartWhile(self):
     Replaces isFinished for a ConditionalCommand in a WHILE loop, to keep it
     running.
     '''
-    finished = super().isFinished()
+    if self.forceCancel:
+        self.forceCancel = False
+        return True
+
+    finished = super(ConditionalCommand, self).isFinished()
 
     if finished:
-        if self.condition:
-            self.onTrue.start()
+        if self.condition():
+            self.currentCommandIndex = None
             return False
 
     return finished
@@ -205,23 +210,28 @@ def WHILE(condition):
             parentLoop = None
 
         cg = CommandGroup(func.__name__)
-
         cg._source = source
+
+        # Set the current loop for any BREAK statements
         source._currentLoop = cg
         func(cg)
+        source._currentLoop = parentLoop
 
-        for reqt in cg.getRequirements():
-            source.requires(reqt)
+        def cancelLoop(self):
+            self.parent.forceCancel = True
 
-        cond = ConditionalCommand('flowcontrolWHILE', cg)
+        end = Command('END WHILE')
+        end.initialize = cancelLoop.__get__(end)
+
+        cond = ConditionalCommand('flowcontrolWHILE', cg, end)
         cond.condition = condition
+        cond.forceCancel = False
         cond.isFinished = _restartWhile.__get__(cond)
         cond._parentLoop = parentLoop
 
         parent.addSequential(cond)
 
         cg.conditionalCommand = cond
-        source._currentLoop = parentLoop
 
     return flowcontrolWHILE
 
@@ -257,19 +267,25 @@ def BREAK(steps=1):
     if loop is None:
         raise ValueError('Cannot BREAK outside of a loop')
 
-    step = 1
-    while steps > step:
-        loop = loop.conditionalCommand._parentLoop
+    # We can't use CancelCommand here, because the conditionalCommand attribute
+    # isn't yet bound to the CommandGroup, so we find it at initialization time
+    # instead
+    def cancelLoop():
+        nonlocal loop, steps
+        step = 1
+        while steps > step:
+            loop = loop.conditionalCommand._parentLoop
 
-        if loop is None:
-            raise ValueError(
-                'BREAK %i not possible with loop depth %i' %
-                (steps, step)
-            )
+            if loop is None:
+                raise ValueError(
+                    'BREAK %i not possible with loop depth %i' %
+                    (steps, step)
+                )
 
-        step += 1
+            step += 1
 
-    breakCmd = InstantCommand('BREAK')
-    breakCmd.initialize = lambda: loop.conditionalCommand._cancel()
+        loop.conditionalCommand.forceCancel = True
 
-    parent.addSequential(breakCmd)
+    breakLoop = Command('flowcontrolBREAK')
+    breakLoop.initialize = cancelLoop
+    parent.addSequential(breakLoop)
