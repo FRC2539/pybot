@@ -55,9 +55,6 @@ def _buildCommandGroup(func, parent):
     cg._source = source
     func(cg)
 
-    for reqt in cg.getRequirements():
-        source.requires(reqt)
-
     return cg
 
 
