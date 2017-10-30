@@ -1,3 +1,5 @@
+
+
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
 from networktables import NetworkTable
@@ -252,7 +254,7 @@ class BaseDrive(DebuggableSubsystem):
 
             if mode == CANTalon.ControlMode.Position:
                 motor.setProfile(1)
-                motor.configMaxOutputVoltage(maxVoltage / 4)
+                motor.configMaxOutputVoltage(maxVoltage / 2)
 
             elif mode == CANTalon.ControlMode.Speed:
                 motor.setProfile(0)

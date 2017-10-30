@@ -12,6 +12,7 @@ class AlignGearCommand(Command):
         self.requires(subsystems.drivetrain)
 
     def initialize(self):
+        print('Align')
         self.lostCount = 0
         self.bogusCount = 0
         self._finished = False
@@ -28,7 +29,7 @@ class AlignGearCommand(Command):
         distanceToLift = subsystems.gear.getLiftDistance()
         remainingDistance = distanceToLift - self.handOffDistance
 
-        self._finished = remainingDistance < 0
+        self._finished = remainingDistance < 2
 
         if remainingDistance > 10 and self.speed < 0.8:
             self.bogusCount += 1
@@ -41,11 +42,11 @@ class AlignGearCommand(Command):
         rotate = 0
 
         if center < -5:
-            rotate = -0.1
+            rotate = -0.2
             onTarget = False
 
         elif center > 5:
-            rotate = 0.1
+            rotate = 0.2
             onTarget = False
 
         if not onTarget:
@@ -53,7 +54,7 @@ class AlignGearCommand(Command):
                 self.speed = max(remainingDistance / 10.0, 0)
 
             self._finished = False
-
+        print('Rotate: %f' % rotate)
         subsystems.drivetrain.move(0, self.speed, rotate)
 
 
