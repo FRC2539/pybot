@@ -155,6 +155,12 @@ def IF(condition):
         _hookCommandGroup(parent)
 
         cg = _buildCommandGroup(func, parent)
+
+        try:
+            _popIfStack(parent)
+        except AttributeError:
+            pass
+
         parent._ifStack = [(condition, cg)]
 
     return flowcontrolIF
@@ -172,7 +178,11 @@ def ELIF(condition):
         parent = _getCommandGroup()
 
         cg = _buildCommandGroup(func, parent)
-        parent._ifStack.append((condition, cg))
+
+        try:
+            parent._ifStack.append((condition, cg))
+        except AttributeError:
+            raise ValueError('Cannot use ELIF without IF')
 
     return flowcontrolELIF
 
@@ -186,7 +196,11 @@ def ELSE(func):
 
     parent = _getCommandGroup()
     cg = _buildCommandGroup(func, parent)
-    parent._ifStack.append((None, cg))
+
+    try:
+        parent._ifStack.append((None, cg))
+    except AttributeError:
+        raise ValueError('Cannot use ELSE without IF')
 
     _popIfStack(parent)
 
