@@ -2,10 +2,11 @@ from wpilib.command.commandgroup import CommandGroup
 from commandbased.cancelcommand import CancelCommand
 
 from .aligngearcommand import AlignGearCommand
+from .drivetoliftcommand import DriveToLiftCommand
 from ..drive.setspeedcommand import SetSpeedCommand
-from ..drive.gotowallcommand import GoToWallCommand
-from ..pickup.pickupcommand import PickupCommand
 from custom.config import Config
+import custom.flowcontrol as fc
+import subsystems
 
 
 class ScoreGearCommandGroup(CommandGroup):
@@ -15,4 +16,6 @@ class ScoreGearCommandGroup(CommandGroup):
 
         self.addSequential(SetSpeedCommand(300))
         self.addSequential(AlignGearCommand(Config('Gear/HandOffDistance')))
-        self.addSequential(GoToWallCommand())
+        @fc.IF(subsystems.gear.isLiftVisible)
+        def hangTheGear(self):
+            self.addSequential(DriveToLiftCommand(), 4)

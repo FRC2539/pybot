@@ -1,10 +1,11 @@
 from wpilib.command.command import Command
 from wpilib.command.commandgroup import CommandGroup
 from commands.conditionalcommand import ConditionalCommand
-from wpilib.command.instantcommand import InstantCommand
 from commandbased.cancelcommand import CancelCommand
 
 import inspect
+
+__all__ = ['IF', 'ELIF', 'ELSE', 'WHILE', 'RETURN', 'BREAK']
 
 '''
 These functions can be used to make programming CommandGroups much more
@@ -215,7 +216,7 @@ def WHILE(condition):
         source._currentLoop = parentLoop
 
         def cancelLoop(self):
-            self.parent.forceCancel = True
+            self.getGroup().forceCancel = True
 
         end = Command('END WHILE')
         end.initialize = cancelLoop.__get__(end)
