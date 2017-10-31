@@ -12,7 +12,6 @@ class AlignGearCommand(Command):
         self.requires(subsystems.drivetrain)
 
     def initialize(self):
-        print('Align')
         self.lostCount = 0
         self.bogusCount = 0
         self._finished = False

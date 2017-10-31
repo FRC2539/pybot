@@ -26,8 +26,7 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: subsystems.shooter.isVisible())
         def launchFuel(self):
             ################Change to 8
-            self.addSequential(FireCommand(Config('Shooter/speed')), 2)
-
+            self.addSequential(FireCommand(Config('Shooter/speed')), 8)
             '''Get away from the wall'''
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
@@ -39,7 +38,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(TurnCommand(25))
                 self.addSequential(MoveCommand(5))
                 self.addSequential(WaitCommand(0.1))
-                self.addSequential(TurnCommand(50))
+                self.addSequential(TurnCommand(40))
 
 
             @fc.ELSE
@@ -47,20 +46,20 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(
                     SetConfigCommand('Autonomous/robotLocation', 60)
                 )
-                self.addSequential(MoveCommand(-15))
+                self.addSequential(MoveCommand(4))
+                self.addSequential(TurnCommand(-65))
                 self.addSequential(WaitCommand(0.1))
-                self.addSequential(TurnCommand(-25))
-                self.addSequential(MoveCommand(-5))
-                self.addSequential(WaitCommand(0.1))
-                self.addSequential(TurnCommand(-50))
+                #self.addSequential(MoveCommand(10))
 
 
             '''Hang a gear, if you got it. Otherwise just drive downfield'''
             @fc.IF(lambda: subsystems.gear.hasGear())
             def turnToLift(self):
                 self.addSequential(PrintCommand("done again again"))
-                self.addSequential(MoveCommand(105))
+                self.addSequential(MoveCommand(110))
                 self.addSequential(TurnCommand(Config('Autonomous/robotLocation')))
+                '''make sure move command says -40'''
+                self.addSequential(MoveCommand(-40))
                 self.addSequential(WaitForLiftCommand(), 2)
 
             @fc.ELSE
@@ -123,31 +122,29 @@ class AutonomousCommandGroup(CommandGroup):
             subsystems.gear.isLiftVisible() and subsystems.gear.hasGear()
         )
         def hangGear(self):
-            self.addSequential(PrintCommand("done"))
             self.addSequential(ScoreGearCommandGroup())
-            self.addSequential(PrintCommand("scored"))
             self.addSequential(WaitOnPilotCommand(), 3)
 
             @fc.WHILE(lambda: subsystems.gear.hasGear())
             def retryHang(self):
-                self.addSequential(MoveCommand(-40))
+                self.addSequential(MoveCommand(-30))
                 self.addSequential(ScoreGearCommandGroup())
                 self.addSequential(WaitOnPilotCommand(), 3)
 
-            self.addSequential(MoveCommand(-10))
+            self.addSequential(MoveCommand(-50))
 
             @fc.IF(lambda: Config('Autonomous/robotLocation') == 0)
             def goDownfieldFromCenter(self):
                 @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
                 def turnLeft(self):
                     self.addSequential(TurnCommand(-90))
-                    self.addSequential(MoveCommand(50))
+                    self.addSequential(MoveCommand(150))
                     self.addSequential(TurnCommand(90))
 
                 @fc.ELSE
                 def turnRight(self):
                     self.addSequential(TurnCommand(90))
-                    self.addSequential(MoveCommand(50))
+                    self.addSequential(MoveCommand(150))
                     self.addSequential(TurnCommand(-90))
 
                 self.addSequential(MoveCommand(240))
