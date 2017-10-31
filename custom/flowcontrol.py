@@ -31,7 +31,7 @@ def _getCommandGroup():
     cg = frame.f_locals['self']
     if not isinstance(cg, CommandGroup):
         raise ValueError(
-            '%s may not be use outside of a CommandGroup' %
+            '%s may not be used outside of a CommandGroup' %
             stack[1].function.__name__
         )
 
