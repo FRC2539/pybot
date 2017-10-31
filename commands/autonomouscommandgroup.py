@@ -5,7 +5,7 @@ from wpilib.driverstation import DriverStation
 import custom.flowcontrol as fc
 import subsystems
 
-from commands.gear.scoregearcommandgroup import ScoreGearCommandGroup
+from commands.gear.hanggearcommandgroup import HangGearCommandGroup
 from commands.gear.waitonpilotcommand import WaitOnPilotCommand
 from commands.drive.movecommand import MoveCommand
 from commands.drive.turncommand import TurnCommand
@@ -13,6 +13,8 @@ from commands.shooter.firecommand import FireCommand
 from commands.setconfigcommand import SetConfigCommand
 from commands.alterconfigcommand import AlterConfigCommand
 from commands.gear.waitforliftcommand import WaitForLiftCommand
+from commands.gear.drivetoliftcommand import DriveToLiftCommand
+from commands.drive.setspeedcommand import SetSpeedCommand
 from commands.alertcommand import AlertCommand
 from custom.config import Config
 
@@ -25,8 +27,8 @@ class AutonomousCommandGroup(CommandGroup):
         '''Lined up with the boiler. Shoot some fuel.'''
         @fc.IF(lambda: subsystems.shooter.isVisible())
         def launchFuel(self):
-            ################Change to 8
             self.addSequential(FireCommand(Config('Shooter/speed')), 8)
+
             '''Get away from the wall'''
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
@@ -122,13 +124,14 @@ class AutonomousCommandGroup(CommandGroup):
             subsystems.gear.isLiftVisible() and subsystems.gear.hasGear()
         )
         def hangGear(self):
-            self.addSequential(ScoreGearCommandGroup())
+            self.addSequential(HangGearCommandGroup())
             self.addSequential(WaitOnPilotCommand(), 3)
 
             @fc.WHILE(lambda: subsystems.gear.hasGear())
             def retryHang(self):
-                self.addSequential(MoveCommand(-30))
-                self.addSequential(ScoreGearCommandGroup())
+                self.addSequential(MoveCommand(-10))
+                self.addSequential(SetSpeedCommand(600))
+                self.addSequential(DriveToLiftCommand())
                 self.addSequential(WaitOnPilotCommand(), 3)
 
             self.addSequential(MoveCommand(-50))

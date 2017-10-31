@@ -15,7 +15,11 @@ class FaceLiftCommand(TurnCommand):
 
     def initialize(self):
         distance = subsystems.gear.getLiftCenter()
-        distance /= Config('Gear/degreesPerPixel', 10)
+
+        if abs(distance) <= 10:
+            distance = 0
+
+        distance /= Config('Gear/pixelsPerDegree', 10)
         self.distance = distance
 
         super().initialize()
