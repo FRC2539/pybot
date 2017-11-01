@@ -131,6 +131,7 @@ class AutonomousCommandGroup(CommandGroup):
             def retryHang(self):
                 self.addSequential(MoveCommand(-10))
                 self.addSequential(SetSpeedCommand(600))
+                self.addSequential(TurnCommand(5))
                 self.addSequential(DriveToLiftCommand())
                 self.addSequential(WaitOnPilotCommand(), 3)
 
