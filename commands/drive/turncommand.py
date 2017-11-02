@@ -10,7 +10,10 @@ class TurnCommand(MoveCommand):
     '''Allows autonomous turning using the drive base encoders.'''
 
     def __init__(self, degrees, name=None):
-        super().__init__(degrees, 'Turn %f degrees' % degrees)
+        if name is None:
+            name = 'Turn %f degrees' % degrees
+
+        super().__init__(degrees, name)
 
 
     def initialize(self):

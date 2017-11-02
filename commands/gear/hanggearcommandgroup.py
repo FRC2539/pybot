@@ -1,7 +1,7 @@
-from .faceliftcommand import FaceLiftCommand
-from .gotohandoffcommand import GoToHandoffCommand
+from .turnandgocommand import TurnAndGoCommand
 from .drivetoliftcommand import DriveToLiftCommand
 from commands.drive.setspeedcommand import SetSpeedCommand
+from .waitforliftcommand import WaitForLiftCommand
 from wpilib.command.waitcommand import WaitCommand
 from wpilib.command.commandgroup import CommandGroup
 
@@ -26,12 +26,17 @@ class HangGearCommandGroup(CommandGroup):
 
         @fc.IF(outsideHandoffDistance)
         def alignWithLift(self):
-            self.addSequential(FaceLiftCommand())
-            self.addSequential(GoToHandoffCommand())
+            readCamera = TurnAndGoCommand()
+            self.addSequential(readCamera)
+            self.addSequential(readCamera.turn())
+            self.addSequential(readCamera.go())
+            self.addSequential(WaitForLiftCommand())
             self.addSequential(WaitCommand(0.3))
 
         @fc.IF(subsystems.gear.isLiftVisible)
         def hangOnLift(self):
-            self.addSequential(FaceLiftCommand())
+            readCamera = TurnAndGoCommand()
+            self.addSequential(readCamera)
+            self.addSequential(readCamera.turn())
             self.addSequential(SetSpeedCommand(600))
             self.addSequential(DriveToLiftCommand())
