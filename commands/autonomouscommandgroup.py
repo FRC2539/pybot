@@ -6,6 +6,7 @@ import custom.flowcontrol as fc
 import subsystems
 
 from commands.gear.hanggearcommandgroup import HangGearCommandGroup
+from commands.gear.scoregearcommandgroup import ScoreGearCommandGroup
 from commands.gear.waitonpilotcommand import WaitOnPilotCommand
 from commands.drive.movecommand import MoveCommand
 from commands.drive.turncommand import TurnCommand
@@ -57,7 +58,6 @@ class AutonomousCommandGroup(CommandGroup):
             '''Hang a gear, if you got it. Otherwise just drive downfield'''
             @fc.IF(lambda: subsystems.gear.hasGear())
             def turnToLift(self):
-                self.addSequential(PrintCommand("done again again"))
                 self.addSequential(MoveCommand(110))
                 self.addSequential(TurnCommand(Config('Autonomous/robotLocation')))
                 '''make sure move command says -40'''
@@ -124,7 +124,7 @@ class AutonomousCommandGroup(CommandGroup):
             subsystems.gear.isLiftVisible() and subsystems.gear.hasGear()
         )
         def hangGear(self):
-            self.addSequential(HangGearCommandGroup())
+            self.addSequential(ScoreGearCommandGroup())
             self.addSequential(WaitOnPilotCommand(), 3)
 
             @fc.WHILE(lambda: subsystems.gear.hasGear())
