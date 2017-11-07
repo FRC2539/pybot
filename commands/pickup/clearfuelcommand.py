@@ -11,7 +11,7 @@ class ClearFuelCommand(Command):
 
 
     def initialize(self):
-        subsystems.pickup.run(-0.7)
+        subsystems.pickup.run(-0.85)
 
 
     def end(self):

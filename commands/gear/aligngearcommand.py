@@ -1,3 +1,4 @@
+
 from wpilib.command.command import Command
 import subsystems
 from custom import driverhud
@@ -39,12 +40,12 @@ class AlignGearCommand(Command):
 
         onTarget = True
         rotate = 0
-
-        if center < -5:
+        # Needs to be 12 & 0.2
+        if center < -12:
             rotate = -0.2
             onTarget = False
 
-        elif center > 5:
+        elif center > 12:
             rotate = 0.2
             onTarget = False
 
@@ -53,7 +54,7 @@ class AlignGearCommand(Command):
                 self.speed = max(remainingDistance / 10.0, 0)
 
             self._finished = False
-        print('Rotate: %f' % rotate)
+
         subsystems.drivetrain.move(0, self.speed, rotate)
 
 

@@ -24,14 +24,11 @@ class FireCommand(Command):
     def execute(self):
         if self.open:
             if subsystems.shooter.isReadyToFire():
-                if self.ticksWithoutFuel > 10:
-                    subsystems.feeder.startAgitator()
+                subsystems.feeder.startAgitator()
                 self.ticksWithoutFuel += 1
 
             else:
                 self.open = False
-                #subsystems.feeder.close()
-                subsystems.feeder.stopAgitator()
                 self.fuelLaunched += 1
 
         elif subsystems.shooter.isReadyToFire():

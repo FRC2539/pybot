@@ -10,12 +10,12 @@ from commands.gear.scoregearcommandgroup import ScoreGearCommandGroup
 from commands.gear.waitonpilotcommand import WaitOnPilotCommand
 from commands.drive.movecommand import MoveCommand
 from commands.drive.turncommand import TurnCommand
+from commands.drive.setspeedcommand import SetSpeedCommand
 from commands.shooter.firecommand import FireCommand
 from commands.setconfigcommand import SetConfigCommand
 from commands.alterconfigcommand import AlterConfigCommand
 from commands.gear.waitforliftcommand import WaitForLiftCommand
 from commands.gear.drivetoliftcommand import DriveToLiftCommand
-from commands.drive.setspeedcommand import SetSpeedCommand
 from commands.alertcommand import AlertCommand
 from custom.config import Config
 
@@ -29,7 +29,6 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: subsystems.shooter.isVisible())
         def launchFuel(self):
             self.addSequential(FireCommand(Config('Shooter/speed')), 8)
-
             '''Get away from the wall'''
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
@@ -39,9 +38,9 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(8))
                 self.addSequential(WaitCommand(0.1))
                 self.addSequential(TurnCommand(25))
-                self.addSequential(MoveCommand(5))
+                self.addSequential(MoveCommand(6))
                 self.addSequential(WaitCommand(0.1))
-                self.addSequential(TurnCommand(40))
+                self.addSequential(TurnCommand(65))
 
 
             @fc.ELSE
@@ -52,21 +51,19 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(4))
                 self.addSequential(TurnCommand(-65))
                 self.addSequential(WaitCommand(0.1))
-                #self.addSequential(MoveCommand(10))
 
 
             '''Hang a gear, if you got it. Otherwise just drive downfield'''
             @fc.IF(lambda: subsystems.gear.hasGear())
             def turnToLift(self):
-                self.addSequential(MoveCommand(110))
+                self.addSequential(MoveCommand(80))
                 self.addSequential(TurnCommand(Config('Autonomous/robotLocation')))
-                '''make sure move command says -40'''
-                self.addSequential(MoveCommand(-40))
+                self.addSequential(MoveCommand(-10))
                 self.addSequential(WaitForLiftCommand(), 2)
 
             @fc.ELSE
             def goDownfield(self):
-                self.addSequential(MoveCommand(300))
+                self.addSequential(MoveCommand(150))
 
         '''We're starting on a side of the airship'''
         @fc.ELIF(lambda: not subsystems.gear.isLiftVisible())
@@ -88,9 +85,10 @@ class AutonomousCommandGroup(CommandGroup):
             '''If a gear is loaded, hang it. Otherwise, drive downfield.'''
             @fc.IF(lambda: subsystems.gear.hasGear())
             def turnToLift(self):
-                self.addSequential(MoveCommand(110))
+                self.addSequential(MoveCommand(85))
                 self.addSequential(TurnCommand(Config('Autonomous/robotLocation')))
-                #self.addSequential(WaitForLiftCommand(), 2)
+                self.addSequential(ScoreGearCommandGroup())
+                self.addSequential(WaitForLiftCommand(), 2)
 
                 @fc.IF(lambda: not subsystems.gear.isLiftVisible())
                 def doubleTurn(self):
@@ -142,16 +140,16 @@ class AutonomousCommandGroup(CommandGroup):
                 @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
                 def turnLeft(self):
                     self.addSequential(TurnCommand(-90))
-                    self.addSequential(MoveCommand(150))
+                    self.addSequential(MoveCommand(90))
                     self.addSequential(TurnCommand(90))
 
                 @fc.ELSE
                 def turnRight(self):
                     self.addSequential(TurnCommand(90))
-                    self.addSequential(MoveCommand(150))
+                    self.addSequential(MoveCommand(90))
                     self.addSequential(TurnCommand(-90))
 
-                self.addSequential(MoveCommand(240))
+                self.addSequential(MoveCommand(200))
 
             @fc.ELSE
             def goDownfieldFromSide(self):
