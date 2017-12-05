@@ -26,7 +26,7 @@ class AutonomousCommandGroup(CommandGroup):
         ds = DriverStation.getInstance()
 
         '''Lined up with the boiler. Shoot some fuel.'''
-        @fc.IF(lambda: subsystems.shooter.isVisible())
+        @fc.IF(lambda: False)
         def launchFuel(self):
             self.addSequential(FireCommand(Config('Shooter/speed')), 8)
             '''Get away from the wall'''
@@ -104,10 +104,9 @@ class AutonomousCommandGroup(CommandGroup):
                         lambda x: -x
                     ))
                     self.addSequential(WaitForLiftCommand(), 2)
-
             @fc.ELSE
             def goDownfield(self):
-                self.addSequential(MoveCommand(300))
+                self.addSequential(MoveCommand(90))
 
         @fc.ELSE
         def weAreCentered(self):

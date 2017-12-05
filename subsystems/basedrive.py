@@ -134,7 +134,7 @@ class BaseDrive(DebuggableSubsystem):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
-        self._setMode(CANTalon.ControlMode.Position)
+        self._setMode(CANTalon.ControlMode.MotionMagic)
         for motor, position in zip(self.activeMotors, positions):
             motor.set(position)
 
@@ -143,10 +143,9 @@ class BaseDrive(DebuggableSubsystem):
         '''
         Check setpoint error to see if it is below the given tolerance.
         '''
-
         error = 0
         for motor in self.activeMotors:
-            error += abs(motor.getError())
+            error += abs(motor.getSetpoint() - motor.getPosition())
 
         error /= len(self.activeMotors)
 
@@ -252,9 +251,10 @@ class BaseDrive(DebuggableSubsystem):
         for motor in self.activeMotors:
             motor.configMaxOutputVoltage(maxVoltage)
 
-            if mode == CANTalon.ControlMode.Position:
+            if mode == CANTalon.ControlMode.MotionMagic:
                 motor.setProfile(1)
-                motor.configMaxOutputVoltage(maxVoltage / 2)
+                motor.setMotionMagicCruiseVelocity(895/2)
+                motor.setMotionMagicAcceleration(895/2)
 
             elif mode == CANTalon.ControlMode.Speed:
                 motor.setProfile(0)

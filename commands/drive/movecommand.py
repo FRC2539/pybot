@@ -20,6 +20,7 @@ class MoveCommand(Command):
 
 
     def initialize(self):
+        self.onTarget = 0
         offset = self.distance * Config('DriveTrain/ticksPerInch')
         targetPositions = []
         sign = 1
@@ -31,4 +32,9 @@ class MoveCommand(Command):
 
 
     def isFinished(self):
-        return self.isTimedOut() and subsystems.drivetrain.atPosition(10)
+        if self.isTimedOut() and subsystems.drivetrain.atPosition(10):
+            self.onTarget += 1
+        else:
+            self.onTarget = 0
+
+        return self.onTarget > 5
