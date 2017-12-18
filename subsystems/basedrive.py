@@ -1,5 +1,3 @@
-
-
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import CANTalon
 from networktables import NetworkTable
@@ -12,8 +10,8 @@ import ports
 class BaseDrive(DebuggableSubsystem):
     '''
     A general case drive train system. It abstracts away shared functionality of
-    the various drive types that we can employ. Anything that can be done with
-    knowing what type of drive system we have should be implemented here.
+    the various drive types that we can employ. Anything that can be done
+    without knowing what type of drive system we have should be implemented here.
     '''
 
     def __init__(self, name):
