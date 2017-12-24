@@ -1,8 +1,5 @@
 from .skiddrive import SkidDrive
 
-import ports
-from custom.analogultrasonic import AnalogUltrasonic
-
 class DriveTrain(SkidDrive):
     '''
     A custom drive train for the current year's game. Only add functionality
@@ -11,10 +8,3 @@ class DriveTrain(SkidDrive):
 
     def __init__(self):
         super().__init__('DriveTrain')
-
-        self.ultrasonic = AnalogUltrasonic(ports.drivetrain.ultrasonicPort)
-
-
-    def getFrontClearance(self):
-        return (self.ultrasonic.getDistance() * 1.008374 + .5762796)
-

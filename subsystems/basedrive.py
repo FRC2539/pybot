@@ -21,12 +21,19 @@ class BaseDrive(DebuggableSubsystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-        self.motors = [
-            CANTalon(ports.drivetrain.frontLeftMotorID),
-            CANTalon(ports.drivetrain.frontRightMotorID),
-            CANTalon(ports.drivetrain.backLeftMotorID),
-            CANTalon(ports.drivetrain.backRightMotorID),
-        ]
+        try:
+            self.motors = [
+                CANTalon(ports.drivetrain.frontLeftMotorID),
+                CANTalon(ports.drivetrain.frontRightMotorID),
+                CANTalon(ports.drivetrain.backLeftMotorID),
+                CANTalon(ports.drivetrain.backRightMotorID),
+            ]
+
+        except AttributeError:
+            self.motors = [
+                CANTalon(ports.drivetrain.leftMotorID),
+                CANTalon(ports.drivetrain.rightMotorID),
+            ]
 
         for motor in self.motors:
             motor.setSafetyEnabled(False)
@@ -61,9 +68,13 @@ class BaseDrive(DebuggableSubsystem):
 
         self.debugMotor('Front Left Motor', self.motors[0])
         self.debugMotor('Front Right Motor', self.motors[1])
-        self.debugMotor('Back Left Motor', self.motors[2])
-        self.debugMotor('Back Right Motor', self.motors[3])
 
+        try:
+            self.debugMotor('Back Left Motor', self.motors[2])
+            self.debugMotor('Back Right Motor', self.motors[3])
+
+        except IndexError:
+            pass
 
     def initDefaultCommand(self):
         '''

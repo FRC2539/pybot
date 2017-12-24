@@ -8,26 +8,19 @@ from wpilib.robotbase import RobotBase
 
 from .drivetrain import DriveTrain
 from .monitor import Monitor
-from .shooter import Shooter
-from .pickup import Pickup
-from .climber import Climber
-from .feeder import Feeder
-from .gear import Gear
+from .lights import Lights
 
 drivetrain = None
 monitor = None
-shooter = None
-pickup = None
-climber = None
-feeder = None
-gear = None
+lights = None
+
 
 def init():
     '''
     Creates all subsystems. You must run this before any commands are
     instantiated. Do not run it more than once.
     '''
-    global drivetrain, monitor, shooter, pickup, climber, feeder, gear
+    global drivetrain, monitor, lights
 
     '''
     The default tests that are run before deploy call startCompetition multiple
@@ -38,9 +31,6 @@ def init():
         raise RuntimeError('Subsystems have already been initialized')
 
     drivetrain = DriveTrain()
+    drivetrain.setUseEncoders(False)
     monitor = Monitor()
-    shooter = Shooter()
-    pickup = Pickup()
-    climber = Climber()
-    feeder = Feeder()
-    gear = Gear()
+    lights = Lights()

@@ -24,11 +24,6 @@ def init():
     if autonChooser is not None and not RobotBase.isSimulation():
         raise RuntimeError('Driver HUD has already been initialized')
 
-    # Import here to avoid circular import
-    from commands.drive.movecommand import MoveCommand
-    from commands.autonomouscommandgroup import AutonomousCommandGroup
-    from commands.test.systemcheckcommand import SystemCheckCommand
-
     '''
     Add commands to the autonChooser to make them available for selection by the
     driver. It is best to choose a command that will not break anything if run
@@ -36,15 +31,11 @@ def init():
     '''
     autonChooser = SendableChooser()
     autonChooser.addDefault('Do Nothing', InstantCommand('Do Nothing'))
-    autonChooser.addObject('Do Everything', AutonomousCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
     '''Display all currently running commands.'''
     SmartDashboard.putData('Active Commands', Scheduler.getInstance())
-
-    '''Comands to display on dashboard. This is good for testing.'''
-    showCommand(SystemCheckCommand())
 
 
 def getAutonomousProgram():

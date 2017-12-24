@@ -11,42 +11,9 @@ class PortsList:
 drivetrain = PortsList()
 
 # CAN IDs for motors
-drivetrain.frontLeftMotorID = 1
-drivetrain.frontRightMotorID = 3
-drivetrain.backLeftMotorID = 2
-drivetrain.backRightMotorID = 4
-
-# Analog Input
-drivetrain.ultrasonicPort = 0
-
-
-shooter = PortsList()
-
-shooter.motorID = 5
-
-shooter.agitatorPort = 1
-
-
-pickup = PortsList()
-
-pickup.motorID = 6
-
-
-climber = PortsList()
-
-climber.motorID = 7
-
-
-feeder = PortsList()
-
-# Servo PWM Port
-feeder.gateID = 0
-
-
-gear = PortsList()
-
-# Optical gear sensor in DIO
-gear.sensorID = 3
+drivetrain.leftMotorID = 1
+drivetrain.rightMotorID = 2
 
 # Relay for LED light ring
-gear.lightRingPort = 0
+lights = PortsList()
+lights = [0, 1, 2]
