@@ -2,7 +2,7 @@ from custom.config import Config
 
 defaults = {
     '/DriveTrain/maxSpeed': 950,
-    '/DriveTrain/manualMaxSpeed': 100,
+    '/DriveTrain/normalSpeed': 600,
     '/DriveTrain/preciseSpeed': 150,
     '/DriveTrain/ticksPerInch': 750,
     '/Shooter/speed': 100,

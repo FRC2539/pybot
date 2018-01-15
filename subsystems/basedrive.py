@@ -1,11 +1,14 @@
 from .debuggablesubsystem import DebuggableSubsystem
-from ctre import CANTalon
-from networktables import NetworkTable
+
 import math
 
+from networktables import NetworkTables
+from ctre import ControlMode, NeutralMode, WPI_TalonSRX
 from robotpy_ext.common_drivers.navx.ahrs import AHRS
+
 from custom.config import Config
 import ports
+
 
 class BaseDrive(DebuggableSubsystem):
     '''
@@ -23,26 +26,25 @@ class BaseDrive(DebuggableSubsystem):
         '''
         try:
             self.motors = [
-                CANTalon(ports.drivetrain.frontLeftMotorID),
-                CANTalon(ports.drivetrain.frontRightMotorID),
-                CANTalon(ports.drivetrain.backLeftMotorID),
-                CANTalon(ports.drivetrain.backRightMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
+                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
+                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
             ]
 
         except AttributeError:
             self.motors = [
-                CANTalon(ports.drivetrain.leftMotorID),
-                CANTalon(ports.drivetrain.rightMotorID),
+                WPI_TalonSRX(ports.drivetrain.leftMotorID),
+                WPI_TalonSRX(ports.drivetrain.rightMotorID),
             ]
 
         for motor in self.motors:
+            motor.setNeutralMode(NeutralMode.Coast)
             motor.setSafetyEnabled(False)
-            motor.enableBrakeMode(False)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
-
         self.activeMotors = []
         self._configureMotors()
 
@@ -54,8 +56,8 @@ class BaseDrive(DebuggableSubsystem):
         self.lastInputs = None
 
         self.setUseEncoders()
-        self.speedLimit = Config('DriveTrain/maxSpeed')
-        self.maxSpeed = self.speedLimit
+        self.maxSpeed = Config('DriveTrain/maxSpeed')
+        self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
 
         '''Allow changing CAN Talon settings from dashboard'''
@@ -72,9 +74,9 @@ class BaseDrive(DebuggableSubsystem):
         try:
             self.debugMotor('Back Left Motor', self.motors[2])
             self.debugMotor('Back Right Motor', self.motors[3])
-
         except IndexError:
             pass
+
 
     def initDefaultCommand(self):
         '''
@@ -82,9 +84,9 @@ class BaseDrive(DebuggableSubsystem):
         subsystem, we will drive via joystick using the max speed stored in
         Config.
         '''
-        from commands.drive.drivecommand import DriveCommand
+        from commands.drivetrain.drivecommand import DriveCommand
 
-        self.setDefaultCommand(DriveCommand(self.maxSpeed))
+        self.setDefaultCommand(DriveCommand(self.speedLimit))
 
 
     def move(self, x, y, rotate):
@@ -124,14 +126,14 @@ class BaseDrive(DebuggableSubsystem):
                 come to a stop.
                 '''
                 for motor in self.activeMotors:
-                    motor.clearIaccum()
+                    motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed * self.speedLimit)
+                motor.set(ControlMode.Velocity, speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed * self.maxPercentVBus)
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -143,9 +145,10 @@ class BaseDrive(DebuggableSubsystem):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
-        self._setMode(CANTalon.ControlMode.MotionMagic)
         for motor, position in zip(self.activeMotors, positions):
-            motor.set(position)
+            motor.configMotionCruiseVelocity(self.speedLimit)
+            motor.configMotionAcceleration(self.speedLimit)
+            motor.set(ControlMode.MotionMagic, position)
 
 
     def atPosition(self, tolerance=10):
@@ -154,7 +157,7 @@ class BaseDrive(DebuggableSubsystem):
         '''
         error = 0
         for motor in self.activeMotors:
-            error += abs(motor.getSetpoint() - motor.getPosition())
+            error += abs(motor.getSetpoint() - motor.getSelectedSensorPosition())
 
         error /= len(self.activeMotors)
 
@@ -162,12 +165,9 @@ class BaseDrive(DebuggableSubsystem):
 
 
     def stop(self):
-        '''A nice shortcut for calling move with all zeroes.'''
-
-        if self.useEncoders:
-            self._setMode(CANTalon.ControlMode.Speed)
-
-        self.move(0, 0, 0)
+        '''Disable all motors until set() is called again.'''
+        for motor in self.activeMotors:
+            motor.stopMotor()
 
 
     def resetGyro(self):
@@ -201,7 +201,7 @@ class BaseDrive(DebuggableSubsystem):
         if not self.useEncoders:
             raise RuntimeError('Cannot read speed. Encoders are disabled.')
 
-        return [x.getSpeed() for x in self.activeMotors]
+        return [x.getSelectedSensorVelocity() for x in self.activeMotors]
 
 
     def getPositions(self):
@@ -210,7 +210,7 @@ class BaseDrive(DebuggableSubsystem):
         if not self.useEncoders:
             raise RuntimeError('Cannot read position. Encoders are disabled.')
 
-        return [x.getPosition() for x in self.activeMotors]
+        return [x.getSelectedSensorPosition() for x in self.activeMotors]
 
 
     def setUseEncoders(self, useEncoders=True):
@@ -219,12 +219,7 @@ class BaseDrive(DebuggableSubsystem):
         the motors will be set to speed mode. Disabling encoders should not be
         done lightly, as many commands rely on encoder information.
         '''
-
         self.useEncoders = useEncoders
-        if useEncoders:
-            self._setMode(CANTalon.ControlMode.Speed)
-        else:
-            self._setMode(CANTalon.ControlMode.PercentVbus)
 
 
     def setSpeedLimit(self, speed):
@@ -243,35 +238,6 @@ class BaseDrive(DebuggableSubsystem):
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
 
-        if self.useEncoders:
-            self._setMode(CANTalon.ControlMode.Speed)
-        else:
-            self._setMode(CANTalon.ControlMode.PercentVbus)
-
-
-    def _setMode(self, mode):
-        '''
-        Sets the control mode of active motors, with some intelligent changes
-        depending on the mode.
-        '''
-
-        maxVoltage = self.activeMotors[0].getBusVoltage()
-
-        for motor in self.activeMotors:
-            motor.configMaxOutputVoltage(maxVoltage)
-
-            if mode == CANTalon.ControlMode.MotionMagic:
-                motor.setProfile(1)
-                motor.setMotionMagicCruiseVelocity(895/2)
-                motor.setMotionMagicAcceleration(895/2)
-
-            elif mode == CANTalon.ControlMode.Speed:
-                motor.setProfile(0)
-                motor.clearIaccum()
-
-
-            motor.setControlMode(mode)
-
 
     def _publishPID(self, table, profile):
         '''
@@ -279,17 +245,17 @@ class BaseDrive(DebuggableSubsystem):
         passed NetworkTable.
         '''
 
-        table = NetworkTable.getTable('DriveTrain/%s' % table)
+        table = NetworkTables.getTable('DriveTrain/%s' % table)
 
         talon = self.activeMotors[0]
 
-        talon.setProfile(profile)
-        table.putNumber('P', talon.getP())
-        table.putNumber('I', talon.getI())
-        table.putNumber('D', talon.getD())
-        table.putNumber('F', talon.getF())
-        table.putNumber('IZone', talon.getIZone())
-        table.putNumber('RampRate', talon.getCloseLoopRampRate())
+        #talon.selectProfileSlot(profile, 0)
+        #table.putNumber('P', talon.getP())
+        #table.putNumber('I', talon.getI())
+        #table.putNumber('D', talon.getD())
+        #table.putNumber('F', talon.getF())
+        #table.putNumber('IZone', talon.getIZone())
+        #table.putNumber('RampRate', talon.getCloseLoopRampRate())
 
         table.addTableListener(self._PIDListener(profile))
 
@@ -305,16 +271,16 @@ class BaseDrive(DebuggableSubsystem):
             '''
 
             funcs = {
-                'P': 'setP',
-                'I': 'setI',
-                'D': 'setD',
-                'F': 'setF',
+                'P': 'config_kP',
+                'I': 'config_kI',
+                'D': 'config_kD',
+                'F': 'config_kF',
                 'IZone': 'setIZone',
                 'RampRate': 'setCloseLoopRampRate'
             }
 
             for motor in self.activeMotors:
-                motor.setProfile(profile)
+                motor.setProfileSlot(profile)
                 getattr(motor, funcs[key])(value)
 
         return updatePID
