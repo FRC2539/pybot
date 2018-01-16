@@ -16,7 +16,7 @@ def init():
 
     mainController = LogitechDualShock(0)
 
-    logicalaxes.driveX = mainController.LeftX
+    logicalaxes.driveX = mainController.RightX
     logicalaxes.driveY = mainController.LeftY
     logicalaxes.driveRotate = mainController.RightX
 

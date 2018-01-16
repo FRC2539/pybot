@@ -11,8 +11,8 @@ class PortsList:
 drivetrain = PortsList()
 
 # CAN IDs for motors
-drivetrain.leftMotorID = 1
-drivetrain.rightMotorID = 2
+drivetrain.leftMotorID = 2
+drivetrain.rightMotorID = 1
 
 # Relay for LED light ring
 lights = PortsList()
