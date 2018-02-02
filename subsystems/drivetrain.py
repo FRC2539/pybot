@@ -1,4 +1,6 @@
 from .skiddrive import SkidDrive
+import ports
+from custom.analogultrasonic import AnalogInput
 
 class DriveTrain(SkidDrive):
     '''
@@ -8,3 +10,10 @@ class DriveTrain(SkidDrive):
 
     def __init__(self):
         super().__init__('DriveTrain')
+'''
+        self.ultrasonic = AnalogInput(ports.drivetrain.ultrasonicPort)
+
+
+    def getUltrasonic(self):
+        return (self.ultrasonic.getDistance() * 1.008374 + .5762796)
+'''

@@ -14,6 +14,8 @@ from commands.climber.climbcommand import ClimbCommand
 from commands.climber.hookcommand import HookCommand
 from commands.climber.unhookcommand import UnhookCommand
 
+from commands.drivetrain.getultrasoniccommand import GetUltrasonicCommand
+
 
 def init():
     '''
@@ -44,6 +46,8 @@ def init():
     mainController.RightTrigger.whileHeld(HookCommand())
     mainController.RightBumper.whileHeld(UnhookCommand())
 
+    mainController.Start.whileHeld(GetUltrasonicCommand())
+'''
     backupController = LogitechDualShock(1)
 
     backupController.Back.whenPressed(ResetCommand())
@@ -57,3 +61,4 @@ def init():
     backupController.LeftBumper.whileHeld(ElevateCommand())
     backupController.RightTrigger.whileHeld(HookCommand())
     backupController.RightBumper.whileHeld(UnhookCommand())
+'''

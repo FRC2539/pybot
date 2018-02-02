@@ -5,7 +5,7 @@ import subsystems
 class OuttakeCommand(TimedCommand):
 
     def __init__(self):
-        super().__init__('Outtake', 2)
+        super().__init__('Outtake', 1)
 
         self.requires(subsystems.intake)
 
