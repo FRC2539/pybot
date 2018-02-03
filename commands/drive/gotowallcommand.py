@@ -1,4 +1,5 @@
 from wpilib.command.command import Command
+from commands.drivetrain.getultrasoniccommand import GetUltrasonicCommand
 import subsystems
 
 class GoToWallCommand(Command):
@@ -16,17 +17,17 @@ class GoToWallCommand(Command):
 
 
     def execute(self):
-        slow = (subsystems.drivetrain.getUltrasonic())
+        slow = (GetUltrasonicCommand())
 
         if slow < 4.98:
-            subsystems.drivetrain.move(0, max(slow / 4, 0), 0)
+            subsystems.drivetrain.move(0, max(slow / 10), 0)
 
         self._finished = (slow < 3)
 
 
     def isFinished(self):
         # Stop if collision detected
-        if subsystems.drivetrain.getUltrasonic() > 3:
+        if GetUltrasonicCommand() > 3:
             return True
 
         return self._finished
