@@ -8,6 +8,7 @@ from commands.drivetrain.pivotcommand import PivotCommand
 from commands.drivetrain.runintowallcommand import RunIntoWallCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.network.alertcommand import AlertCommand
+from commands.drive.gotowallcommand import GoToWallCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -38,22 +39,12 @@ class AutonomousCommandGroup(CommandGroup):
         def fromLeft(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
+                self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(20))
-                self.addSequential(PivotCommand(-90))
-                self.addSequential(MoveCommand(10))
-                self.addSequential(PivotCommand(90))
-                self.addSequential(MoveCommand(10))
-                self.addSequential(PivotCommand(90))
-                self.addSequential(MoveCommand(5))
+                self.addSequential(PivotCommand(-30))
                 self.addSequential(SetSpeedCommand(1500))
+                self.addSequential(GoToWallCommand())
                 self.addSequential(AlertCommand('We scored!', 'Info'))
-                #self.addSequential(MoveCommand(20))
-                #self.addSequential(PivotCommand(60))
-                #self.addSequential(MoveCommand(30))
-                #self.addSequential(PivotCommand(-60))
-                #self.addSequential(SetSpeedCommand(1500))
-                #self.addSequential(MoveCommand(32))
-                #self.addSequential(AlertCommand('We scored!', 'Info'))
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
@@ -67,23 +58,9 @@ class AutonomousCommandGroup(CommandGroup):
         def fromRight(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
-                self.addSequential(MoveCommand(20))
-                self.addSequential(PivotCommand(90))
-                self.addSequential(MoveCommand(10))
-                self.addSequential(PivotCommand(-90))
-                self.addSequential(MoveCommand(10))
-                self.addSequential(PivotCommand(-90))
-                self.addSequential(MoveCommand(5))
                 self.addSequential(SetSpeedCommand(1500))
+                self.addSequential(GoToWallCommand())
                 self.addSequential(AlertCommand('We scored!', 'Info'))
-
-                #self.addSequential(MoveCommand(20))
-                #self.addSequential(PivotCommand(-60))
-                #self.addSequential(MoveCommand(30))
-                #self.addSequential(PivotCommand(60))
-                #self.addSequential(SetSpeedCommand(1500))
-                #self.addSequential(MoveCommand(32))
-                #self.addSequential(AlertCommand('We scored!', 'Info'))
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
@@ -97,25 +74,23 @@ class AutonomousCommandGroup(CommandGroup):
         def middle(self):
             @fc.IF(lambda: Config('Autonomous/switch') == 'always')
             def scoreSwitch(self):
-                @fc.IF(lambda: ds.getGameSpecificMessage()[0])
+                @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def fromLeft(self):
-                    self.addSequential(MoveCommand(15))
-                    self.addSequential(PivotCommand(-90))
-                    self.addSequential(MoveCommand(21))
-                    self.addSequential(PivotCommand(90))
-                    self.addSequential(MoveCommand(32))
+                    self.addSequential(PivotCommand(-40))
+                    self.addSequential(MoveCommand(104))
+                    self.addSequential(PivotCommand(40))
+                    self.addSequential(GoToWallCommand())
 
                 @fc.ELSE
                 def fromRight(self):
-                    self.addSequential(MoveCommand(15))
-                    self.addSequential(PivotCommand(90))
-                    self.addSequential(MoveCommand(11))
-                    self.addSequential(PivotCommand(-90))
-                    self.addSequential(MoveCommand(32))
+                    self.addSequential(PivotCommand(30))
+                    self.addSequential(MoveCommand(92))
+                    self.addSequential(PivotCommand(-30))
+                    self.addSequential(GoToWallCommand())
 
             @fc.ELIF(lambda: Config('Autonomous/scale') == 'always')
             def scoreScale(self):
-                @fc.IF(lambda: ds.getGameSpecificMessage()[1])
+                @fc.IF(lambda: ds.getGameSpecificMessage()[1] == 'L')
                 def fromLeft(self):
                     pass
 
