@@ -11,7 +11,7 @@ class GetUltrasonicCommand(Command):
     def __init__(self):
         super().__init__('GetUltrasonic')
 
-        self.ultrasonic = AnalogInput(ports.drivetrain.ultrasonicSensorID)
+        #self.ultrasonic = AnalogInput(ports.drivetrain.ultrasonicSensorID)
 
     def initialize(self):
-        return self.ultrasonic.getAverageVoltage()
+        return AnalogInput(ports.drivetrain.ultrasonicSensorID).getAverageVoltage()
