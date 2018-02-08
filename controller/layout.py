@@ -46,7 +46,7 @@ def init():
     mainController.RightTrigger.whileHeld(HookCommand())
     mainController.RightBumper.whileHeld(UnhookCommand())
 
-    mainController.Start.whileHeld(GetUltrasonicCommand())
+    mainController.Start.whenPressed(GetUltrasonicCommand())
 '''
     backupController = LogitechDualShock(1)
 

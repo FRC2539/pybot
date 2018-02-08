@@ -48,7 +48,12 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                pass
+                self.addSequential(PivotCommand(-30))
+                self.addSequential(MoveCommand(50))
+                self.addSequential(PivotCommand(30))
+                self.addSequential(MoveCommand(60))
+                self.addSequential(PivotCommand(90))
+                self.addSequential(MoveCommand(8))
 
             @fc.ELSE
             def crossBaseline(self):
@@ -64,7 +69,12 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                pass
+                self.addSequential(PivotCommand(30))
+                self.addSequential(MoveCommand(50))
+                self.addSequential(PivotCommand(-30))
+                self.addSequential(MoveCommand(60))
+                self.addSequential(PivotCommand(-90))
+                self.addSequential(MoveCommand(8))
 
             @fc.ELSE
             def crossBaseline(self):

@@ -6,7 +6,7 @@ class AnalogUltrasonic(AnalogInput):
     def __init__(self, channel):
         super().__init__(channel)
 
-        self.scalingFactor = 1
+        self.scalingFactor = 102.40655401945725
 
 
     def getDistance(self):

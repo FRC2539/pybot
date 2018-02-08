@@ -1,17 +1,11 @@
-from wpilib.command import Command
-from custom.analogultrasonic import AnalogUltrasonic
-from networktables import NetworkTables
-from wpilib.analoginput import AnalogInput
-
-import ports
+from wpilib.command.instantcommand import InstantCommand
+import subsystems
 
 
-class GetUltrasonicCommand(Command):
+class GetUltrasonicCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('GetUltrasonic')
 
-        #self.ultrasonic = AnalogInput(ports.drivetrain.ultrasonicSensorID)
-
     def initialize(self):
-        return AnalogInput(ports.drivetrain.ultrasonicSensorID).getAverageVoltage()
+        print(subsystems.drivetrain.getFrontClearance())

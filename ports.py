@@ -15,7 +15,7 @@ drivetrain.frontLeftMotorID = 1
 drivetrain.frontRightMotorID = 3
 drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
-drivetrain.ultrasonicSensorID = 0
+drivetrain.ultrasonicPort = 0
 
 intake = PortsList()
 
