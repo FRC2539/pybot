@@ -1,5 +1,5 @@
 from wpilib.command.subsystem import Subsystem
-from ctre import WPI_TalonSRX, ControlMode
+from ctre import WPI_TalonSRX, ControlMode, FeedbackDevice
 import ports
 from custom.config import Config
 import threading
@@ -12,6 +12,11 @@ class Elevator(Subsystem):
 
         self.motor = WPI_TalonSRX(ports.elevator.motorID)
         self.motor.setSafetyEnabled(False)
+        self.motor.configSelectedFeedbackSensor(
+            FeedbackDevice.PulseWidthEncodedPosition,
+            0,
+            0
+        )
 
         self.floors = [
             Config('Elevator/ground'),

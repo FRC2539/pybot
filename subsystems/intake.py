@@ -8,11 +8,14 @@ class Intake(Subsystem):
 
     def __init__(self):
         super().__init__('Intake')
+
         self.leftMotor = WPI_TalonSRX(ports.intake.leftMotorID)
         self.leftMotor.setSafetyEnabled(False)
+
         self.rightMotor = WPI_TalonSRX(ports.intake.rightMotorID)
         self.rightMotor.setSafetyEnabled(False)
         self.rightMotor.setInverted(True)
+
         self.lightSensor = DigitalInput(ports.intake.lightSensorID)
 
 
@@ -41,4 +44,4 @@ class Intake(Subsystem):
 
 
     def isCubeInIntake(self):
-        return self.lightSensor.get()
+        return not self.lightSensor.get()
