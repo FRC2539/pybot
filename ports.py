@@ -11,21 +11,23 @@ class PortsList:
 drivetrain = PortsList()
 
 '''CAN IDs for motors'''
-drivetrain.frontLeftMotorID = 1
-drivetrain.frontRightMotorID = 3
-drivetrain.backLeftMotorID = 2
-drivetrain.backRightMotorID = 4
+drivetrain.frontLeftMotorID = 2
+drivetrain.frontRightMotorID = 4
+drivetrain.backLeftMotorID = 1
+drivetrain.backRightMotorID = 3
+
 drivetrain.ultrasonicPort = 0
 
 intake = PortsList()
 
-intake.leftMotorID = 5
-intake.rightMotorID = 6
+intake.leftMotorID = 6
+intake.rightMotorID = 7
+
 intake.lightSensorID = 0
 
 elevator = PortsList()
 
-elevator.motorID = 7
+elevator.motorID = 5
 
 climber = PortsList()
 

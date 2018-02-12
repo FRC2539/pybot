@@ -11,7 +11,7 @@ class DeelevateCommand(Command):
 
 
     def initialize(self):
-        subsystems.elevator.up()
+        subsystems.elevator.down()
 
 
     def end(self):
