@@ -50,12 +50,15 @@ class Elevator(Subsystem):
 
 
     def stop(self):
-        self.set(0)
+        self.motor.set(ControlMode.MotionMagic, self.motor.getPulseWidthPosition())
 
+    '''
+    def reset(self):
+        self.motor.setPosition(0)
+    '''
 
     def goTo(self, position):
         self.motor.set(ControlMode.MotionMagic, int(position))
-
 
     def changeLevel(self, amount=1):
         with self.mutex:
