@@ -19,15 +19,32 @@ class DriveCommand(Command):
     def initialize(self):
         subsystems.drivetrain.stop()
         subsystems.drivetrain.setProfile(0)
-        #subsystems.drivetrain.setAcceleration(0.2)
+        subsystems.drivetrain.initializeTilt()
         try:
             subsystems.drivetrain.setSpeedLimit(self.speedLimit)
         except (ZeroDivisionError, TypeError):
             print('Could not set speed to %f' % self.speedLimit)
             subsystems.drivetrain.setUseEncoders(False)
 
+        self.lastY = None
+
 
     def execute(self):
+        # Avoid quick changes in direction
+        y = logicalaxes.driveY.get()
+        if self.lastY is None:
+            self.lastY = y
+        else:
+            cooldown = 0.025
+            self.lastY -= math.copysign(cooldown, self.lastY)
+
+            # If the sign has changed, don't move
+            if self.lastY * y < 0:
+                y = 0
+
+            if abs(y) > abs(self.lastY):
+                self.lastY = y
+
         tilt = subsystems.drivetrain.getTilt()
         correction = math.copysign(pow(tilt, 2), tilt) / 36
         if correction < 0.1:
@@ -35,9 +52,6 @@ class DriveCommand(Command):
 
         subsystems.drivetrain.move(
             logicalaxes.driveX.get(),
-            logicalaxes.driveY.get() - correction,
+            y - correction,
             logicalaxes.driveRotate.get()
         )
-
-    def end(self):
-        subsystems.drivetrain.setAcceleration(0)

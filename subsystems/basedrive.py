@@ -216,11 +216,19 @@ class BaseDrive(DebuggableSubsystem):
 
         return (self.navX.getYaw() + self.gyroOffset) % 360
 
-    def getTilt(self):
-        ''' Returns the tilt value. '''
+
+    def initializeTilt(self):
         if self.flatAngle is None:
-            self.flatAngle = self.navX.getPitch()
+            self.resetTilt()
+
+
+    def resetTilt(self):
+        self.flatAngle = self.navX.getPitch()
+
+
+    def getTilt(self):
         return self.navX.getPitch() - self.flatAngle
+
 
     def getAcceleration(self):
         '''Reads acceleration from NavX MXP.'''
@@ -262,9 +270,6 @@ class BaseDrive(DebuggableSubsystem):
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
 
-    def setAcceleration(self, acceleration):
-        for motor in self.activeMotors:
-            motor.configClosedLoopRamp(acceleration, 0)
 
     def _publishPID(self, table, profile):
         '''
