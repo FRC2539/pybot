@@ -17,6 +17,15 @@ class Elevator(Subsystem):
             0,
             0
         )
+        self.motor.setSensorPhase(True)
+        self.motor.setInverted(True)
+
+        self.lowerLimit = 0
+        self.upperLimit = 19000
+        self.motor.configReverseSoftLimitEnable(True, 0)
+        self.motor.configForwardSoftLimitEnable(True, 0)
+        self.motor.configReverseSoftLimitThreshold(self.lowerLimit, 0)
+        self.motor.configForwardSoftLimitThreshold(self.upperLimit, 0)
 
         self.floors = [
             Config('Elevator/ground'),
@@ -50,12 +59,16 @@ class Elevator(Subsystem):
 
 
     def stop(self):
-        self.motor.set(ControlMode.MotionMagic, self.motor.getPulseWidthPosition())
+        position = self.motor.getPulseWidthPosition()
+        if position < self.lowerLimit:
+            position = self.lowerLimit
+        elif position > self.upperLimit:
+            position = self.upperLimit
 
-    '''
+        self.motor.set(ControlMode.MotionMagic, position)
+
     def reset(self):
-        self.motor.setPosition(0)
-    '''
+        self.motor.setSelectedSensorPosition(0, 0, 0)
 
     def goTo(self, position):
         self.motor.set(ControlMode.MotionMagic, int(position))

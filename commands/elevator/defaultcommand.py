@@ -8,7 +8,3 @@ class DefaultCommand(Command):
         super().__init__('Default for Elevator')
 
         self.requires(subsystems.elevator)
-
-
-    def initialize(self):
-        subsystems.elevator.stop()
