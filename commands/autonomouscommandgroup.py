@@ -9,6 +9,7 @@ from commands.drivetrain.runintowallcommand import RunIntoWallCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.network.alertcommand import AlertCommand
 from commands.drivetrain.gotowallcommand import GoToWallCommand
+from commands.elevator.gotoheightcommand import GoToHeightCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -52,6 +53,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(60))
                 self.addSequential(PivotCommand(90))
                 self.addSequential(MoveCommand(8))
+                self.addSequential(ScoreOnScale())
 
             @fc.ELSE
             def crossBaseline(self):
@@ -71,6 +73,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(60))
                 self.addSequential(PivotCommand(-90))
                 self.addSequential(MoveCommand(8))
+                self.addSequential(ScoreOnScale())
 
             @fc.ELSE
             def crossBaseline(self):
@@ -98,11 +101,11 @@ class AutonomousCommandGroup(CommandGroup):
             def scoreScale(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[1] == 'L')
                 def fromLeft(self):
-                    pass
+                    self.addSequential(ScoreOnScale())
 
                 @fc.ELSE
                 def fromRight(self):
-                    pass
+                    self.addSequential(ScoreOnScale())
 
             @fc.ELSE
             def crossBaselineCenter(self):
@@ -128,5 +131,15 @@ class ScoreOnSwitch(CommandGroup):
         super().__init__('Score on switch')
 
         self.addSequential(SetSpeedCommand(1500))
+        self.addParallel(GoToHeightCommand('switch'))
+        self.addSequential(GoToWallCommand())
+        self.addSequential(AlertCommand('We scored!', 'Info'))
+
+class ScoreOnScale(CommandGroup):
+    def __init__(self):
+        super().__init__('Score on scale')
+
+        self.addSequential(SetSpeedCommand(1500))
+        self.addParallel(GoToHeightCommand('scale'))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
