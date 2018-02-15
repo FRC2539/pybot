@@ -15,7 +15,7 @@ from commands.climber.hookcommand import HookCommand
 from commands.climber.unhookcommand import UnhookCommand
 
 from commands.drivetrain.getultrasoniccommand import GetUltrasonicCommand
-
+from commands.elevator.changelevelcommand import ChangeLevelCommand
 from commands.elevator.resetelevatorcommand import ResetElevatorCommand
 
 
@@ -45,6 +45,8 @@ def init():
 
     mainController.LeftTrigger.whileHeld(DeelevateCommand())
     mainController.LeftBumper.whileHeld(ElevateCommand())
+    mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
+    mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
     mainController.RightTrigger.whileHeld(HookCommand())
     mainController.RightBumper.whileHeld(UnhookCommand())
 

@@ -67,11 +67,14 @@ class Elevator(Subsystem):
 
         self.motor.set(ControlMode.MotionMagic, position)
 
+
     def reset(self):
         self.motor.setSelectedSensorPosition(0, 0, 0)
 
+
     def goTo(self, position):
         self.motor.set(ControlMode.MotionMagic, int(position))
+
 
     def changeLevel(self, amount=1):
         with self.mutex:

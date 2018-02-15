@@ -10,6 +10,7 @@ from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.network.alertcommand import AlertCommand
 from commands.drivetrain.gotowallcommand import GoToWallCommand
 from commands.elevator.gotoheightcommand import GoToHeightCommand
+from wpilib.command import PrintCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -40,6 +41,7 @@ class AutonomousCommandGroup(CommandGroup):
         def fromLeft(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
+                self.addSequential(PrintCommand('Something is wrong'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(20))
                 self.addSequential(PivotCommand(-30))
@@ -47,6 +49,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
+                self.addSequential(PrintCommand('You have a problem'))
                 self.addSequential(PivotCommand(-30))
                 self.addSequential(MoveCommand(50))
                 self.addSequential(PivotCommand(30))
@@ -67,6 +70,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
+                self.addSequential(PrintCommand('You messed up'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(50))
                 self.addSequential(PivotCommand(-30))
@@ -85,13 +89,16 @@ class AutonomousCommandGroup(CommandGroup):
             def scoreSwitch(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def fromLeft(self):
+                    self.addSequential(PrintCommand('Something went wrong'))
                     self.addSequential(PivotCommand(-40))
                     self.addSequential(MoveCommand(104))
                     self.addSequential(PivotCommand(40))
                     self.addSequential(ScoreOnSwitch())
 
+
                 @fc.ELSE
                 def fromRight(self):
+                    self.addSequential(PrintCommand('You failed'))
                     self.addSequential(PivotCommand(30))
                     self.addSequential(MoveCommand(92))
                     self.addSequential(PivotCommand(-30))
@@ -116,6 +123,7 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(MoveCommand(60))
                     self.addSequential(PivotCommand(-45))
                     self.addSequential(MoveCommand(20))
+                    self.addSequential(ScoreOnSwitch())
 
                 @fc.ELSE
                 def crossLeft(self):
@@ -124,13 +132,13 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(MoveCommand(60))
                     self.addSequential(PivotCommand(45))
                     self.addSequential(MoveCommand(20))
+                    self.addSequential(ScoreOnSwitch())
 
 
 class ScoreOnSwitch(CommandGroup):
     def __init__(self):
         super().__init__('Score on switch')
 
-        self.addSequential(SetSpeedCommand(1500))
         self.addParallel(GoToHeightCommand('switch'))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
@@ -139,7 +147,6 @@ class ScoreOnScale(CommandGroup):
     def __init__(self):
         super().__init__('Score on scale')
 
-        self.addSequential(SetSpeedCommand(1500))
         self.addParallel(GoToHeightCommand('scale'))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))

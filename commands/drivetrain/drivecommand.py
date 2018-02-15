@@ -35,7 +35,7 @@ class DriveCommand(Command):
         if self.lastY is None:
             self.lastY = y
         else:
-            cooldown = 0.025
+            cooldown = 0.05
             self.lastY -= math.copysign(cooldown, self.lastY)
 
             # If the sign has changed, don't move
@@ -46,7 +46,7 @@ class DriveCommand(Command):
                 self.lastY = y
 
         tilt = subsystems.drivetrain.getTilt()
-        correction = math.copysign(pow(tilt, 2), tilt) / 36
+        correction = math.copysign(pow(tilt, 2), tilt) / 100
         if correction < 0.1:
             correction = 0
 
