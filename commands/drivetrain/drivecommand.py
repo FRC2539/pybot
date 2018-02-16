@@ -47,6 +47,7 @@ class DriveCommand(Command):
 
         tilt = subsystems.drivetrain.getTilt()
         correction = math.copysign(pow(tilt, 2), tilt) / 100
+
         if correction < 0.1:
             correction = 0
 
