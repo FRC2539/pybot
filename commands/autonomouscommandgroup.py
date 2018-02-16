@@ -10,6 +10,7 @@ from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.network.alertcommand import AlertCommand
 from commands.drivetrain.gotowallcommand import GoToWallCommand
 from commands.elevator.gotoheightcommand import GoToHeightCommand
+from commands.drivetrain.getultrasoniccommand import GetUltrasonicCommand
 from wpilib.command import PrintCommand
 
 class AutonomousCommandGroup(CommandGroup):
@@ -41,7 +42,7 @@ class AutonomousCommandGroup(CommandGroup):
         def fromLeft(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
-                self.addSequential(PrintCommand('Something is wrong'))
+                self.addSequential(PrintCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(20))
                 self.addSequential(PivotCommand(-30))
@@ -140,6 +141,7 @@ class ScoreOnSwitch(CommandGroup):
         super().__init__('Score on switch')
 
         self.addParallel(GoToHeightCommand('switch'))
+        self.addSequential(SetSpeedCommand(100))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
 
@@ -148,5 +150,6 @@ class ScoreOnScale(CommandGroup):
         super().__init__('Score on scale')
 
         self.addParallel(GoToHeightCommand('scale'))
+        self.addSequential(SetSpeedCommand(100))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
