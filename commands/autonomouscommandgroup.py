@@ -42,7 +42,7 @@ class AutonomousCommandGroup(CommandGroup):
         def fromLeft(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
-                self.addSequential(PrintCommand('Russian hacking attempt'))
+                self.addSequential(AlertCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(20))
                 self.addSequential(PivotCommand(-30))
@@ -50,7 +50,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                self.addSequential(PrintCommand('You have a problem'))
+                self.addSequential(AlertCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(-30))
                 self.addSequential(MoveCommand(50))
                 self.addSequential(PivotCommand(30))
@@ -71,7 +71,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                self.addSequential(PrintCommand('You messed up'))
+                self.addSequential(AlertCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(50))
                 self.addSequential(PivotCommand(-30))
@@ -90,7 +90,7 @@ class AutonomousCommandGroup(CommandGroup):
             def scoreSwitch(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def fromLeft(self):
-                    self.addSequential(PrintCommand('Something went wrong'))
+                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(PivotCommand(-40))
                     self.addSequential(MoveCommand(104))
                     self.addSequential(PivotCommand(40))
@@ -99,7 +99,7 @@ class AutonomousCommandGroup(CommandGroup):
 
                 @fc.ELSE
                 def fromRight(self):
-                    self.addSequential(PrintCommand('You failed'))
+                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(PivotCommand(30))
                     self.addSequential(MoveCommand(92))
                     self.addSequential(PivotCommand(-30))
@@ -119,6 +119,7 @@ class AutonomousCommandGroup(CommandGroup):
             def crossBaselineCenter(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def crossRight(self):
+                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(MoveCommand(20))
                     self.addSequential(PivotCommand(45))
                     self.addSequential(MoveCommand(60))
@@ -128,6 +129,7 @@ class AutonomousCommandGroup(CommandGroup):
 
                 @fc.ELSE
                 def crossLeft(self):
+                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(MoveCommand(20))
                     self.addSequential(PivotCommand(-45))
                     self.addSequential(MoveCommand(60))
@@ -141,7 +143,7 @@ class ScoreOnSwitch(CommandGroup):
         super().__init__('Score on switch')
 
         self.addParallel(GoToHeightCommand('switch'))
-        self.addSequential(SetSpeedCommand(100))
+        self.addSequential(SetSpeedCommand(500))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
 
@@ -150,6 +152,6 @@ class ScoreOnScale(CommandGroup):
         super().__init__('Score on scale')
 
         self.addParallel(GoToHeightCommand('scale'))
-        self.addSequential(SetSpeedCommand(100))
+        self.addSequential(SetSpeedCommand(500))
         self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
