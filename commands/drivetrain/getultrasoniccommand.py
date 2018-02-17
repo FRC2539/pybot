@@ -8,4 +8,4 @@ class GetUltrasonicCommand(InstantCommand):
         super().__init__('GetUltrasonic')
 
     def initialize(self):
-        print(subsystems.drivetrain.getFrontClearance())
+        return subsystems.drivetrain.getFrontClearance()

@@ -28,7 +28,6 @@ class DriveCommand(Command):
 
         self.lastY = None
 
-
     def execute(self):
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()
@@ -46,9 +45,8 @@ class DriveCommand(Command):
                 self.lastY = y
 
         tilt = subsystems.drivetrain.getTilt()
-        correction = math.copysign(pow(tilt, 2), tilt) / 100
-
-        if correction < 0.1:
+        correction = tilt / 20
+        if correction < 0.2:
             correction = 0
 
         subsystems.drivetrain.move(
