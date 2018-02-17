@@ -33,7 +33,7 @@ class Intake(Subsystem):
 
 
     def intake(self):
-        self.set(.5)
+        self.set(1)
 
 
     def outtake(self):
