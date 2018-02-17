@@ -11,10 +11,11 @@ class Intake(Subsystem):
 
         self.leftMotor = WPI_TalonSRX(ports.intake.leftMotorID)
         self.leftMotor.setSafetyEnabled(False)
+        self.leftMotor.setInverted(True)
 
         self.rightMotor = WPI_TalonSRX(ports.intake.rightMotorID)
         self.rightMotor.setSafetyEnabled(False)
-        self.rightMotor.setInverted(True)
+
 
         self.lightSensor = DigitalInput(ports.intake.lightSensorID)
 

@@ -27,7 +27,7 @@ class Elevator(Subsystem):
         self.motor.configReverseSoftLimitThreshold(self.lowerLimit, 0)
         self.motor.configForwardSoftLimitThreshold(self.upperLimit, 0)
         self.motor.configMotionCruiseVelocity(935, 0)
-        self.motor.configMotionAcceleration(9350, 0)
+        self.motor.configMotionAcceleration(935, 0)
 
         self.floors = [
             Config('Elevator/ground'),

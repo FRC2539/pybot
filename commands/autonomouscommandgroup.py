@@ -1,17 +1,17 @@
 from wpilib.command import CommandGroup
+from wpilib.command import PrintCommand
 from wpilib.driverstation import DriverStation
-import commandbased.flowcontrol as fc
 from custom.config import Config
+from commands.network.alertcommand import AlertCommand
+import commandbased.flowcontrol as fc
 
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.pivotcommand import PivotCommand
 from commands.drivetrain.runintowallcommand import RunIntoWallCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
-from commands.network.alertcommand import AlertCommand
 from commands.drivetrain.gotowallcommand import GoToWallCommand
 from commands.elevator.gotoheightcommand import GoToHeightCommand
-from commands.drivetrain.getultrasoniccommand import GetUltrasonicCommand
-from wpilib.command import PrintCommand
+from commands.intake.intakecommand import IntakeCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -38,11 +38,12 @@ class AutonomousCommandGroup(CommandGroup):
             location = Config('Autonomous/robotLocation')
             return msg == location
 
+        self.addSequential(AlertCommand('Russian hacking attempt'))
+
         @fc.IF(lambda: Config('Autonomous/robotLocation') == 'L')
         def fromLeft(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
-                self.addSequential(AlertCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(20))
                 self.addSequential(PivotCommand(-30))
@@ -50,7 +51,6 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                self.addSequential(AlertCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(-30))
                 self.addSequential(MoveCommand(50))
                 self.addSequential(PivotCommand(30))
@@ -71,7 +71,6 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                self.addSequential(AlertCommand('Russian hacking attempt'))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(50))
                 self.addSequential(PivotCommand(-30))
@@ -90,7 +89,6 @@ class AutonomousCommandGroup(CommandGroup):
             def scoreSwitch(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def fromLeft(self):
-                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(PivotCommand(-40))
                     self.addSequential(MoveCommand(104))
                     self.addSequential(PivotCommand(40))
@@ -99,7 +97,6 @@ class AutonomousCommandGroup(CommandGroup):
 
                 @fc.ELSE
                 def fromRight(self):
-                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(PivotCommand(30))
                     self.addSequential(MoveCommand(92))
                     self.addSequential(PivotCommand(-30))
@@ -119,7 +116,6 @@ class AutonomousCommandGroup(CommandGroup):
             def crossBaselineCenter(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def crossRight(self):
-                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(MoveCommand(20))
                     self.addSequential(PivotCommand(45))
                     self.addSequential(MoveCommand(60))
@@ -129,7 +125,6 @@ class AutonomousCommandGroup(CommandGroup):
 
                 @fc.ELSE
                 def crossLeft(self):
-                    self.addSequential(AlertCommand('Russian hacking attempt'))
                     self.addSequential(MoveCommand(20))
                     self.addSequential(PivotCommand(-45))
                     self.addSequential(MoveCommand(60))
@@ -153,5 +148,4 @@ class ScoreOnScale(CommandGroup):
 
         self.addParallel(GoToHeightCommand('scale'))
         self.addSequential(SetSpeedCommand(500))
-        self.addSequential(GoToWallCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))

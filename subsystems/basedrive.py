@@ -42,7 +42,7 @@ class BaseDrive(DebuggableSubsystem):
         for motor in self.motors:
             motor.setNeutralMode(NeutralMode.Coast)
             motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, 0)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
