@@ -17,12 +17,12 @@ class GoToWallCommand(Command):
 
 
     def execute(self):
-        slow = (subsystems.drivetrain.getFrontClearance() - 2) / 10.0
+        slow = (subsystems.drivetrain.getFrontClearance()) - 16 / 32.0
 
         if slow < 1:
             subsystems.drivetrain.move(0, max(slow, 0), 0)
 
-        self._finished = (slow < 0)
+        self._finished = (slow <= 0)
 
 
     def isFinished(self):
