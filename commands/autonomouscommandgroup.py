@@ -12,6 +12,7 @@ from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.gotowallcommand import GoToWallCommand
 from commands.elevator.gotoheightcommand import GoToHeightCommand
 from commands.intake.intakecommand import IntakeCommand
+from commands.intake.outtakecommand import OuttakeCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -106,10 +107,12 @@ class AutonomousCommandGroup(CommandGroup):
             def scoreScale(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[1] == 'L')
                 def fromLeft(self):
+                    self.addParallel(GoToHeightCommand('scale'))
                     self.addSequential(ScoreOnScale())
 
                 @fc.ELSE
                 def fromRight(self):
+                    self.addParallel(GoToHeightCommand('scale'))
                     self.addSequential(ScoreOnScale())
 
             @fc.ELSE
@@ -137,15 +140,17 @@ class ScoreOnSwitch(CommandGroup):
     def __init__(self):
         super().__init__('Score on switch')
 
-        self.addParallel(GoToHeightCommand('switch'))
-        self.addSequential(SetSpeedCommand(500))
+        self.addSequential(GoToHeightCommand('switch'))
+        self.addSequential(SetSpeedCommand(800))
         self.addSequential(GoToWallCommand())
+        self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
 
 class ScoreOnScale(CommandGroup):
     def __init__(self):
         super().__init__('Score on scale')
 
-        self.addParallel(GoToHeightCommand('scale'))
-        self.addSequential(SetSpeedCommand(500))
+        self.addSequential(GoToHeightCommand('scale'))
+        self.addSequential(SetSpeedCommand(800))
+        self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))

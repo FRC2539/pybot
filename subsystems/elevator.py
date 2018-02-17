@@ -57,7 +57,7 @@ class Elevator(Subsystem):
 
 
     def down(self):
-        self.set(-1)
+        self.set(-0.5)
 
 
     def stop(self):
