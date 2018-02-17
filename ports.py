@@ -20,7 +20,7 @@ drivetrain.ultrasonicPort = 0
 
 intake = PortsList()
 
-intake.leftMotorID = 6
+intake.leftMotorID = 8
 intake.rightMotorID = 7
 
 intake.lightSensorID = 0
@@ -32,4 +32,4 @@ elevator.motorID = 5
 climber = PortsList()
 
 climber.hookMotorID = 9
-climber.winchMotorID = 8
+climber.winchMotorID = 6
