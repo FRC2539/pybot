@@ -8,6 +8,7 @@ class ResetElevatorCommand(Command):
         super().__init__('Reset Elevator')
 
         self.requires(subsystems.elevator)
+        self.setRunWhenDisabled(True)
 
 
     def initialize(self):

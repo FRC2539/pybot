@@ -2,6 +2,7 @@ from wpilib.command import Command
 
 import subsystems
 from controller import logicalaxes
+from custom.config import Config
 import math
 
 logicalaxes.registerAxis('driveX')
@@ -15,11 +16,16 @@ class DriveCommand(Command):
         self.requires(subsystems.drivetrain)
         self.speedLimit = speedLimit
 
+        self.preciseSpeed = Config('DriveTrain/preciseSpeed')
+        if self.speedLimit < self.preciseSpeed:
+            self.preciseSpeed = self.speedLimit
+
+        self.unsafeHeight = Config('Elevator/switch') + 1000
+
 
     def initialize(self):
         subsystems.drivetrain.stop()
         subsystems.drivetrain.setProfile(0)
-        subsystems.drivetrain.initializeTilt()
         try:
             subsystems.drivetrain.setSpeedLimit(self.speedLimit)
         except (ZeroDivisionError, TypeError):
@@ -27,6 +33,8 @@ class DriveCommand(Command):
             subsystems.drivetrain.setUseEncoders(False)
 
         self.lastY = None
+        self.slowed = False
+
 
     def execute(self):
         # Avoid quick changes in direction
@@ -46,8 +54,17 @@ class DriveCommand(Command):
 
         tilt = subsystems.drivetrain.getTilt()
         correction = tilt / 20
-        if correction < 0.2:
+        if abs(correction) < 0.2:
             correction = 0
+
+        # Slow down when elevator is up
+        if not self.slowed:
+            if subsystems.elevator.getHeight() >= self.unsafeHeight:
+                subsystems.drivetrain.setSpeedLimit(self.preciseSpeed)
+
+        else:
+            if subsystems.elevator.getHeight() < self.unsafeHeight:
+                subsystems.drivetrain.setSpeedLimit(self.speedLimit)
 
         subsystems.drivetrain.move(
             logicalaxes.driveX.get(),

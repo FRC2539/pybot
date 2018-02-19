@@ -53,7 +53,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
         self.resetGyro()
-        self.flatAngle = None
+        self.flatAngle = 0
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
@@ -215,11 +215,6 @@ class BaseDrive(DebuggableSubsystem):
         '''Current gyro reading'''
 
         return (self.navX.getYaw() + self.gyroOffset) % 360
-
-
-    def initializeTilt(self):
-        if self.flatAngle is None:
-            self.resetTilt()
 
 
     def resetTilt(self):

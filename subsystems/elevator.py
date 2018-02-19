@@ -37,6 +37,10 @@ class Elevator(Subsystem):
             Config('Elevator/scale'),
             Config('Elevator/hang')
         ]
+        self.floorNames = []
+        for floor in self.floors:
+            name = floor.getKey().split('/')[-1].capitalize()
+            self.floorNames.append(name)
 
         self.level = 0
         self.mutex = threading.RLock()
@@ -60,22 +64,75 @@ class Elevator(Subsystem):
         self.set(-0.5)
 
 
-    def stop(self):
-        position = self.motor.getPulseWidthPosition()
-        if position < self.lowerLimit:
-            position = self.lowerLimit
-        elif position > self.upperLimit:
-            position = self.upperLimit
+    def getHeight(self):
+        return self.motor.getPulseWidthPosition()
 
-        self.motor.set(ControlMode.MotionMagic, position)
+
+    def getLevelName(self):
+        height = self.getHeight()
+        level = self.floors[self.level]
+        if level - 500 < height < level + 500:
+            return self.floorNames[self.level]
+
+        below = None
+        above = None
+        for level, floor in enumerate(self.floors):
+            above = level
+            if height <= floor:
+                break
+
+            below = level
+
+        if below == above:
+            if height < self.floors[above] + 500:
+                return self.floorNames[above]
+
+            return 'Above %s' % self.floorNames[above]
+
+        if below is None:
+            if height > self.floors[0] - 500:
+                return self.floorNames[0]
+
+            return 'Below %s' % self.floorNames[0]
+
+        if height - self.floor[below] < self.floor[above] - height:
+            if height < self.floor[below] + 500:
+                return self.floorNames[below]
+            return 'Above %s' % self.floorNames[below]
+
+        else:
+            if height > self.floorNames[above] - 500:
+                return self.floorNames[above]
+            return 'Below %s' % self.floorNames[above]
+
+
+    def guessLevel(self):
+        height = self.getHeight()
+        for level, floor in enumerate(self.floors):
+            if floor - 500 < height < floor + 500:
+                self.level = level
+                return
+
+
+    def stop(self):
+        height = self.getHeight()
+        if height < self.lowerLimit:
+            height = self.lowerLimit
+        elif height > self.upperLimit:
+            height = self.upperLimit
+
+        self.guessLevel()
+
+        self.motor.set(ControlMode.MotionMagic, height)
 
 
     def reset(self):
         self.motor.setSelectedSensorPosition(0, 0, 0)
+        self.setLevel('ground')
 
 
-    def goTo(self, position):
-        self.motor.set(ControlMode.MotionMagic, int(position))
+    def goTo(self, height):
+        self.motor.set(ControlMode.MotionMagic, int(height))
 
 
     def changeLevel(self, amount=1):

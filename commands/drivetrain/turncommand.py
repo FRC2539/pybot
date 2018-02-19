@@ -13,7 +13,7 @@ class TurnCommand(MoveCommand):
         if name is None:
             name = 'Turn %f degrees' % degrees
 
-        super().__init__(degrees, name)
+        super().__init__(degrees, False, name)
 
 
     def initialize(self):
@@ -25,6 +25,7 @@ class TurnCommand(MoveCommand):
             targetPositions.append(position + offset)
 
         subsystems.drivetrain.setPositions(targetPositions)
+
 
     def _calculateDisplacement(self):
         '''

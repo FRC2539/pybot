@@ -5,9 +5,12 @@ defaults = {
     'DriveTrain/normalSpeed': 600,
     'DriveTrain/preciseSpeed': 150,
     'DriveTrain/ticksPerInch': 750,
-    'Autonomous/robotLocation': 'C',
+    'DriveTrain/width': 29.5,
+    'Autonomous/robotLocation': 'L',
     'Autonomous/switch': 'easy',
-    'Autonomous/scale': 'easy'
+    'Autonomous/scale': 'easy',
+    'Elevator/ground': 0,
+    'Elevator/switch': 3000
 }
 
 def fakeConfig(self):

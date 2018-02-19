@@ -61,6 +61,10 @@ class Config:
             return Config._values[self.key].get()
 
 
+    def getKey(self):
+        return self.key
+
+
     '''
     We overload the "magic methods" for different primitive types that we would
     like to store in Config.

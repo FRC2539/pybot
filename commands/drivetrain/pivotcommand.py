@@ -13,7 +13,7 @@ class PivotCommand(MoveCommand):
         if name is None:
             name = 'Pivot %f degrees' % degrees
 
-        super().__init__(degrees, name)
+        super().__init__(degrees, False, name)
 
 
     def initialize(self):
@@ -34,6 +34,7 @@ class PivotCommand(MoveCommand):
                     targetPositions.append(position)
 
         subsystems.drivetrain.setPositions(targetPositions)
+
 
     def _calculateDisplacement(self):
         '''
