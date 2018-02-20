@@ -21,7 +21,7 @@ class Elevator(Subsystem):
         self.motor.setInverted(True)
 
         self.lowerLimit = 0
-        self.upperLimit = 19000
+        self.upperLimit = 21600
         self.motor.configReverseSoftLimitEnable(True, 0)
         self.motor.configForwardSoftLimitEnable(True, 0)
         self.motor.configReverseSoftLimitThreshold(self.lowerLimit, 0)
@@ -68,6 +68,10 @@ class Elevator(Subsystem):
         return self.motor.getPulseWidthPosition()
 
 
+    def getSpeed(self):
+        return abs(self.motor.getQuadratureVelocity())
+
+
     def getLevelName(self):
         height = self.getHeight()
         level = self.floors[self.level]
@@ -95,13 +99,13 @@ class Elevator(Subsystem):
 
             return 'Below %s' % self.floorNames[0]
 
-        if height - self.floor[below] < self.floor[above] - height:
-            if height < self.floor[below] + 500:
+        if height - self.floors[below] < self.floors[above] - height:
+            if height < self.floors[below] + 500:
                 return self.floorNames[below]
             return 'Above %s' % self.floorNames[below]
 
         else:
-            if height > self.floorNames[above] - 500:
+            if height > self.floors[above] - 500:
                 return self.floorNames[above]
             return 'Below %s' % self.floorNames[above]
 

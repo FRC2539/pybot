@@ -16,4 +16,4 @@ class DriveTrain(SkidDrive):
 
 
     def getFrontClearance(self):
-        return self.ultrasonic.getDistance()
+        return self.ultrasonic.getDistance() - 8

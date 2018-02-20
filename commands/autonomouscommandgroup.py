@@ -45,19 +45,18 @@ class AutonomousCommandGroup(CommandGroup):
         def fromLeft(self):
             @fc.IF(getSwitch)
             def cubeOnSwitch(self):
+                self.addSequential(MoveCommand(10))
                 self.addSequential(PivotCommand(30))
-                self.addSequential(MoveCommand(20))
+                self.addSequential(MoveCommand(60))
                 self.addSequential(PivotCommand(-30))
+                self.addSequential(MoveCommand(10))
                 self.addSequential(ScoreOnSwitch())
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                self.addSequential(PivotCommand(-30))
-                self.addSequential(MoveCommand(50))
-                self.addSequential(PivotCommand(30))
-                self.addSequential(MoveCommand(60))
+                self.addSequential(MoveCommand(120))
                 self.addSequential(PivotCommand(90))
-                self.addSequential(MoveCommand(8))
+                self.addSequential(MoveCommand(20))
                 self.addSequential(ScoreOnScale())
 
             @fc.ELSE
@@ -140,7 +139,7 @@ class ScoreOnSwitch(CommandGroup):
     def __init__(self):
         super().__init__('Score on switch')
 
-        self.addSequential(GoToHeightCommand('switch'))
+        self.addParallel(GoToHeightCommand('switch'))
         self.addSequential(SetSpeedCommand(800))
         self.addSequential(GoToWallCommand())
         self.addSequential(OuttakeCommand())
@@ -150,7 +149,7 @@ class ScoreOnScale(CommandGroup):
     def __init__(self):
         super().__init__('Score on scale')
 
-        self.addSequential(GoToHeightCommand('scale'))
+        self.addParallel(GoToHeightCommand('scale'))
         self.addSequential(SetSpeedCommand(800))
         self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))

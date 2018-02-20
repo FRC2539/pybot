@@ -1,8 +1,8 @@
-from wpilib.command import Command
+from wpilib.command.instantcommand import InstantCommand
 
 import subsystems
 
-class ResetElevatorCommand(Command):
+class ResetElevatorCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Reset Elevator')
