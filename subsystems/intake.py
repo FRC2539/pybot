@@ -1,5 +1,5 @@
 from wpilib.command.subsystem import Subsystem
-from ctre import WPI_TalonSRX, ControlMode
+from ctre import WPI_TalonSRX, ControlMode, NeutralMode
 import ports
 from wpilib.digitalinput import DigitalInput
 
@@ -11,10 +11,12 @@ class Intake(Subsystem):
 
         self.leftMotor = WPI_TalonSRX(ports.intake.leftMotorID)
         self.leftMotor.setSafetyEnabled(False)
+        self.leftMotor.setNeutralMode(NeutralMode.Brake)
         self.leftMotor.setInverted(True)
 
         self.rightMotor = WPI_TalonSRX(ports.intake.rightMotorID)
         self.rightMotor.setSafetyEnabled(False)
+        self.rightMotor.setNeutralMode(NeutralMode.Brake)
 
 
         self.lightSensor = DigitalInput(ports.intake.lightSensorID)
