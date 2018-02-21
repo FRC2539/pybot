@@ -18,7 +18,6 @@ class Intake(Subsystem):
         self.rightMotor.setSafetyEnabled(False)
         self.rightMotor.setNeutralMode(NeutralMode.Brake)
 
-
         self.lightSensor = DigitalInput(ports.intake.lightSensorID)
 
 

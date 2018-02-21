@@ -17,7 +17,7 @@ class GoToWallCommand(Command):
 
 
     def execute(self):
-        slow = (subsystems.drivetrain.getFrontClearance() - 2) / 10.0
+        slow = (subsystems.drivetrain.getFrontClearance() - 4) / 16.0
 
         if slow < 1:
             subsystems.drivetrain.move(0, max(slow, 0), 0)

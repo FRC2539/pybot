@@ -48,8 +48,8 @@ def init():
     mainController.LeftBumper.whileHeld(ElevateCommand())
     mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
     mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
-    mainController.RightTrigger.whileHeld(UnhookCommand())
-    mainController.RightBumper.whileHeld(HookCommand())
+    mainController.RightTrigger.whileHeld(HookCommand())
+    mainController.RightBumper.whileHeld(UnhookCommand())
 
     mainController.Start.whenPressed(GetUltrasonicCommand())
 

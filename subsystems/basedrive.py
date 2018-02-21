@@ -178,6 +178,8 @@ class BaseDrive(DebuggableSubsystem):
         for motor in self.activeMotors:
             motor.stopMotor()
 
+        self.lastInputs = None
+
 
     def setProfile(self, profile):
         '''Select which PID profile to use.'''

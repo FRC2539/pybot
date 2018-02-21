@@ -22,10 +22,9 @@ class AutonomousCommandGroup(CommandGroup):
         ds = DriverStation.getInstance()
 
         def getSwitch():
-            if Config('Autonomous/switch') == "always":
-                return True
             if Config('Autonomous/switch') == "never":
                 return False
+
             msg = ds.getGameSpecificMessage()[0]
             location = Config('Autonomous/robotLocation')
             return msg == location
@@ -39,6 +38,7 @@ class AutonomousCommandGroup(CommandGroup):
             location = Config('Autonomous/robotLocation')
             return msg == location
 
+        self.addSequential(SetSpeedCommand(2500))
         self.addSequential(AlertCommand('Russian hacking attempt'))
 
         @fc.IF(lambda: Config('Autonomous/robotLocation') == 'L')
@@ -69,6 +69,15 @@ class AutonomousCommandGroup(CommandGroup):
             def cubeOnSwitch(self):
                 self.addSequential(ScoreOnSwitch())
 
+            @fc.ELIF(lambda: Config('Autonomous/switch') == 'always')
+            def goToLeft(self):
+                self.addSequential(MoveCommand(10))
+                self.addSequential(PivotCommand(-30))
+                self.addSequential(MoveCommand(60))
+                self.addSequential(PivotCommand(30))
+                self.addSequential(MoveCommand(10))
+                self.addSequential(ScoreOnSwitch())
+
             @fc.ELIF(getScale)
             def cubeOnScale(self):
                 self.addSequential(PivotCommand(30))
@@ -81,7 +90,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELSE
             def crossBaseline(self):
-                self.addSequential(MoveCommand(100))
+                self.addSequential(MoveCommand(88))
 
         @fc.ELSE
         def middle(self):
@@ -140,7 +149,6 @@ class ScoreOnSwitch(CommandGroup):
         super().__init__('Score on switch')
 
         self.addParallel(GoToHeightCommand('switch'))
-        self.addSequential(SetSpeedCommand(800))
         self.addSequential(GoToWallCommand())
         self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
@@ -150,6 +158,5 @@ class ScoreOnScale(CommandGroup):
         super().__init__('Score on scale')
 
         self.addParallel(GoToHeightCommand('scale'))
-        self.addSequential(SetSpeedCommand(800))
         self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))

@@ -17,6 +17,7 @@ class MoveCommand(Command):
         super().__init__(name, 0.2)
 
         self.distance = distance
+        self.blocked = False
         self.avoidCollisions = avoidCollisions
         self.requires(subsystems.drivetrain)
 
@@ -47,6 +48,7 @@ class MoveCommand(Command):
                     self.blocked = True
                     self.obstacleCount = 0
                     subsystems.drivetrain.stop()
+                    subsystems.drivetrain.move(0, 0, 0)
                     driverhud.showAlert('Obstacle Detected')
             else:
                 if subsystems.drivetrain.getFrontClearance() >= 20:
@@ -61,9 +63,12 @@ class MoveCommand(Command):
 
 
     def isFinished(self):
+        if self.blocked:
+            return False
+
         if self.isTimedOut() and subsystems.drivetrain.atPosition():
             self.onTarget += 1
         else:
             self.onTarget = 0
 
-        return self.onTarget > 5
+        return self.onTarget > 15

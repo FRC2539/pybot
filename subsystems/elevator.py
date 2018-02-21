@@ -17,8 +17,6 @@ class Elevator(Subsystem):
             0,
             0
         )
-        self.motor.setSensorPhase(True)
-        self.motor.setInverted(True)
 
         self.lowerLimit = 0
         self.upperLimit = 21600
@@ -27,7 +25,7 @@ class Elevator(Subsystem):
         self.motor.configReverseSoftLimitThreshold(self.lowerLimit, 0)
         self.motor.configForwardSoftLimitThreshold(self.upperLimit, 0)
         self.motor.configMotionCruiseVelocity(935, 0)
-        self.motor.configMotionAcceleration(935, 0)
+        self.motor.configMotionAcceleration(1870, 0)
 
         self.floors = [
             Config('Elevator/ground'),
@@ -65,7 +63,7 @@ class Elevator(Subsystem):
 
 
     def getHeight(self):
-        return self.motor.getPulseWidthPosition()
+        return self.motor.getSelectedSensorPosition(0)
 
 
     def getSpeed(self):

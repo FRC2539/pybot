@@ -15,6 +15,7 @@ class Climber(DebuggableSubsystem):
         self.hook = WPI_TalonSRX(ports.climber.hookMotorID)
         self.hook.setNeutralMode(NeutralMode.Brake)
         self.hook.setSafetyEnabled(False)
+        self.hook.setInverted(True)
 
         self.winch = WPI_TalonSRX(ports.climber.winchMotorID)
         self.winch.setNeutralMode(NeutralMode.Brake)
