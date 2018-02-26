@@ -219,6 +219,20 @@ class BaseDrive(DebuggableSubsystem):
         return (self.navX.getYaw() + self.gyroOffset) % 360
 
 
+    def getAngleTo(self, targetAngle):
+        '''
+        Returns the anglular distance from the given target. Values will be
+        between -180 and 180, inclusive.
+        '''
+        degrees = targetAngle - self.getAngle()
+        while degrees > 180:
+            degrees -= 360
+        while degrees < -180:
+            degrees += 360
+
+        return degrees
+
+
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
 
