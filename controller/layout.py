@@ -53,7 +53,7 @@ def init():
 
     mainController.Start.whenPressed(GetUltrasonicCommand())
 
-'''
+
     backupController = LogitechDualShock(1)
 
     backupController.Back.whenPressed(ResetCommand())
@@ -65,6 +65,7 @@ def init():
 
     backupController.LeftTrigger.whileHeld(DeelevateCommand())
     backupController.LeftBumper.whileHeld(ElevateCommand())
-    backupController.RightTrigger.whileHeld(UhookCommand())
-    backupController.RightBumper.whileHeld(HookCommand())
-'''
+    backupController.DPadUp.whenPressed(ChangeLevelCommand(1))
+    backupController.DPadDown.whenPressed(ChangeLevelCommand(-1))
+    backupController.RightTrigger.whileHeld(HookCommand())
+    backupController.RightBumper.whileHeld(UnhookCommand())

@@ -40,7 +40,7 @@ class BaseDrive(DebuggableSubsystem):
             ]
 
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Coast)
+            motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
