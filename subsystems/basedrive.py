@@ -111,7 +111,7 @@ class BaseDrive(DebuggableSubsystem):
             y = math.copysign(max(abs(y) - self.deadband, 0), y)
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
-        speeds = self._calculateSpeeds(x, y, rotate)
+        speeds = self._calculateSpeeds(x, y, rotate / 2)
 
         '''Prevent speeds > 1'''
         maxSpeed = 0

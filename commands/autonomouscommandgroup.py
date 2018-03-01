@@ -38,39 +38,95 @@ class AutonomousCommandGroup(CommandGroup):
             location = Config('Autonomous/robotLocation')
             return msg == location
 
-        self.addSequential(SetSpeedCommand(2500))
-        self.addSequential(AlertCommand('Russian hacking attempt'))
-
         @fc.IF(lambda: Config('Autonomous/robotLocation') == 'L')
         def fromLeft(self):
-            @fc.IF(getSwitch)
+
+            @fc.IF(getSwitch and getScale)
+            def scaleAndSwitch(self):
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
+                self.addSequential(MoveCommand(260))
+                self.addSequential(PivotCommand(95))
+                self.addSequential(ScoreOnScale())
+                self.addSequential(GoToHeightCommand('ground'))
+                #self.addSequential(GoToHeightCommand('switch'))
+                #self.addSequential(ScoreOnSwitch))
+
+            @fc.ELIF(getSwitch)
             def cubeOnSwitch(self):
+                self.addSequential(SetSpeedCommand(1500))
+                self.addParallel(GoToHeightCommand('portal'))
+                self.addParallel(IntakeCommand())
+                self.addSequential(MoveCommand(120))
+                self.addSequential(PivotCommand(90))
+                self.addParallel(ScoreOnSwitch())
+                self.addSequential(MoveCommand(14))
+                self.addSequential(MoveCommand(-5))
+                self.addSequential(GoToHeightCommand('ground'))
+
+            @fc.ELIF(lambda: Config('Autonomous/switch') == 'always')
+            def goToRight(self):
+                self.addSequential(SetSpeedCommand(1500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
                 self.addSequential(MoveCommand(10))
                 self.addSequential(PivotCommand(30))
                 self.addSequential(MoveCommand(60))
                 self.addSequential(PivotCommand(-30))
                 self.addSequential(MoveCommand(10))
                 self.addSequential(ScoreOnSwitch())
+                self.addSequential(GoToHeightCommand('ground'))
 
             @fc.ELIF(getScale)
-            def cubeOnScale(self):
-                self.addSequential(MoveCommand(120))
-                self.addSequential(PivotCommand(90))
-                self.addSequential(MoveCommand(20))
+            def scoreScale(self):
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
+                self.addSequential(MoveCommand(260))
+                self.addSequential(PivotCommand(95))
                 self.addSequential(ScoreOnScale())
+                self.addSequential(GoToHeightCommand('ground'))
 
             @fc.ELSE
             def crossBaseline(self):
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
                 self.addSequential(MoveCommand(100))
 
         @fc.ELIF(lambda: Config('Autonomous/robotLocation') == 'R')
         def fromRight(self):
-            @fc.IF(getSwitch)
+
+            @fc.IF(getSwitch and getScale)
+            def scaleAndSwitch(self):
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
+                self.addSequential(MoveCommand(260))
+                self.addSequential(PivotCommand(-95))
+                self.addSequential(ScoreOnScale())
+                self.addSequential(GoToHeightCommand('ground'))
+                #self.addSequential(GoToHeightCommand('Switch'))
+                #self.addSequential(ScoreOnSwitch))
+
+
+            @fc.ELIF(getSwitch)
             def cubeOnSwitch(self):
-                self.addSequential(ScoreOnSwitch())
+                self.addSequential(SetSpeedCommand(1500))
+                #self.addSequential(GoToHeightCommand('portal'))
+                #self.addSequential(IntakeCommand())
+                self.addSequential(MoveCommand(120))
+                self.addSequential(PivotCommand(-95))
+                self.addParallel(ScoreOnSwitch())
+                self.addSequential(MoveCommand(14))
+                self.addSequential(GoToHeightCommand('ground'))
 
             @fc.ELIF(lambda: Config('Autonomous/switch') == 'always')
             def goToLeft(self):
+                self.addSequential(SetSpeedCommand(1500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
                 self.addSequential(MoveCommand(10))
                 self.addSequential(PivotCommand(-30))
                 self.addSequential(MoveCommand(60))
@@ -80,16 +136,18 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def cubeOnScale(self):
-                self.addSequential(PivotCommand(30))
-                self.addSequential(MoveCommand(50))
-                self.addSequential(PivotCommand(-30))
-                self.addSequential(MoveCommand(60))
-                self.addSequential(PivotCommand(-90))
-                self.addSequential(MoveCommand(8))
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
+                self.addSequential(MoveCommand(260))
+                self.addSequential(PivotCommand(-95))
                 self.addSequential(ScoreOnScale())
 
             @fc.ELSE
             def crossBaseline(self):
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(GoToHeightCommand('portal'))
+                self.addSequential(IntakeCommand())
                 self.addSequential(MoveCommand(88))
 
         @fc.ELSE
@@ -98,35 +156,31 @@ class AutonomousCommandGroup(CommandGroup):
             def scoreSwitch(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def fromLeft(self):
+                    self.addSequential(SetSpeedCommand(1500))
+                    self.addSequential(GoToHeightCommand('portal'))
+                    self.addSequential(IntakeCommand())
                     self.addSequential(PivotCommand(-40))
                     self.addSequential(MoveCommand(104))
                     self.addSequential(PivotCommand(40))
                     self.addSequential(ScoreOnSwitch())
 
-
                 @fc.ELSE
                 def fromRight(self):
+                    self.addSequential(SetSpeedCommand(1500))
+                    self.addSequential(GoToHeightCommand('portal'))
+                    self.addSequential(IntakeCommand())
                     self.addSequential(PivotCommand(30))
                     self.addSequential(MoveCommand(92))
                     self.addSequential(PivotCommand(-30))
                     self.addSequential(ScoreOnSwitch())
 
-            @fc.ELIF(lambda: Config('Autonomous/scale') == 'always')
-            def scoreScale(self):
-                @fc.IF(lambda: ds.getGameSpecificMessage()[1] == 'L')
-                def fromLeft(self):
-                    self.addParallel(GoToHeightCommand('scale'))
-                    self.addSequential(ScoreOnScale())
-
-                @fc.ELSE
-                def fromRight(self):
-                    self.addParallel(GoToHeightCommand('scale'))
-                    self.addSequential(ScoreOnScale())
-
             @fc.ELSE
             def crossBaselineCenter(self):
                 @fc.IF(lambda: ds.getGameSpecificMessage()[0] == 'L')
                 def crossRight(self):
+                    self.addSequential(SetSpeedCommand(2500))
+                    self.addSequential(GoToHeightCommand('portal'))
+                    self.addSequential(IntakeCommand())
                     self.addSequential(MoveCommand(20))
                     self.addSequential(PivotCommand(45))
                     self.addSequential(MoveCommand(60))
@@ -136,6 +190,9 @@ class AutonomousCommandGroup(CommandGroup):
 
                 @fc.ELSE
                 def crossLeft(self):
+                    self.addSequential(SetSpeedCommand(2500))
+                    self.addSequential(GoToHeightCommand('portal'))
+                    self.addSequential(IntakeCommand())
                     self.addSequential(MoveCommand(20))
                     self.addSequential(PivotCommand(-45))
                     self.addSequential(MoveCommand(60))
@@ -148,8 +205,7 @@ class ScoreOnSwitch(CommandGroup):
     def __init__(self):
         super().__init__('Score on switch')
 
-        self.addParallel(GoToHeightCommand('switch'))
-        self.addSequential(GoToWallCommand())
+        self.addSequential(GoToHeightCommand('switch'))
         self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))
 
@@ -157,6 +213,6 @@ class ScoreOnScale(CommandGroup):
     def __init__(self):
         super().__init__('Score on scale')
 
-        self.addParallel(GoToHeightCommand('scale'))
+        self.addSequential(GoToHeightCommand('scale'))
         self.addSequential(OuttakeCommand())
         self.addSequential(AlertCommand('We scored!', 'Info'))

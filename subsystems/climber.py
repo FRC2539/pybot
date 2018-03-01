@@ -20,6 +20,7 @@ class Climber(DebuggableSubsystem):
         self.winch = WPI_TalonSRX(ports.climber.winchMotorID)
         self.winch.setNeutralMode(NeutralMode.Brake)
         self.winch.setSafetyEnabled(False)
+        self.winch.setInverted(True)
 
     def startWinch(self):
         self.winch.set(ControlMode.PercentOutput, 1)

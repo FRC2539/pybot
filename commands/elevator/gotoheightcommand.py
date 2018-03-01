@@ -6,7 +6,7 @@ class GoToHeightCommand(Command):
 
     def __init__(self, level):
         super().__init__('Go To %s' % level, 1)
-        self.level=level
+        self.level = level
 
         self.requires(subsystems.elevator)
 

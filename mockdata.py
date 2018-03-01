@@ -10,7 +10,10 @@ defaults = {
     'Autonomous/switch': 'easy',
     'Autonomous/scale': 'easy',
     'Elevator/ground': 0,
-    'Elevator/switch': 3000
+    'Elevator/switch': 3000,
+    'Elevator/portal': 2000,
+    'Elevator/scale': 5000,
+    'Elevator/exchange': 500
 }
 
 def fakeConfig(self):
