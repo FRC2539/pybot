@@ -66,7 +66,7 @@ class MoveCommand(Command):
         if self.blocked:
             return False
 
-        if self.isTimedOut() and subsystems.drivetrain.atPosition():
+        if self.isTimedOut() and subsystems.drivetrain.atPosition(20):
             self.onTarget += 1
         else:
             self.onTarget = 0
