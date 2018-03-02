@@ -13,3 +13,7 @@ class OuttakeCommand(TimedCommand):
     def initialize(self):
         if subsystems.intake.isCubeInIntake():
             subsystems.intake.outtake()
+
+
+    def end(self):
+        subsystems.intake.stopTake()
