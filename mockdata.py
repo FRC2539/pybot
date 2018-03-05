@@ -13,7 +13,8 @@ defaults = {
     'Elevator/switch': 3000,
     'Elevator/portal': 2000,
     'Elevator/scale': 5000,
-    'Elevator/exchange': 500
+    'Elevator/exchange': 500,
+    'Elevator/hang': 6000
 }
 
 def fakeConfig(self):

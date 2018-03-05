@@ -11,8 +11,8 @@ class OuttakeCommand(TimedCommand):
 
 
     def initialize(self):
-        if subsystems.intake.isCubeInIntake():
-            subsystems.intake.outtake()
+        #if subsystems.intake.isCubeInIntake():
+        subsystems.intake.outtake()
 
 
     def end(self):
