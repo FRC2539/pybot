@@ -71,4 +71,4 @@ class MoveCommand(Command):
         else:
             self.onTarget = 0
 
-        return self.onTarget > 15
+        return self.onTarget > 5
