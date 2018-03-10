@@ -23,7 +23,6 @@ class PivotCommand(MoveCommand):
             self.pivotSide = 1
 
         if reverse:
-            self.direction = -1
             self.pivotSide = abs(self.pivotSide - 1)
 
 
