@@ -17,4 +17,4 @@ class TurnToCommand(TurnCommand):
     def initialize(self):
         self.distance = subsystems.drivetrain.getAngleTo(self.targetDegrees)
 
-        super().initialize(self)
+        super().initialize()

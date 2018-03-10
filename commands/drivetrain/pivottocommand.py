@@ -13,9 +13,19 @@ class PivotToCommand(PivotCommand):
         )
 
         self.targetDegrees = targetDegrees
+        self.reversed = reverse
 
 
     def initialize(self):
         self.distance = subsystems.drivetrain.getAngleTo(self.targetDegrees)
+        print("Pivot %s degrees" % self.distance)
 
-        super().initialize(self)
+        # 0 = Left Side, 1 = Right Side
+        self.pivotSide = 0
+        if self.distance < 0:
+            self.pivotSide = 1
+
+        if self.reversed:
+            self.pivotSide = abs(self.pivotSide - 1)
+
+        super().initialize()
