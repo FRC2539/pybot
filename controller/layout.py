@@ -7,6 +7,7 @@ from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
+from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
@@ -46,12 +47,14 @@ def init():
 
     mainController.LeftTrigger.whileHeld(DeelevateCommand())
     mainController.LeftBumper.whileHeld(ElevateCommand())
-    mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
-    mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
     mainController.RightTrigger.whileHeld(HookCommand())
     mainController.RightBumper.whileHeld(UnhookCommand())
 
-    mainController.Start.whenPressed(GetUltrasonicCommand())
+    mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
+    mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
+    mainController.DPadLeft.whenPressed(SlowOuttakeCommand())
+
+    #mainController.Start.whenPressed(GetUltrasonicCommand())
 
 
     backupController = LogitechDualShock(1)
@@ -65,7 +68,9 @@ def init():
 
     backupController.LeftTrigger.whileHeld(DeelevateCommand())
     backupController.LeftBumper.whileHeld(ElevateCommand())
-    backupController.DPadUp.whenPressed(ChangeLevelCommand(1))
-    backupController.DPadDown.whenPressed(ChangeLevelCommand(-1))
     backupController.RightTrigger.whileHeld(HookCommand())
     backupController.RightBumper.whileHeld(UnhookCommand())
+
+    backupController.DPadUp.whenPressed(ChangeLevelCommand(1))
+    backupController.DPadDown.whenPressed(ChangeLevelCommand(-1))
+    backupController.DPadLeft.whenPressed(SlowOuttakeCommand())
