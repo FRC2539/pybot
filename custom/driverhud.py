@@ -28,6 +28,7 @@ def init():
     from commands.autonomouscommandgroup import AutonomousCommandGroup
     from commands.drivetrain.resettiltcommand import ResetTiltCommand
     from commands.elevator.resetelevatorcommand import ResetElevatorCommand
+    from commands.tools.configurepidcommandgroup import ConfigurePIDCommandGroup
 
     '''
     Add commands to the autonChooser to make them available for selection by the
@@ -44,6 +45,7 @@ def init():
 
     showCommand(ResetTiltCommand())
     showCommand(ResetElevatorCommand())
+    showCommand(ConfigurePIDCommandGroup())
 
 
 def getAutonomousProgram():
