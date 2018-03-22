@@ -59,7 +59,7 @@ class AutonomousCommandGroup(CommandGroup):
 
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(118), 2)
+                self.addSequential(PivotCommand(135), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addSequential(MoveCommand(60))
                 self.addSequential(GoToHeightCommand('switch'))
@@ -69,7 +69,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getSwitch)
             def scoreSwitch(self):
-                'from side'
+                #1st cube
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(MoveCommand(120))
                 self.addSequential(SetSpeedCommand(2000))
@@ -93,7 +93,8 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(OuttakeCommand(), 0.5)
 
                 '''
-                'quick switch'
+            def quickSwitch(self):
+                #1st cube
                 self.addSequential(SetSpeedCommand(2250))
                 self.addParallel(GoToHeightCommand('switch'))
                 self.addParallel(IntakeCommand(), 5)
@@ -134,7 +135,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def scoreScale(self):
-                'corner of scale'
+                #1st cube
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(MoveCommand(220))
                 self.addParallel(IntakeCommand(), 10)
@@ -144,11 +145,11 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(28))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addParallel(GoToHeightCommand('ground'))
-                self.addSequential(MoveCommand(-16))
+                self.addSequential(MoveCommand(-28))
 
                 #2nd cube
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-118), 2)
+                self.addSequential(PivotCommand(135), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addSequential(MoveCommand(60))
                 self.addSequential(MoveCommand(-10))
@@ -156,52 +157,24 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(95))
                 self.addSequential(TurnCommand(90))
 
-                '''
-                'from side'
-                self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(MoveCommand(260))
-                self.addParallel(IntakeCommand(), 10)
-                self.addParallel(GoToHeightCommand('hang'))
-                self.addSequential(SetSpeedCommand(450))
-                self.addSequential(PivotCommand(95), 2)
-                self.addSequential(MoveCommand(32))
-                self.addSequential(OuttakeCommand(), 0.5)
-                self.addParallel(GoToHeightCommand('ground'))
-                self.addSequential(MoveCommand(-12))
-
-                #2nd cube
-                self.addSequential(TurnCommand(-255))
-                self.addSequential(MoveCommand(20))
-                self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveCommand(25))
-                self.addSequential(MoveCommand(-20))
-                '''
 
             @fc.ELIF(lambda: Config('Autonomous/scale') == 'always')
             def goToRightScale(self):
                 #Scale
-                self.addSequential(SetSpeedCommand(1500))
-                self.addSequential(MoveCommand(185))
-                self.addSequential(PivotCommand(95), 2)
-                self.addSequential(MoveCommand(135))
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(MoveCommand(190))
+                self.addSequential(PivotCommand(90), 2)
+                self.addSequential(MoveCommand(192))
                 self.addSequential(PivotCommand(-90), 2)
-                self.addSequential(MoveCommand(20))
-                self.addSequential(PivotCommand(-45), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addParallel(GoToHeightCommand('hang'))
+                self.addSequential(PivotCommand(-45), 2)
                 self.addSequential(SetSpeedCommand(1000))
-                self.addSequential(MoveCommand(32))
+                self.addSequential(MoveCommand(24))
                 self.addSequential(OuttakeCommand(), 0.5)
+                self.addSequential(SetSpeedCommand(1000))
                 self.addParallel(GoToHeightCommand('ground'))
-                self.addSequential(MoveCommand(-16))
-                '''
-                #Switch
-                self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(118), 2)
-                self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveCommand(60))
-                self.addSequential(MoveCommand(-10))
-                '''
+                self.addSequential(MoveCommand(-28))
 
             @fc.ELSE
             def crossBaseline(self):
@@ -220,14 +193,14 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addParallel(GoToHeightCommand('hang'))
                 self.addSequential(SetSpeedCommand(1000))
                 self.addSequential(PivotCommand(-45), 2)
-                self.addSequential(MoveCommand(28))
+                self.addSequential(MoveCommand(50))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(MoveCommand(-28))
 
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-118), 2)
+                self.addSequential(PivotCommand(-135), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addSequential(MoveCommand(60))
                 self.addSequential(GoToHeightCommand('switch'))
@@ -237,21 +210,21 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getSwitch)
             def scoreSwitch(self):
-                'from side'
-                self.addSequential(SetSpeedCommand(2250))
-                self.addParallel(IntakeCommand(), 5)
-                self.addParallel(GoToHeightCommand('switch'))
+                #1st cube
+                self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(MoveCommand(120))
-                self.addSequential(PivotCommand(-95), 2)
-                self.addSequential(MoveCommand(16))
+                self.addSequential(SetSpeedCommand(2000))
+                self.addParallel(IntakeCommand(), 10)
+                self.addParallel(GoToHeightCommand('switch'))
+                self.addSequential(PivotCommand(-80), 2)
+                self.addSequential(MoveCommand(18), 3)
                 self.addSequential(OuttakeCommand(), 0.5)
-                self.addSequential(MoveCommand(-10))
-                self.addSequential(GoToHeightCommand('ground'))
+                self.addParallel(GoToHeightCommand('ground'))
 
                 #2nd cube
                 self.addSequential(PivotCommand(95, True))
                 self.addSequential(MoveCommand(50))
-                self.addSequential(PivotCommand(-115), 2)
+                self.addSequential(PivotCommand(-125), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addSequential(MoveCommand(10))
                 self.addSequential(PivotCommand(-90), 2)
@@ -259,38 +232,36 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(GoToHeightCommand('switch'))
                 self.addSequential(MoveCommand(5))
                 self.addSequential(OuttakeCommand(), 0.5)
+
                 '''
-                'quickSwitch'
+            def quickSwitch(self):
+                #1st cube
                 self.addSequential(SetSpeedCommand(2250))
-                self.addParallel(GoToHeightCommand('portal'))
+                self.addParallel(GoToHeightCommand('switch'))
                 self.addParallel(IntakeCommand(), 5)
                 self.addSequential(MoveCommand(95))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addSequential(MoveCommand(-10))
+                self.addSequential(SetSpeedCommand(800))
                 self.addSequential(GoToHeightCommand('ground'))
 
-                #2nd cube
-                self.addSequential(PivotCommand(95, True))
-                self.addSequential(MoveCommand(50))
-                self.addSequential(PivotCommand(-115))
-                self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveCommand(10))
-                self.addSequential(PivotCommand(-90))
-                self.addParallel(IntakeCommand(), 10)
-                self.addSequential(GoToHeightCommand('switch'))
-                self.addSequential(MoveCommand(5))
-                self.addSequential(OuttakeCommand(), 0.5)
+                #2nd Cube
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(PivotCommand(90, True))
+                self.addSequential(MoveCommand(40))
+                self.addSequential(PivotCommand(-85), 2)
+                self.addSequential(MoveCommand(120))
                 '''
 
             @fc.ELIF(lambda: Config('Autonomous/switch') == 'always')
             def goToLeftSwitch(self):
                 #1st cube
                 self.addSequential(SetSpeedCommand(1500))
-                self.addSequential(PivotCommand(-60))
+                self.addSequential(PivotCommand(-45), 2)
                 self.addParallel(GoToHeightCommand('switch'))
                 self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveCommand(120))
-                self.addSequential(PivotCommand(60))
+                self.addSequential(MoveCommand(130))
+                self.addSequential(PivotCommand(45), 2)
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addSequential(MoveCommand(-10))
                 self.addSequential(SetSpeedCommand(800))
@@ -300,26 +271,26 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(-90, True))
                 self.addSequential(MoveCommand(40))
-                self.addSequential(PivotCommand(85))
+                self.addSequential(PivotCommand(-85), 2)
                 self.addSequential(MoveCommand(120))
 
             @fc.ELIF(getScale)
             def scoreScale(self):
-                'corner of scale'
+                #1st cube
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(MoveCommand(220))
                 self.addParallel(IntakeCommand(), 10)
                 self.addParallel(GoToHeightCommand('hang'))
                 self.addSequential(SetSpeedCommand(1000))
                 self.addSequential(PivotCommand(-45), 2)
-                self.addSequential(MoveCommand(28))
+                self.addSequential(MoveCommand(50))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(MoveCommand(-28))
 
                 #2nd cube
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-118), 2)
+                self.addSequential(PivotCommand(-135), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addSequential(MoveCommand(60))
                 self.addSequential(MoveCommand(-10))
@@ -327,52 +298,24 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveCommand(95))
                 self.addSequential(TurnCommand(-90))
 
-                '''
-                'from side'
-                self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(MoveCommand(260))
-                self.addParallel(IntakeCommand(), 10)
-                self.addParallel(GoToHeightCommand('hang'))
-                self.addSequential(SetSpeedCommand(450))
-                self.addSequential(PivotCommand(-95))
-                self.addSequential(MoveCommand(32))
-                self.addSequential(OuttakeCommand(), 0.5)
-                self.addParallel(GoToHeightCommand('ground'))
-                self.addSequential(MoveCommand(-12))
-
-                #2nd cube
-                self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-118), 2)
-                self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveCommand(60))
-                self.addSequential(MoveCommand(-10))
-                '''
 
             @fc.ELIF(lambda: Config('Autonomous/scale') == 'always')
             def goToLeftScale(self):
                 #Scale
-                self.addSequential(SetSpeedCommand(1500))
-                self.addSequential(MoveCommand(185))
-                self.addSequential(PivotCommand(95), 2)
-                self.addSequential(MoveCommand(135))
+                self.addSequential(SetSpeedCommand(2500))
+                self.addSequential(MoveCommand(190))
                 self.addSequential(PivotCommand(-90), 2)
-                self.addSequential(MoveCommand(20))
-                self.addSequential(PivotCommand(-45), 2)
+                self.addSequential(MoveCommand(192))
+                self.addSequential(PivotCommand(90), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addParallel(GoToHeightCommand('hang'))
+                self.addSequential(PivotCommand(45), 2)
                 self.addSequential(SetSpeedCommand(1000))
-                self.addSequential(MoveCommand(32))
+                self.addSequential(MoveCommand(24))
                 self.addSequential(OuttakeCommand(), 0.5)
+                self.addSequential(SetSpeedCommand(1000))
                 self.addParallel(GoToHeightCommand('ground'))
-                self.addSequential(MoveCommand(-16))
-                '''
-                #Switch
-                self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-118), 2)
-                self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveCommand(60))
-                self.addSequential(MoveCommand(-10))
-                '''
+                self.addSequential(MoveCommand(-28))
 
             @fc.ELSE
             def crossBaseline(self):
@@ -399,6 +342,7 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(MoveCommand(-10))
                     self.addParallel(GoToHeightCommand('ground'))
 
+                    '''
                     #2nd Cube
                     self.addSequential(SetSpeedCommand(2500))
                     self.addSequential(PivotCommand(-90, True))
@@ -406,12 +350,13 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(PivotCommand(95), 2)
                     self.addSequential(MoveCommand(76))
                     self.addSequential(PivotCommand(95), 2)
+                    '''
 
                 @fc.ELSE
                 def toRight(self):
                     #1st cube
                     self.addSequential(SetSpeedCommand(2500))
-                    self.addSequential(PivotCommand(30), 2)
+                    self.addSequential(PivotCommand(27), 2)
                     self.addSequential(SetSpeedCommand(2000))
                     self.addParallel(GoToHeightCommand('switch'))
                     self.addParallel(IntakeCommand(), 10)
@@ -421,6 +366,7 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(MoveCommand(-10))
                     self.addParallel(GoToHeightCommand('ground'))
 
+                    '''
                     #2nd cube
                     self.addSequential(SetSpeedCommand(2500))
                     self.addSequential(PivotCommand(90, True))
@@ -428,6 +374,7 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(PivotCommand(-95), 2)
                     self.addSequential(MoveCommand(76))
                     self.addSequential(PivotCommand(-95), 2)
+                    '''
 
             @fc.ELSE
             def crossBaselineCenter(self):

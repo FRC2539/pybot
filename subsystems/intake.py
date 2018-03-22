@@ -38,7 +38,7 @@ class Intake(Subsystem):
 
 
     def slowOut(self):
-        self.set(-0.3)
+        self.set(-0.5)
 
 
     def outtake(self):
