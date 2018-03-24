@@ -158,17 +158,13 @@ class BaseDrive(DebuggableSubsystem):
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
 
-    #########################################################################
-    #
-    #   *** Experimental ***
-    #
     def setPositionsWithGyro(self, positions):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
         index = 0
         angle = subsystems.drivetrain.getAngle()
-        #self.stop()
+
         for motor, position in zip(self.activeMotors, positions):
             motor.selectProfileSlot(1, 0)
             if index == 0 and angle > 2.0:
@@ -183,7 +179,6 @@ class BaseDrive(DebuggableSubsystem):
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
             index += 1
-    #########################################################################
 
     def averageError(self):
         '''Find the average distance between setpoint and current position.'''
