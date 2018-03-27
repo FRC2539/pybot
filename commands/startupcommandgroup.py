@@ -15,7 +15,12 @@ class StartUpCommandGroup(CommandGroup):
 
         self.addParallel(ResetTiltCommand())
 
-        @fc.IF(lambda: subsystems.elevator.getHeight() > 1000)
+        @fc.IF(lambda: abs(subsystems.elevator.getHeight()) > 1000)
         def resetElevator(self):
-            self.addParallel(ResetElevatorCommand())
-            self.addParallel(AlertCommand('Reset elevator position'))
+            self.addSequential(AlertCommand(
+                'Code restarted when elevator is not at ground level')
+            )
+            self.addSequential(AlertCommand(
+                'If elevator is at ground level, you must reset the elevator',
+                'Info'
+            ))
