@@ -19,7 +19,7 @@ class Elevator(Subsystem):
         )
 
         self.lowerLimit = 0
-        self.upperLimit = 24000
+        self.upperLimit = 23500
         self.motor.configReverseSoftLimitEnable(True, 0)
         self.motor.configForwardSoftLimitEnable(True, 0)
         self.motor.configReverseSoftLimitThreshold(self.lowerLimit, 0)
