@@ -60,9 +60,10 @@ class AutonomousCommandGroup(CommandGroup):
 
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(135), 2)
+                self.addSequential(PivotCommand(132), 2)
                 self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveWithGyroCommand(48))
+                self.addSequential(MoveWithGyroCommand(40))
+                self.addParallel(MoveWithGyroCommand(8), 2)
                 self.addSequential(GoToHeightCommand('switch'))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addSequential(MoveWithGyroCommand(-10))
@@ -150,9 +151,9 @@ class AutonomousCommandGroup(CommandGroup):
 
                 #2nd cube
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(135), 2)
+                self.addSequential(PivotCommand(132), 2)
                 self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveWithGyroCommand(48))
+                self.addSequential(MoveWithGyroCommand(40))
                 self.addSequential(MoveWithGyroCommand(-10))
                 self.addSequential(TurnCommand(-90))
                 self.addSequential(MoveWithGyroCommand(95))
@@ -201,9 +202,10 @@ class AutonomousCommandGroup(CommandGroup):
 
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-135), 2)
+                self.addSequential(PivotCommand(-132), 2)
                 self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveWithGyroCommand(48))
+                self.addSequential(MoveWithGyroCommand(40))
+                self.addParallel(MoveWithGyroCommand(8), 2)
                 self.addSequential(GoToHeightCommand('switch'))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addSequential(MoveWithGyroCommand(-10))
@@ -291,9 +293,9 @@ class AutonomousCommandGroup(CommandGroup):
 
                 #2nd cube
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-135), 2)
+                self.addSequential(PivotCommand(-132), 2)
                 self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveWithGyroCommand(48))
+                self.addSequential(MoveWithGyroCommand(40))
                 self.addSequential(MoveWithGyroCommand(-10))
                 self.addSequential(TurnCommand(90))
                 self.addSequential(MoveWithGyroCommand(95))
@@ -324,7 +326,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveWithGyroCommand(100))
 
         @fc.ELSE
-        def middle(self):
+        def center(self):
 
             @fc.IF(lambda: Config('Autonomous/switch') == 'always')
             def scoreSwitch(self):
@@ -337,7 +339,7 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(SetSpeedCommand(2000))
                     self.addParallel(GoToHeightCommand('switch'))
                     self.addParallel(IntakeCommand(), 10)
-                    self.addSequential(MoveWithGyroCommand(98), 3)
+                    self.addSequential(MoveWithGyroCommand(98))
                     self.addSequential(PivotCommand(35), 2)
                     self.addSequential(OuttakeCommand(), 0.5)
                     self.addSequential(MoveWithGyroCommand(-10))
