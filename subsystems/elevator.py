@@ -26,7 +26,7 @@ class Elevator(Subsystem):
         self.motor.configForwardSoftLimitThreshold(self.upperLimit, 0)
         self.motor.configMotionCruiseVelocity(870, 0)
         self.motor.configMotionAcceleration(2000, 0)
-        self.motor.configPeakCurrentLimit(30, 0)
+        self.motor.configPeakCurrentLimit(40, 0)
         self.motor.configPeakCurrentDuration(100, 0)
         self.motor.enableCurrentLimit(True)
 
