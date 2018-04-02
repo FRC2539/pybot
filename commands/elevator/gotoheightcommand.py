@@ -13,11 +13,15 @@ class GoToHeightCommand(Command):
 
     def initialize(self):
         subsystems.elevator.setLevel(self.level)
+        self.target = subsystems.elevator.floors[subsystems.elevator.level]
         self.stopped = 0
 
 
     def isFinished(self):
         if not self.isTimedOut():
+            return False
+
+        if abs(self.target - subsystems.elevator.getHeight()) > 1000:
             return False
 
         if subsystems.elevator.getSpeed() < 0.01:
