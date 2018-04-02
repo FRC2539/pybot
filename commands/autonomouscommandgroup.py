@@ -339,7 +339,7 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(SetSpeedCommand(2000))
                     self.addParallel(GoToHeightCommand('switch'))
                     self.addParallel(IntakeCommand(), 10)
-                    self.addSequential(MoveWithGyroCommand(98))
+                    self.addSequential(MoveWithGyroCommand(98), 3)
                     self.addSequential(PivotCommand(35), 2)
                     self.addSequential(OuttakeCommand(), 0.5)
                     self.addSequential(MoveWithGyroCommand(-10))

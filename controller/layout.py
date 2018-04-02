@@ -9,6 +9,7 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
 from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
+from commands.elevator.forcedlowercommand import ForcedLowerCommand
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
 from commands.climber.climbcommand import ClimbCommand
@@ -39,6 +40,7 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.Back.whenPressed(ResetCommand())
+    mainController.Start.whileHeld(ForcedLowerCommand())
 
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     mainController.A.toggleWhenPressed(IntakeCommand())
@@ -53,8 +55,6 @@ def init():
     mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
     mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
     mainController.DPadLeft.whenPressed(SlowOuttakeCommand())
-
-    #mainController.Start.whenPressed(GetUltrasonicCommand())
 
 
     backupController = LogitechDualShock(1)

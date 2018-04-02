@@ -19,7 +19,7 @@ class Elevator(Subsystem):
         )
 
         self.lowerLimit = 0
-        self.upperLimit = 23000
+        self.upperLimit = 24000
         self.motor.configReverseSoftLimitEnable(True, 0)
         self.motor.configForwardSoftLimitEnable(True, 0)
         self.motor.configReverseSoftLimitThreshold(self.lowerLimit, 0)
@@ -162,3 +162,7 @@ class Elevator(Subsystem):
                     break
 
         self.goTo(self.floors[self.level])
+
+
+    def enableLowerLimit(self, enabled=True):
+        self.motor.configReverseSoftLimitEnable(enabled, 0)
