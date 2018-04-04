@@ -16,6 +16,7 @@ from commands.drivetrain.gotowallcommand import GoToWallCommand
 from commands.elevator.gotoheightcommand import GoToHeightCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
+from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -51,19 +52,18 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveWithGyroCommand(220))
                 self.addParallel(IntakeCommand(), 10)
                 self.addParallel(GoToHeightCommand('hang'))
-                self.addSequential(SetSpeedCommand(1000))
-                self.addSequential(PivotCommand(40), 2)
-                self.addSequential(MoveWithGyroCommand(28))
-                self.addSequential(OuttakeCommand(), 0.5)
+                self.addSequential(SetSpeedCommand(750))
+                self.addSequential(PivotCommand(35), 2)
+                self.addSequential(MoveWithGyroCommand(28), 2)
+                self.addSequential(SlowOuttakeCommand(), 0.5)
                 self.addParallel(GoToHeightCommand('ground'))
-                self.addSequential(MoveWithGyroCommand(-28))
+                self.addParallel(SetSpeedCommand(2500))
+                self.addParallel(MoveCommand(-14), 1)
 
                 #Switch
-                self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(132), 2)
+                self.addSequential(PivotCommand(135, True), 2)
                 self.addParallel(IntakeCommand(), 10)
-                self.addSequential(MoveWithGyroCommand(40))
-                self.addParallel(MoveWithGyroCommand(8), 2)
+                self.addSequential(MoveWithGyroCommand(80), 2)
                 self.addSequential(GoToHeightCommand('switch'))
                 self.addSequential(OuttakeCommand(), 0.5)
                 self.addSequential(MoveWithGyroCommand(-10))

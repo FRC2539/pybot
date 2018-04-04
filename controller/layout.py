@@ -60,6 +60,7 @@ def init():
     backupController = LogitechDualShock(1)
 
     backupController.Back.whenPressed(ResetCommand())
+    backupController.Start.whileHeld(ForcedLowerCommand())
 
     backupController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
     backupController.A.toggleWhenPressed(IntakeCommand())

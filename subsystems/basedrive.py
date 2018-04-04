@@ -165,7 +165,6 @@ class BaseDrive(DebuggableSubsystem):
         angle = self.getAngle() * 75
 
         for motor, position in zip(self.activeMotors, positions):
-            print(index)
             motor.selectProfileSlot(1, 0)
             if index == 0 and angle > 75:
                 motor.configMotionCruiseVelocity(int(self.speedLimit - angle), 0)
