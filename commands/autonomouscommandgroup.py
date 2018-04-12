@@ -169,7 +169,7 @@ class AutonomousCommandGroup(CommandGroup):
             def goToRightScale(self):
                 #Scale
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(MoveWithGyroCommand(190))
+                self.addSequential(MoveWithGyroCommand(196))
                 self.addSequential(PivotCommand(90), 2)
                 self.addSequential(MoveWithGyroCommand(192))
                 self.addSequential(PivotCommand(-90), 2)
@@ -179,7 +179,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(SetSpeedCommand(1000))
                 self.addSequential(MoveWithGyroCommand(24))
                 self.addSequential(OuttakeCommand(), 0.5)
-                self.addSequential(SetSpeedCommand(1000))
+                self.addSequential(SetSpeedCommand(700))
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(MoveWithGyroCommand(-28))
 
@@ -208,7 +208,7 @@ class AutonomousCommandGroup(CommandGroup):
 
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(PivotCommand(-127), 2)
+                self.addSequential(PivotCommand(-117), 2)
                 self.addParallel(IntakeCommand(), 10)
                 self.addSequential(MoveWithGyroCommand(36))
                 self.addSequential(GoToHeightCommand('switch'))
@@ -315,7 +315,7 @@ class AutonomousCommandGroup(CommandGroup):
             def goToLeftScale(self):
                 #Scale
                 self.addSequential(SetSpeedCommand(2500))
-                self.addSequential(MoveWithGyroCommand(190))
+                self.addSequential(MoveWithGyroCommand(196))
                 self.addSequential(PivotCommand(-90), 2)
                 self.addSequential(MoveWithGyroCommand(192))
                 self.addSequential(PivotCommand(90), 2)
@@ -325,7 +325,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(SetSpeedCommand(1000))
                 self.addSequential(MoveWithGyroCommand(24))
                 self.addSequential(OuttakeCommand(), 0.5)
-                self.addSequential(SetSpeedCommand(1000))
+                self.addSequential(SetSpeedCommand(700))
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(MoveWithGyroCommand(-28))
 
@@ -344,12 +344,12 @@ class AutonomousCommandGroup(CommandGroup):
                 def toLeft(self):
                     #1st cube
                     self.addSequential(SetSpeedCommand(2500))
-                    self.addSequential(PivotCommand(-35), 2)
+                    self.addSequential(PivotCommand(-37), 2)
                     self.addSequential(SetSpeedCommand(2000))
                     self.addParallel(GoToHeightCommand('switch'))
                     self.addParallel(IntakeCommand(), 10)
                     self.addSequential(MoveWithGyroCommand(98), 3)
-                    self.addSequential(PivotCommand(35), 2)
+                    self.addSequential(PivotCommand(37), 2)
                     self.addSequential(OuttakeCommand(), 0.5)
                     self.addSequential(MoveWithGyroCommand(-10))
                     self.addParallel(GoToHeightCommand('ground'))
