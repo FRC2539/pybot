@@ -1,6 +1,6 @@
 from wpilib.command import Command
 
-import subsystems
+import robot
 
 class ClimbCommand(Command):
     '''
@@ -10,12 +10,12 @@ class ClimbCommand(Command):
     def __init__(self):
         super().__init__('Climb')
 
-        self.requires(subsystems.climber)
+        self.requires(robot.climber)
 
 
     def initialize(self):
-        subsystems.climber.startWinch()
+        robot.climber.startWinch()
 
 
     def end(self):
-        subsystems.climber.stopWinch()
+        robot.climber.stopWinch()

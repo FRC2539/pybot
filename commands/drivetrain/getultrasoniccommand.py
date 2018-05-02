@@ -1,5 +1,5 @@
 from wpilib.command.instantcommand import InstantCommand
-import subsystems
+import robot
 
 
 class GetUltrasonicCommand(InstantCommand):
@@ -9,4 +9,4 @@ class GetUltrasonicCommand(InstantCommand):
         self.setRunWhenDisabled(True)
 
     def initialize(self):
-        print(subsystems.drivetrain.getFrontClearance())
+        print(robot.drivetrain.getFrontClearance())

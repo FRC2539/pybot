@@ -1,6 +1,6 @@
 from .pivotcommand import PivotCommand
 
-import subsystems
+import robot
 
 class PivotToCommand(PivotCommand):
     '''Pivot to a specified angle using the gyroscope.'''
@@ -17,7 +17,7 @@ class PivotToCommand(PivotCommand):
 
 
     def initialize(self):
-        self.distance = subsystems.drivetrain.getAngleTo(self.targetDegrees)
+        self.distance = robot.drivetrain.getAngleTo(self.targetDegrees)
         print("Pivot %s degrees" % self.distance)
 
         # 0 = Left Side, 1 = Right Side

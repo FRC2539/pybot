@@ -1,6 +1,6 @@
 from wpilib.command import Command
 
-import subsystems
+import robot
 from controller import logicalaxes
 from custom.config import Config
 import math
@@ -13,7 +13,7 @@ class DriveCommand(Command):
     def __init__(self, speedLimit):
         super().__init__('DriveCommand %s' % speedLimit)
 
-        self.requires(subsystems.drivetrain)
+        self.requires(robot.drivetrain)
         self.speedLimit = speedLimit
 
         self.preciseSpeed = Config('DriveTrain/preciseSpeed')
@@ -24,13 +24,13 @@ class DriveCommand(Command):
 
 
     def initialize(self):
-        subsystems.drivetrain.stop()
-        subsystems.drivetrain.setProfile(0)
+        robot.drivetrain.stop()
+        robot.drivetrain.setProfile(0)
         try:
-            subsystems.drivetrain.setSpeedLimit(self.speedLimit)
+            robot.drivetrain.setSpeedLimit(self.speedLimit)
         except (ZeroDivisionError, TypeError):
             print('Could not set speed to %f' % self.speedLimit)
-            subsystems.drivetrain.setUseEncoders(False)
+            robot.drivetrain.setUseEncoders(False)
 
         self.lastY = None
         self.slowed = False
@@ -52,21 +52,21 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        tilt = subsystems.drivetrain.getTilt()
+        tilt = robot.drivetrain.getTilt()
         correction = tilt / 20
         if abs(correction) < 0.2:
             correction = 0
 
         # Slow down when elevator is up
         if not self.slowed:
-            if subsystems.elevator.getHeight() >= self.unsafeHeight:
-                subsystems.drivetrain.setSpeedLimit(self.preciseSpeed)
+            if robot.elevator.getHeight() >= self.unsafeHeight:
+                robot.drivetrain.setSpeedLimit(self.preciseSpeed)
 
         else:
-            if subsystems.elevator.getHeight() < self.unsafeHeight:
-                subsystems.drivetrain.setSpeedLimit(self.speedLimit)
+            if robot.elevator.getHeight() < self.unsafeHeight:
+                robot.drivetrain.setSpeedLimit(self.speedLimit)
 
-        subsystems.drivetrain.move(
+        robot.drivetrain.move(
             logicalaxes.driveX.get(),
             y - correction,
             logicalaxes.driveRotate.get()

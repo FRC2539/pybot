@@ -1,6 +1,6 @@
 from wpilib.command import Command
 
-import subsystems
+import robot
 
 class HookCommand(Command):
     '''
@@ -10,11 +10,11 @@ class HookCommand(Command):
     def __init__(self):
         super().__init__('Hook')
 
-        self.requires(subsystems.climber)
+        self.requires(robot.climber)
 
     def initialize(self):
-        subsystems.climber.hookDown()
+        robot.climber.hookDown()
 
 
     def end(self):
-        subsystems.climber.stopHook()
+        robot.climber.stopHook()

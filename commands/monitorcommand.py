@@ -3,7 +3,7 @@ from wpilib.timer import Timer
 from networktables import NetworkTables
 
 import math
-import subsystems
+import robot
 
 class MonitorCommand(Command):
     '''Runs continually while the robot is powered on.'''
@@ -14,7 +14,7 @@ class MonitorCommand(Command):
         '''
         Required because this is the default command for the monitor subsystem.
         '''
-        self.requires(subsystems.monitor)
+        self.requires(robot.monitor)
 
         self.setInterruptible(False)
         self.setRunWhenDisabled(True)
@@ -25,7 +25,7 @@ class MonitorCommand(Command):
 
 
     def initialize(self):
-        self.hasCube = subsystems.intake.isCubeInIntake()
+        self.hasCube = robot.intake.isCubeInIntake()
         self.table.putBoolean('Intake/hasCube', self.hasCube)
 
 
@@ -38,14 +38,14 @@ class MonitorCommand(Command):
 
             self.table.putString(
                 'Elevator/label',
-                subsystems.elevator.getLevelName()
+                robot.elevator.getLevelName()
             )
             self.table.putString(
                 'Elevator/position',
-                subsystems.elevator.getHeight()
+                robot.elevator.getHeight()
             )
 
-        if self.hasCube != subsystems.intake.isCubeInIntake():
+        if self.hasCube != robot.intake.isCubeInIntake():
             self.cubeChanged += 1
         else:
             self.cubeChanged = 0

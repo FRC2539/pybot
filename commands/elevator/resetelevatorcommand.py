@@ -1,15 +1,15 @@
 from wpilib.command.instantcommand import InstantCommand
 
-import subsystems
+import robot
 
 class ResetElevatorCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Reset Elevator')
 
-        self.requires(subsystems.elevator)
+        self.requires(robot.elevator)
         self.setRunWhenDisabled(True)
 
 
     def initialize(self):
-        subsystems.elevator.reset()
+        robot.elevator.reset()

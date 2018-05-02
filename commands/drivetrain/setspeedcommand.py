@@ -1,6 +1,6 @@
 from wpilib.command.instantcommand import InstantCommand
 
-import subsystems
+import robot
 
 class SetSpeedCommand(InstantCommand):
     '''Changes the max speed of the drive subsystem.'''
@@ -11,4 +11,4 @@ class SetSpeedCommand(InstantCommand):
 
 
     def initialize(self):
-        subsystems.drivetrain.setSpeedLimit(self.speed)
+        robot.drivetrain.setSpeedLimit(self.speed)

@@ -1,19 +1,19 @@
 from wpilib.command.timedcommand import TimedCommand
 
-import subsystems
+import robot
 
 class OuttakeCommand(TimedCommand):
 
     def __init__(self):
         super().__init__('Outtake', 1)
 
-        self.requires(subsystems.intake)
+        self.requires(robot.intake)
 
 
     def initialize(self):
-        #if subsystems.intake.isCubeInIntake():
-        subsystems.intake.outtake()
+        #if robot.intake.isCubeInIntake():
+        robot.intake.outtake()
 
 
     def end(self):
-        subsystems.intake.stopTake()
+        robot.intake.stopTake()

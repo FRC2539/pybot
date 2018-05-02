@@ -1,6 +1,6 @@
 from .movecommand import MoveCommand
 
-import subsystems
+import robot
 from custom.config import Config
 
 import math
@@ -21,10 +21,10 @@ class TurnCommand(MoveCommand):
 
         offset = self._calculateDisplacement()
         targetPositions = []
-        for position in subsystems.drivetrain.getPositions():
+        for position in robot.drivetrain.getPositions():
             targetPositions.append(position + offset)
 
-        subsystems.drivetrain.setPositions(targetPositions)
+        robot.drivetrain.setPositions(targetPositions)
 
 
     def _calculateDisplacement(self):

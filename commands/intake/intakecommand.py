@@ -1,18 +1,18 @@
 from wpilib.command.command import Command
 from wpilib.timer import Timer
 
-import subsystems
+import robot
 
 class IntakeCommand(Command):
 
     def __init__(self):
         super().__init__('Intake')
 
-        self.requires(subsystems.intake)
+        self.requires(robot.intake)
 
 
     def initialize(self):
-        subsystems.intake.intake()
+        robot.intake.intake()
         self.endTime = None
 
 
@@ -20,7 +20,7 @@ class IntakeCommand(Command):
         if self.endTime:
             return self.endTime < Timer.getFPGATimestamp()
         else:
-            if subsystems.intake.isCubeInIntake():
+            if robot.intake.isCubeInIntake():
                 # Wait 1 second after cube detected
                 self.endTime = Timer.getFPGATimestamp() + 1
 
@@ -28,4 +28,4 @@ class IntakeCommand(Command):
 
 
     def end(self):
-        subsystems.intake.stopTake()
+        robot.intake.stopTake()

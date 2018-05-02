@@ -1,7 +1,7 @@
 from wpilib.command.commandgroup import CommandGroup
 import commandbased.flowcontrol as fc
 
-import subsystems
+import robot
 
 from .drivetrain.resettiltcommand import ResetTiltCommand
 from .elevator.resetelevatorcommand import ResetElevatorCommand
@@ -15,7 +15,7 @@ class StartUpCommandGroup(CommandGroup):
 
         self.addParallel(ResetTiltCommand())
 
-        @fc.IF(lambda: abs(subsystems.elevator.getHeight()) > 1000)
+        @fc.IF(lambda: abs(robot.elevator.getHeight()) > 1000)
         def resetElevator(self):
             self.addSequential(AlertCommand(
                 'Code restarted when elevator is not at ground level')

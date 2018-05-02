@@ -1,7 +1,7 @@
 from wpilib.command import Command
 from custom.config import Config
 from custom import driverhud
-import subsystems
+import robot
 
 class MoveWithGyroCommand(Command):
 
@@ -19,7 +19,7 @@ class MoveWithGyroCommand(Command):
         self.distance = distance
         self.blocked = False
         self.avoidCollisions = avoidCollisions
-        self.requires(subsystems.drivetrain)
+        self.requires(robot.drivetrain)
 
 
     def initialize(self):
@@ -29,18 +29,18 @@ class MoveWithGyroCommand(Command):
         self.targetPositions = []
         offset = self.distance * Config('DriveTrain/ticksPerInch')
         sign = 1
-        for position in subsystems.drivetrain.getPositions():
+        for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset * sign)
             sign *= -1
 
-        subsystems.drivetrain.resetGyro()
-        subsystems.drivetrain.setPositionsWithGyro(self.targetPositions)
+        robot.drivetrain.resetGyro()
+        robot.drivetrain.setPositionsWithGyro(self.targetPositions)
 
 
     def execute(self):
         if self.avoidCollisions:
             if not self.blocked:
-                if subsystems.drivetrain.getFrontClearance() < 10:
+                if robot.drivetrain.getFrontClearance() < 10:
                     self.obstacleCount += 1
                 else:
                     self.obstacleCount = 0
@@ -48,11 +48,11 @@ class MoveWithGyroCommand(Command):
                 if self.obstacleCount >= 10:
                     self.blocked = True
                     self.obstacleCount = 0
-                    subsystems.drivetrain.stop()
-                    subsystems.drivetrain.move(0, 0, 0)
+                    robot.drivetrain.stop()
+                    robot.drivetrain.move(0, 0, 0)
                     driverhud.showAlert('Obstacle Detected')
             else:
-                if subsystems.drivetrain.getFrontClearance() >= 20:
+                if robot.drivetrain.getFrontClearance() >= 20:
                     self.obstacleCount += 1
                 else:
                     self.obstacleCount = 0
@@ -60,16 +60,16 @@ class MoveWithGyroCommand(Command):
                 if self.obstacleCount >= 10:
                     self.blocked = False
                     self.obstacleCount = 0
-                    subsystems.drivetrain.setPositionsWithGyro(self.targetPositions)
+                    robot.drivetrain.setPositionsWithGyro(self.targetPositions)
 
-        subsystems.drivetrain.setPositionsWithGyro(self.targetPositions)
+        robot.drivetrain.setPositionsWithGyro(self.targetPositions)
 
 
     def isFinished(self):
         if self.blocked:
             return False
 
-        if self.isTimedOut() and subsystems.drivetrain.atPosition(20):
+        if self.isTimedOut() and robot.drivetrain.atPosition(20):
             self.onTarget += 1
         else:
             self.onTarget = 0

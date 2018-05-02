@@ -1,18 +1,18 @@
 from wpilib.command import Command
 
-import subsystems
+import robot
 
 class ElevateCommand(Command):
 
     def __init__(self):
         super().__init__('Elevate')
 
-        self.requires(subsystems.elevator)
+        self.requires(robot.elevator)
 
 
     def initialize(self):
-        subsystems.elevator.up()
+        robot.elevator.up()
 
 
     def end(self):
-        subsystems.elevator.stop()
+        robot.elevator.stop()

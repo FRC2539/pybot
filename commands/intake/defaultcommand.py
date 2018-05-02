@@ -1,14 +1,14 @@
 from wpilib.command.command import Command
 
-import subsystems
+import robot
 
 class DefaultCommand(Command):
 
     def __init__(self):
         super().__init__('Default for Intake')
 
-        self.requires(subsystems.intake)
+        self.requires(robot.intake)
 
 
     def initialize(self):
-        subsystems.intake.stopTake()
+        robot.intake.stopTake()

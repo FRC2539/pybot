@@ -1,18 +1,18 @@
 from wpilib.command.timedcommand import TimedCommand
 
-import subsystems
+import robot
 
 class SlowOuttakeCommand(TimedCommand):
 
     def __init__(self):
         super().__init__('Slow Outtake', 1)
 
-        self.requires(subsystems.intake)
+        self.requires(robot.intake)
 
 
     def initialize(self):
-        subsystems.intake.slowOut()
+        robot.intake.slowOut()
 
 
     def end(self):
-        subsystems.intake.stopTake()
+        robot.intake.stopTake()

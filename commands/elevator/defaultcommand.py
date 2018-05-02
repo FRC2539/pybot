@@ -1,10 +1,10 @@
 from wpilib.command.command import Command
 
-import subsystems
+import robot
 
 class DefaultCommand(Command):
 
     def __init__(self):
         super().__init__('Default for Elevator')
 
-        self.requires(subsystems.elevator)
+        self.requires(robot.elevator)

@@ -1,6 +1,6 @@
 from .movecommand import MoveCommand
 
-import subsystems
+import robot
 from custom.config import Config
 
 import math
@@ -31,14 +31,14 @@ class PivotCommand(MoveCommand):
 
         offset = self._calculateDisplacement() * self.direction
         targetPositions = []
-        for i, position in enumerate(subsystems.drivetrain.getPositions()):
+        for i, position in enumerate(robot.drivetrain.getPositions()):
             side = i % 2
             if self.pivotSide == side:
                 position += offset
 
             targetPositions.append(position)
 
-        subsystems.drivetrain.setPositions(targetPositions)
+        robot.drivetrain.setPositions(targetPositions)
 
 
     def _calculateDisplacement(self):

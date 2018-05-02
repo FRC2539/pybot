@@ -1,6 +1,6 @@
 from wpilib.command import Command
 
-import subsystems
+import robot
 
 class GoToHeightCommand(Command):
 
@@ -8,12 +8,12 @@ class GoToHeightCommand(Command):
         super().__init__('Go To %s' % level, 1)
         self.level = level
 
-        self.requires(subsystems.elevator)
+        self.requires(robot.elevator)
 
 
     def initialize(self):
-        subsystems.elevator.setLevel(self.level)
-        self.target = subsystems.elevator.floors[subsystems.elevator.level]
+        robot.elevator.setLevel(self.level)
+        self.target = robot.elevator.floors[robot.elevator.level]
         self.stopped = 0
 
 
@@ -21,10 +21,10 @@ class GoToHeightCommand(Command):
         if not self.isTimedOut():
             return False
 
-        if abs(self.target - subsystems.elevator.getHeight()) > 1000:
+        if abs(self.target - robot.elevator.getHeight()) > 1000:
             return False
 
-        if subsystems.elevator.getSpeed() < 0.01:
+        if robot.elevator.getSpeed() < 0.01:
             self.stopped += 1
         else:
             self.stopped = 0

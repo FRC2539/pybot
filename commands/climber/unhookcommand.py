@@ -1,6 +1,6 @@
 from wpilib.command import Command
 
-import subsystems
+import robot
 
 class UnhookCommand(Command):
     '''
@@ -10,12 +10,12 @@ class UnhookCommand(Command):
     def __init__(self):
         super().__init__('Unhook')
 
-        self.requires(subsystems.climber)
+        self.requires(robot.climber)
 
 
     def initialize(self):
-        subsystems.climber.hookUp()
+        robot.climber.hookUp()
 
 
     def end(self):
-        subsystems.climber.stopHook()
+        robot.climber.stopHook()

@@ -9,6 +9,12 @@ import controller.layout
 import subsystems
 import shutil, sys
 
+from wpilib.command.subsystem import Subsystem
+
+from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.intake import Intake as intake
+from subsystems.elevator import Elevator as elevator
+from subsystems.climber import Climber as climber
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
@@ -19,7 +25,7 @@ class KryptonBot(CommandBasedRobot):
         if RobotBase.isSimulation():
             import mockdata
 
-        subsystems.init()
+        self.subsystems()
         controller.layout.init()
         driverhud.init()
 
@@ -42,6 +48,27 @@ class KryptonBot(CommandBasedRobot):
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)
+
+
+    @classmethod
+    def subsystems(cls):
+        vars = globals()
+        module = sys.modules['robot']
+        for key, var in vars.items():
+            try:
+                if issubclass(var, Subsystem) and var is not Subsystem:
+                    setattr(module, key, var())
+            except TypeError:
+                pass
+
+
+    @classmethod
+    def _reset(cls):
+        vars = globals()
+        module = sys.modules['robot']
+        for key, var in vars.items():
+            if isinstance(var, Subsystem):
+                setattr(module, key, type(var))
 
 
 if __name__ == '__main__':

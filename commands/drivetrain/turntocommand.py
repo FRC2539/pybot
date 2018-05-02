@@ -1,6 +1,6 @@
 from .turncommand import TurnCommand
 
-import subsystems
+import robot
 
 class TurnToCommand(TurnCommand):
     '''Turn to a specified angle using the gyroscope.'''
@@ -15,6 +15,6 @@ class TurnToCommand(TurnCommand):
 
 
     def initialize(self):
-        self.distance = subsystems.drivetrain.getAngleTo(self.targetDegrees)
+        self.distance = robot.drivetrain.getAngleTo(self.targetDegrees)
 
         super().initialize()

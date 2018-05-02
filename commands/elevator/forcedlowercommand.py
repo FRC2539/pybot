@@ -1,22 +1,22 @@
 from wpilib.command.command import Command
 
-import subsystems
+import robot
 
 class ForcedLowerCommand(Command):
 
     def __init__(self):
         super().__init__('Override Elevator')
 
-        self.requires(subsystems.elevator)
+        self.requires(robot.elevator)
 
 
     def initialize(self):
-        subsystems.elevator.enableLowerLimit(False)
-        subsystems.elevator.down()
+        robot.elevator.enableLowerLimit(False)
+        robot.elevator.down()
 
 
     def end(self):
-        subsystems.elevator.stop()
-        subsystems.elevator.enableLowerLimit(True)
-        if subsystems.elevator.getHeight() < 0:
-            subsystems.elevator.reset()
+        robot.elevator.stop()
+        robot.elevator.enableLowerLimit(True)
+        if robot.elevator.getHeight() < 0:
+            robot.elevator.reset()
