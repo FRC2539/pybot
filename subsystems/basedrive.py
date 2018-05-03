@@ -294,8 +294,8 @@ class BaseDrive(DebuggableSubsystem):
         mode depending on if encoders are enabled.
         '''
 
-        if speed < 0:
-            raise ValueError('DriveTrain speed cannot be less than 0')
+        if speed <= 0:
+            raise ValueError('DriveTrain speed must be greater than 0')
 
         self.speedLimit = speed
         if speed > self.maxSpeed:
@@ -303,6 +303,16 @@ class BaseDrive(DebuggableSubsystem):
 
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
+
+
+    def enableSimpleDriving(self):
+        '''
+        Allow the robot to drive without encoders or any input from Config.
+        '''
+
+        self.speedLimit = 1
+        self.maxSpeed = 1
+        self.setUseEncoders(False)
 
 
     def _publishPID(self, table, profile):

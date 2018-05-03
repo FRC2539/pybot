@@ -2,7 +2,7 @@ from wpilib.command import Command
 
 import robot
 from controller import logicalaxes
-from custom.config import Config
+from custom.config import Config, MissingConfigError
 import math
 
 logicalaxes.registerAxis('driveX')
@@ -16,21 +16,15 @@ class DriveCommand(Command):
         self.requires(robot.drivetrain)
         self.speedLimit = speedLimit
 
-        self.preciseSpeed = Config('DriveTrain/preciseSpeed')
-        if self.speedLimit < self.preciseSpeed:
-            self.preciseSpeed = self.speedLimit
-
-        self.unsafeHeight = Config('Elevator/switch') + 1000
-
 
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
-        except (ZeroDivisionError, TypeError):
-            print('Could not set speed to %f' % self.speedLimit)
-            robot.drivetrain.setUseEncoders(False)
+        except (ValueError, MissingConfigError):
+            print('Could not set speed to %s' % self.speedLimit)
+            robot.drivetrain.enableSimpleDriving()
 
         self.lastY = None
         self.slowed = False
@@ -56,15 +50,6 @@ class DriveCommand(Command):
         correction = tilt / 20
         if abs(correction) < 0.2:
             correction = 0
-
-        # Slow down when elevator is up
-        if not self.slowed:
-            if robot.elevator.getHeight() >= self.unsafeHeight:
-                robot.drivetrain.setSpeedLimit(self.preciseSpeed)
-
-        else:
-            if robot.elevator.getHeight() < self.unsafeHeight:
-                robot.drivetrain.setSpeedLimit(self.speedLimit)
 
         robot.drivetrain.move(
             logicalaxes.driveX.get(),

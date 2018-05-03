@@ -62,15 +62,6 @@ class KryptonBot(CommandBasedRobot):
                 pass
 
 
-    @classmethod
-    def _reset(cls):
-        vars = globals()
-        module = sys.modules['robot']
-        for key, var in vars.items():
-            if isinstance(var, Subsystem):
-                setattr(module, key, type(var))
-
-
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':
         shutil.rmtree('opkg_cache', ignore_errors=True)

@@ -1,5 +1,9 @@
 from networktables import NetworkTables
 
+class MissingConfigError(KeyError):
+    pass
+
+
 class Config:
     '''
     Config values are stored on the roboRIO and updated using NetworkTables.
@@ -44,7 +48,11 @@ class Config:
 
     def getValue(self):
         if Config._values[self.key] is None:
-            value = Config._nt.getValue(self.key, None)
+            try:
+                value = Config._nt.getValue(self.key, None)
+            except AttributeError as exc:
+                raise MissingConfigError('No key named %s' % self.key) from exc
+
             if value is None:
                 return value
 
@@ -92,6 +100,8 @@ class Config:
 
         try:
             float(self.getValue())
+            return self.key
+        except MissingConfigError:
             return self.key
         except (TypeError, ValueError):
             return str(self.getValue())
