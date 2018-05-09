@@ -16,16 +16,5 @@ class IntakeCommand(Command):
         self.endTime = None
 
 
-    def isFinished(self):
-        if self.endTime:
-            return self.endTime < Timer.getFPGATimestamp()
-        else:
-            if subsystems.intake.isCubeInIntake():
-                # Wait 1 second after cube detected
-                self.endTime = Timer.getFPGATimestamp() + 1
-
-        return False
-
-
     def end(self):
         subsystems.intake.stopTake()

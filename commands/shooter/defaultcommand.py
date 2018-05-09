@@ -5,6 +5,6 @@ import subsystems
 class DefaultCommand(Command):
 
     def __init__(self):
-        super().__init__('Default for Elevator')
+        super().__init__('Default for Shooter')
 
-        self.requires(subsystems.elevator)
+        self.requires(subsystems.shooter)

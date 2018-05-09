@@ -20,7 +20,6 @@ class DriveCommand(Command):
         if self.speedLimit < self.preciseSpeed:
             self.preciseSpeed = self.speedLimit
 
-        self.unsafeHeight = Config('Elevator/switch') + 1000
 
 
     def initialize(self):
@@ -56,15 +55,6 @@ class DriveCommand(Command):
         correction = tilt / 20
         if abs(correction) < 0.2:
             correction = 0
-
-        # Slow down when elevator is up
-        if not self.slowed:
-            if subsystems.elevator.getHeight() >= self.unsafeHeight:
-                subsystems.drivetrain.setSpeedLimit(self.preciseSpeed)
-
-        else:
-            if subsystems.elevator.getHeight() < self.unsafeHeight:
-                subsystems.drivetrain.setSpeedLimit(self.speedLimit)
 
         subsystems.drivetrain.move(
             logicalaxes.driveX.get(),

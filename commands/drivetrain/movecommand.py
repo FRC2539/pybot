@@ -27,7 +27,7 @@ class MoveCommand(Command):
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
-        offset = self.distance * Config('DriveTrain/ticksPerInch')
+        offset = self.distance * 1 #Config('DriveTrain/ticksPerInch')
         sign = 1
         for position in subsystems.drivetrain.getPositions():
             self.targetPositions.append(position + offset * sign)

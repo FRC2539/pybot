@@ -25,31 +25,8 @@ class MonitorCommand(Command):
 
 
     def initialize(self):
-        self.hasCube = subsystems.intake.isCubeInIntake()
-        self.table.putBoolean('Intake/hasCube', self.hasCube)
+        '''random comment'''
 
 
     def execute(self):
         '''Implement watchers here.'''
-
-        currentTime = math.floor(Timer.getFPGATimestamp())
-        if currentTime != self.lastCheck:
-            self.lastCheck = currentTime
-
-            self.table.putString(
-                'Elevator/label',
-                subsystems.elevator.getLevelName()
-            )
-            self.table.putString(
-                'Elevator/position',
-                subsystems.elevator.getHeight()
-            )
-
-        if self.hasCube != subsystems.intake.isCubeInIntake():
-            self.cubeChanged += 1
-        else:
-            self.cubeChanged = 0
-
-        if self.cubeChanged >= 5:
-            self.hasCube = not self.hasCube
-            self.table.putBoolean('Intake/hasCube', self.hasCube)

@@ -12,4 +12,3 @@ class Monitor(Subsystem):
         from commands.monitorcommand import MonitorCommand
 
         self.setDefaultCommand(MonitorCommand())
-

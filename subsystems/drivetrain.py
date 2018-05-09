@@ -11,9 +11,3 @@ class DriveTrain(SkidDrive):
 
     def __init__(self):
         super().__init__('DriveTrain')
-
-        self.ultrasonic = AnalogUltrasonic(ports.drivetrain.ultrasonicPort)
-
-
-    def getFrontClearance(self):
-        return self.ultrasonic.getDistance() - 8

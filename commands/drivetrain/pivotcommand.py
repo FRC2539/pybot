@@ -47,7 +47,7 @@ class PivotCommand(MoveCommand):
         based on the width of the robot base.
         '''
 
-        inchesPerDegree = math.pi * Config('DriveTrain/width') / 360
+        inchesPerDegree = math.pi * 1 #Config('DriveTrain/width') / 360
         totalDistanceInInches = self.distance * inchesPerDegree
 
-        return totalDistanceInInches * Config('DriveTrain/ticksPerInch') * 2
+        return totalDistanceInInches * 1 #Config('DriveTrain/ticksPerInch') * 2
