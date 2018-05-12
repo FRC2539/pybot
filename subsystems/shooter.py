@@ -30,7 +30,7 @@ class Shooter(Subsystem):
         self.right.set(ControlMode.PercentOutput, speed)
 
     def up(self):
-        self.set(1)
+        self.set(0.5)
 
 
     def down(self):
