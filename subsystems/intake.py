@@ -13,7 +13,6 @@ class Intake(Subsystem):
         self.leftMotor = WPI_TalonSRX(ports.shooter.indexWheelID)
         self.leftMotor.setSafetyEnabled(False)
         self.leftMotor.setNeutralMode(NeutralMode.Brake)
-        self.leftMotor.setInverted(True)
 
         self.rightMotor = WPI_TalonSRX(ports.shooter.shooterWheelID)
         self.rightMotor.setSafetyEnabled(False)
