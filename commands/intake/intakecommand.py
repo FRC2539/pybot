@@ -13,8 +13,9 @@ class IntakeCommand(Command):
 
     def initialize(self):
         subsystems.intake.intake()
-        self.endTime = None
+        subsystems.index.intake()
 
 
     def end(self):
-        subsystems.intake.stopTake()
+        subsystems.intake.stop()
+        subsystems.index.stop()

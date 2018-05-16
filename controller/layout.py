@@ -11,6 +11,8 @@ from commands.intake.outtakecommand import OuttakeCommand
 from commands.shooter.elevatecommand import ElevateCommand
 from commands.shooter.deelevatecommand import DeelevateCommand
 
+from commands.shootcommandgroup import ShootCommandGroup
+
 
 
 def init():
@@ -33,7 +35,7 @@ def init():
     mainController.Back.whenPressed(ResetCommand())
 
     mainController.A.toggleWhenPressed(IntakeCommand())
-    mainController.B.whenPressed(OuttakeCommand())
+    mainController.B.whenPressed(ShootCommandGroup())
 
     mainController.LeftTrigger.whileHeld(DeelevateCommand())
     mainController.LeftBumper.whileHeld(ElevateCommand())
@@ -45,7 +47,7 @@ def init():
     backupController.Back.whenPressed(ResetCommand())
 
     backupController.A.toggleWhenPressed(IntakeCommand())
-    backupController.B.whenPressed(OuttakeCommand())
+    backupController.B.whenPressed(ShootCommandGroup())
 
     backupController.LeftTrigger.whileHeld(DeelevateCommand())
     backupController.LeftBumper.whileHeld(ElevateCommand())
