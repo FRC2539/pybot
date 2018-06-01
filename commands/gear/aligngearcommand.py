@@ -7,7 +7,7 @@ class AlignGearCommand(Command):
     '''Drives the robot forward and turns until it is in front of the lift.'''
 
     def __init__(self, handOffDistance):
-        super().__init__('Align Gear at %d Inches' % handOffDistance)
+        super().__init__('Align Gear at x Inches')
         self.handOffDistance = handOffDistance
 
         self.requires(subsystems.drivetrain)

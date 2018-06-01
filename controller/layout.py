@@ -33,11 +33,11 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.LeftTrigger.whileHeld(ClimbCommand())
-    mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
+    mainController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed', 11000)))
     mainController.RightBumper.whenPressed(ScoreGearCommand())
     mainController.A.toggleWhenPressed(PickupCommand())
     mainController.B.toggleWhenPressed(ClearFuelCommand())
-    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed', 2000)))
     mainController.Y.whenPressed(GetAccel())
     mainController.Back.whenPressed(ResetCommand())
     mainController.DPadUp.whenPressed(RunIntoWallCommand(600))
@@ -46,8 +46,8 @@ def init():
     backupController = LogitechDualShock(1)
 
     backupController.LeftTrigger.whileHeld(ClimbCommand())
-    backupController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed')))
+    backupController.RightTrigger.toggleWhenPressed(FireCommand(Config('Shooter/speed', 11000)))
     backupController.RightBumper.whenPressed(ScoreGearCommand())
     backupController.A.toggleWhenPressed(PickupCommand())
     backupController.B.toggleWhenPressed(ClearFuelCommand())
-    backupController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+    backupController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed', 2000)))

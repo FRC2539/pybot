@@ -1,4 +1,9 @@
 from networktables import NetworkTables
+from networktables.entry import NetworkTableEntry
+
+class MissingConfigError(KeyError):
+    pass
+
 
 class Config:
     '''
@@ -17,8 +22,8 @@ class Config:
         if self._sep not in key:
             key = 'Config%s%s' % (self._sep, key)
 
-        if not key.startswith(self._sep):
-            key = '%s%s' % (self._sep, key)
+        if key.startswith(self._sep):
+            key = key[1:]
 
         self.key = key
         if key in Config._values:
@@ -28,8 +33,8 @@ class Config:
             Config._nt = NetworkTables.getGlobalTable()
 
         try:
-            value = Config._nt.getValue(self.key)
-        except KeyError:
+            value = Config._nt.getValue(self.key, None)
+        except AttributeError:
             value = None
 
         if value is None and default is None:
@@ -48,9 +53,12 @@ class Config:
     def getValue(self):
         if Config._values[self.key] is None:
             try:
-                value = Config._nt.getValue(self.key)
-            except KeyError:
-                return None
+                value = Config._nt.getValue(self.key, None)
+            except AttributeError as exc:
+                raise MissingConfigError('No key named %s' % self.key) from exc
+
+            if value is None:
+                raise MissingConfigError('No key named %s' % self.key)
 
             Config._values[self.key] = Config._nt.getAutoUpdateValue(
                 self.key,
@@ -62,7 +70,11 @@ class Config:
             return value
 
         else:
-            return Config._values[self.key].get()
+            return Config._values[self.key].value
+
+
+    def getKey(self):
+        return self.key
 
 
     '''
@@ -76,14 +88,14 @@ class Config:
     def __float__(self):
         try:
             return float(self.getValue())
-        except TypeError:
+        except (TypeError, ValueError):
             return 0.0
 
 
     def __int__(self):
         try:
             return int(self.getValue())
-        except TypeError:
+        except (TypeError, ValueError):
             return 0
 
 
@@ -93,7 +105,9 @@ class Config:
         try:
             float(self.getValue())
             return self.key
-        except TypeError:
+        except MissingConfigError:
+            return self.key
+        except (TypeError, ValueError):
             return str(self.getValue())
 
 

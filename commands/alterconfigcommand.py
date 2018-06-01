@@ -10,7 +10,7 @@ class AlterConfigCommand(InstantCommand):
         super().__init__('Alter %s' % key)
         self.setRunWhenDisabled(True)
 
-        self.config = Config(key)
+        self.config = Config(key, 0)
         self.func = func
 
 

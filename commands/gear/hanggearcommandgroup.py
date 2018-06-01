@@ -22,7 +22,7 @@ class HangGearCommandGroup(CommandGroup):
             if distance is None:
                 return False
 
-            return distance > Config('Gear/HandOffDistance')
+            return distance > Config('Gear/HandOffDistance', 100)
 
         @fc.IF(outsideHandoffDistance)
         def alignWithLift(self):

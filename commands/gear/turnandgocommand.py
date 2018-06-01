@@ -30,7 +30,7 @@ class TurnAndGoCommand(InstantCommand):
         self.turncommand.distance = distance
 
         distance = subsystems.gear.getLiftDistance()
-        distance -= Config('Gear/HandOffDistance')
+        distance -= Config('Gear/HandOffDistance', 15)
 
         distance = max(distance, 0)
 

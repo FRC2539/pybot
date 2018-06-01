@@ -1,10 +1,10 @@
-from .debuggablesubsystem import DebuggableSubsystem
-from ctre import CANTalon
+from wpilib.command.subsystem import Subsystem
+from ctre import WPI_TalonSRX, TalonSRX, ControlMode
 from wpilib.digitalinput import DigitalInput
 
 import ports
 
-class Climber(DebuggableSubsystem):
+class Climber(Subsystem):
     '''
     A subsystem designed to climb a rope.
     '''
@@ -12,10 +12,10 @@ class Climber(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Climber')
 
-        self.motor = CANTalon(ports.climber.motorID)
-        self.motor.enableBrakeMode(True)
+        self.motor = WPI_TalonSRX(ports.climber.motorID)
+        self.motor.setNeutralMode(True)
         self.motor.setSafetyEnabled(False)
-        self.motor.setControlMode(CANTalon.ControlMode.PercentVbus)
+        self.motor.set(ControlMode.PercentOutput, 0)
 
 
     def start(self):

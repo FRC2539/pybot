@@ -11,4 +11,4 @@ class ShootCommandGroup(CommandGroup):
 
         self.addSequential(TurnToBoilerCommand())
         self.addSequential(GoToBoilerCommand())
-        self.addSequential(FireCommand(Config('Shooter/speed')))
+        self.addSequential(FireCommand(Config('Shooter/speed', 250)))

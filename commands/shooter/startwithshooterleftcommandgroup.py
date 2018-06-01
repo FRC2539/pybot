@@ -19,7 +19,7 @@ class StartWithShooterLeftCommandGroup(CommandGroup):
         self.addSequential(MoveCommand(15))
         self.addSequential(FireCommand(Config('Shooter/speed')))"""
 
-        self.addSequential(FireCommand(Config('Shooter/speed')), 9)
+        self.addSequential(FireCommand(Config('Shooter/speed', 250)), 9)
         self.addSequential(MoveCommand(20))
         self.addSequential(TurnCommand(-50))
         self.addSequential(MoveCommand(100))

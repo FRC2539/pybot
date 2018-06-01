@@ -15,7 +15,7 @@ class ScoreGearCommandGroup(CommandGroup):
         super().__init__('Score Gear')
 
         self.addSequential(SetSpeedCommand(400))
-        self.addSequential(AlignGearCommand(Config('Gear/HandOffDistance')))
+        self.addSequential(AlignGearCommand(Config('Gear/HandOffDistance', 100)))
         @fc.IF(subsystems.gear.isLiftVisible)
         def hangTheGear(self):
             self.addSequential(DriveToLiftCommand(), 4)

@@ -28,7 +28,7 @@ class AutonomousCommandGroup(CommandGroup):
         '''Lined up with the boiler. Shoot some fuel.'''
         @fc.IF(lambda: False)
         def launchFuel(self):
-            self.addSequential(FireCommand(Config('Shooter/speed')), 8)
+            self.addSequential(FireCommand(Config('Shooter/speed', 11000)), 8)
             '''Get away from the wall'''
             @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
             def turnRight(self):
@@ -57,7 +57,7 @@ class AutonomousCommandGroup(CommandGroup):
             @fc.IF(lambda: subsystems.gear.hasGear())
             def turnToLift(self):
                 self.addSequential(MoveCommand(80))
-                self.addSequential(TurnCommand(Config('Autonomous/robotLocation')))
+                self.addSequential(TurnCommand(Config('Autonomous/robotLocation', 20)))
                 self.addSequential(MoveCommand(-10))
                 self.addSequential(WaitForLiftCommand(), 2)
 
@@ -86,7 +86,7 @@ class AutonomousCommandGroup(CommandGroup):
             @fc.IF(lambda: subsystems.gear.hasGear())
             def turnToLift(self):
                 self.addSequential(MoveCommand(85))
-                self.addSequential(TurnCommand(Config('Autonomous/robotLocation')))
+                self.addSequential(TurnCommand(Config('Autonomous/robotLocation', 20)))
                 self.addSequential(ScoreGearCommandGroup())
                 self.addSequential(WaitForLiftCommand(), 2)
 
@@ -134,7 +134,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             self.addSequential(MoveCommand(-50))
 
-            @fc.IF(lambda: Config('Autonomous/robotLocation') == 0)
+            @fc.IF(lambda: Config('Autonomous/robotLocation', 0) == 0)
             def goDownfieldFromCenter(self):
                 @fc.IF(lambda: ds.getAlliance() == ds.Alliance.Red)
                 def turnLeft(self):

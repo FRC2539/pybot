@@ -1,9 +1,9 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from wpilib.command.subsystem import Subsystem
 from wpilib.servo import Servo
 from wpilib.relay import Relay
 import ports
 
-class Feeder(DebuggableSubsystem):
+class Feeder(Subsystem):
     '''
     A subsystem designed for feeding balls to the shooter.
     '''

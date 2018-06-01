@@ -2,12 +2,12 @@ from wpilib.relay import Relay
 from wpilib.digitalinput import DigitalInput
 from networktables import NetworkTables
 
-from .debuggablesubsystem import DebuggableSubsystem
+from wpilib.command.subsystem import Subsystem
 from custom.config import Config
 from subsystems.drivetrain import DriveTrain
 import ports
 
-class Gear(DebuggableSubsystem):
+class Gear(Subsystem):
     '''
     A subsystem designed for hanging gears on the lifts.
     '''
@@ -32,7 +32,7 @@ class Gear(DebuggableSubsystem):
 
     def isLiftVisible(self):
         try:
-            return self.liftVision.getBoolean('liftVisible')
+            return self.liftVision.getBoolean('liftVisible', 0)
         except KeyError:
             return False
 

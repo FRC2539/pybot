@@ -1,9 +1,9 @@
-from .debuggablesubsystem import DebuggableSubsystem
-from ctre import CANTalon
+from wpilib.command.subsystem import Subsystem
+from ctre import WPI_TalonSRX, ControlMode
 
 import ports
 
-class Pickup(DebuggableSubsystem):
+class Pickup(Subsystem):
     '''
     A subsystem designed for picking up balls from the floor.
     '''
@@ -11,11 +11,11 @@ class Pickup(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Pickup')
 
-        self.motor = CANTalon(ports.pickup.motorID)
+        self.motor = WPI_TalonSRX(ports.pickup.motorID)
         self.motor.setSafetyEnabled(False)
-        self.motor.enableBrakeMode(False)
+        self.motor.setNeutralMode(False)
         self.motor.setInverted(True)
-        self. motor.setControlMode(CANTalon.ControlMode.PercentVbus)
+        self.motor.set(ControlMode.PercentOutput, 0)
 
 
     def run(self, speed):

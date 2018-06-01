@@ -20,7 +20,7 @@ class GearAutonomousCommandGroup(CommandGroup):
         super().__init__('Score a Gear Autonomously')
 
         move = ConditionalCommand('Move Toward Lift', MoveCommand(80))
-        move.condition = lambda: Config("Autonomous/robotLocation") != 0
+        move.condition = lambda: Config("Autonomous/robotLocation", 100) != 0
 
         scoreAnyway = ConditionalCommand(
             'Attempt to Score',
@@ -31,7 +31,7 @@ class GearAutonomousCommandGroup(CommandGroup):
 
         self.addSequential(move)
         self.addSequential(WaitCommand(.5))
-        self.addSequential(TurnCommand(Config("Autonomous/robotLocation")))
+        self.addSequential(TurnCommand(Config("Autonomous/robotLocation", 100)))
         self.addSequential(WaitForLiftCommand(), 2)
         self.addSequential(scoreAnyway)
         self.addSequential(WaitOnPilotCommand())

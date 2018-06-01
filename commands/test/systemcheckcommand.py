@@ -1,5 +1,5 @@
 from wpilib.command.instantcommand import InstantCommand
-from ctre import CANTalon
+from ctre import WPI_TalonSRX
 import subsystems
 import ports
 
@@ -10,19 +10,19 @@ class SystemCheckCommand(InstantCommand):
         # Print information about connection to each system
         print("Firmware Version\n")
         # Drivetrain
-        print("Front Left DriveTrain: Version %s" % (CANTalon(ports.drivetrain.frontLeftMotorID).getFirmwareVersion()))
-        print("Front Right DriveTrain: Version %s" % (CANTalon(ports.drivetrain.frontRightMotorID).getFirmwareVersion()))
-        print("Back Left DriveTrain: Version %s" % (CANTalon(ports.drivetrain.backLeftMotorID).getFirmwareVersion()))
-        print("Back Right Drivetrain: Version %s\n" % (CANTalon(ports.drivetrain.backRightMotorID).getFirmwareVersion()))
+        print("Front Left DriveTrain: Version %s" % (WPI_TalonSRX(ports.drivetrain.frontLeftMotorID).getFirmwareVersion()))
+        print("Front Right DriveTrain: Version %s" % (WPI_TalonSRX(ports.drivetrain.frontRightMotorID).getFirmwareVersion()))
+        print("Back Left DriveTrain: Version %s" % (WPI_TalonSRX(ports.drivetrain.backLeftMotorID).getFirmwareVersion()))
+        print("Back Right Drivetrain: Version %s\n" % (WPI_TalonSRX(ports.drivetrain.backRightMotorID).getFirmwareVersion()))
 
         # Shooter
-        print("Shooter: Version %s" % (CANTalon(ports.shooter.motorID).getFirmwareVersion()))
+        print("Shooter: Version %s" % (WPI_TalonSRX(ports.shooter.motorID).getFirmwareVersion()))
         print()
         # Pickup
-        print("pickup: Version %s" % (CANTalon(ports.pickup.motorID).getFirmwareVersion()))
+        print("pickup: Version %s" % (WPI_TalonSRX(ports.pickup.motorID).getFirmwareVersion()))
         print()
         # Climber
-        print("Climber: Version %s" % (CANTalon(ports.climber.motorID).getFirmwareVersion()))
+        print("Climber: Version %s" % (WPI_TalonSRX(ports.climber.motorID).getFirmwareVersion()))
 
         print("Motor PIDs")
         leftDriveTrain = subsystems.drivetrain.activeMotors[0]

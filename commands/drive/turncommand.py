@@ -11,7 +11,7 @@ class TurnCommand(MoveCommand):
 
     def __init__(self, degrees, name=None):
         if name is None:
-            name = 'Turn %f degrees' % degrees
+            name = 'Turn x degrees'
 
         super().__init__(degrees, name)
 
@@ -32,7 +32,7 @@ class TurnCommand(MoveCommand):
         based on the width of the robot base.
         '''
 
-        inchesPerDegree = math.pi * Config('DriveTrain/width') / 360
+        inchesPerDegree = math.pi * Config('DriveTrain/width', 30) / 360
         totalDistanceInInches = self.distance * inchesPerDegree
 
-        return totalDistanceInInches * Config('DriveTrain/ticksPerInch')
+        return totalDistanceInInches * Config('DriveTrain/ticksPerInch', 250)
