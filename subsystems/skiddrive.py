@@ -18,6 +18,9 @@ class SkidDrive(BaseDrive):
         self.motors[3].enableVoltageCompensation(True)
         self.motors[3].set(ControlMode.Follower, ports.drivetrain.frontRightMotorID)
 
+        self.motors[2].setInverted(True)
+        self.motors[3].setInverted(True)
+
 
     def _calculateSpeeds(self, x, y, rotate):
         return [y + rotate, -y + rotate]

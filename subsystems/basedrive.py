@@ -235,7 +235,7 @@ class BaseDrive(Subsystem):
         depending on the mode.
         '''
 
-        maxVoltage = 1 #self.activeMotors[0].getBusVoltage()
+        maxVoltage = self.activeMotors[0].getBusVoltage()
 
         for motor in self.activeMotors:
             motor.configNominalOutputForward(maxVoltage, 0)
