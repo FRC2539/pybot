@@ -1,13 +1,17 @@
-from wpilib.command.subsystem import Subsystem
-from ctre import WPI_TalonSRX, ControlMode
-from networktables import NetworkTables
+from .debuggablesubsystem import DebuggableSubsystem
+
 import math
 
+from networktables import NetworkTables
+from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
 from robotpy_ext.common_drivers.navx.ahrs import AHRS
+from wpilib.digitalinput import DigitalInput
+
 from custom.config import Config
 import ports
 
-class BaseDrive(Subsystem):
+
+class BaseDrive(DebuggableSubsystem):
     '''
     A general case drive train system. It abstracts away shared functionality of
     the various drive types that we can employ. Anything that can be done
@@ -21,39 +25,61 @@ class BaseDrive(Subsystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-        self.motors = [
-            WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-            WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-            WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-            WPI_TalonSRX(ports.drivetrain.backRightMotorID),
-        ]
+        try:
+            self.motors = [
+                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
+                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
+                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
+            ]
+
+        except AttributeError:
+            self.motors = [
+                WPI_TalonSRX(ports.drivetrain.leftMotorID),
+                WPI_TalonSRX(ports.drivetrain.rightMotorID),
+            ]
 
         for motor in self.motors:
+            motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
-            motor.setNeutralMode(False)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
-
         self.activeMotors = []
         self._configureMotors()
 
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
         self.resetGyro()
+        self.flatAngle = 0
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
         self.setUseEncoders()
-        self.speedLimit = 2500 #Config('DriveTrain/maxSpeed', 2500)
-        self.maxSpeed = self.speedLimit
+        self.maxSpeed = Config('DriveTrain/maxSpeed')
+        self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
+        self.maxPercentVBus = 1
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
         self._publishPID('Position', 1)
+
+
+        '''Add items that can be debugged in Test mode.'''
+        self.debugSensor('navX', self.navX)
+
+        self.debugMotor('Front Left Motor', self.motors[0])
+        self.debugMotor('Front Right Motor', self.motors[1])
+
+        try:
+            self.debugMotor('Back Left Motor', self.motors[2])
+            self.debugMotor('Back Right Motor', self.motors[3])
+        except IndexError:
+            pass
 
 
     def initDefaultCommand(self):
@@ -64,7 +90,7 @@ class BaseDrive(Subsystem):
         '''
         from commands.drive.drivecommand import DriveCommand
 
-        self.setDefaultCommand(DriveCommand(self.maxSpeed))
+        self.setDefaultCommand(DriveCommand(self.speedLimit))
 
 
     def move(self, x, y, rotate):
@@ -88,7 +114,7 @@ class BaseDrive(Subsystem):
         speeds = self._calculateSpeeds(x, y, rotate / 2)
 
         '''Prevent speeds > 1'''
-        maxSpeed = 0
+        maxSpeed = 1
         for speed in speeds:
             maxSpeed = max(abs(speed), maxSpeed)
 
@@ -123,31 +149,77 @@ class BaseDrive(Subsystem):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
-        self._setMode(WPI_TalonSRX().ControlMode.MotionMagic)
+        self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.set(position)
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
+
+
+    def setPositionsWithGyro(self, positions):
+        if not self.useEncoders:
+            raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        index = 0
+        angle = self.getAngle() * 75
+
+        for motor, position in zip(self.activeMotors, positions):
+            motor.selectProfileSlot(1, 0)
+            if index == 0 and angle > 75:
+                motor.configMotionCruiseVelocity(int(self.speedLimit - angle), 0)
+
+            elif index == 1 and angle < -75:
+                motor.configMotionCruiseVelocity(int(self.speedLimit + angle), 0)
+
+            else:
+                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
+            index += 1
+
+
+    def averageError(self):
+        '''Find the average distance between setpoint and current position.'''
+        error = 0
+        for motor in self.activeMotors:
+            error += abs(motor.getClosedLoopTarget(0) - motor.getSelectedSensorPosition(0))
+
+        return error / len(self.activeMotors)
 
 
     def atPosition(self, tolerance=10):
         '''
         Check setpoint error to see if it is below the given tolerance.
         '''
-        error = 0
-        for motor in self.activeMotors:
-            error += abs(motor.getSetpoint() - motor.getPosition())
-
-        error /= len(self.activeMotors)
-
-        return error <= tolerance
+        return self.averageError() <= tolerance
 
 
     def stop(self):
-        '''A nice shortcut for calling move with all zeroes.'''
+        '''Disable all motors until set() is called again.'''
+        for motor in self.activeMotors:
+            motor.stopMotor()
 
-        if self.useEncoders:
-            self._setMode(ControlMode.Velocity)
+        self.lastInputs = None
 
-        self.move(0, 0, 0)
+
+    def setProfile(self, profile):
+        '''Select which PID profile to use.'''
+        for motor in self.activeMotors:
+            motor.selectProfileSlot(profile, 0)
+
+
+    def resetPID(self):
+        '''Set all PID values to 0 for profiles 0 and 1.'''
+        for motor in self.activeMotors:
+            motor.configClosedLoopRamp(0, 0)
+            for profile in range(2):
+                motor.config_kP(profile, 0, 0)
+                motor.config_kI(profile, 0, 0)
+                motor.config_kD(profile, 0, 0)
+                motor.config_kF(profile, 0, 0)
+                motor.config_IntegralZone(profile, 0, 0)
 
 
     def resetGyro(self):
@@ -170,6 +242,28 @@ class BaseDrive(Subsystem):
         return (self.navX.getYaw() + self.gyroOffset) % 360
 
 
+    def getAngleTo(self, targetAngle):
+        '''
+        Returns the anglular distance from the given target. Values will be
+        between -180 and 180, inclusive.
+        '''
+        degrees = targetAngle - self.getAngle()
+        while degrees > 180:
+            degrees -= 360
+        while degrees < -180:
+            degrees += 360
+
+        return degrees
+
+
+    def resetTilt(self):
+        self.flatAngle = self.navX.getPitch()
+
+
+    def getTilt(self):
+        return self.navX.getPitch() - self.flatAngle
+
+
     def getAcceleration(self):
         '''Reads acceleration from NavX MXP.'''
         return self.navX.getWorldLinearAccelY()
@@ -177,35 +271,21 @@ class BaseDrive(Subsystem):
 
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
-
-        if not self.useEncoders:
-            raise RuntimeError('Cannot read speed. Encoders are disabled.')
-
-        return [x.getSpeed() for x in self.activeMotors]
-
+        return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
     def getPositions(self):
         '''Returns the position of each active motor.'''
-
-        if not self.useEncoders:
-            raise RuntimeError('Cannot read position. Encoders are disabled.')
-
-        return [x.getPosition() for x in self.activeMotors]
+        return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
 
 
     def setUseEncoders(self, useEncoders=True):
         '''
         Turns on and off encoders. As a side effect, if encoders are enabled,
-        the motors will be se0t to speed mode. Disabling encoders should not be
+        the motors will be set to speed mode. Disabling encoders should not be
         done lightly, as many commands rely on encoder information.
         '''
-
         self.useEncoders = useEncoders
-        #if useEncoders:
-            #self._setMode(WPI_TalonSRX().ControlMode.Velocity)
-        #else:
-            #self._setMode(WPI_TalonSRX().ControlMode.PercentVbus)
-# Ben did this; may be wrong.
+
 
     def setSpeedLimit(self, speed):
         '''
@@ -213,8 +293,8 @@ class BaseDrive(Subsystem):
         mode depending on if encoders are enabled.
         '''
 
-        if speed < 0:
-            raise ValueError('DriveTrain speed cannot be less than 0')
+        if speed <= 0:
+            raise ValueError('DriveTrain speed must be greater than 0')
 
         self.speedLimit = speed
         if speed > self.maxSpeed:
@@ -223,16 +303,11 @@ class BaseDrive(Subsystem):
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
 
-        if self.useEncoders:
-            self._setMode(ControlMode.Velocity)
-        else:
-            self._setMode(ControlMode.PercentOutput)
-
 
     def _setMode(self, mode):
+
         '''
-        Sets the control mode of active motors, with some intelligent changes
-        depending on the mode.
+        Allow the robot to drive without encoders or any input from Config.
         '''
 
         maxVoltage = self.activeMotors[0].getBusVoltage()
@@ -262,21 +337,10 @@ class BaseDrive(Subsystem):
         table = NetworkTables.getTable('DriveTrain/%s' % table)
 
         talon = self.activeMotors[0]
-        '''
-        talon.selectProfileSlot(0, 0)
-        table.putNumber('P', WPI_TalonSRX().getP())
-        table.putNumber('I', talon.getI())
-        table.putNumber('D', talon.getD())
-        table.putNumber('F', talon.getF())
-        table.putNumber('IZone', talon.getIZone())
-        table.putNumber('RampRate', talon.getCloseLoopRampRate())
-        '''
 
-        table.addTableListener(self._PIDListener(profile))
-
-
-    def _PIDListener(self, profile):
-        '''Provides as easy way to make sure we update the right profile.'''
+        # TODO: If CTRE ever gives us back the ability to query PID values, send
+        # them to NetworkTables here. In the meantime, we just persist the last
+        # values that were set via NetworkTables
 
         def updatePID(table, key, value, isNew):
             '''
@@ -285,20 +349,32 @@ class BaseDrive(Subsystem):
             to access the methods of the motor by name.
             '''
 
+            table.setPersistent(key)
+
+            if key == 'RampRate':
+                for motor in self.activeMotors:
+                    motor.configClosedLoopRamp(value, 0)
+
+                return
+
+            if key == 'P':
+                for motor in self.activeMotors:
+                    motor.config_kP(1, value, 0)
+
+                return
+
             funcs = {
-                'P': 'config_kP',
                 'I': 'config_kI',
                 'D': 'config_kD',
                 'F': 'config_kF',
-                'IZone': 'config_IntegralZone',
-                'RampRate': 'configClosedLoopRamp'
+                'IZone': 'config_IntegralZone'
             }
 
             for motor in self.activeMotors:
-                motor.selectProfileSlot(profile, 0)
-                getattr(motor, funcs[key], value)
+                getattr(motor, funcs[key])(0, value, 0)
+                getattr(motor, funcs[key])(1, value, 0)
 
-        return updatePID
+        table.addTableListener(updatePID, localNotify=True)
 
 
     def _configureMotors(self):

@@ -1,5 +1,5 @@
 from .basedrive import BaseDrive
-from ctre import WPI_TalonSRX, ControlMode
+from ctre._impl import ControlMode
 from wpilib.robotdrive import RobotDrive
 import ports
 
@@ -13,15 +13,14 @@ class SkidDrive(BaseDrive):
         self.activeMotors = self.motors[0:2]
 
         '''Make the back motors follow the front.'''
-        self.motors[2].enableVoltageCompensation(True)
-        self.motors[2].set(ControlMode.Follower, ports.drivetrain.frontLeftMotorID)
-        self.motors[3].enableVoltageCompensation(True)
-        self.motors[3].set(ControlMode.Follower, ports.drivetrain.frontRightMotorID)
+        if len(self.motors) == 4:
+            self.motors[2].follow(self.motors[0])
+            self.motors[3].follow(self.motors[1])
 
-        self.motors[2].setInverted(True)
-        self.motors[3].setInverted(True)
+        '''Invert encoders'''
+        for motor in self.activeMotors:
+            motor.setSensorPhase(True)
 
 
     def _calculateSpeeds(self, x, y, rotate):
         return [y + rotate, -y + rotate]
-

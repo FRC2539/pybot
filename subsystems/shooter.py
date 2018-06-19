@@ -52,10 +52,10 @@ class Shooter(Subsystem):
 
 
     def isReadyToFire(self):
-        if self.motor.getControlMode() != ControlMode.Velocity:
-            return False
+        #if self.motor.getControlMode() != ControlMode.Velocity:
+            #return False
 
-        return abs(self.motor.getClosedLoopError(0)) < 100
+        return True #abs(self.motor.getClosedLoopError(0)) < 100
 
 
     def stop(self):
