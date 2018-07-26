@@ -5,7 +5,10 @@ from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
-
+from commands.climbhook.movehookcommand import movehookCommand
+from commands.winch.winchcommand import WinchCommand
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.outakecommand import OutakeCommand
 
 def init():
     '''
@@ -26,8 +29,14 @@ def init():
 
     mainController.Back.whenPressed(ResetCommand())
     mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+    mainController.A.whileHeld(movehookCommand(-0.3))
+    mainController.B.whileHeld(movehookCommand(0.3))
+    mainController.Y.whileHeld(WinchCommand(-1))
+    mainController.RightTrigger.toggleWhenPressed(OutakeCommand(-1))
+    mainController.RightBumper.toggleWhenPressed(IntakeCommand(1))
 
-    backupController = LogitechDualShock(1)
+
+    '''backupController = LogitechDualShock(1)
 
     backupController.Back.whenPressed(ResetCommand())
-    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))'''
