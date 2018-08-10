@@ -36,9 +36,6 @@ class KryptonBot(CommandBasedRobot):
     def autonomousInit(self):
         '''This function is called each time autonomous mode starts.'''
 
-        # Send field data to the dashboard
-        driverhud.showField()
-
         # Schedule the autonomous command
         auton = driverhud.getAutonomousProgram()
         auton.start()
