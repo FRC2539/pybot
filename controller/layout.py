@@ -7,7 +7,7 @@ from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
-from commands.intake.slowouttakecommand import SlowOuttakeCommand
+from commands.intake.DropCube import DropCube
 
 from commands.elevator.forcedlowercommand import ForcedLowerCommand
 from commands.elevator.elevatecommand import ElevateCommand
@@ -54,7 +54,7 @@ def init():
 
     mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
     mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
-    mainController.DPadLeft.whenPressed(SlowOuttakeCommand())
+    mainController.DPadLeft.whenPressed(DropCube())
 
 
     backupController = LogitechDualShock(1)
@@ -74,4 +74,4 @@ def init():
 
     backupController.DPadUp.whenPressed(ChangeLevelCommand(1))
     backupController.DPadDown.whenPressed(ChangeLevelCommand(-1))
-    backupController.DPadLeft.whenPressed(SlowOuttakeCommand())
+    backupController.DPadLeft.whenPressed(DropCube())
