@@ -7,7 +7,7 @@ from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
-from commands.intake.DropCube import DropCube
+from commands.intake.dropcube import DropCube
 
 from commands.elevator.forcedlowercommand import ForcedLowerCommand
 from commands.elevator.elevatecommand import ElevateCommand

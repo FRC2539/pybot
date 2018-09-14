@@ -6,7 +6,7 @@ from commands.drivetrain.setspeedcommand import SetSpeedCommand
 
 
 
-class DropCube (CommandGroup):
+class DropCube(CommandGroup):
 
     def __init__(self):
         super().__init__('DropCube')
