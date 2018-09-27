@@ -9,6 +9,8 @@ from commands.climbhook.movehookcommand import movehookCommand
 from commands.winch.winchcommand import WinchCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outakecommand import OutakeCommand
+from commands.elevator.delevatecommand import DelevateCommand
+from commands.elevator.elevatecommand import ElevateCommand
 
 def init():
     '''
@@ -32,9 +34,10 @@ def init():
     mainController.A.whileHeld(movehookCommand(-0.3))
     mainController.B.whileHeld(movehookCommand(0.3))
     mainController.Y.whileHeld(WinchCommand(-1))
-    mainController.RightTrigger.toggleWhenPressed(OutakeCommand(-1))
+    mainController.RightTrigger.toggleWhenPressed(OutakeCommand(-0.75))
     mainController.RightBumper.toggleWhenPressed(IntakeCommand(1))
-
+    mainController.LeftTrigger.whileHeld(DelevateCommand())
+    mainController.LeftBumper.whileHeld(ElevateCommand())
 
     '''backupController = LogitechDualShock(1)
 

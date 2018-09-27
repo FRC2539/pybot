@@ -76,7 +76,7 @@ class MoveCommand(Command):
         if self.blocked:
             return False
 
-        if self.isTimedOut() and robot.drivetrain.atPosition(20):
+        if self.isTimedOut() and robot.drivetrain.atPosition():
             self.onTarget += 1
         else:
             self.onTarget = 0

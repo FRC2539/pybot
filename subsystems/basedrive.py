@@ -165,10 +165,11 @@ class BaseDrive(DebuggableSubsystem):
         return error / len(self.activeMotors)
 
 
-    def atPosition(self, tolerance=10):
+    def atPosition(self, tolerance=20):
         '''
         Check setpoint error to see if it is below the given tolerance.
         '''
+
         return self.averageError() <= tolerance
 
 
@@ -235,7 +236,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter'))
 
-        return rotations * Config('DriveTrain/ticksPerRotation', 4096)
+        return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):
