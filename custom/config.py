@@ -58,7 +58,9 @@ class Config:
                 raise MissingConfigError('No key named %s' % self.key) from exc
 
             if value is None:
-                raise MissingConfigError('No key named %s' % self.key)
+                value = 0
+                pass
+                #raise MissingConfigError('No key named %s' % self.key)
 
             Config._values[self.key] = Config._nt.getAutoUpdateValue(
                 self.key,

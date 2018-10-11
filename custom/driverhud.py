@@ -26,7 +26,7 @@ def init():
 
     # Import here to avoid circular import
     from commands.autonomouscommandgroup import AutonomousCommandGroup
-    from commands.drivetrain.resettiltcommand import ResetTiltCommand
+    #from commands.drivetrain.resettiltcommand import ResetTiltCommand
     from commands.tools.configurepidcommandgroup import ConfigurePIDCommandGroup
 
 
@@ -43,7 +43,7 @@ def init():
     '''Display all currently running commands.'''
     SmartDashboard.putData('Active Commands', Scheduler.getInstance())
 
-    showCommand(ResetTiltCommand())
+    #showCommand(ResetTiltCommand())
     showCommand(ConfigurePIDCommandGroup())
 
 

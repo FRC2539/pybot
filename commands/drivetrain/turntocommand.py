@@ -1,3 +1,4 @@
+"""
 from .turncommand import TurnCommand
 
 import robot
@@ -18,3 +19,5 @@ class TurnToCommand(TurnCommand):
         self.distance = robot.drivetrain.getAngleTo(self.targetDegrees)
 
         super().initialize()
+"""
+# No gyro

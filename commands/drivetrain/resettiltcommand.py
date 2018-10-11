@@ -1,3 +1,4 @@
+"""
 from wpilib.command.instantcommand import InstantCommand
 
 import robot
@@ -13,3 +14,9 @@ class ResetTiltCommand(InstantCommand):
 
     def initialize(self):
         robot.drivetrain.resetTilt()
+"""
+
+'''
+None of this is needed as of today, because there is no gyro.
+- Ben
+'''

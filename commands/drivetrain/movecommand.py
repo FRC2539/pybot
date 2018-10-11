@@ -21,10 +21,7 @@ class MoveCommand(Command):
         self.avoidCollisions = avoidCollisions
         self.requires(robot.drivetrain)
 
-        try:
-            self.precision = robot.drivetrain.inchesToTicks(1)
-        except MissingConfigError:
-            self.precision = 20
+        #self.precision = robot.drivetrain.inchesToTicks(1)
 
 
     def initialize(self):
@@ -32,10 +29,10 @@ class MoveCommand(Command):
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
-        offset = robot.drivetrain.inchesToTicks(self.distance)
+        #offset = robot.drivetrain.inchesToTicks(self.distance)
         sign = 1
         for position in robot.drivetrain.getPositions():
-            self.targetPositions.append(position + offset * sign)
+            self.targetPositions.append(position + 0 * sign)
             sign *= -1
 
         robot.drivetrain.setPositions(self.targetPositions)
@@ -43,38 +40,7 @@ class MoveCommand(Command):
 
     def execute(self):
         if self.avoidCollisions:
-            try:
-                if self.distance < 0:
-                    clearance = robot.drivetrain.getRearClearance()
-                else:
-                    clearance = robot.drivetrain.getFrontClearance()
-
-                if not self.blocked:
-                    if clearance < 10:
-                        if self.obstacleCount >= 10:
-                            self.blocked = True
-                            self.obstacleCount = 0
-                            robot.drivetrain.stop()
-                            robot.drivetrain.move(0, 0, 0)
-                            driverhud.showAlert('Obstacle Detected')
-                        else:
-                            self.obstacleCount += 1
-                    else:
-                        self.obstacleCount = 0
-
-                else:
-                    if clearance >= 20:
-                        if self.obstacleCount >= 10:
-                            self.blocked = False
-                            self.obstacleCount = 0
-                            robot.drivetrain.setPositions(self.targetPositions)
-                        else:
-                            self.obstacleCount += 1
-                    else:
-                        self.obstacleCount = 0
-
-            except NotImplementedError:
-                pass
+            pass
 
 
     def isFinished(self):

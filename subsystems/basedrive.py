@@ -4,7 +4,6 @@ import math
 
 from networktables import NetworkTables
 from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
-from robotpy_ext.common_drivers.navx.ahrs import AHRS
 
 from custom.config import Config
 import ports
@@ -34,14 +33,14 @@ class BaseDrive(DebuggableSubsystem):
 
         except AttributeError:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.leftMotorID),
-                WPI_TalonSRX(ports.drivetrain.rightMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
             ]
 
         for motor in self.motors:
             motor.setNeutralMode(NeutralMode.Coast)
             motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+            motor.setInverted(True)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -50,14 +49,13 @@ class BaseDrive(DebuggableSubsystem):
         self._configureMotors()
 
         '''Initialize the navX MXP'''
-        self.navX = AHRS.create_spi()
-        self.resetGyro()
+        #self.navX = AHRS.create_spi()
+        #self.resetGyro()
         self.flatAngle = 0
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.setUseEncoders()
         self.maxSpeed = Config('DriveTrain/maxSpeed')
         self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
@@ -69,10 +67,10 @@ class BaseDrive(DebuggableSubsystem):
 
 
         '''Add items that can be debugged in Test mode.'''
-        self.debugSensor('navX', self.navX)
+        #self.debugSensor('navX', self.navX)
 
-        self.debugMotor('Front Left Motor', self.motors[0])
-        self.debugMotor('Front Right Motor', self.motors[1])
+        self.debugMotor('Left Motor', self.motors[0])
+        self.debugMotor('Right Motor', self.motors[1])
 
         try:
             self.debugMotor('Back Left Motor', self.motors[2])
@@ -105,10 +103,6 @@ class BaseDrive(DebuggableSubsystem):
         self.lastInputs = [x, y, rotate]
 
         '''Prevent drift caused by small input values'''
-        if self.useEncoders:
-            x = math.copysign(max(abs(x) - self.deadband, 0), x)
-            y = math.copysign(max(abs(y) - self.deadband, 0), y)
-            rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
@@ -121,22 +115,9 @@ class BaseDrive(DebuggableSubsystem):
             speeds = [x / maxSpeed for x in speeds]
 
         '''Use speeds to feed motor output.'''
-        if self.useEncoders:
-            if not any(speeds):
-                '''
-                When we are trying to stop, clearing the I accumulator can
-                reduce overshooting, thereby shortening the time required to
-                come to a stop.
-                '''
-                for motor in self.activeMotors:
-                    motor.setIntegralAccumulator(0, 0, 0)
 
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
-
-        else:
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+        for motor, speed in zip(self.activeMotors, speeds):
+            motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -144,10 +125,6 @@ class BaseDrive(DebuggableSubsystem):
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
         '''
-
-        if not self.useEncoders:
-            raise RuntimeError('Cannot set position. Encoders are disabled.')
-
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
             motor.selectProfileSlot(1, 0)
@@ -160,9 +137,11 @@ class BaseDrive(DebuggableSubsystem):
         '''Find the average distance between setpoint and current position.'''
         error = 0
         for motor in self.activeMotors:
-            error += abs(motor.getClosedLoopTarget(0) - motor.getSelectedSensorPosition(0))
+            error += abs(motor.getClosedLoopTarget(0))
 
-        return error / len(self.activeMotors)
+        finalerror = error / len(self.activeMotors)
+
+        return finalerror
 
 
     def atPosition(self, tolerance=10):
@@ -197,7 +176,7 @@ class BaseDrive(DebuggableSubsystem):
                 motor.config_kF(profile, 0, 0)
                 motor.config_IntegralZone(profile, 0, 0)
 
-
+    """
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
 
@@ -230,13 +209,11 @@ class BaseDrive(DebuggableSubsystem):
 
         return degrees
 
-
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter'))
 
         return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
-
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
@@ -250,7 +227,6 @@ class BaseDrive(DebuggableSubsystem):
         '''Reads acceleration from NavX MXP.'''
         return self.navX.getWorldLinearAccelY()
 
-
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
         return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
@@ -259,7 +235,6 @@ class BaseDrive(DebuggableSubsystem):
     def getPositions(self):
         '''Returns the position of each active motor.'''
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
-
 
     def getFrontClearance(self):
         '''Override this in drivetrain if a distance sensor is attached.'''
@@ -278,7 +253,7 @@ class BaseDrive(DebuggableSubsystem):
         done lightly, as many commands rely on encoder information.
         '''
         self.useEncoders = useEncoders
-
+    """
 
     def setSpeedLimit(self, speed):
         '''
@@ -304,7 +279,7 @@ class BaseDrive(DebuggableSubsystem):
 
         self.speedLimit = 1
         self.maxSpeed = 1
-        self.setUseEncoders(False)
+        #self.setUseEncoders(False)
 
 
     def _publishPID(self, table, profile):

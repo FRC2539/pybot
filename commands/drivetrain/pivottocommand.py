@@ -1,3 +1,4 @@
+"""
 from .pivotcommand import PivotCommand
 
 import robot
@@ -28,3 +29,4 @@ class PivotToCommand(PivotCommand):
             self.pivotSide = abs(self.pivotSide - 1)
 
         super().initialize()
+"""
