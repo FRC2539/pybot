@@ -14,6 +14,7 @@ from commands.indexwheel.indexforwardcommand import IndexForwardCommand
 from commands.indexwheel.indexslowforwardcommand import IndexSlowForwardCommand
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.slowshootcommand import SlowShootCommand
+from commands.shooter.shootercommandgroup import ShooterCommandGroup
 
 
 def init():
@@ -35,15 +36,11 @@ def init():
     logicalaxes.driveRotate = driveController.RightX
 
     driveController.Back.whenPressed(ResetCommand())
-    driveController.LeftTrigger.whileHeld(SlowLowerCommand())
-    driveController.LeftBumper.whileHeld(LowerBallCommand())
-    driveController.RightTrigger.whileHeld(SlowRaiseCommand())
-    driveController.RightBumper.whileHeld(RaiseBallCommand())
-    driveController.Y.whileHeld(IndexReverseCommand())
+    driveController.LeftBumper.toggleWhenPressed(LowerBallCommand())
+    driveController.RightTrigger.toggleWhenPressed(ShooterCommandGroup())
+    driveController.RightBumper.toggleWhenPressed(RaiseBallCommand())
     driveController.A.whileHeld(IndexForwardCommand())
-    driveController.B.whileHeld(IndexSlowForwardCommand())
-    driveController.X.whileHeld(ShootCommand())
-    driveController.DPadLeft.toggleWhenPressed(SlowShootCommand())
+    #driveController.DPadLeft.toggleWhenPressed(SlowShootCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)

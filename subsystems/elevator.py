@@ -2,19 +2,18 @@ from .debuggablesubsystem import DebuggableSubsystem
 from wpilib.command.subsystem import Subsystem
 from ctre import ControlMode, NeutralMode, WPI_TalonSRX
 from wpilib.digitalinput import DigitalInput
-from wpilib import PWMSpeedController
-
+from wpilib import Spark
 import ports
-
+#import wpilib
 
 class Elevator(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
         super().__init__('Elevator')
-        self.elevatorBelt = WPI_TalonSRX(ports.elevator.elevatorBeltMotorID)
+        self.elevatorBelt = Spark(ports.elevator.elevatorBeltMotorID)
         self.elevatorBelt.setSafetyEnabled(False)
-        self.elevatorBelt.setInverted(True)
+        self.elevatorBelt.setInverted(False)
 
         # setInverted might need to be False
 
@@ -23,7 +22,7 @@ class Elevator(DebuggableSubsystem):
         self.elevatorWheel.setInverted(True)
 
     def set(self, speed):
-        self.elevatorBelt.set(ControlMode.PercentOutput, speed)
+        self.elevatorBelt.set(speed)
         self.elevatorWheel.set(ControlMode.PercentOutput, speed)
 
     def slowElevate(self):
