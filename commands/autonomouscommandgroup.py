@@ -61,7 +61,6 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveWithGyroCommand(-40))
 
                 #Switch
-                '''
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(127), 2)
                 self.addParallel(IntakeCommand(), 10)
@@ -73,7 +72,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(TurnCommand(-90))
                 self.addSequential(MoveWithGyroCommand(95))
                 self.addSequential(TurnCommand(90))
-                '''
+
             @fc.ELIF(getSwitch)
             def scoreSwitch(self):
                 #1st cubes
@@ -142,12 +141,12 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def scoreScale(self):
-
+                #Score90
                 '''
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(-45))
                 self.addSequential(MoveWithGyroCommand(12))
-                self.addSequential(PivotCommand(44.35526444746))
+                self.addSequential(PivotCommand(45))
                 self.addSequential(MoveWithGyroCommand(247))
                 self.addParallel(IntakeCommand())
                 self.addSequential(SetSpeedCommand(700))
@@ -158,10 +157,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveWithGyroCommand(-24))
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(SetSpeedCommand(1500))
-
                 '''
-
-                #Scale90
                 #Scale
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(MoveWithGyroCommand(220))
@@ -174,7 +170,6 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(SetSpeedCommand(1500))
                 self.addSequential(MoveWithGyroCommand(-40))
-
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(127), 2)
@@ -308,12 +303,12 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def scoreScale(self):
-                #Scale
-
+                #Scale90
+                '''
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(45))
                 self.addSequential(MoveWithGyroCommand(12))
-                self.addSequential(PivotCommand(-44.35526444746))
+                self.addSequential(PivotCommand(-45))
                 self.addSequential(MoveWithGyroCommand(247))
                 self.addParallel(IntakeCommand())
                 self.addSequential(SetSpeedCommand(700))
@@ -324,7 +319,8 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(MoveWithGyroCommand(24))
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(SetSpeedCommand(1500))
-                """
+                '''
+                #Scale
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(MoveWithGyroCommand(220))
                 self.addParallel(IntakeCommand(), 10)
@@ -336,7 +332,6 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addParallel(GoToHeightCommand('ground'))
                 self.addSequential(SetSpeedCommand(1500))
                 self.addSequential(MoveWithGyroCommand(-40))
-
                 #Switch
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(-127), 2)
@@ -346,7 +341,6 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(TurnCommand(90))
                 self.addSequential(MoveWithGyroCommand(95))
                 self.addSequential(TurnCommand(-90))
-                """
 
             @fc.ELIF(lambda: Config('Autonomous/scale') == 'always')
             def goToLeftScale(self):
