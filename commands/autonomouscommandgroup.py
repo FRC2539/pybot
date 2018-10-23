@@ -141,7 +141,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             @fc.ELIF(getScale)
             def scoreScale(self):
-                #Score90
+                #Scale90
                 '''
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(-45))
