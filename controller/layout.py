@@ -55,6 +55,7 @@ def init():
     mainController.DPadUp.whenPressed(ChangeLevelCommand(1))
     mainController.DPadDown.whenPressed(ChangeLevelCommand(-1))
     mainController.DPadLeft.whenPressed(DropCube())
+    mainController.DPadRight.whenPressed(ResetElevatorCommand())
 
 
     backupController = LogitechDualShock(1)
@@ -75,3 +76,4 @@ def init():
     backupController.DPadUp.whenPressed(ChangeLevelCommand(1))
     backupController.DPadDown.whenPressed(ChangeLevelCommand(-1))
     backupController.DPadLeft.whenPressed(DropCube())
+    backupController.DPadRight.whenPressed(ResetElevatorCommand())
