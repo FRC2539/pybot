@@ -44,7 +44,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: Config('Autonomous/robotLocation') == 'L')
         def fromLeft(self):
-            '''
+
             @fc.IF(lambda: getScale() and getSwitch())
             def scaleAndSwitch(self):
                 #Scale
@@ -72,11 +72,11 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(TurnCommand(-90))
                 self.addSequential(MoveWithGyroCommand(95))
                 self.addSequential(TurnCommand(90))
-            '''
-            @fc.IF(getScale)
+
+            @fc.ELIF(getScale)
             def scoreScale(self):
                 #Score90
-
+                '''
                 self.addSequential(SetSpeedCommand(2500))
                 self.addSequential(PivotCommand(-45))
                 self.addSequential(MoveWithGyroCommand(12))
@@ -113,7 +113,7 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(TurnCommand(-90))
                 self.addSequential(MoveWithGyroCommand(95))
                 self.addSequential(TurnCommand(90))
-                '''
+
             @fc.ELIF(getSwitch)
             def scoreSwitch(self):
                 #1st cubes
@@ -248,7 +248,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.ELIF(lambda: Config('Autonomous/robotLocation') == 'R')
         def fromRight(self):
-            '''
+
             @fc.IF(lambda: getScale() and getSwitch())
             def scaleAndSwitch(self):
                 #Scale
@@ -276,8 +276,8 @@ class AutonomousCommandGroup(CommandGroup):
                 self.addSequential(TurnCommand(90))
                 self.addSequential(MoveWithGyroCommand(95))
                 self.addSequential(TurnCommand(-90))
-            '''
-            @fc.IF(getScale)
+
+            @fc.ELIF(getScale)
             def scoreScale(self):
                 #Scale90
 
