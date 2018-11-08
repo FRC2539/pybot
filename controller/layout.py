@@ -11,7 +11,13 @@ from commands.intake.outtakecommand import OuttakeCommand
 from commands.shooter.elevatecommand import ElevateCommand
 from commands.shooter.deelevatecommand import DeelevateCommand
 
+from commands.shootcommandgroup import ShootCommandGroup
 
+from commands.lights.solidorangecommand import SolidOrangeCommand
+from commands.lights.lightsoffcommand import LightsOffCommand
+from commands.lights.rgbchangingcommand import RGBChangingCommand
+from commands.lights.increasecyclecommand import IncreaseCycleCommand
+from commands.lights.decreasecyclecommand import DecreaseCycleCommand
 
 def init():
     '''
@@ -32,8 +38,12 @@ def init():
 
     mainController.Back.whenPressed(ResetCommand())
 
-    mainController.A.toggleWhenPressed(IntakeCommand())
-    mainController.B.whenPressed(OuttakeCommand())
+    mainController.A.toggleWhenPressed(SolidOrangeCommand())
+    mainController.B.toggleWhenPressed(ShootCommandGroup())
+    mainController.X.toggleWhenPressed(LightsOffCommand())
+    mainController.Y.toggleWhenPressed(RGBChangingCommand())
+    mainController.DPadUp.toggleWhenPressed(IncreaseCycleCommand())
+    mainController.DPadDown.toggleWhenPressed(DecreaseCycleCommand())
 
     mainController.LeftTrigger.whileHeld(DeelevateCommand())
     mainController.LeftBumper.whileHeld(ElevateCommand())
@@ -44,8 +54,10 @@ def init():
 
     backupController.Back.whenPressed(ResetCommand())
 
-    backupController.A.toggleWhenPressed(IntakeCommand())
-    backupController.B.whenPressed(OuttakeCommand())
+    backupController.A.toggleWhenPressed(SolidOrangeCommand())
+    backupController.B.toggleWhenPressed(ShootCommandGroup())
+    backupController.X.toggleWhenPressed(LightsOffCommand())
+    backupController.Y.toggleWhenPressed(RGBChangingCommand())
 
     backupController.LeftTrigger.whileHeld(DeelevateCommand())
     backupController.LeftBumper.whileHeld(ElevateCommand())

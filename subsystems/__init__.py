@@ -10,19 +10,23 @@ from .drivetrain import DriveTrain
 from .monitor import Monitor
 from .intake import Intake
 from .shooter import Shooter
+from .index import Index
+from .lights import Lights
 
 
 drivetrain = None
 monitor = None
 intake = None
 shooter = None
+index = None
+lights = None
 
 def init():
     '''
     Creates all subsystems. You must run this before any commands are
     instantiated. Do not run it more than once.
     '''
-    global drivetrain, monitor, intake, shooter
+    global drivetrain, monitor, intake, shooter, index, lights
 
     '''
     The default tests that are run before deploy call startCompetition multiple
@@ -36,3 +40,5 @@ def init():
     monitor = Monitor()
     intake = Intake()
     shooter = Shooter()
+    index = Index()
+    lights = Lights()

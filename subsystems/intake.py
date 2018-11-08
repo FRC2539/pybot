@@ -10,13 +10,9 @@ class Intake(Subsystem):
     def __init__(self):
         super().__init__('Intake')
 
-        self.leftMotor = WPI_TalonSRX(ports.shooter.indexWheelID)
-        self.leftMotor.setSafetyEnabled(False)
-        self.leftMotor.setNeutralMode(NeutralMode.Brake)
-
-        self.rightMotor = WPI_TalonSRX(ports.shooter.shooterWheelID)
-        self.rightMotor.setSafetyEnabled(False)
-        self.rightMotor.setNeutralMode(NeutralMode.Brake)
+        self.shooterWheel = WPI_TalonSRX(ports.shooter.shooterWheelID)
+        self.shooterWheel.setSafetyEnabled(False)
+        self.shooterWheel.setNeutralMode(NeutralMode.Brake)
 
 
     def initDefaultCommand(self):
@@ -25,19 +21,17 @@ class Intake(Subsystem):
         self.setDefaultCommand(DefaultCommand())
 
 
-    def set(self, speed):
+    def setShoot(self, speed):
         '''Set motors to the given speed'''
-        self.leftMotor.set(ControlMode.PercentOutput, speed)
-        self.rightMotor.set(ControlMode.PercentOutput, speed)
-
+        self.shooterWheel.set(ControlMode.PercentOutput, speed)
 
     def intake(self):
-        self.set(1)
+        self.setShoot(1)
 
 
     def outtake(self):
-        self.set(-1)
+        self.setShoot(-1)
 
 
-    def stopTake(self):
-        self.set(0)
+    def stop(self):
+        self.setShoot(0)
