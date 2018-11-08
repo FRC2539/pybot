@@ -16,6 +16,8 @@ from commands.shootcommandgroup import ShootCommandGroup
 from commands.lights.solidorangecommand import SolidOrangeCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
 from commands.lights.rgbchangingcommand import RGBChangingCommand
+from commands.lights.increasecyclecommand import IncreaseCycleCommand
+from commands.lights.decreasecyclecommand import DecreaseCycleCommand
 
 def init():
     '''
@@ -40,6 +42,8 @@ def init():
     mainController.B.toggleWhenPressed(ShootCommandGroup())
     mainController.X.toggleWhenPressed(LightsOffCommand())
     mainController.Y.toggleWhenPressed(RGBChangingCommand())
+    mainController.DPadUp.toggleWhenPressed(IncreaseCycleCommand())
+    mainController.DPadDown.toggleWhenPressed(DecreaseCycleCommand())
 
     mainController.LeftTrigger.whileHeld(DeelevateCommand())
     mainController.LeftBumper.whileHeld(ElevateCommand())

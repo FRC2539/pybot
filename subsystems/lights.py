@@ -1,4 +1,5 @@
 from .debuggablesubsystem import DebuggableSubsystem
+from custom import driverhud
 
 from wpilib import Spark
 import ports
@@ -12,6 +13,7 @@ class Lights(DebuggableSubsystem):
         self.lights = Spark(ports.lights.lightControllerID)
         self.lights.setSafetyEnabled(False)
         self.lights.setInverted(False)
+        self.variedcolor = -0.99
 
     def set(self, pulseWidth):
         self.lights.set(pulseWidth)
@@ -30,3 +32,23 @@ class Lights(DebuggableSubsystem):
 
     def solidBlue(self):
         self.set(0.87)
+
+    def decreaseCycle(self):
+        if self.variedcolor == -0.99:
+            self.variedcolor = 0.99
+            self.set(self.variedcolor)
+            driverhud.showAlert('Speed Decrased:\n' + self.variedcolor)
+        else:
+            self.variedcolor -= 0.02
+            self.set(self.variedcolor)
+            driverhud.showAlert('Speed Decreased:\n' + self.variedcolor)
+
+    def increaseCycle(self):
+        if self.variedcolor == 0.99:
+            self.variedcolor = -0.99
+            self.set(self.variedcolor)
+            driverhud.showAlert('Speed Increased:\n' + self.variedcolor)
+        else:
+            self.variedcolor += 0.02
+            self.set(self.variedcolor)
+            driverhud.showAlert('Speed Increased:\n' + self.variedcolor)
