@@ -14,15 +14,15 @@ class RGBChangingCommand(Command):
         pass
 
     def execute(self):
-        if self.colorvalue <= 10:
+        if self.colorvalue <= 1:
             subsystems.lights.solidRed()
             self.colorvalue += 1
 
-        elif self.colorvalue <= 20 and self.colorvalue > 10:
+        elif self.colorvalue <= 2:
             subsystems.lights.solidGreen()
             self.colorvalue += 1
 
-        elif self.colorvalue <= 30 and self.colorvalue > 20:
+        elif self.colorvalue <= 3:
             subsystems.lights.solidBlue()
             self.colorvalue = 0
 

@@ -19,6 +19,10 @@ from commands.lights.rgbchangingcommand import RGBChangingCommand
 from commands.lights.increasecyclecommand import IncreaseCycleCommand
 from commands.lights.decreasecyclecommand import DecreaseCycleCommand
 
+from commands.lights.twelvedaysofchristmaslightscommandgroup import TwelveDaysOfChristmasLightsCommandGroup
+from commands.lights.solidbluecommand import SolidBlueCommand
+from commands.lights.solidgreencommand import SolidGreenCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -38,12 +42,13 @@ def init():
 
     mainController.Back.whenPressed(ResetCommand())
 
-    mainController.A.toggleWhenPressed(SolidOrangeCommand())
-    mainController.B.toggleWhenPressed(ShootCommandGroup())
+    mainController.A.whileHeld(SolidOrangeCommand())
     mainController.X.toggleWhenPressed(LightsOffCommand())
     mainController.Y.toggleWhenPressed(RGBChangingCommand())
-    mainController.DPadUp.toggleWhenPressed(IncreaseCycleCommand())
-    mainController.DPadDown.toggleWhenPressed(DecreaseCycleCommand())
+    mainController.B.whileHeld(TwelveDaysOfChristmasLightsCommandGroup())
+    mainController.DPadUp.whileHeld(SolidGreenCommand())
+    mainController.DPadDown.whileHeld(SolidBlueCommand())
+    mainController.DPadLeft.whileHeld(SolidOrangeCommand())
 
     mainController.LeftTrigger.whileHeld(DeelevateCommand())
     mainController.LeftBumper.whileHeld(ElevateCommand())
@@ -55,7 +60,7 @@ def init():
     backupController.Back.whenPressed(ResetCommand())
 
     backupController.A.toggleWhenPressed(SolidOrangeCommand())
-    backupController.B.toggleWhenPressed(ShootCommandGroup())
+    backupController.B.toggleWhenPressed(TwelveDaysOfChristmasLightsCommandGroup())
     backupController.X.toggleWhenPressed(LightsOffCommand())
     backupController.Y.toggleWhenPressed(RGBChangingCommand())
 

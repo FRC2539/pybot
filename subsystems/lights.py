@@ -22,7 +22,7 @@ class Lights(DebuggableSubsystem):
         self.set(0.99)
 
     def solidOrange(self):
-        self.set(0.09)
+        self.set(0.65)
 
     def solidRed(self):
         self.set(0.61)
