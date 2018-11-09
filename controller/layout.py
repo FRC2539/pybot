@@ -15,6 +15,9 @@ from commands.indexwheel.indexslowforwardcommand import IndexSlowForwardCommand
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.slowshootcommand import SlowShootCommand
 from commands.shooter.shootercommandgroup import ShooterCommandGroup
+from commands.shooter.vspeedshootcommandgroup import VariedSpeedShootCommandGroup
+from commands.shooter.increasefirespeedcommand import IncreaseFireSpeedCommand
+from commands.shooter.decreasefirespeedcommand import DecreaseFireSpeedCommand
 
 
 def init():
@@ -36,22 +39,24 @@ def init():
     logicalaxes.driveRotate = driveController.RightX
 
     driveController.Back.whenPressed(ResetCommand())
-    driveController.LeftBumper.toggleWhenPressed(LowerBallCommand())
+    driveController.LeftTrigger.toggleWhenPressed(VariedSpeedShootCommandGroup())
+    driveController.LeftBumper.whileHeld(LowerBallCommand())
     driveController.RightTrigger.toggleWhenPressed(ShooterCommandGroup())
-    driveController.RightBumper.toggleWhenPressed(RaiseBallCommand())
+    driveController.RightBumper.whileHeld(RaiseBallCommand())
     driveController.A.whileHeld(IndexForwardCommand())
+    driveController.DPadUp.whenPressed(IncreaseFireSpeedCommand())
+    driveController.DPadDown.whenPressed(DecreaseFireSpeedCommand())
+
     #driveController.DPadLeft.toggleWhenPressed(SlowShootCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 
     componentController.Back.whenPressed(ResetCommand())
-    componentController.LeftTrigger.whileHeld(SlowLowerCommand())
+    componentController.LeftTrigger.toggleWhenPressed(VariedSpeedShootCommandGroup())
     componentController.LeftBumper.whileHeld(LowerBallCommand())
-    componentController.RightTrigger.whileHeld(SlowRaiseCommand())
+    componentController.RightTrigger.toggleWhenPressed(ShooterCommandGroup())
     componentController.RightBumper.whileHeld(RaiseBallCommand())
-    componentController.Y.whileHeld(IndexReverseCommand())
     componentController.A.whileHeld(IndexForwardCommand())
-    componentController.B.whileHeld(IndexSlowForwardCommand())
-    componentController.X.toggleWhenPressed(ShootCommand())
-    componentController.DPadLeft.toggleWhenPressed(SlowShootCommand())
+    componentController.DPadUp.whenPressed(IncreaseFireSpeedCommand())
+    componentController.DPadDown.whenPressed(DecreaseFireSpeedCommand())
