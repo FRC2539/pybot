@@ -19,3 +19,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.winch)
         self.requires(robot.intake)
         self.requires(robot.elevator)
+        self.requires(robot.pneumatics)

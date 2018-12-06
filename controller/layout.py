@@ -5,12 +5,8 @@ from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
-from commands.climbhook.movehookcommand import movehookCommand
-from commands.winch.winchcommand import WinchCommand
-from commands.intake.intakecommand import IntakeCommand
-from commands.intake.outakecommand import OutakeCommand
-from commands.elevator.delevatecommand import DelevateCommand
-from commands.elevator.elevatecommand import ElevateCommand
+from commands.pneumatics.togglesolenoidcommand import toggleSolenoidCommand
+from commands.pneumatics.holdsolenoidcommand import HoldSolenoidCommand
 
 def init():
     '''
@@ -30,14 +26,9 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.Back.whenPressed(ResetCommand())
-    mainController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-    mainController.A.whileHeld(movehookCommand(-0.3))
-    mainController.B.whileHeld(movehookCommand(0.3))
-    mainController.Y.whileHeld(WinchCommand(-1))
-    mainController.RightTrigger.toggleWhenPressed(OutakeCommand(-0.75))
-    mainController.RightBumper.toggleWhenPressed(IntakeCommand(1))
-    mainController.LeftTrigger.whileHeld(DelevateCommand())
-    mainController.LeftBumper.whileHeld(ElevateCommand())
+
+    mainController.A.whenPressed(toggleSolenoidCommand())
+    mainController.Y.whileHeld(HoldSolenoidCommand())
 
     '''backupController = LogitechDualShock(1)
 

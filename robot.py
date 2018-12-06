@@ -17,6 +17,7 @@ from subsystems.climbhook import Climbhook as climbhook
 from subsystems.winch import Winch as winch
 from subsystems.intake import Intake as intake
 from subsystems.elevator import Elevator as elevator
+from subsystems.pneumatics import Pneumatics as pneumatics
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

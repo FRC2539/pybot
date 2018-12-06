@@ -42,6 +42,7 @@ class BaseDrive(DebuggableSubsystem):
             motor.setNeutralMode(NeutralMode.Coast)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+            motor.setQuadraturePosition(0, 10)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -261,6 +262,10 @@ class BaseDrive(DebuggableSubsystem):
         '''Returns the position of each active motor.'''
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
 
+    def resetEncoders(self):
+        '''Resets encoders'''
+        for motor in self.motors:
+            motor.setQuadraturePosition(0, 10)
 
     def getFrontClearance(self):
         '''Override this in drivetrain if a distance sensor is attached.'''
