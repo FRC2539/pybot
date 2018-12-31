@@ -10,7 +10,8 @@ class Pneumatics(DebuggableSubsystem):
 
     def __init__(self):
         super().__init__('Pneumatics')
-
+        pass
+        """
         compressor = Compressor(0)
         compressor.setClosedLoopControl(True);
 
@@ -19,19 +20,24 @@ class Pneumatics(DebuggableSubsystem):
 
         self.solenoid1.set(False)
         self.solenoid2.set(True)
-
+        """
     def toggle(self):
+        pass
+        """
         if(self.solenoid1.get()):
             self.solenoid1.set(False)
             self.solenoid2.set(True)
         else:
             self.solenoid2.set(False)
             self.solenoid1.set(True)
-
+        """
     def hold(self):
+        pass
+        """
         if(self.solenoid1.get()):
             self.solenoid1.set(False)
             self.solenoid2.set(True)
         else:
             self.solenoid1.set(True)
             self.solenoid2.set(False)
+        """

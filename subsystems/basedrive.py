@@ -139,6 +139,9 @@ class BaseDrive(DebuggableSubsystem):
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
+    def tankDrive(self, left, right):
+        self.activeMotors[0].set(ControlMode.PercentOutput, left * self.maxPercentVBus)
+        self.activeMotors[1].set(ControlMode.PercentOutput, right * self.maxPercentVBus)
 
     def setPositions(self, positions):
         '''

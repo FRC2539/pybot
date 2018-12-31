@@ -5,8 +5,6 @@ from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
-from commands.pneumatics.togglesolenoidcommand import toggleSolenoidCommand
-from commands.pneumatics.holdsolenoidcommand import HoldSolenoidCommand
 
 def init():
     '''
@@ -26,9 +24,6 @@ def init():
     logicalaxes.driveRotate = mainController.RightX
 
     mainController.Back.whenPressed(ResetCommand())
-
-    mainController.A.whenPressed(toggleSolenoidCommand())
-    mainController.Y.whileHeld(HoldSolenoidCommand())
 
     '''backupController = LogitechDualShock(1)
 
