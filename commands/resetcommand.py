@@ -15,3 +15,4 @@ class ResetCommand(InstantCommand):
 
         '''Require all subsystems to reset.'''
         self.requires(robot.drivetrain)
+        self.requires(robot.arduino)

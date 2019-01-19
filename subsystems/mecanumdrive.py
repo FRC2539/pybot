@@ -14,6 +14,7 @@ class MecanumDrive(BaseDrive):
     def __init__(self, name):
         super().__init__(name)
 
+        self.resetGyro()
         self.isFieldOriented = False
 
 
