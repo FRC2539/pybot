@@ -1,10 +1,14 @@
 from .logitechdualshock import LogitechDualShock
 from . import logicalaxes
 
+from .logitechjoystick import LogitechJoystick
+
 from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
+from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
+from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 
 
 def init():
@@ -18,18 +22,19 @@ def init():
         - cancelWhenPressed: good for commands started with a different button
     '''
 
-    # The controller for driving the robot
-    driveController = LogitechDualShock(0)
+    # The joysticks for driving the robot
+    driveStick = LogitechJoystick(0)
+    rotateStick = LogitechJoystick(1)
 
-    logicalaxes.driveX = driveController.LeftX
-    logicalaxes.driveY = driveController.LeftY
-    logicalaxes.driveRotate = driveController.RightX
+    logicalaxes.driveX = driveStick.X
+    logicalaxes.driveY = driveStick.Y
+    logicalaxes.driveRotate = rotateStick.X
 
-    driveController.Back.whenPressed(ResetCommand())
-    driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+    rotateStick.topThumb.whenPressed(ZeroGyroCommand())
+    rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
 
 
     # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(1)
+    controller = LogitechDualShock(2)
 
-    componentController.Back.whenPressed(ResetCommand())
+    controller.Back.whenPressed(ResetCommand())

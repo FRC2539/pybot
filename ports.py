@@ -18,6 +18,5 @@ drivetrain.frontRightMotorID = 3
 drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
 
-sparkmaxtemporary = PortsList()
-
-arduino = PortsList()
+lights = PortsList()
+lights.lightControllerID = 0

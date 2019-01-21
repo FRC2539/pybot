@@ -1,6 +1,5 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from wpilib import SerialPort
-import ports
 from time import sleep
 
 

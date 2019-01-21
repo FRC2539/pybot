@@ -39,7 +39,7 @@ class BaseDrive(DebuggableSubsystem):
             ]
 
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Coast)
+            motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
@@ -99,7 +99,12 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
         if [x, y, rotate] == self.lastInputs:
+            return
+        elif (x == 0 and y == 0 and rotate == 0):
+            for motor in self.activeMotors:
+                motor.set(ControlMode.PercentOutput, 0)
             return
 
         self.lastInputs = [x, y, rotate]
