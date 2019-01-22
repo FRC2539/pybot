@@ -97,9 +97,6 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(TurnCommand(-4))
                     #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
 
-                #@fc.IF(lambda: dcargoX() <= 280)
-                #def getCargo(self):
-                    #lookforcargo(noCargo)
                 self.addSequential(MoveWithGyroCommand(ddistanceToCargo()))
 
 
