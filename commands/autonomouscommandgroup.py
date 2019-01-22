@@ -31,7 +31,11 @@ def hasCargo():
     else:
         return False
 
+def dcargoX():
+    return Config('cameraInfo/cargoX', -1)
 
+def ddistanceToCargo():
+    return Config('cameraInfo/distanceToCargo', -1)
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -41,34 +45,63 @@ class AutonomousCommandGroup(CommandGroup):
         ds = DriverStation.getInstance()
 
         print("auto start")
+        self.addSequential(AlertCommand('auto start'))
 
         #self.addSequential(TurnCommand(-10))
         #self.addSequential(MoveWithGyroCommand(10))
 
-        @fc.WHILE(noCargo)
-        def lookforcargo(self):
-            print("look for cargo")
-
-
-        #@fc.WHILE(True)
-        #def cargoLoop(self):
-
+        #self.addSequential(AlertCommand('Start X: %s' % float(dcargoX())))
 
         @fc.WHILE(hasCargo)
-        def foundcargo(self):
-            cargoX = Config('cameraInfo/cargoX', -1)
-            distanceToCargo = Config('cameraInfo/distanceToCargo',-1)
+        def initfoundcargo(self):
+            #distanceToCargo = Config('cameraInfo/distanceToCargo')
 
-            #self.addSequential(AlertCommand('X: %s' % float(cargoX)))
+            self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
+            #self.addSequential(AlertCommand('moveX: %s' % float(moveX)))
+            #self.addSequential(TurnCommand(moveX))
+            @fc.IF(lambda: dcargoX() >= 240)
+            def cargoLeft(self):
+                self.addSequential(TurnCommand(4))
+                #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
 
-            if cargoX >= 175:
-                self.addSequential(TurnCommand(-10))
+            @fc.IF(lambda: dcargoX() <= 280)
+            def cargoRight(self):
+                self.addSequential(TurnCommand(-4))
+                #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
 
-            if cargoX <= 125:
-                self.addSequential(TurnCommand(10))
+            #@fc.IF(lambda: dcargoX() <= 280)
+            #def getCargo(self):
+                #lookforcargo(noCargo)
+            #self.addSequential(MoveWithGyroCommand(ddistanceToCargo()))
 
-            #lookforcargo(noCargo)
-            self.addSequential(MoveWithGyroCommand(distanceToCargo))
+        self.addSequential(AlertCommand('before no cargo'))
+        @fc.WHILE(noCargo)
+        def lookforcargo(self):
+
+
+            @fc.WHILE(hasCargo)
+            def foundcargo(self):
+
+                #distanceToCargo = Config('cameraInfo/distanceToCargo')
+
+                self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
+                #self.addSequential(AlertCommand('moveX: %s' % float(moveX)))
+                #self.addSequential(TurnCommand(moveX))
+                @fc.IF(lambda: dcargoX() >= 240)
+                def cargoLeft(self):
+                    self.addSequential(TurnCommand(4))
+                    #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
+
+                @fc.IF(lambda: dcargoX() <= 280)
+                def cargoRight(self):
+                    self.addSequential(TurnCommand(-4))
+                    #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
+
+                #@fc.IF(lambda: dcargoX() <= 280)
+                #def getCargo(self):
+                    #lookforcargo(noCargo)
+                self.addSequential(MoveWithGyroCommand(ddistanceToCargo()))
 
 
         print("auto end")
+        self.addSequential(AlertCommand('auto end'))
