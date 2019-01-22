@@ -1,5 +1,6 @@
 
 
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -20,3 +21,7 @@ drivetrain.backRightMotorID = 4
 
 lights = PortsList()
 lights.lightControllerID = 0
+
+sparkmaxtemporary = PortsList()
+sparkmaxtemporary.neo1 = 5
+sparkmaxtemporary.neo2 = 6
