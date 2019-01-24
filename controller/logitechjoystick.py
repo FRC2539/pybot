@@ -4,7 +4,6 @@ class LogitechJoystick(GenericController):
     '''
     Represents a Logitech Joystick.
     '''
-
     namedButtons = {
         'trigger': 1,
         'topThumb': 2,
