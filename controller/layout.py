@@ -10,7 +10,6 @@ from commands.resetcommand import ResetCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 
-from commands.sparkmaxtemporary.sparkmaxtestcommand import SparkMaxTestCommand
 
 
 def init():
@@ -34,7 +33,6 @@ def init():
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    rotateStick.trigger.whileHeld(SparkMaxTestCommand())
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
