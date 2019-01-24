@@ -44,7 +44,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         ds = DriverStation.getInstance()
 
-        print("auto start")
+        #print("auto start")
         self.addSequential(AlertCommand('auto start'))
 
         #self.addSequential(TurnCommand(-10))
@@ -56,7 +56,7 @@ class AutonomousCommandGroup(CommandGroup):
         def initfoundcargo(self):
             #distanceToCargo = Config('cameraInfo/distanceToCargo')
 
-            self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
+            #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
             #self.addSequential(AlertCommand('moveX: %s' % float(moveX)))
             #self.addSequential(TurnCommand(moveX))
             @fc.IF(lambda: dcargoX() >= 240)
@@ -74,7 +74,7 @@ class AutonomousCommandGroup(CommandGroup):
                 #lookforcargo(noCargo)
             #self.addSequential(MoveWithGyroCommand(ddistanceToCargo()))
 
-        self.addSequential(AlertCommand('before no cargo'))
+        #self.addSequential(AlertCommand('before no cargo'))
         @fc.WHILE(noCargo)
         def lookforcargo(self):
 
@@ -97,8 +97,8 @@ class AutonomousCommandGroup(CommandGroup):
                     self.addSequential(TurnCommand(-4))
                     #self.addSequential(AlertCommand('X: %s' % float(dcargoX())))
 
-                self.addSequential(MoveWithGyroCommand(ddistanceToCargo()))
+                #self.addSequential(MoveWithGyroCommand(ddistanceToCargo() -2))
 
 
-        print("auto end")
+        #print("auto end")
         self.addSequential(AlertCommand('auto end'))
