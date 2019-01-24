@@ -21,7 +21,3 @@ drivetrain.backRightMotorID = 4
 
 lights = PortsList()
 lights.lightControllerID = 0
-
-sparkmaxtemporary = PortsList()
-sparkmaxtemporary.neo1 = 5
-sparkmaxtemporary.neo2 = 6
