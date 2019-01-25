@@ -6,8 +6,8 @@ class LogitechJoystick(GenericController):
     '''
     namedButtons = {
         'trigger': 1,
-        'topThumb': 2,
-        'bottomThumb': 3,
+        'bottomThumb': 2,
+        'topThumb': 3,
         'leftThumb': 4,
         'rightThumb': 5,
         'Button6': 6,

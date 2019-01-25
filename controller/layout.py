@@ -10,7 +10,10 @@ from commands.resetcommand import ResetCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 
-
+from commands.lights.orangelightscommand import OrangeLightsCommand
+from commands.lights.lightsoffcommand import LightsOffCommand
+from commands.lights.teamcolorlightscommand import TeamColorLightsCommand
+from commands.lights.seizurelightscommand import SeizureLightsCommand
 
 def init():
     '''
@@ -31,6 +34,7 @@ def init():
     logicalaxes.driveY = driveStick.Y
     logicalaxes.driveRotate = rotateStick.X
 
+
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
 
@@ -38,3 +42,7 @@ def init():
     controller = LogitechDualShock(2)
 
     controller.Back.whenPressed(ResetCommand())
+    controller.A.whenPressed(TeamColorLightsCommand())
+    controller.B.whenPressed(SeizureLightsCommand())
+    controller.X.whenPressed(LightsOffCommand())
+    controller.Y.whenPressed(OrangeLightsCommand())
