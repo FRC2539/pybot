@@ -33,6 +33,8 @@ class DriveCommand(Command):
 
 
     def execute(self):
+
+        print(robot.drivetrain.getEncoders())
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()
         if self.lastY is None:

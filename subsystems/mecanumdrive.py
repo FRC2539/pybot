@@ -17,6 +17,8 @@ class MecanumDrive(BaseDrive):
         self.resetGyro()
         self.isFieldOriented = True
 
+        self.strafeTicksPerInch = 233
+
 
     def setUseFieldOrientation(self, isFieldOriented=True):
         '''
@@ -27,8 +29,15 @@ class MecanumDrive(BaseDrive):
 
         self.isFieldOriented = isFieldOriented
 
+
     def toggleFieldOrientation(self):
         self.isFieldOriented = not self.isFieldOriented
+
+
+    def strafeInchesToTicks(self, distance):
+        '''Converts a distance in inches into a number of encoder ticks.'''
+        return int(distance * self.strafeTicksPerInch)
+
 
     def _configureMotors(self):
         '''All four motors are active in a mecanum system.'''

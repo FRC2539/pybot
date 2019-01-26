@@ -99,6 +99,7 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
         if [x, y, rotate] == self.lastInputs:
             return
         elif (x == 0 and y == 0 and rotate == 0):
@@ -296,6 +297,13 @@ class BaseDrive(DebuggableSubsystem):
         done lightly, as many commands rely on encoder information.
         '''
         self.useEncoders = useEncoders
+
+
+    def getEncoders(self):
+        encoders = []
+        for motor in self.motors:
+            encoders.append(motor.getQuadraturePosition())
+        return encoders
 
 
     def setSpeedLimit(self, speed):

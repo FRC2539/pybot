@@ -1,48 +1,46 @@
 from wpilib.command.command import Command
 import math
 import robot
+from custom.config import Config
 
 class HolonomicMoveCommand(Command):
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, rotate):
         super().__init__('Holonomic Move')
 
         self.requires(robot.drivetrain)
 
         self.x = x
         self.y = y
-        #self.rotate = rotate
+        self.rotate = rotate
 
-        self.finished = False
+        self.targets = []
 
 
     def initialize(self):
         if robot.drivetrain.isFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
-
         robot.drivetrain.resetGyro()
-        robot.drivetrain.resetNavXDisplacement()
+        positions = robot.drivetrain.getPositions()
 
+        inchesPerDegree = (math.pi * 23.5) / 360
+        totalDistanceInInches = self.rotate * inchesPerDegree
+        ticks = (totalDistanceInInches / (math.pi * 6)) * 4096
 
-    def execute(self):
-        print('X:  ' + str(robot.drivetrain.getXDisplacement()) + '             Y:  ' + str(robot.drivetrain.getYDisplacement()))
+        self.x = int(robot.drivetrain.strafeInchesToTicks(self.x))
+        self.y = int(self.y / (math.pi * 6) * 4096)
+        self.rotate = int(ticks * 1.2)
 
-        #if abs(robot.drivetrain.getAngle()) >= abs(self.rotate):
-        #    self.rotate = 0
-        if abs(robot.drivetrain.getXDisplacement()) >= abs(self.x):
-            self.x = 0
-        if abs(robot.drivetrain.getYDisplacement()) >= abs(self.y):
-            self.y = 0
+        self.targets = [
+            positions[0] + self.x + self.y + self.rotate,
+            positions[1] - self.x + self.y - self.rotate,
+            positions[2] - self.x + self.y + self.rotate,
+            positions[3] + self.x + self.y - self.rotate
+        ]
 
-        if (self.x == 0 and self.y == 0 and self.rotate == 0):
-            self.finished = True
+        print("current")
+        print(positions)
+        print("targets")
+        print(self.targets)
 
-        robot.drivetrain.move(self.x / 12, self.y / 24, 0)
-
-
-    def isFinished(self):
-        return self.finished
-
-
-    def end(self):
-        robot.drivetrain.stop()
+        robot.drivetrain.setPositions(self.targets)
