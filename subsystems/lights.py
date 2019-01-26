@@ -11,16 +11,21 @@ class Lights(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Lights')
         self.lights = Spark(ports.lights.lightControllerID)
-        self.lights.setSafetyEnabled(False)
-        self.lights.setInverted(False)
+
         self.variedcolor = -0.99
+
         NetworkTables.initialize(server='roborio-2539-frc.local')
-        lightTable = NetworkTables.getTable('Lights')
+
+        lightTable = NetworkTables.getTable('lightTable')
+
         lightTable.putBoolean('lightsOn', False)
         lightTable.putBoolean('killLights', False)
 
     def set(self, pulseWidth):
         self.lights.set(pulseWidth)
+
+    def setSpecific(self, val):
+        self.set(val)
 
     def off(self):
         self.set(0.99)
@@ -44,7 +49,7 @@ class Lights(DebuggableSubsystem):
         self.set(0.57)
 
     def solidOrange(self):
-        self.set(0.65)
+        self.set(0.63)
 
     def solidViolet(self):
         self.set(0.91)

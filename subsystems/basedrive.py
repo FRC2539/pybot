@@ -99,12 +99,10 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
-
         if [x, y, rotate] == self.lastInputs:
             return
         elif (x == 0 and y == 0 and rotate == 0):
-            for motor in self.activeMotors:
-                motor.set(ControlMode.PercentOutput, 0)
+            self.stop()
             return
 
         self.lastInputs = [x, y, rotate]
@@ -208,6 +206,11 @@ class BaseDrive(DebuggableSubsystem):
 
         self.setGyroAngle(0)
 
+    def resetNavXDisplacement(self):
+        '''Resets the accelerometer on the navX'''
+
+        self.navX.resetDisplacement()
+
 
     def setGyroAngle(self, angle):
         '''Tweak the gyro reading.'''
@@ -234,6 +237,16 @@ class BaseDrive(DebuggableSubsystem):
             degrees += 360
 
         return degrees
+
+
+    def getXDisplacement(self):
+        '''Returns x-axis displacement of robot since the last reset, in INCHES'''
+        return (self.navX.getDisplacementX() * 39.3701)
+
+
+    def getYDisplacement(self):
+        '''Returns y-axis displacement of robot since the last reset, in INCHES'''
+        return (self.navX.getDisplacementY() * 39.3701)
 
 
     def inchesToTicks(self, distance):

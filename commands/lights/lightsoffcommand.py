@@ -1,4 +1,5 @@
 from wpilib.command.instantcommand import InstantCommand
+from networktables import NetworkTables
 
 import robot
 
@@ -12,5 +13,3 @@ class LightsOffCommand(InstantCommand):
 
     def initialize(self):
         robot.lights.off()
-
-
