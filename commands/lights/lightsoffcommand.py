@@ -1,8 +1,8 @@
-from wpilib.command.command import Command
+from wpilib.command.instantcommand import InstantCommand
 
 import robot
 
-class LightsOffCommand(Command):
+class LightsOffCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Lights Off')

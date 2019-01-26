@@ -42,7 +42,7 @@ def init():
     controller = LogitechDualShock(2)
 
     controller.Back.whenPressed(ResetCommand())
-    controller.A.whenPressed(TeamColorLightsCommand())
-    controller.B.whenPressed(SeizureLightsCommand())
-    controller.X.whenPressed(LightsOffCommand())
-    controller.Y.whenPressed(OrangeLightsCommand())
+    controller.A.toggleWhenPressed(TeamColorLightsCommand())
+    controller.B.toggleWhenPressed(SeizureLightsCommand())
+    controller.X.toggleWhenPressed(LightsOffCommand())
+    controller.Y.whileHeld(OrangeLightsCommand())

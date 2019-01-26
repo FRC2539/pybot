@@ -1,6 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from custom import driverhud
 from wpilib import Spark
+from networktables import NetworkTables
 
 import ports
 
@@ -13,6 +14,10 @@ class Lights(DebuggableSubsystem):
         self.lights.setSafetyEnabled(False)
         self.lights.setInverted(False)
         self.variedcolor = -0.99
+        NetworkTables.initialize(server='roborio-2539-frc.local')
+        lightTable = NetworkTables.getTable('Lights')
+        lightTable.putBoolean('lightsOn', False)
+        lightTable.putBoolean('killLights', False)
 
     def set(self, pulseWidth):
         self.lights.set(pulseWidth)
