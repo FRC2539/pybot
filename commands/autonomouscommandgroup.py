@@ -7,6 +7,7 @@ from commands.network.alertcommand import AlertCommand
 from wpilib.command.waitcommand import WaitCommand
 import commandbased.flowcontrol as fc
 
+from commands.drivetrain.movewithvisioncommandgroup import MoveWithVisionCommandGroup
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.pivotcommand import PivotCommand
@@ -19,6 +20,7 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
 from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
+"""
 def noCargo():
     if Config('cameraInfo/cargoFound', False):
         return False
@@ -36,12 +38,14 @@ def dcargoX():
 
 def ddistanceToCargo():
     return Config('cameraInfo/distanceToCargo', -1)
-
+"""
 class AutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('Autonomous')
+        self.addSequential(MoveWithVisionCommandGroup())
 
+"""
         ds = DriverStation.getInstance()
 
         #print("auto start")
@@ -102,3 +106,4 @@ class AutonomousCommandGroup(CommandGroup):
 
         #print("auto end")
         self.addSequential(AlertCommand('auto end'))
+"""
