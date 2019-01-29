@@ -1,12 +1,12 @@
-from wpilib.command.command import Command
+from wpilib.command.timedcommand import TimedCommand
 import math
 import robot
 from custom.config import Config
 
-class HolonomicMoveCommand(Command):
+class HolonomicMoveCommand(TimedCommand):
 
-    def __init__(self, x, y, rotate):
-        super().__init__('Holonomic Move')
+    def __init__(self, x, y, rotate, timeout):
+        super().__init__('Holonomic Move', timeout)
 
         self.requires(robot.drivetrain)
 
@@ -14,33 +14,38 @@ class HolonomicMoveCommand(Command):
         self.y = y
         self.rotate = rotate
 
-        self.targets = []
+        self.cycles = timeout * 10
+        self.speedLimit = robot.drivetrain.speedLimit
 
 
     def initialize(self):
         if robot.drivetrain.isFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
         robot.drivetrain.resetGyro()
-        positions = robot.drivetrain.getPositions()
 
         inchesPerDegree = (math.pi * 23.5) / 360
         totalDistanceInInches = self.rotate * inchesPerDegree
         ticks = (totalDistanceInInches / (math.pi * 6)) * 4096
 
-        self.x = int(robot.drivetrain.strafeInchesToTicks(self.x))
-        self.y = int(self.y / (math.pi * 6) * 4096)
-        self.rotate = int(ticks * 1.2)
+        self.x = ((robot.drivetrain.strafeInchesToTicks(self.x) / self.cycles) / self.speedLimit)
+        self.y = 3 * (((self.y / (math.pi * 6) * 4096) / self.cycles) / self.speedLimit)
+        self.rotate = 2 * (((ticks * 1.2) / self.cycles) / self.speedLimit)
 
-        self.targets = [
-            positions[0] + self.x + self.y + self.rotate,
-            positions[1] - self.x + self.y - self.rotate,
-            positions[2] - self.x + self.y + self.rotate,
-            positions[3] + self.x + self.y - self.rotate
-        ]
+        print('X:          ' + str(self.x))
+        print('Y:          ' + str(self.y))
+        print('Rotate:     ' + str(self.rotate))
 
-        print("current")
-        print(positions)
-        print("targets")
-        print(self.targets)
+        robot.drivetrain.move(self.x, self.y, self.rotate)
 
-        robot.drivetrain.setPositions(self.targets)
+    def execute(self):
+        pass
+
+    def isFinished(self):
+        if self.isTimedOut():
+            robot.drivetrain.stop()
+            return True
+        else:
+            return False
+
+    def end(self):
+        robot.drivetrain.stop()
