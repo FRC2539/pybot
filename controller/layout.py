@@ -39,7 +39,7 @@ def init():
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    rotateStick.trigger.whenPressed(HolonomicMoveCommand(40, 100, 180, 3))
+    rotateStick.trigger.toggleWhenPressed(HolonomicMoveCommand(36, 60, 90))
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)

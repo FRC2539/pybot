@@ -8,6 +8,7 @@ from navx.ahrs import AHRS
 
 from custom.config import Config
 import ports
+import robot
 
 
 class BaseDrive(DebuggableSubsystem):
@@ -100,7 +101,7 @@ class BaseDrive(DebuggableSubsystem):
         coordinates have not changed.
         '''
 
-        if [x, y, rotate] == self.lastInputs:
+        if [x, y, rotate] == self.lastInputs and not robot.drivetrain.isFieldOriented:
             return
         elif (x == 0 and y == 0 and rotate == 0):
             self.stop()
