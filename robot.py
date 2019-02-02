@@ -13,7 +13,6 @@ from wpilib.command.subsystem import Subsystem
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
-from subsystems.arduino import Arduino as arduino
 from subsystems.lights import Lights as lights
 
 class KryptonBot(CommandBasedRobot):

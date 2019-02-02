@@ -36,13 +36,14 @@ class HolonomicMoveCommand(TimedCommand):
         self.xTime = self.x / (self.speedLimit * 10)
         self.yTime = self.y / (self.speedLimit * 10)
         self.rotateTime = self.rotate / (self.speedLimit * 10)
-
+        '''
         self.runtime = self.yTime
         if self.xTime > self.runtime:
             self.runtime = self.xTime
         if self.rotateTime > self.runtime:
             self.runtime = self.rotateTime
-
+        '''
+        self.runtime = math.sqrt((self.xTime ** 2) + (self.yTime ** 2)) + self.rotateTime
         print(self.runtime)
         return self.runtime
 

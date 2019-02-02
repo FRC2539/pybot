@@ -103,7 +103,7 @@ class BaseDrive(DebuggableSubsystem):
 
         if [x, y, rotate] == self.lastInputs and not robot.drivetrain.isFieldOriented:
             return
-        elif (x == 0 and y == 0 and rotate == 0):
+        if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
 
