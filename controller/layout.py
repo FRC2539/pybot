@@ -11,11 +11,10 @@ from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 
-from commands.lights.orangelightscommand import OrangeLightsCommand
-from commands.lights.lightsoffcommand import LightsOffCommand
-from commands.lights.teamcolorlightscommand import TeamColorLightsCommand
-from commands.lights.seizurelightscommand import SeizureLightsCommand
-from commands.lights.cyclelightscommand import CycleLightsCommand
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.ejectcommand import EjectCommand
+from commands.elevator.elevatecommand import ElevateCommand
+from commands.elevator.deelevatecommand import DeelevateCommand
 
 def init():
     '''
@@ -39,14 +38,13 @@ def init():
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    rotateStick.trigger.whenPressed(HolonomicMoveCommand(0, 60, 90))
+    #rotateStick.trigger.whenPressed(HolonomicMoveCommand(0, 60, 90))
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
 
-    controller.DPadUp.whenPressed(CycleLightsCommand())
     controller.Back.whenPressed(ResetCommand())
-    controller.A.toggleWhenPressed(TeamColorLightsCommand())
-    controller.B.toggleWhenPressed(SeizureLightsCommand())
-    controller.X.toggleWhenPressed(LightsOffCommand())
-    controller.Y.whileHeld(OrangeLightsCommand())
+    controller.RightTrigger.whileHeld(DeelevateCommand())
+    controller.RightBumper.whileHeld(ElevateCommand())
+    controller.A.toggleWhenPressed(IntakeCommand())
+    controller.B.whenPressed(EjectCommand())
