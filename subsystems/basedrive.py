@@ -100,6 +100,9 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
+        #print("settingRotate-"+str(rotate))
+
         if [x, y, rotate] == self.lastInputs:
             return
 
@@ -145,6 +148,8 @@ class BaseDrive(DebuggableSubsystem):
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
         '''
+
+
 
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')

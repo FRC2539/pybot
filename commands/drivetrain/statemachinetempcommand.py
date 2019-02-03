@@ -32,11 +32,12 @@ class StateMachineTempCommand(Command):
         print("init-"+str(robot.drivetrain.getPositions()))
         self._finished = False
 
-        self.degrees = -15
+        self.degrees = -360
         self.distance = self.degrees
         reverse = False
 
         self.num = 0
+        self.speedLimit = 800
 
         self.direction = 1
 
@@ -63,15 +64,15 @@ class StateMachineTempCommand(Command):
 
                 if tapeX <= 290:
                     print("left-"+str(int(tapeX)))
-                    offset = (260 - tapeX)/20
-                    print("offset-"+str(-offset))
+                    offset = -((260 - tapeX)/15)
+                    print("offset:"+str(-offset))
                     self._pivot(-offset)
 
 
                 elif tapeX >=325:
                     print("right-"+str(int(tapeX)))
-                    offset = (tapeX - 310)/20
-                    print("offset-"+str(offset))
+                    offset = (tapeX - 310)/15
+                    print("offset:"+str(offset))
                     self._pivot(offset)
 
 
