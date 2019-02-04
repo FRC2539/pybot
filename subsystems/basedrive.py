@@ -100,7 +100,6 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
-
         if [x, y, rotate] == self.lastInputs and not robot.drivetrain.isFieldOriented:
             return
         if [x, y, rotate] == [0, 0, 0]:
@@ -143,6 +142,15 @@ class BaseDrive(DebuggableSubsystem):
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
+        if [x, y, rotate] == self.lastInputs and not robot.drivetrain.isFieldOriented:
+            return
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
+        angle = self.getAngle()
+        print('ANGLE:  ' + str(angle))
+        print('ROTATE:  ' + str(rotate))
 
     def setPositions(self, positions):
         '''

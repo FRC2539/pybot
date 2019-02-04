@@ -30,16 +30,15 @@ class Elevator(DebuggableSubsystem):
 
 
     def up(self):
-        self.set(1)
+        self.set(0.5)
 
 
     def down(self):
-        self.set(-1)
+        self.set(-0.5)
 
 
     def stop(self):
         self.setPosition(self.getPosition())
-
 
     def set(self, speed):
         self.motor.set(speed)
@@ -60,3 +59,5 @@ class Elevator(DebuggableSubsystem):
 
     def goToLevel(self, level):
         self.setPosition(self.levels[level])
+
+    #def goToLevel(self, level)

@@ -53,3 +53,9 @@ class Lights(DebuggableSubsystem):
 
     def solidViolet(self):
         self.set(0.91)
+
+    def fire(self):
+        self.set(-0.57)
+
+    def chase(self):
+        self.set(-0.31)

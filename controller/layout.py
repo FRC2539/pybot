@@ -13,8 +13,16 @@ from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
+from commands.intake.slowejectcommand import SlowEjectCommand
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
+
+from commands.lights.firelightscommand import FireLightsCommand
+from commands.lights.orangelightscommand import OrangeLightsCommand
+from commands.lights.teamcolorlightscommand import TeamColorLightsCommand
+from commands.lights.seizurelightscommand import SeizureLightsCommand
+from commands.lights.lightsoffcommand import LightsOffCommand
+from commands.lights.chaselightscommand import ChaseLightsCommand
 
 def init():
     '''
@@ -44,7 +52,13 @@ def init():
     controller = LogitechDualShock(2)
 
     controller.Back.whenPressed(ResetCommand())
-    controller.RightTrigger.whileHeld(DeelevateCommand())
-    controller.RightBumper.whileHeld(ElevateCommand())
+    controller.LeftTrigger.whileHeld(DeelevateCommand())
+    controller.LeftBumper.whileHeld(ElevateCommand())
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
+    controller.X.whenPressed(LightsOffCommand())
+    controller.Y.toggleWhenPressed(ChaseLightsCommand())
+    controller.DPadUp.whenPressed(SlowEjectCommand())
+    controller.DPadRight.toggleWhenPressed(FireLightsCommand())
+    controller.DPadLeft.toggleWhenPressed(OrangeLightsCommand())
+    controller.DPadDown.toggleWhenPressed(SeizureLightsCommand())
