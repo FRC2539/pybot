@@ -12,14 +12,23 @@ class Lights(DebuggableSubsystem):
         super().__init__('Lights')
         self.lights = Spark(ports.lights.lightControllerID)
 
-        self.variedcolor = -0.99
 
-        NetworkTables.initialize(server='roborio-2539-frc.local')
+    '''
+    Light Mapping:
+        Intake:     - Has Game Piece:       Solid Green
 
-        lightTable = NetworkTables.getTable('lightTable')
+        Auto:       - No Target             Solid Red
+                    - Sees Target, Moving   Blink Purple (fast)
+                    - In position           Solid Blue
 
-        lightTable.putBoolean('lightsOn', False)
-        lightTable.putBoolean('killLights', False)
+        Loading:    - Hatch Panel           Blink Yellow (fast)
+                    - Cargo                 Blink Pink (fast)
+
+        Seizure Mode at end of match        Seizure Mode
+
+        Issue                               Blink Red (slow)
+    '''
+
 
     def set(self, pulseWidth):
         self.lights.set(pulseWidth)
