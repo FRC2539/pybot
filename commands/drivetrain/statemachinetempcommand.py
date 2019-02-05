@@ -51,27 +51,33 @@ class StateMachineTempCommand(Command):
 
     def execute(self):
 
-        if self.num >= 100:
+        if self.num >= 50:
             #self.stateMachineTable.putNumber('returnNumber', self.num)
 
             if Config('cameraInfo/tapeFound', False):
-                print("found")
+
 
 
                 robot.drivetrain.stop()
 
                 tapeX = Config('cameraInfo/tapeX', -1)
-
+                print("f-"+str(tapeX))
+                offset = (tapeX - (480/2))/480 * 52
+                print("offset:"+str(offset))
+                self._pivot(offset)
+                '''
                 if tapeX <= 290:
                     print("left-"+str(int(tapeX)))
-                    offset = -((260 - tapeX)/15)
+                    #offset = -((260 - tapeX)/15)
+                    offset = (tapeX - (480/2))/480 * 72
                     print("offset:"+str(-offset))
                     self._pivot(-offset)
 
 
                 elif tapeX >=325:
                     print("right-"+str(int(tapeX)))
-                    offset = (tapeX - 310)/15
+                    #offset = (tapeX - 310)/15
+                    offset = (tapeX - (480/2))/480 * 72
                     print("offset:"+str(offset))
                     self._pivot(offset)
 
@@ -79,10 +85,12 @@ class StateMachineTempCommand(Command):
                 else:
                     print("centered"+(str(int(tapeX))))
 
-            else:
-                self._pivot(self.degrees)
+                '''
 
-                print("turning")
+            #else:
+                #self._pivot(self.degrees)
+
+                #print("turning")
             self.num = 0
         else:
             self.num += 1
