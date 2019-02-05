@@ -44,13 +44,14 @@ class SeizureLightsCommand(Command):
             self.colorvalue += 1
 
         elif self.colorvalue <= 8:
-            robot.lights.solidViolet()
+            robot.lights.solidPurple()
             self.colorvalue = 0
 
         else:
             self.colorvalue = 0
             print('Uh-oh')
 
-        time.sleep(0.03634273462768745736756824367364)
+        time.sleep(0.04)
+
     def end(self):
         robot.lights.off()

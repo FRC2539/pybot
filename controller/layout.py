@@ -23,6 +23,8 @@ from commands.lights.teamcolorlightscommand import TeamColorLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
 from commands.lights.chaselightscommand import ChaseLightsCommand
+from commands.lights.blinklightscommand import BlinkLightsCommand
+
 
 def init():
     '''
@@ -54,11 +56,12 @@ def init():
     controller.Back.whenPressed(ResetCommand())
     controller.LeftTrigger.whileHeld(DeelevateCommand())
     controller.LeftBumper.whileHeld(ElevateCommand())
+    controller.RightTrigger.whileHeld(BlinkLightsCommand('blue'))
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
     controller.X.whenPressed(LightsOffCommand())
     controller.Y.toggleWhenPressed(ChaseLightsCommand())
     controller.DPadUp.whenPressed(SlowEjectCommand())
-    controller.DPadRight.toggleWhenPressed(FireLightsCommand())
-    controller.DPadLeft.toggleWhenPressed(OrangeLightsCommand())
-    controller.DPadDown.toggleWhenPressed(SeizureLightsCommand())
+    controller.DPadRight.whenPressed(FireLightsCommand())
+    controller.DPadLeft.whenPressed(OrangeLightsCommand())
+    controller.DPadDown.whenPressed(SeizureLightsCommand())

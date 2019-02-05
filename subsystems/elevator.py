@@ -59,5 +59,3 @@ class Elevator(DebuggableSubsystem):
 
     def goToLevel(self, level):
         self.setPosition(self.levels[level])
-
-    #def goToLevel(self, level)

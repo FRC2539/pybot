@@ -3,6 +3,7 @@ from custom import driverhud
 from wpilib import Spark
 from networktables import NetworkTables
 
+import time
 import ports
 
 class Lights(DebuggableSubsystem):
@@ -12,6 +13,19 @@ class Lights(DebuggableSubsystem):
         super().__init__('Lights')
         self.lights = Spark(ports.lights.lightControllerID)
 
+        self.colors = {
+                        'black' : 0.99,
+                        'white' : 0.93,
+                        'red' : 0.61,
+                        'green' : 0.71,
+                        'blue' : 0.83,
+                        'purple' : 0.91,
+                        'pink' : 0.57,
+                        'yellow' : 0.69,
+                        'orange' : 0.63,
+                        'fire' : -0.57,
+                        'chase' : -0.31
+            }
 
     '''
     Light Mapping:
@@ -37,34 +51,34 @@ class Lights(DebuggableSubsystem):
         self.set(val)
 
     def off(self):
-        self.set(0.99)
+        self.set(self.colors['black'])
 
     def solidRed(self):
-        self.set(0.61)
+        self.set(self.colors['red'])
 
     def solidGreen(self):
-        self.set(0.71)
+        self.set(self.colors['green'])
 
     def solidYellow(self):
-        self.set(0.69)
+        self.set(self.colors['yellow'])
 
     def solidBlue(self):
-        self.set(0.83)
+        self.set(self.colors['blue'])
 
     def solidWhite(self):
-        self.set(0.93)
+        self.set(self.colors['white'])
 
     def solidPink(self):
-        self.set(0.57)
+        self.set(self.colors['pink'])
 
     def solidOrange(self):
-        self.set(0.63)
+        self.set(self.colors['orange'])
 
-    def solidViolet(self):
-        self.set(0.91)
+    def solidPurple(self):
+        self.set(self.colors['purple'])
 
     def fire(self):
-        self.set(-0.57)
+        self.set(self.colors['fire'])
 
     def chase(self):
-        self.set(-0.31)
+        self.set(self.colors['chase'])
