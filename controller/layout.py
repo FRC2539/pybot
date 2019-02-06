@@ -56,7 +56,6 @@ def init():
     controller.Back.whenPressed(ResetCommand())
     controller.LeftTrigger.whileHeld(DeelevateCommand())
     controller.LeftBumper.whileHeld(ElevateCommand())
-    controller.RightTrigger.whileHeld(BlinkLightsCommand('blue'))
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
     controller.X.whenPressed(LightsOffCommand())

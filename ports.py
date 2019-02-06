@@ -22,6 +22,7 @@ lights.lightControllerID = 0
 
 elevator = PortsList()
 elevator.motorID = 5
+elevator.limit = 0
 
 intake = PortsList()
 intake.motorID = 10

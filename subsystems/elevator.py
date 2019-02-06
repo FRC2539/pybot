@@ -1,5 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from rev import CANSparkMax, MotorType, ControlType
+from wpilib import DigitalInput
 
 import ports
 
@@ -14,7 +15,9 @@ class Elevator(DebuggableSubsystem):
         self.encoder = self.motor.getEncoder()
         self.PIDController = self.motor.getPIDController()
 
-        self.encoderOffset = 0
+        self.limit = DigitalInput(ports.elevator.limit)
+
+        self.zero = 0
 
         #These are temporary and need to be finalized for competition.
         self.levels = {
@@ -35,10 +38,15 @@ class Elevator(DebuggableSubsystem):
 
     def down(self):
         self.set(-0.5)
+        isZero = self.isAtZero()
+        if isZero:
+            self.zero = self.getPosition()
+        return isZero
 
 
     def stop(self):
         self.setPosition(self.getPosition())
+
 
     def set(self, speed):
         self.motor.set(speed)
@@ -52,9 +60,13 @@ class Elevator(DebuggableSubsystem):
         return self.encoder.getPosition()
 
 
-    def setZero(self):
-        self.encoderOffset = self.getPosition()
-        self.setPosition(self.encoderOffset)
+    def isAtZero(self):
+        return not self.limit.get()
+
+
+    def reZero(self):
+        self.zero = self.getPosition()
+        self.setPosition(self.zero)
 
 
     def goToLevel(self, level):
