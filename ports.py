@@ -17,18 +17,19 @@ drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
 
 lights = PortsList()
-'''PWM'''
-lights.lightControllerID = 0
+lights.lightControllerID = 0 #PWM
 
 elevator = PortsList()
 elevator.motorID = 5
-elevator.limit = 0
+elevator.limit = 1 #DIO
 
 intake = PortsList()
 intake.motorID = 10
+intake.lightSensor = 0 #DIO
 
 arm = PortsList()
 arm.motorID = 6
+arm.limit = 2 #DIO
 
 climber = PortsList()
 climber.backRackMotorID = 11

@@ -15,4 +15,5 @@ class SlowEjectCommand(TimedCommand):
 
 
     def end(self):
+        robot.lights.off()
         robot.intake.stop()

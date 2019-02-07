@@ -1,5 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import ControlMode, NeutralMode, WPI_TalonSRX
+from wpilib import DigitalInput
 
 import ports
 
@@ -11,14 +12,16 @@ class Intake(DebuggableSubsystem):
         super().__init__('Intake')
 
         self.motor = WPI_TalonSRX(ports.intake.motorID)
+        self.motor.setNeutralMode(NeutralMode.Brake)
 
+        self.cargo = DigitalInput(ports.intake.lightSensor)
 
     def intake(self):
         self.motor.set(0.5)
 
 
     def eject(self):
-        self.motor.set(-1.0)
+        self.motor.set(-0.5)
 
 
     def slowEject(self):
@@ -27,3 +30,7 @@ class Intake(DebuggableSubsystem):
 
     def stop(self):
         self.motor.stopMotor()
+
+
+    def hasCargo(self):
+        return self.cargo.get()
