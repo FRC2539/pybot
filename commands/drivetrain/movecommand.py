@@ -23,6 +23,7 @@ class MoveCommand(Command):
 
 
     def initialize(self):
+        print("move command init")
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0

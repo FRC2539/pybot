@@ -32,6 +32,8 @@ class AutonomousCommandGroup(CommandGroup):
 
         #self.addParallel(StateMachineTempCommand())
 
+        #self.addSequential(StateMachineTempCommand())
+
         self.addSequential(NewRampingSpeedCommand(60, 600))
 
         #self.addSequential(PivotCommand(20))
