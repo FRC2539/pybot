@@ -29,10 +29,11 @@ class AutonomousCommandGroup(CommandGroup):
 
         #self.addSequential(SetSpeedCommand(800))
 
-        self.addParallel(StateMachineTempCommand())
+        #self.addParallel(StateMachineTempCommand())
+        self.addSequential(StateMachineTempCommand())
 
 
-        #self.addSequential(PivotCommand(20))
+        self.addSequential(PivotCommand(20))
 
         '''
         self.addSequential(SetSpeedCommand(1500))
