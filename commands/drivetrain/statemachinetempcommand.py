@@ -87,7 +87,9 @@ class StateMachineTempCommand(Command):
 
         self.sign = 1
 
-        robot.drivetrain.setSpeedLimit(600)
+        #robot.drivetrain.setSpeedLimit(600)
+
+        self.heading = []
 
         self._checkforTape()
 
@@ -99,72 +101,66 @@ class StateMachineTempCommand(Command):
     def execute(self):
         #print("here")
 
-        if self.sock != -1:
-            data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
-            print("1 received message:" + str(data))
-            self.tmessage = data.decode("utf-8")
-            self.message = self.tmessage.split(",")
-            self.tapeFound = self.message[0].split(":")[1]
-            self.tapeX = float(self.message[1].split(":")[1])
-            self.tapeDistance = float(self.message[2].split(":")[1])
 
-            #print("tf-"+str(tapeFound))
-            #print("tx: "+str(tapeX))
-            print("td: "+str(self.tapeDistance))
+        if self.num >= 20:
+            #robot.drivetrain.setPositions(self.targetPositions)
 
-            if self.tapeFound == "True":
-                #print("tape")
-                self.offset = self.tapeX #(self.tapeX - (640/2))/640 * 5
-                #print("offset: "+str(offset))
-                #if tapeDistance <= 4:
-                #    offset = 0
-                #elif offset <= 5 and offset >= -5:
-                #    offset = 0
+            if self.sock != -1:
+                data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
+                #print("1 received message:" + str(data))
+                self.tmessage = data.decode("utf-8")
+                self.message = self.tmessage.split(",")
+                self.tapeFound = self.message[0].split(":")[1]
+                self.tapeX = float(self.message[1].split(":")[1])
+                self.tapeDistance = float(self.message[2].split(":")[1])
+                #self.tapeDistance -= 12
+                print("ctd: "+str(self.tapeDistance) + " tx " + str(self.tapeX) + " tf"+ str(self.tapeFound))
 
-                if self.tapeDistance <= 70:
-                    self.tapeDistance -= 70
-                    #self.moveDistance = 0
-                    #self.offset = 0
-                    #print("too close, stopping")
-                    #robot.drivetrain.stop()
-                else:
+                if self.tapeFound == "True":
+                    print("has tape")
+                    print("tapeX: "+str(self.tapeX))
+                    self.tapeX = self.tapeX /4
+                    print("tapeX_half: "+str(self.tapeX))
+                    if self.tapeX <= -2 or self.tapeX >= 2:
 
 
-                    self.offset = 0
-                    #moveDistance = (tapeDistance - 60) * Config('DriveTrain/ticksPerInch')
-                    self.moveDistance = (6) * Config('DriveTrain/ticksPerInch')
-                    #print("pivot and move: "+str(offset)+"% "+str(moveDistance))
+                        offset = self._calculateDisplacement(self.tapeX) * self.direction
+                        targetPositions = []
+                        sign = 1
+
+                        for i, position in enumerate(self.heading):
+                            side = i % 2
+
+                            if self.pivotSide == side:
+                                position += offset
+                                position = position * sign
+                                sign *= -1
+
+                            targetPositions.append(position)
+
+                        if self.tapeDistance <= 70:
+                            print("slow down")
+                            robot.drivetrain.setSpeedLimit(200)
+
+                        if self.tapeDistance <= 50:
+                            #robot.drivetrain.move(0, 0, 0)
+                            print("stop")
+                            #robot.drivetrain.setPositions(robot.drivetrain.getPositions())
+                            #robot.drivetrain.stop()
+
+                        print("correcting turn"+ str(targetPositions))
+                        robot.drivetrain.setPositions(targetPositions)
 
 
+                #else:
+                     #self._pivotandmove(0, 0)
+                     #robot.drivetrain.move(0, 0, 0)
 
-                    #self._pivotandmove(offset, moveDistance)
+        #self._checkforTape()
+            self.num = 0
 
-                    self.targetPositions = []
+        self.num += 1
 
-                    md = 90 * Config('DriveTrain/ticksPerInch')#moveDistance
-                    self.x = 0
-                    for position in robot.drivetrain.getPositions():
-                        if self.x % 2 == 0:
-                            self.targetPositions.append(position + md)
-                        else:
-                            self.targetPositions.append(position - md)
-                        self.x += 1
-
-                    #print("moving: "+ str(moveDistance / Config('DriveTrain/ticksPerInch')))
-                    #print("otarget-"+str(robot.drivetrain.getPositions()))
-                    #print("ntarget-"+str(self.targetPositions))
-
-                    robot.drivetrain.setSpeedLimit(1200)
-
-                    if self.num >= 10:
-                        robot.drivetrain.setPositions(self.targetPositions)
-                        self.num = 0
-
-                self.num += 1
-
-            else:
-                print("no tape")
-                #robot.drivetrain.stop()
 
 
 
@@ -175,21 +171,72 @@ class StateMachineTempCommand(Command):
 
     def _checkforTape(self):
         if self.sock != -1:
+            data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
+            #print("1 received message:" + str(data))
+            self.tmessage = data.decode("utf-8")
+            self.message = self.tmessage.split(",")
+            self.tapeFound = self.message[0].split(":")[1]
+            self.tapeX = float(self.message[1].split(":")[1])
+            self.tapeDistance = float(self.message[2].split(":")[1])
+            self.tapeDistance -= 12
 
-            try:
-                #print("while")
-                data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
-                tmessage = data.decode("utf-8")
-                print("received message:" + str(tmessage))
+
+
+            if self.tapeFound == "True":
+                #print("tape")
+                #self.offset = self.tapeX #(self.tapeX - (640/2))/640 * 5
+                #print("offset: "+str(offset))
+                #if tapeDistance <= 4:
+                #    offset = 0
+                #elif offset <= 5 and offset >= -5:
+                #    offset = 0
+
+                #if self.tapeX <= -1 or self.tapeX >= 1:
+
+                    #print("tapeX within range: "+str(self.tapeX))
+                    #self.tapeX = 0
+
+                if self.tapeX <= 5 or self.tapeX >= -5:
+                    print("rotate only over 5")
+                    self.distance = 0
+
+                robot.drivetrain.setSpeedLimit(800)
+                if self.tapeDistance <= 40:
+                    print("within 40")
+                    #robot.drivetrain.move(0, 0, 0)
+                    robot.drivetrain.setSpeedLimit(100)
+                    #self.moveDistance = (self.tapeDistance)
+                    #self.tapeDistance -= 70
+                    #self.moveDistance = 0
+                    #self.offset = 0
+                    #print("too close, stopping")
+                    #robot.drivetrain.stop()
+                    #if self.tapeDistance <= 10:
+                    #    self.moveDistance = (0)
+
+                #else:
+                    #robot.drivetrain.setSpeedLimit(800)
+                    #self.offset = 0
+                    #moveDistance = (tapeDistance - 60) * Config('DriveTrain/ticksPerInch')
+                    #self.moveDistance = (self.tapeDistance)
+                    #print("pivot and move: "+str(offset)+"% "+str(moveDistance))
+
+
+                print("tf-"+str(self.tapeFound))
+                print("tx: "+str(self.tapeX))
+                print("td: "+str(self.tapeDistance))
+
+                if self.tapeX == 0 and self.tapeDistance == 0:
+                    print('no td and tx')
+                else:
+                    self._pivotandmove(self.tapeX, self.tapeDistance)
 
 
 
-
-
-            except Exception as seriousbusiness:
-            #except:
-                print("error- "+ str(seriousbusiness))
-                #print("udp message error")
+            else:
+                print("no tape")
+                #robot.drivetrain.stop()
+                #robot.drivetrain.move(0, 0, 0)
 
     def _move(self, distance):
         self.targetPositions = []
@@ -209,26 +256,36 @@ class StateMachineTempCommand(Command):
         robot.drivetrain.setPositions(self.targetPositions)
 
     def _pivotandmove(self, tdegrees, tdistance):
+
+        print("pm turning: "+ str(tdegrees))
         offset = self._calculateDisplacement(tdegrees) * self.direction
+        #offset = 0
+        tdistance = tdistance * Config('DriveTrain/ticksPerInch')
+        #print("offset ticks: "+str(offset))
+        #print("pm dist ticks: "+str(tdistance))
         targetPositions = []
         sign = 1
+
         for i, position in enumerate(robot.drivetrain.getPositions()):
             side = i % 2
+            #print("side: "+str(self.pivotSide)+ " startPos: "+ str(position))
             if self.pivotSide == side:
                 position += offset
-                position -= tdistance
-                position = position * sign
-                sign *= -1
-            else:
-                position += tdistance
                 position = position * sign
                 sign *= -1
 
+
+            if i % 2 == 0:
+                position += tdistance
+            else:
+                position -= tdistance
+
+            #print("side: "+str(self.pivotSide)+ " setPos: "+ str(position))
             targetPositions.append(position)
 
-        print(robot.drivetrain.getPositions())
-        print("newPos- "+str(targetPositions))
-
+        #print("oldPos: "+ str(robot.drivetrain.getPositions()))
+        #print("newPos: "+str(targetPositions))
+        self.heading = targetPositions
         robot.drivetrain.setPositions(targetPositions)
 
     def _calculateDisplacement(self, tdegrees):
@@ -244,7 +301,10 @@ class StateMachineTempCommand(Command):
 
 
     def isFinished(self):
-
+        #print("check finished: "+ str(self._finished))
+        if self.heading == robot.drivetrain.getPositions():
+            self._finished = True
+            print("finished")
         return self._finished
 
 
