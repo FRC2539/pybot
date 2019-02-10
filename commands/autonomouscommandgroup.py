@@ -18,6 +18,7 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
 from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
+from commands.drivetrain.newrampingspeedcommand import NewRampingSpeedCommand
 from commands.drivetrain.statemachinetempcommand import StateMachineTempCommand
 
 class AutonomousCommandGroup(CommandGroup):
@@ -30,13 +31,15 @@ class AutonomousCommandGroup(CommandGroup):
         #self.addSequential(SetSpeedCommand(800))
 
         #self.addParallel(StateMachineTempCommand())
-        self.addSequential(StateMachineTempCommand())
 
+        #self.addSequential(StateMachineTempCommand())
 
-        self.addSequential(PivotCommand(20))
+        self.addSequential(NewRampingSpeedCommand(60, 600))
+
+        #self.addSequential(PivotCommand(20))
 
         '''
-        self.addSequential(SetSpeedCommand(1500))
+        #self.addSequential(SetSpeedCommand(1500))
         self.addSequential(PivotCommand(45), 2)
         self.addParallel(GoToHeightCommand('switch'))
         self.addParallel(IntakeCommand(), 10)
