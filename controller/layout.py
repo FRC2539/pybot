@@ -22,8 +22,6 @@ from commands.lights.orangelightscommand import OrangeLightsCommand
 from commands.lights.teamcolorlightscommand import TeamColorLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
-from commands.lights.chaselightscommand import ChaseLightsCommand
-from commands.lights.blinklightscommand import BlinkLightsCommand
 
 
 def init():
@@ -45,10 +43,11 @@ def init():
     logicalaxes.driveY = driveStick.Y
     logicalaxes.driveRotate = rotateStick.X
 
+    driveStick.trigger.toggleWhenPressed(IntakeCommand())
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    #rotateStick.trigger.whenPressed(HolonomicMoveCommand(0, 60, 90))
+    rotateStick.trigger.whenPressed(EjectCommand())
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
@@ -59,8 +58,7 @@ def init():
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
     controller.X.whenPressed(LightsOffCommand())
-    controller.Y.toggleWhenPressed(ChaseLightsCommand())
+    controller.Y.whenPressed(HolonomicMoveCommand(70, 54, 45))
     controller.DPadUp.whenPressed(SlowEjectCommand())
-    controller.DPadRight.whenPressed(FireLightsCommand())
     controller.DPadLeft.whenPressed(OrangeLightsCommand())
     controller.DPadDown.whenPressed(SeizureLightsCommand())

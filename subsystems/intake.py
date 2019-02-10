@@ -17,15 +17,15 @@ class Intake(DebuggableSubsystem):
         self.cargo = DigitalInput(ports.intake.lightSensor)
 
     def intake(self):
-        self.motor.set(0.5)
+        self.motor.set(0.75)
 
 
     def eject(self):
-        self.motor.set(-0.5)
+        self.motor.set(-0.75)
 
 
     def slowEject(self):
-        self.motor.set(-0.6)
+        self.motor.set(-0.65)
 
 
     def stop(self):

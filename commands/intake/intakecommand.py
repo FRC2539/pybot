@@ -1,5 +1,5 @@
 from wpilib.command.command import Command
-
+import time
 import robot
 
 class IntakeCommand(Command):
@@ -24,7 +24,7 @@ class IntakeCommand(Command):
 
 
     def execute(self):
-        self.hasCargo = robot.intake.hasCargo()
+        self.hasCargo = not robot.intake.hasCargo()
 
         if self.cargoCount >= 3 and self.hasCargo:
             self.cargoCount = 0
@@ -46,4 +46,7 @@ class IntakeCommand(Command):
             robot.lights.solidGreen()
         else:
             robot.lights.off()
+
+        time.sleep(0.25)
+
         robot.intake.stop()

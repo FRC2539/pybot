@@ -17,7 +17,7 @@ class MecanumDrive(BaseDrive):
         self.resetGyro()
         self.isFieldOriented = True
 
-        self.strafeTicksPerInch = 335
+        self.strafeTicksPerInch = 258 #Experimental value, reccomended to re-test for every robot.
 
 
     def setUseFieldOrientation(self, isFieldOriented=True):
