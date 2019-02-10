@@ -142,6 +142,18 @@ class BaseDrive(DebuggableSubsystem):
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
+    def movePer(self, left, right):
+        #speeds = self._calculateSpeeds(x, y, rotate / 2)
+        #print("active motors: "+str(self.activeMotors))
+        x = 0
+        for motor in self.activeMotors:
+            #print("x: "+str(x%2))
+            if x % 2 == 0:
+                motor.set(ControlMode.PercentOutput, left)
+            else:
+                motor.set(ControlMode.PercentOutput, right * -1)
+            x += 1
+
 
     def setPositions(self, positions):
         '''
