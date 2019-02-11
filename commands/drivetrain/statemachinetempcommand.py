@@ -45,7 +45,7 @@ class StateMachineTempCommand(Command):
             print("no udp")
             self.sock = -1
 
-        self.maxSpeed = 50
+        self.maxSpeed = 80
 
 
 
@@ -66,7 +66,7 @@ class StateMachineTempCommand(Command):
                 #print("has tape")
                 #print("tapeX: "+str(self.tapeX))
                 #print("tapeDistance: " + str(self.tapeDistance))
-                if self.tapeDistance <= 90 and self.tapeDistance > 55:
+                if self.tapeDistance <= 65 and self.tapeDistance > 55:
                     #print("slow down")
                     speed = 25
                     robot.drivetrain.move(0, 0, 0)
