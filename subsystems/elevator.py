@@ -35,19 +35,19 @@ class Elevator(DebuggableSubsystem):
 
 
     def up(self):
-        isTop = self.getPosition() >= self.upperLimit
+        isTop = False #self.getPosition() >= self.upperLimit
 
         if isTop:
             self.stop()
         else:
-            self.set(0.5)
+            self.set(1)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isTop
 
 
     def down(self):
-        isZero = self.isAtZero()
+        isZero = False #self.isAtZero()
 
         if isZero:
             self.stop()
@@ -90,3 +90,9 @@ class Elevator(DebuggableSubsystem):
 
     def goToFloor(self):
         self.goToLevel('floor')
+
+
+    def initDefaultCommand(self):
+        from commands.elevator.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())

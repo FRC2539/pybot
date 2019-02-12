@@ -60,5 +60,3 @@ def init():
     controller.X.whenPressed(LightsOffCommand())
     controller.Y.whenPressed(HolonomicMoveCommand(70, 54, 45))
     controller.DPadUp.whenPressed(SlowEjectCommand())
-    controller.DPadLeft.whenPressed(OrangeLightsCommand())
-    controller.DPadDown.whenPressed(SeizureLightsCommand())
