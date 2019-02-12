@@ -2,17 +2,17 @@ from wpilib.command.command import Command
 
 import robot
 
-class GoToLevelCommand(Command):
+class ArmGoToLevelCommand(Command):
 
     def __init__(self, level):
-        super().__init__('Go To Level')
+        super().__init__('Arm Go To Level')
 
         self.requires(robot.elevator)
         self.level = level
 
 
     def initialize(self):
-        robot.elevator.goToLevel(self.level)
+        robot.arm.goToLevel(self.level)
 
 
     def execute(self):

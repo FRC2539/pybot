@@ -1,21 +1,20 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from rev import CANSparkMax, MotorType, ControlType
+import ports
 from wpilib import DigitalInput
 
-import ports
 
-
-class Elevator(DebuggableSubsystem):
+class Arm(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
-        super().__init__('Elevator')
+        super().__init__('Arm')
 
-        self.motor = CANSparkMax(ports.elevator.motorID, MotorType.kBrushless)
+        self.motor = CANSparkMax(ports.arm.motorID, MotorType.kBrushless)
         self.encoder = self.motor.getEncoder()
         self.PIDController = self.motor.getPIDController()
 
-        self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
+        self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
         self.upperLimit = 7000
 
@@ -30,7 +29,8 @@ class Elevator(DebuggableSubsystem):
                         'cargoBalls' : 3000,
                         'lowBalls' : 2500,
                         'midBalls' : 4500,
-                        'highBalls' : 6500
+                        'highBalls' : 6500,
+                        'start' : 7000
                         }
 
 
@@ -90,3 +90,7 @@ class Elevator(DebuggableSubsystem):
 
     def goToFloor(self):
         self.goToLevel('floor')
+
+
+    def goToStartingPosition(self):
+        self.goToLevel('start')
