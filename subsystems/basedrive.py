@@ -174,6 +174,35 @@ class BaseDrive(DebuggableSubsystem):
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
 
+    def setRampingPositions(self, positions, distance, endSpeed, speedLimit):
+        '''
+        Have the motors move to the given positions. There should be one
+        position per active motor. Extra positions will be ignored.
+        '''
+        self.ticksPerInch = 233.5
+        self.speedDifferential = speedLimit / distance
+        moveIsComplete = True
+        currentTicks = 0
+        self.totalTicks = distance * self.ticksPerInch
+
+        if not self.useEncoders:
+            raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        while currentTicks < self.totalTicks:
+
+            for motor, position in zip(self.activeMotors, positions):
+                motor.selectProfileSlot(1, 0)
+
+                motor.configMotionCruiseVelocity(int(self.speedLimit - self.speedDifferential), 0)
+
+                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+
+                motor.configMotionAcceleration(int(self.speedLimit), 0)
+                motor.set(ControlMode.MotionMagic, position)
+            print('driving')
+            currentTicks += self.totalTicks
+
+        return 1
 
     def setPositionsWithGyro(self, positions):
         if not self.useEncoders:

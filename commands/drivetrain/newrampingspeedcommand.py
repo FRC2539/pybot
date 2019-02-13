@@ -15,6 +15,9 @@ class NewRampingSpeedCommand(Command):
         self.endSpeed = endSpeed
         self._isFinished = False
 
+    def getSpeedLimit(self):
+        return robot.drivetrain.speedLimit
+
     def initialize(self):
         self.count = 0
         self.ticksPerInch = 233.5
@@ -22,7 +25,7 @@ class NewRampingSpeedCommand(Command):
 
         self.currentPos = robot.drivetrain.getPositions()
 
-        self.maxSpeed = robot.drivetrain.speedLimit
+        self.maxSpeed = 600 #robot.drivetrain.speedLimit
         self.oldSpeed = robot.drivetrain.speedLimit
 
         self.speedDifferential = abs(self.maxSpeed / self.distance)
@@ -31,7 +34,7 @@ class NewRampingSpeedCommand(Command):
         print('old positions' + str(self.currentPos))
 
         for i in self.currentPos:
-            inches = self.ticksPerInch * self.distance
+            inchesinTicks = self.ticksPerInch * self.distance #* self.distance
 
 
 
@@ -40,40 +43,49 @@ class NewRampingSpeedCommand(Command):
                 if i == self.currentPos[1]:
                     print('why')
                     i *= -1
-                self.newPos.append(i - inches)
+                self.newPos.append(i - inchesinTicks)
 
             else:
                 if i == self.currentPos[1]:
                     print('hmm')
                     i *= 1
-                    self.newPos.append(i - inches)
+                    self.newPos.append(i - inchesinTicks)
 
                 else:
-                    self.newPos.append(i + inches)
+                    self.newPos.append(i + inchesinTicks)
 
         self.currentPos = self.newPos
         print('New positions: ' + str(self.currentPos))
 
         # Moving
-        robot.drivetrain.setPositions(self.currentPos)
-        print('Started Moving')
+
+        self.speed = robot.drivetrain.speedLimit
 
     def execute(self):
-        if self.count >= 30:
-            self.maxSpeed = 600#-= self.speedDifferential
 
-            try:
-                robot.drivetrain.setSpeedLimit(self.maxSpeed)
-            except ValueError:
-                self.maxSpeed = 2500
+        speedLimit = self.getSpeedLimit()
 
-            if self.maxSpeed < 100:
-                self._isFinished = True
+        val = robot.drivetrain.setRampingPositions(self.newPos, self.distance, self.endSpeed, speedLimit)
 
-                #   self.count += 1
-        else:
-            self.count += 1
+        if val:
+            self._isFinished= True
+    """
+        print('started execute')
 
+
+        try:
+            robot.drivetrain.setSpeedLimit(self.maxSpeed)
+        except ValueError:
+
+
+        #self.maxSpeed = 2500
+
+        if self.maxSpeed < 50:
+            self._isFinished = True
+
+            #   self.count += 1
+
+    """
 
     def isFinshed(self):
         return self._isFinished
@@ -81,4 +93,4 @@ class NewRampingSpeedCommand(Command):
     def end(self):
         print('Done')
         robot.drivetrain.stop()
-        robot.drivetrain.setSpeedLimit(self.oldSpeed)
+       # robot.drivetrain.setSpeedLimit(self.oldSpeed)
