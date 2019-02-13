@@ -20,6 +20,7 @@ from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
 from commands.drivetrain.newrampingspeedcommand import NewRampingSpeedCommand
 from commands.drivetrain.statemachinetempcommand import StateMachineTempCommand
+from commands.drivetrain.leaverampcommand import leaveRampCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -32,7 +33,8 @@ class AutonomousCommandGroup(CommandGroup):
 
         #self.addParallel(StateMachineTempCommand())
 
-        self.addSequential(StateMachineTempCommand())
+        #self.addSequential(StateMachineTempCommand())
+        self.addSequential(leaveRampCommand(35,90,5,90))
 
         #self.addSequential(NewRampingSpeedCommand(60, 600))
 

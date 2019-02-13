@@ -144,7 +144,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def movePer(self, left, right):
         #speeds = self._calculateSpeeds(x, y, rotate / 2)
-        print("active motors: "+str(self.activeMotors))
+        print("l: "+str(left)+" r:"+str(right))
         x = 0
         for motor in self.activeMotors:
             #print("x: "+str(x%2))
