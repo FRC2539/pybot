@@ -11,11 +11,15 @@ class AllExtendCommand(Command):
 
 
     def initialize(self):
-        robot.climber.extendAll()
+        self._finished = False
 
 
     def execute(self):
-        pass
+        self._finished = robot.climber.extendAll()
+
+
+    def isFinished(self):
+        return self._finished
 
 
     def end(self):

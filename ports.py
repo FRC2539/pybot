@@ -36,3 +36,7 @@ climber.rearRackMotorID = 11
 climber.leftRackMotorID = 9
 climber.rightRackMotorID = 8
 climber.driveMotorID = 7
+
+climber.rearRackLimit = 3 #DIO
+climber.leftRackLimit = 4 #DIO
+climber.rightRackLimit = 5 #DIO
