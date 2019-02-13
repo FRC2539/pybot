@@ -32,7 +32,7 @@ arm.motorID = 6
 arm.lowerLimit = 2 #DIO
 
 climber = PortsList()
-climber.backRackMotorID = 11
+climber.rearRackMotorID = 11
 climber.leftRackMotorID = 9
 climber.rightRackMotorID = 8
 climber.driveMotorID = 7

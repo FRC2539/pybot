@@ -15,6 +15,8 @@ class DefaultCommand(Command):
 
 
     def execute(self):
+        print('Current: ' + str(robot.elevator.getPosition()))
+        print('Stop:    ' + str(self.position))
         robot.elevator.setPosition(self.position)
 
 

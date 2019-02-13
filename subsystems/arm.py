@@ -14,6 +14,8 @@ class Arm(DebuggableSubsystem):
         self.encoder = self.motor.getEncoder()
         self.PIDController = self.motor.getPIDController()
 
+        self.motor.setInverted(True)
+
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
         self.upperLimit = 7000
@@ -40,7 +42,7 @@ class Arm(DebuggableSubsystem):
         if isTop:
             self.stop()
         else:
-            self.set(0.5)
+            self.set(0.65)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isTop
@@ -53,7 +55,7 @@ class Arm(DebuggableSubsystem):
             self.stop()
             self.zero = self.getPosition()
         else:
-            self.set(-0.5)
+            self.set(-0.65)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isZero
