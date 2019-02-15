@@ -72,6 +72,7 @@ def init():
     controller.LeftBumper.whileHeld(RaiseCommand())
     controller.RightBumper.whileHeld(AllExtendCommand())
     controller.RightTrigger.whileHeld(AllRetractCommand())
+    '''
     controller.A.whileHeld(DriveForwardCommand())
     controller.B.whileHeld(DriveBackwardCommand())
     controller.X.whileHeld(FrontRetractCommand())
@@ -80,6 +81,6 @@ def init():
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
     controller.X.whenPressed(LightsOffCommand())
-    controller.Y.whenPressed(HolonomicMoveCommand(70, 54, 45))
-    '''
+    #controller.Y.whenPressed(HolonomicMoveCommand(70, 54, 45))
+
     controller.DPadUp.whenPressed(SlowEjectCommand())
