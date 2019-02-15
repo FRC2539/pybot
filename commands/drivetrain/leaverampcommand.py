@@ -21,24 +21,10 @@ class leaveRampCommand(Command):
         self.transitionDistance = transitionDistance * Config('DriveTrain/ticksPerInch')
         self.endDistance = endDistance * Config('DriveTrain/ticksPerInch')
 
-        #print("ss: "+str(self.slowspeed))
-        #print("hs: "+str(self.highspeed))
-        #print("ts: "+str(self.transitionDistance))
-        #print("ed: "+str(self.endDistance))
-        robot.drivetrain.resetGyro()
         self.rotateDistance = rotateDistance * Config('DriveTrain/ticksPerInch')
         self.degrees = degrees
         self.startAngle = robot.drivetrain.getAngle()
-        #self.targetDegrees = robot.drivetrain.getAngleTo(degrees)
 
-        #if self.targetDegrees < 0:
-        #    self.targetDegrees = 360 + self.targetDegrees
-
-        #self.targetAngle = self.startAngle + self.degrees
-
-        #self.transitionDistance = self.transitionDistance + self.startPositions[0]
-
-        #print("startAngle: "+ str(self.startAngle))
 
     def initialize(self):
         self.startPositions = robot.drivetrain.getPositions()
@@ -71,14 +57,6 @@ class leaveRampCommand(Command):
         #print("sd: "+ str(self.distance) + " rd: "+ str(self.rotateDistance))
 
         if self.distance >= self.rotateDistance:
-            #print("past rotateDistance: " + str(self.rotateDistance))
-            #print("degrees: " + str(self.degrees) + " angle progress: " + str(robot.drivetrain.getAngle() - self.startAngle))
-
-            #if self.targetDegrees < 0:
-            #    self.directionX = (self.startAngle - robot.drivetrain.getAngle()) - self.degrees
-            #else:
-            #    self.directionX = self.degrees - (robot.drivetrain.getAngle() - self.startAngle)
-            #print("directionX: "+str(self.directionX))
             direction = ""
             if self.degrees > 0:
                 direction = "add"
@@ -127,20 +105,21 @@ class leaveRampCommand(Command):
 
         robot.drivetrain.movePer(lspeed, rspeed)
 
-    def _calculateDisplacement(self):
-        '''
-        In order to avoid having a separate ticksPerDegree, we calculate it
-        based on the width of the robot base.
-        '''
-        inchesPerDegree = math.pi * Config('DriveTrain/width') / 360
-        totalDistance = self.degrees * inchesPerDegree
-
-        return totalDistance * 2
+    def angleDifference(self, a1, a2):
+        r = (a2 -a1) % 360
+        if (r < -180):
+            r += 360
+        if (r >= 180):
+            r -= 360
+        return r
 
     def isFinished(self):
 
-        #if self.distance >= self.endDistance:
-        #    self._finished = True
+        if self.distance >= self.endDistance:
+            print("finished")
+            robot.drivetrain.move(0, 0, 0)
+            robot.drivetrain.movePer(0, 0)
+            self._finished = True
         return self._finished
 
 

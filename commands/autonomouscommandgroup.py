@@ -33,8 +33,12 @@ class AutonomousCommandGroup(CommandGroup):
 
         #self.addParallel(StateMachineTempCommand())
 
+
+        self.addSequential(leaveRampCommand(40,60,45,100,55,40.236817265))
+        #self.addSequential(leaveRampCommand(35,85,10,130,90,90))
+        #self.addSequential(IntakeCommand(), 10)
+
         #self.addSequential(StateMachineTempCommand())
-        self.addSequential(leaveRampCommand(30,50,5,90,60,45))
 
         #self.addSequential(NewRampingSpeedCommand(60, 600))
 
