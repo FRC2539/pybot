@@ -11,11 +11,16 @@ class ElevateCommand(Command):
 
 
     def initialize(self):
-        robot.elevator.up()
+        self._finished = False
 
 
     def execute(self):
-        pass
+        self._finished = robot.elevator.up()
+        print(robot.elevator.getPosition())
+
+
+    def isFinished(self):
+        return self._finished
 
 
     def end(self):

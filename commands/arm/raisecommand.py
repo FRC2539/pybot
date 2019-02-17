@@ -11,11 +11,16 @@ class RaiseCommand(Command):
 
 
     def initialize(self):
-        robot.arm.up()
+        self._finished = False
 
 
     def execute(self):
-        pass
+        print('Arm:     ' + str(robot.arm.getPosition()))
+        self._finished = robot.arm.up()
+
+
+    def isFinished(self):
+        return self._finished
 
 
     def end(self):

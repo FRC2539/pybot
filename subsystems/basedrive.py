@@ -58,7 +58,7 @@ class BaseDrive(DebuggableSubsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.setUseEncoders()
+        self.setUseEncoders(False)
         self.maxSpeed = Config('DriveTrain/maxSpeed')
         self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
@@ -148,9 +148,6 @@ class BaseDrive(DebuggableSubsystem):
             self.stop()
             return
 
-        angle = self.getAngle()
-        print('ANGLE:  ' + str(angle))
-        print('ROTATE:  ' + str(rotate))
 
     def setPositions(self, positions):
         '''

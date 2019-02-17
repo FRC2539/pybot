@@ -7,16 +7,18 @@ class GoToTapeCommand(Command):
 
     def __init__(self):
         super().__init__('Go To Tape')
+        self.tape = Config('cameraTable/tapeFound')
         self.strafe = Config('cameraTable/tapeStrafe', 0)
         self.distance = Config('cameraTable/tapeDistance', 0)
         self.angle = Config('cameraTable/tapeAngle', 0)
 
-        self.x = None
-        self.y = None
-        self.rotate = None
+        self.x = 0
+        self.y = 0
+        self.rotate = 0
 
 
     def initialize(self):
+        self.seenTape = self.tape.getValue()
         if not robot.drivetrain.isFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
         robot.drivetrain.resetGyro()
@@ -36,7 +38,7 @@ class GoToTapeCommand(Command):
 
 
     def isFinished(self):
-        return abs(self.x) <= 0.05 and abs(self.y) <= 0.05 and abs(self.rotate) <= 0.05
+        return (abs(self.x) <= 0.05 and abs(self.y) <= 0.05 and abs(self.rotate) <= 0.05) or (not self.seenTape)
 
 
     def end(self):

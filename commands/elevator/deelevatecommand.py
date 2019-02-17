@@ -16,7 +16,7 @@ class DeelevateCommand(Command):
 
     def execute(self):
         self._finished = robot.elevator.down()
-
+        print(robot.elevator.getPosition())
 
     def isFinished(self):
         return self._finished

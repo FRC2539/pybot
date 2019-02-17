@@ -17,7 +17,7 @@ class Elevator(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
 
-        self.upperLimit = 7000
+        self.upperLimit = 150
 
         self.zero = 0
 
@@ -35,31 +35,35 @@ class Elevator(DebuggableSubsystem):
 
 
     def up(self):
-        isTop = False #self.getPosition() >= self.upperLimit
+        isTop = self.getPosition() + self.zero >= self.upperLimit
 
         if isTop:
             self.stop()
         else:
-            self.set(1)
-            #self.PIDController.setReference(5000, ControlType.kVelocity)
+            self.set(1.0)
+            #self.PIDController.setReference(4000, ControlType.kVelocity)
 
         return isTop
 
 
     def down(self):
-        isZero = False #self.isAtZero()
+        isZero = self.isAtZero()
 
         if isZero:
             self.stop()
             self.zero = self.getPosition()
         else:
-            self.set(-0.5)
-            #self.PIDController.setReference(5000, ControlType.kVelocity)
+            self.set(-1)
+            #self.PIDController.setReference(-4000, ControlType.kVelocity)
 
         return isZero
 
 
     def stop(self):
+        self.motor.disable()
+
+
+    def hold(self):
         self.setPosition(self.getPosition())
 
 
@@ -91,8 +95,5 @@ class Elevator(DebuggableSubsystem):
     def goToFloor(self):
         self.goToLevel('floor')
 
-
-    def initDefaultCommand(self):
-        from commands.elevator.defaultcommand import DefaultCommand
-
-        self.setDefaultCommand(DefaultCommand())
+    def panelEject(self):
+        self.setPosition(self.getPosition - 0.125)

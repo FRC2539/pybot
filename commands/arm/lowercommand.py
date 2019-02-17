@@ -15,6 +15,7 @@ class LowerCommand(Command):
 
 
     def execute(self):
+        print('Arm:     ' + str(robot.arm.getPosition()))
         self._finished = robot.arm.down()
 
 

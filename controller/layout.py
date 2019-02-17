@@ -10,6 +10,7 @@ from commands.resetcommand import ResetCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
+from commands.drivetrain.donutscommand import DonutsCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -17,6 +18,7 @@ from commands.intake.slowejectcommand import SlowEjectCommand
 
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
+from commands.elevator.panelejectcommand import PanelEjectCommand
 
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
@@ -62,25 +64,34 @@ def init():
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     rotateStick.trigger.whenPressed(EjectCommand())
-    rotateStick.Button6.whenPressed(HolonomicMoveCommand(70, 54, 45))
+    #rotateStick.Button6.whenPressed(HolonomicMoveCommand(70, 54, 45))
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
 
+    '''
     controller.Back.whenPressed(ResetCommand())
     controller.LeftTrigger.whileHeld(LowerCommand())
     controller.LeftBumper.whileHeld(RaiseCommand())
     controller.RightBumper.whileHeld(AllExtendCommand())
     controller.RightTrigger.whileHeld(AllRetractCommand())
-    '''
+
     controller.A.whileHeld(DriveForwardCommand())
     controller.B.whileHeld(DriveBackwardCommand())
     controller.X.whileHeld(FrontRetractCommand())
     controller.Y.whileHeld(RearRetractCommand())
     '''
+
+    controller.LeftTrigger.whileHeld(LowerCommand())
+    controller.LeftBumper.whileHeld(RaiseCommand())
+    controller.RightBumper.whileHeld(UpCommand())
+    controller.RightTrigger.whileHeld(DownCommand())
+
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
-    controller.X.whenPressed(LightsOffCommand())
-    #controller.Y.whenPressed(HolonomicMoveCommand(70, 54, 45))
+    controller.X.whileHeld(DeelevateCommand())
+    controller.Y.whileHeld(ElevateCommand())
+
 
     controller.DPadUp.whenPressed(SlowEjectCommand())
+    controller.DPadDown.whenPressed(PanelEjectCommand())

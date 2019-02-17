@@ -18,7 +18,7 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = 7000
+        self.upperLimit = -105
 
         self.zero = 0
 
@@ -37,12 +37,12 @@ class Arm(DebuggableSubsystem):
 
 
     def up(self):
-        isTop = self.getPosition() >= self.upperLimit
+        isTop = self.getPosition() + self.zero <= self.upperLimit
 
         if isTop:
             self.stop()
         else:
-            self.set(0.65)
+            self.set(0.75)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isTop
@@ -62,6 +62,10 @@ class Arm(DebuggableSubsystem):
 
 
     def stop(self):
+        self.motor.disable()
+
+
+    def hold(self):
         self.setPosition(self.getPosition())
 
 
