@@ -19,7 +19,7 @@ from commands.intake.outtakecommand import OuttakeCommand
 from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
 from commands.drivetrain.newrampingspeedcommand import NewRampingSpeedCommand
-from commands.drivetrain.statemachinetempcommand import StateMachineTempCommand
+from commands.drivetrain.visionmovecommand import visionmoveCommand
 from commands.drivetrain.leaverampcommand import leaveRampCommand
 
 class AutonomousCommandGroup(CommandGroup):
@@ -29,12 +29,28 @@ class AutonomousCommandGroup(CommandGroup):
 
         ds = DriverStation.getInstance()
 
-        #self.addSequential(SetSpeedCommand(800))
-
-        #self.addParallel(StateMachineTempCommand())
+        #find tape and go to it
 
 
-        self.addSequential(leaveRampCommand(40,60,45,100,55,40.236817265))
+        #leave ramp
+        self.addSequential(leaveRampCommand(20,50,24,80,30,15))
+        #self.addSequential(leaveRampCommand(0,50,0,40,1,-35))
+
+        #vision move to tape
+        self.addSequential(visionmoveCommand())
+
+
+
+
+
+
+        #backup and turn from rocket
+        #self.addSequential(leaveRampCommand(-35,50,-24,100,.01,160))
+
+        #self.addSequential(leaveRampCommand(35,35,12,90,0,0))
+        #self.addSequential(leaveRampCommand(35.843219,60,45,100,50,36.236817265))
+
+
         #self.addSequential(leaveRampCommand(35,85,10,130,90,90))
         #self.addSequential(IntakeCommand(), 10)
 

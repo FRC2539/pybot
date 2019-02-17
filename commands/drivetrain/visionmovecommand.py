@@ -13,17 +13,15 @@ import socket
 
 import robot
 
-class StateMachineTempCommand(Command):
 
-
+class visionmoveCommand(Command):
 
     def __init__(self, demo = False):
-        super().__init__('State Machine Temp')
-        #print("init")
-
-        self.demo = demo
+        super().__init__('visionmove')
 
         self.requires(robot.drivetrain)
+        self.demo = demo
+
 
     def initialize(self):
 
@@ -50,6 +48,8 @@ class StateMachineTempCommand(Command):
             self.sock = -1
 
         self.maxSpeed = 70
+
+        print("initialize visionmove")
 
 
 
@@ -145,4 +145,4 @@ class StateMachineTempCommand(Command):
     def end(self):
         #robot.drivetrain.stop()
 
-        print("end")
+        print("ended visionmove")
