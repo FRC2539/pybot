@@ -18,9 +18,11 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OuttakeCommand
 from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
+from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
+from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.newrampingspeedcommand import NewRampingSpeedCommand
 from commands.drivetrain.visionmovecommand import visionmoveCommand
-from commands.drivetrain.leaverampcommand import leaveRampCommand
+from commands.drivetrain.leaverampcommand import LeaveRampCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -29,23 +31,36 @@ class AutonomousCommandGroup(CommandGroup):
 
         ds = DriverStation.getInstance()
 
+
+        #self.addSequential(LeaveRampCommand(-35,50,-24,35,.01,90))
+
         #find tape and go to it
+        #slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0
 
+        #start right to rocket1
+        #self.addParallel(ZeroGyroCommand())
+        #self.addSequential(LeaveRampCommand())
 
-        #leave ramp
-        self.addSequential(leaveRampCommand(20,50,24,80,30,15))
-        #self.addSequential(leaveRampCommand(0,50,0,40,1,-35))
+        #start right to rocket2
+        #self.addParallel(ZeroGyroCommand())
+        self.addSequential(LeaveRampCommand(25,50,30,120,31,45))
+
+        #start right to rocket3
+        #self.addParallel(ZeroGyroCommand())
+        #self.addSequential(LeaveRampCommand(0, 0, 0, 0, 0, 0))
+
+        #start right to cargo1
+        #self.addSequential(LeaveRampCommand(0,0,0,0,0,0))
+
+        #start right to cargo2
+        #self.addSequential(LeaveRampCommand(0,0,0,0,0,0))
+
 
         #vision move to tape
-        self.addSequential(visionmoveCommand())
-
-
-
-
-
+        #self.addSequential(visionmoveCommand())
 
         #backup and turn from rocket
-        #self.addSequential(leaveRampCommand(-35,50,-24,100,.01,160))
+        #self.addSequential(leaveRampCommand(-35,50,-24,35,.01,160))
 
         #self.addSequential(leaveRampCommand(35,35,12,90,0,0))
         #self.addSequential(leaveRampCommand(35.843219,60,45,100,50,36.236817265))

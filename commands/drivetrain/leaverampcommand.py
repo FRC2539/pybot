@@ -6,7 +6,7 @@ import math
 
 import robot
 
-class leaveRampCommand(Command):
+class LeaveRampCommand(Command):
 
     def __init__(self,slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0):
         super().__init__('leave Ramp')
@@ -96,7 +96,24 @@ class leaveRampCommand(Command):
 
             currentAngle = robot.drivetrain.getAngle()
 
+            angleDiff = self.angleDifference(currentAngle, targetAngle)
+            print("angleDiff: "+str(angleDiff))
+            if (-1 <= angleDiff <= 1):
+                print("good and done rotating")
+                self.rotating = False
+                self.rotated = True
+                if self.rotateDistance != 0 and abs(self.distance) >= abs(self.endDistance):
+                    self._finished = True
+                elif abs(self.distance) >= abs(self.endDistance):
+                    self._finished = True
+            else:
+                if self.rotating == True:
+                    lspeed = currentspeed + (.05) * angleDiff
+                    rspeed = currentspeed - (.05) * angleDiff
+                else:
+                    lspeed = currentspeed + (.05) * angleDiff
 
+            '''
             lowtarget = targetAngle - 5
             if lowtarget < 0:
                 if direction == "subtract":
@@ -142,7 +159,7 @@ class leaveRampCommand(Command):
                         lspeed = currentspeed - (.5) #* targetAngle
                     else:
                         rspeed = currentspeed + (.5) #* targetAngle
-
+            '''
 
 
 
