@@ -35,6 +35,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def up(self):
+
         isTop = self.getPosition() + self.zero >= self.upperLimit
 
         if isTop:
@@ -45,8 +46,8 @@ class Elevator(DebuggableSubsystem):
 
         return isTop
 
-
     def down(self):
+
         isZero = self.isAtZero()
 
         if isZero:
@@ -54,10 +55,11 @@ class Elevator(DebuggableSubsystem):
             self.zero = self.getPosition()
         else:
             self.set(-1)
-            #self.PIDController.setReference(-4000, ControlType.kVelocity)
+
+
+           #self.PIDController.setReference(-4000, ControlType.kVelocity)
 
         return isZero
-
 
     def stop(self):
         self.motor.disable()
@@ -96,4 +98,4 @@ class Elevator(DebuggableSubsystem):
         self.goToLevel('floor')
 
     def panelEject(self):
-        self.setPosition(self.getPosition - 0.125)
+        self.setPosition(float(self.getPosition()) - 0.1)

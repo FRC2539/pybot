@@ -17,11 +17,12 @@ class ClimbCommandGroup(CommandGroup):
 
         # Add commands here with self.addSequential() and self.addParallel()
 
-        self.addSequential(AllExtendCommand(), 3)
-        self.addSequential(DriveForwardCommand(), 2)
-        self.addSequential(FrontRetractCommand(), 3)
-        self.addSequential(SetSpeedCommand(1500))
+
+        self.addSequential(AllExtendCommand())
+        self.addSequential(DriveForwardCommand(), 3)
+        self.addSequential(FrontRetractCommand(), 3.5)
+        self.addSequential(SetSpeedCommand(1000))
         self.addParallel(DriveForwardCommand(), 2)
         self.addSequential(MoveCommand(18), 2)
-        self.addSequential(RearRetractCommand(), 3)
+        self.addSequential(RearRetractCommand(), 3.5)
         self.addSequential(MoveCommand(8), 2)

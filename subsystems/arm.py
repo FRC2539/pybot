@@ -18,21 +18,21 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = -105
+        self.upperLimit = -95
 
         self.zero = 0
 
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0,
-                        'lowHatches' : 2000,
-                        'midHatches' : 4000,
-                        'highHatches' : 6000,
-                        'cargoBalls' : 3000,
-                        'lowBalls' : 2500,
-                        'midBalls' : 4500,
-                        'highBalls' : 6500,
-                        'start' : 7000
+                        'lowHatches' : -10,
+                        'midHatches' : -20,
+                        'highHatches' : -35,
+                        'cargoBalls' : -55,
+                        'lowBalls' : -75,
+                        'midBalls' : -90,
+                        'highBalls' : -100,
+                        'start' : -105
                         }
 
 
@@ -42,7 +42,7 @@ class Arm(DebuggableSubsystem):
         if isTop:
             self.stop()
         else:
-            self.set(0.75)
+            self.set(1)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isTop
@@ -55,7 +55,7 @@ class Arm(DebuggableSubsystem):
             self.stop()
             self.zero = self.getPosition()
         else:
-            self.set(-0.65)
+            self.set(-1)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isZero

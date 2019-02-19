@@ -10,6 +10,7 @@ from commands.resetcommand import ResetCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
+from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.donutscommand import DonutsCommand
 
 from commands.intake.intakecommand import IntakeCommand
@@ -32,6 +33,7 @@ from commands.climber.frontretractcommand import FrontRetractCommand
 from commands.climber.rearretractcommand import RearRetractCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.climber.drivebackwardcommand import DriveBackwardCommand
+from commands.climber.climbcommandgroup import ClimbCommandGroup
 
 from commands.lights.firelightscommand import FireLightsCommand
 from commands.lights.orangelightscommand import OrangeLightsCommand
@@ -69,7 +71,7 @@ def init():
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
 
-    '''
+    """
     controller.Back.whenPressed(ResetCommand())
     controller.LeftTrigger.whileHeld(LowerCommand())
     controller.LeftBumper.whileHeld(RaiseCommand())
@@ -80,12 +82,13 @@ def init():
     controller.B.whileHeld(DriveBackwardCommand())
     controller.X.whileHeld(FrontRetractCommand())
     controller.Y.whileHeld(RearRetractCommand())
-    '''
 
+    """
     controller.LeftTrigger.whileHeld(LowerCommand())
     controller.LeftBumper.whileHeld(RaiseCommand())
     controller.RightBumper.whileHeld(UpCommand())
     controller.RightTrigger.whileHeld(DownCommand())
+
 
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
@@ -94,4 +97,7 @@ def init():
 
 
     controller.DPadUp.whenPressed(SlowEjectCommand())
-    controller.DPadDown.whenPressed(PanelEjectCommand())
+    controller.DPadDown.whenPressed(MoveCommand(10))
+
+    controller.DPadLeft.whenPressed(ClimbCommandGroup())
+    controller.DPadRight.whenPressed(PanelEjectCommand())
