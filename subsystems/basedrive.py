@@ -148,6 +148,8 @@ class BaseDrive(DebuggableSubsystem):
             self.stop()
             return
 
+        print(self.getPositions())
+
 
     def setPositions(self, positions):
         '''

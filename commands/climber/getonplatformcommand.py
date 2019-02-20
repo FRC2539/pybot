@@ -2,10 +2,10 @@ from wpilib.command.command import Command
 
 import robot
 
-class DriveForwardCommand(Command):
+class GetOnPlatformCommand(Command):
 
     def __init__(self):
-        super().__init__('Drive Forward')
+        super().__init__('Get On Platform')
 
         self.requires(robot.climber)
 
@@ -15,7 +15,7 @@ class DriveForwardCommand(Command):
 
 
     def execute(self):
-        pass
+        robot.climber.extendAll()
 
 
     def end(self):

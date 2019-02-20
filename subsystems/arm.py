@@ -18,7 +18,7 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = -95
+        self.upperLimit = -90
 
         self.zero = 0
 

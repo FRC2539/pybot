@@ -30,15 +30,15 @@ class Climber(DebuggableSubsystem):
 
 
     def getRightLimit(self):
-        return self.rightLimit.get()
+        return not self.rightLimit.get()
 
 
     def getLeftLimit(self):
-        return self.leftLimit.get()
+        return not self.leftLimit.get()
 
 
     def getRearLimit(self):
-        return self.rearLimit.get()
+        return not self.rearLimit.get()
 
 
     def stopRacks(self):
@@ -67,7 +67,7 @@ class Climber(DebuggableSubsystem):
 
 
     def extendLeft(self):
-        atLimit = self.getRearLimit()
+        atLimit = self.getLeftLimit()
         if not atLimit:
             self.leftRackMotor.set(1)
         else:
@@ -83,11 +83,11 @@ class Climber(DebuggableSubsystem):
 
 
     def extendRear(self):
-        atLimit = self.getLeftLimit()
+        atLimit = self.getRearLimit()
         if not atLimit:
             self.rearRackMotor.set(1)
         else:
-            self.stopRightRack()
+            self.stopRearRack()
 
 
     def retractAll(self):
@@ -109,8 +109,8 @@ class Climber(DebuggableSubsystem):
 
 
     def driveForward(self):
-        self.driveMotor.set(0.6)
+        self.driveMotor.set(0.8)
 
 
     def driveBackward(self):
-        self.driveMotor.set(-0.6)
+        self.driveMotor.set(-0.8)

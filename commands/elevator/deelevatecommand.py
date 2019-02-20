@@ -14,8 +14,10 @@ class DeelevateCommand(Command):
         self._finished = False
         robot.elevator.down()
 
+
     def execute(self):
         self._finished = robot.elevator.down()
+
 
     def isFinished(self):
         return self._finished

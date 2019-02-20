@@ -82,8 +82,8 @@ def init():
     controller.B.whileHeld(DriveBackwardCommand())
     controller.X.whileHeld(FrontRetractCommand())
     controller.Y.whileHeld(RearRetractCommand())
-
     """
+
     controller.LeftTrigger.whileHeld(LowerCommand())
     controller.LeftBumper.whileHeld(RaiseCommand())
     controller.RightBumper.whileHeld(UpCommand())
@@ -95,9 +95,8 @@ def init():
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
 
-
     controller.DPadUp.whenPressed(SlowEjectCommand())
     controller.DPadDown.whenPressed(MoveCommand(10))
 
     controller.DPadLeft.whenPressed(ClimbCommandGroup())
-    controller.DPadRight.whenPressed(PanelEjectCommand())
+    #controller.DPadRight.whenPressed(PanelEjectCommand())
