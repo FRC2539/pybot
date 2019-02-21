@@ -5,7 +5,7 @@ import robot
 
 class MoveCommand(Command):
 
-    def __init__(self, distance, avoidCollisions=True, name=None):
+    def __init__(self, distance, avoidCollisions=False, name=None):
         '''
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -38,10 +38,14 @@ class MoveCommand(Command):
             self.targetPositions.append(position + offset * sign)
             sign *= -1
 
+        print('Targets: ' + str(self.targetPositions))
+        print('Starting: ' + str(robot.drivetrain.getPositions()))
+
         robot.drivetrain.setPositions(self.targetPositions)
 
 
     def execute(self):
+        print('Current: ' + str(robot.drivetrain.getPositions()))
         if self.avoidCollisions:
             try:
                 if self.distance < 0:

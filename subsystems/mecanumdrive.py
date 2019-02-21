@@ -44,9 +44,9 @@ class MecanumDrive(BaseDrive):
 
         self.activeMotors = self.motors
 
-        '''Invert the motors on the left side.'''
-        self.motors[RobotDriveBase.MotorType.kFrontLeft].setSensorPhase(True)
-        self.motors[RobotDriveBase.MotorType.kRearLeft].setSensorPhase(True)
+        '''Invert the encoders.'''
+        for motor in self.activeMotors:
+            motor.setSensorPhase(True)
 
 
     def _calculateSpeeds(self, x, y, rotate):
