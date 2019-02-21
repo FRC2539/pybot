@@ -31,19 +31,35 @@ class AutonomousCommandGroup(CommandGroup):
 
         ds = DriverStation.getInstance()
 
+        ###visionmove demo
+        self.addSequential(visionmoveCommand(True))
 
-        #self.addSequential(LeaveRampCommand(-35,50,-24,35,.01,90))
+        ###go to rocket then go to ham play place
+        #self.addSequential(LeaveRampCommand(30,60,30,260,1,45))
+        #self.addSequential(LeaveRampCommand(-50,60,-60,220,1,145))
 
-        #find tape and go to it
+        ###cargoship to place first hatch then go to ham play place
+        #self.addSequential(LeaveRampCommand(30,60,30,240,1,-30))
+        #self.addSequential(TurnCommand(160))
+        #self.addSequential(LeaveRampCommand(30,60,30,270,140,50))
+        #self.addSequential(visionmoveCommand())
+
+
+
         #slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0
+        #rotateDistance must be higher than transitionDistance for it to continue moving after the rotation.
+        #if rotatedistance is above 30, it moves until it hits the wall. IF rotateDistance is below 30, it moves the same small distance every time.
+        #we have no control over when it turn
 
         #start right to rocket1
         #self.addParallel(ZeroGyroCommand())
         #self.addSequential(LeaveRampCommand())
 
         #start right to rocket2
-        #self.addParallel(ZeroGyroCommand())
-        self.addSequential(LeaveRampCommand(25,50,30,120,31,45))
+        #self.addParallel(ZeroGyroCommand))
+        #self.addSequential(LeaveRampCommand(25,40,60,90,0.01,45))
+        #self.addSequential(LeaveRampCommand(-25,-60,10,200,0.01,-20))
+        #self.addSequential(TurnCommand(180))
 
         #start right to rocket3
         #self.addParallel(ZeroGyroCommand())

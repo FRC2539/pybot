@@ -41,13 +41,16 @@ class LeaveRampCommand(Command):
         self.rotating = False
         self._finished = False
 
+        self.travelturndistance = 0
+
     def execute(self):
         #slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0
         #print("execute: " + str(self.slowspeed) + ", " + str(self.highspeed)+", "+str(self.transitionDistance)+", "+str(self.endDistance)+", "+str(self.rotateDistance)+", "+str(self.degrees))
 
         currentPositions = robot.drivetrain.getPositions()
 
-        print("startPos: " + str(self.startPositions[0]) + " currentPos: " + str(currentPositions[0]))
+        #print("totalTravel: "+str((self.startPositions[0] - currentPositions[0])/Config('DriveTrain/ticksPerInch')))
+        #print("startPos: " + str(self.startPositions[0]) + " currentPos: " + str(currentPositions[0]))
 
         #print("move and monitor: "+ str(currentPositions))
         if self.transited:
@@ -56,38 +59,48 @@ class LeaveRampCommand(Command):
             currentspeed = self.slowspeed
 
 
-        if abs(self.degrees > 0):
-            self.distance =  abs(currentPositions[0]) - abs(self.startPositions[0])
-        else:
-            self.distance =  abs(currentPositions[1]) - abs(self.startPositions[1])
 
-        #print("distance: "+ str(self.distance) + " td: "+ str(self.transitionDistance))
+        #if abs(self.degrees > 0):
+        #     self.distance =  abs(currentPositions[0]) - abs(self.startPositions[0])
+        #else:
+        #    self.distance =  abs(currentPositions[1]) - abs(self.startPositions[1])
+
+        self.distance = abs(currentPositions[0] - currentPositions[1]) - abs(self.startPositions[0] - self.startPositions[1])
+        if self.distance < 0:
+            self.distance = self.distance *-1
+
+        print("distance: "+ str(self.distance / Config('DriveTrain/ticksPerInch')) + " td: "+ str(self.transitionDistance / Config('DriveTrain/ticksPerInch')) + " ed: "+ str(self.endDistance / Config('DriveTrain/ticksPerInch')))
         if (abs(self.rotated) == True or abs(self.rotating) == True or (abs(self.distance) >= abs(self.transitionDistance) and abs(self.distance) <= abs(self.endDistance))) and self.transited == False:
-            if abs(self.rotated == True) or (abs(self.rotating == False) and abs(self.rotateDistance) > abs(self.transitionDistance)) or abs(self.rotateDistance) == 0:
+            #if abs(self.rotated == True) or ((abs(self.rotating == False) and (abs(self.rotateDistance) > abs(self.distance)) or abs(self.rotateDistance) == 0)):
+            #print("td: " + str(self.transitionDistance / Config('DriveTrain/ticksPerInch')) + " d: " + str(self.distance / Config('DriveTrain/ticksPerInch')) + " r: " + str(self.rotated / Config('DriveTrain/ticksPerInch')) + " rd: " + str(self.rotateDistance / Config('DriveTrain/ticksPerInch')))
+            if (self.distance > self.transitionDistance and (abs(self.rotated) == True or abs(self.rotateDistance) == 0) or abs(self.rotateDistance) > self.transitionDistance):
                 print("transition now")
                 self.transited = True
                 currentspeed = self.highspeed
                 #currentspeed = 0
-            else:
+            elif abs(self.distance) >= abs(self.rotateDistance):
                 self.rotating = True
+                self.travelturndistance = self.distance
                 print("finish rotating")
-                currentspeed = 0
+                #currentspeed = 0
         elif abs(self.distance) >= abs(self.endDistance):
 
-            #print("end now: "+ str(self.endDistance))
-            currentspeed = 0
+            print("end now, d: "+ str(self.distance)+" ed: "+str(self.endDistance) + "ttd: " + str(self.travelturndistance))
+            #currentspeed = 0
+            self._finished = True
 
+        print("currentspeed: "+str(currentspeed))
         rspeed = currentspeed
         lspeed = currentspeed
 
         #print("sd: "+ str(self.distance) + " rd: "+ str(self.rotateDistance))
         targetAngle = 0
         if abs(self.distance) >= abs(self.rotateDistance):
-            direction = ""
-            if self.degrees > 0:
-                direction = "add"
-            else:
-                direction = "subtract"
+            #direction = ""
+            #if self.degrees > 0:
+            #    direction = "add"
+            #else:
+            #    direction = "subtract"
 
             targetAngle = self.startAngle + self.degrees
             if targetAngle > 360:
@@ -97,21 +110,22 @@ class LeaveRampCommand(Command):
             currentAngle = robot.drivetrain.getAngle()
 
             angleDiff = self.angleDifference(currentAngle, targetAngle)
-            print("angleDiff: "+str(angleDiff))
+            #print("angleDiff: "+str(angleDiff))
             if (-1 <= angleDiff <= 1):
-                print("good and done rotating")
+                #print("good and done rotating")
                 self.rotating = False
                 self.rotated = True
                 if self.rotateDistance != 0 and abs(self.distance) >= abs(self.endDistance):
                     self._finished = True
                 elif abs(self.distance) >= abs(self.endDistance):
+                    #print("turning done and past end distance")
                     self._finished = True
             else:
                 if self.rotating == True:
-                    lspeed = currentspeed + (.05) * angleDiff
-                    rspeed = currentspeed - (.05) * angleDiff
+                    lspeed = currentspeed + (.005) * angleDiff
+                    rspeed = currentspeed - (.005) * angleDiff
                 else:
-                    lspeed = currentspeed + (.05) * angleDiff
+                    lspeed = currentspeed + (.005) * angleDiff
 
             '''
             lowtarget = targetAngle - 5

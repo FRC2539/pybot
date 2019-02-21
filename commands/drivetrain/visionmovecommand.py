@@ -47,7 +47,7 @@ class visionmoveCommand(Command):
             print("no udp")
             self.sock = -1
 
-        self.maxSpeed = 70
+        self.maxSpeed = 50
 
         print("initialize visionmove")
 
@@ -73,9 +73,9 @@ class visionmoveCommand(Command):
                     self.reverse = False
                     #print("has tape")
                     #print("tapeX: "+str(self.tapeX))
-                    #print("tapeDistance: " + str(self.tapeDistance))
+                    print("tapeDistance: " + str(self.tapeDistance))
                     if self.tapeDistance <= 75 and self.tapeDistance > 55:
-                        #print("slow down")
+                        print("slow down")
                         speed = 25
                         robot.drivetrain.move(0, 0, 0)
                     elif self.tapeDistance <= 55:
@@ -85,10 +85,15 @@ class visionmoveCommand(Command):
                             speed = 50
                             #self.tapeDistance -= 50
                             self.reverse = True
+                        elif self.demo == True:
+                            print("demo mode and close, stop")
+                            speed = 0
+                            robot.drivetrain.move(0, 0, 0)
+                            robot.drivetrain.movePer(0, 0)
                         else:
                             print("not demo or between 40 and 60: "+str(self.tapeDistance))
-                            speed = 0
-                        #print("close, now stop")
+                            speed = 50
+                        print("close, now stop")
                         robot.drivetrain.move(0, 0, 0)
                     else:
                         if self.demo == True:
@@ -137,7 +142,10 @@ class visionmoveCommand(Command):
         #    self._finished = True
         #    print("finished")
         if self.demo == False and self.tapeDistance <= 55:
+            robot.drivetrain.move(0, 0, 0)
+            robot.drivetrain.movePer(0, 0)
             self.finished = True
+            print("el fin")
 
         return self._finished
 
