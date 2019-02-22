@@ -61,20 +61,24 @@ def init():
     logicalaxes.driveY = driveStick.Y
     logicalaxes.driveRotate = rotateStick.X
 
+    logicalaxes.climb = rotateStick.bottomThing
+
     driveStick.trigger.toggleWhenPressed(IntakeCommand())
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     rotateStick.trigger.whenPressed(EjectCommand())
+
+    rotateStick.Button8.whenPressed(ClimbCommandGroup())
+
     #rotateStick.Button6.whenPressed(HolonomicMoveCommand(70, 54, 45))
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
 
-
     controller.Back.whenPressed(ResetCommand())
-    controller.LeftTrigger.whileHeld(LowerCommand())
-    controller.LeftBumper.whileHeld(RaiseCommand())
+
+    """
     controller.RightBumper.whileHeld(AllExtendCommand())
     controller.RightTrigger.whileHeld(AllRetractCommand())
 
@@ -84,19 +88,16 @@ def init():
     controller.Y.whileHeld(RearRetractCommand())
     """
 
-    controller.LeftTrigger.whileHeld(LowerCommand())
-    controller.LeftBumper.whileHeld(RaiseCommand())
-    controller.RightBumper.whileHeld(UpCommand())
-    controller.RightTrigger.whileHeld(DownCommand())
+    controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
+    controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
 
+    controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
+    controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
 
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
-    controller.X.whileHeld(DeelevateCommand())
-    controller.Y.whileHeld(ElevateCommand())
-    """
-    controller.DPadUp.whenPressed(SlowEjectCommand())
-    controller.DPadDown.whenPressed(MoveCommand(10))
+    controller.DPadRight.whenPressed(SlowEjectCommand())
 
-    controller.DPadLeft.whenPressed(ClimbCommandGroup())
-    #controller.DPadRight.whenPressed(PanelEjectCommand())
+    controller.X.whileHeld(DeelevateCommand()) # Elevator command
+    controller.Y.whileHeld(ElevateCommand()) # Elevator command
+    controller.DPadLeft.whenPressed(PanelEjectCommand()) # Lower the elevator slightly, just to removed the hatch panel.
