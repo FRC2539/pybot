@@ -71,7 +71,7 @@ def init():
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
 
-
+    """
     controller.Back.whenPressed(ResetCommand())
     controller.LeftTrigger.whileHeld(LowerCommand())
     controller.LeftBumper.whileHeld(RaiseCommand())
@@ -94,9 +94,8 @@ def init():
     controller.B.whenPressed(EjectCommand())
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
-    """
-    controller.DPadUp.whenPressed(SlowEjectCommand())
-    controller.DPadDown.whenPressed(MoveCommand(10))
 
-    controller.DPadLeft.whenPressed(ClimbCommandGroup())
-    #controller.DPadRight.whenPressed(PanelEjectCommand())
+    controller.DPadUp.whenPressed(SlowEjectCommand())
+
+    #controller.DPadLeft.whenPressed(ClimbCommandGroup())
+    controller.DPadRight.whenPressed(PanelEjectCommand())
