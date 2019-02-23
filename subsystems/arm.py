@@ -16,6 +16,9 @@ class Arm(DebuggableSubsystem):
 
         self.motor.setInverted(True)
 
+        self.motor.setOpenLoopRampRate(0.4)
+        self.motor.setClosedLoopRampRate(0.4)
+
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
         self.upperLimit = -90
@@ -37,7 +40,7 @@ class Arm(DebuggableSubsystem):
 
 
     def up(self):
-        isTop = self.getPosition() + self.zero <= self.upperLimit
+        isTop = False #self.getPosition() + self.zero <= self.upperLimit
 
         if isTop:
             self.stop()

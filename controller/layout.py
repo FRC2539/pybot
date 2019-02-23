@@ -20,6 +20,8 @@ from commands.intake.slowejectcommand import SlowEjectCommand
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
 from commands.elevator.panelejectcommand import PanelEjectCommand
+from commands.elevator.ascendlevelcommand import AscendLevelCommand
+from commands.elevator.descendlevelcommand import DescendLevelCommand
 
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
@@ -96,8 +98,13 @@ def init():
 
     controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
-    controller.DPadRight.whenPressed(SlowEjectCommand())
 
     controller.X.whileHeld(DeelevateCommand()) # Elevator command
     controller.Y.whileHeld(ElevateCommand()) # Elevator command
     controller.DPadLeft.whenPressed(PanelEjectCommand()) # Lower the elevator slightly, just to removed the hatch panel.
+
+    controller.DPadUp.whenPressed(AscendLevelCommand())
+    controller.DPadDown.whenPressed(DescendLevelCommand())
+
+    controller.DPadLeft.whenPressed(SlowEjectCommand())
+    controller.DPadRight.whenPressed(PanelEjectCommand())
