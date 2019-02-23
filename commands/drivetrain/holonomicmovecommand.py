@@ -22,7 +22,7 @@ class HolonomicMoveCommand(TimedCommand):
 
         self.runtimeSecs = 0
         self.runtime = 0
-        self.speedLimit = robot.drivetrain.speedLimit
+        self.speedLimit = 2500 #robot.drivetrain.speedLimit
 
         self.setup()
 
@@ -50,7 +50,7 @@ class HolonomicMoveCommand(TimedCommand):
         self.yTime = self.yTicks / (self.speedLimit * 10)
         self.rotateTime = self.rotateTicks / (self.speedLimit * 10)
 
-        self.runtimeSecs = math.sqrt((self.xTime ** 2) + (self.yTime ** 2)) + self.rotateTime
+        self.runtimeSecs = 2 * (math.sqrt((self.xTime ** 2) + (self.yTime ** 2) + (self.rotateTime ** 2)))
 
         return self.runtimeSecs
 
@@ -64,9 +64,9 @@ class HolonomicMoveCommand(TimedCommand):
 
         self.runtime = self.runtimeSecs * 10 * 1.15
 
-        self.x = (self.xTicks / self.runtime) / self.speedLimit
-        self.y = (self.yTicks / self.runtime) / self.speedLimit
-        self.rotate = ((self.rotateTicks * 1.2) / self.runtime) / self.speedLimit
+        self.x = (self.xTicks / self.runtime) / (self.speedLimit / 2)
+        self.y = (self.yTicks / self.runtime) / (self.speedLimit / 2)
+        self.rotate = ((self.rotateTicks * 1.2) / self.runtime) / (self.speedLimit / 2)
 
         print('X:          ' + str(self.x))
         print('Y:          ' + str(self.y))
@@ -76,11 +76,15 @@ class HolonomicMoveCommand(TimedCommand):
     def execute(self):
         robot.drivetrain.move(self.x, self.y, self.rotate)
 
+        print('X:          ' + str(self.x))
+        print('Y:          ' + str(self.y))
+        print('Rotate:     ' + str(self.rotate))
+
 
     def end(self):
         robot.drivetrain.stop()
-        if robot.drivetrain.getAngle() != self.originalRotate and [self.originalX, self.originalY] != [0, 0]:
-            adjust(self.originalRotate - robot.drivetrain.getAngle())
+        #if robot.drivetrain.getAngle() != self.originalRotate and [self.originalX, self.originalY] != [0, 0]:
+            #adjust(self.originalRotate - robot.drivetrain.getAngle())
 
 
 def adjust(adjustment):

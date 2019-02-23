@@ -21,7 +21,10 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = -90
+        self.upperLimit = -90.0
+
+        self.encoder.setPositionConversionFactor(1)
+        self.encoder.setPosition(self.upperLimit)
 
         self.zero = 0
 
@@ -40,7 +43,8 @@ class Arm(DebuggableSubsystem):
 
 
     def up(self):
-        isTop = False #self.getPosition() + self.zero <= self.upperLimit
+        print('Arm: ' + str(self.getPosition()))
+        isTop = False #self.getPosition() <= self.upperLimit
 
         if isTop:
             self.stop()
@@ -52,11 +56,13 @@ class Arm(DebuggableSubsystem):
 
 
     def down(self):
-        isZero = self.isAtZero()
+        print('Arm: ' + str(self.getPosition()))
+        isZero = False #self.isAtZero()
 
         if isZero:
             self.stop()
             self.zero = self.getPosition()
+            self.reZero()
         else:
             self.set(-1)
             #self.PIDController.setReference(5000, ControlType.kVelocity)
@@ -76,6 +82,10 @@ class Arm(DebuggableSubsystem):
         self.motor.set(speed)
 
 
+    def resetEncoder(self):
+        self.encoder.setPosition(0.0)
+
+
     def setPosition(self, position):
         self.PIDController.setReference(position, ControlType.kPosition)
 
@@ -85,7 +95,7 @@ class Arm(DebuggableSubsystem):
 
 
     def isAtZero(self):
-        return not self.lowerLimit.get()
+        return (not self.lowerLimit.get()) or (self.getPosition() >= 0)
 
 
     def reZero(self):

@@ -23,7 +23,7 @@ class Elevator(DebuggableSubsystem):
         self.upperLimit = 150.0
 
         self.encoder.setPositionConversionFactor(1)
-        self.encoder.setPosition(self.upperLimit)
+        self.encoder.setPosition(0.0)
 
 
         #These are temporary and need to be finalized for competition.
