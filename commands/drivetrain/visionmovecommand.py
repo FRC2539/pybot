@@ -1,6 +1,6 @@
 from wpilib.command.command import Command
 
-from networktables import NetworkTables
+#from networktables import NetworkTables
 
 from custom.config import Config
 
@@ -25,7 +25,7 @@ class visionmoveCommand(Command):
 
     def initialize(self):
 
-
+        print("init vision move")
 
         self._finished = False
 
@@ -37,15 +37,15 @@ class visionmoveCommand(Command):
 
 
 
-        UDP_IP = "10.25.39.2"
-        UDP_PORT = 5809
+        #UDP_IP = "10.25.39.2"
+        #UDP_PORT = 5809
 
-        try:
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.sock.bind((UDP_IP, UDP_PORT))
-        except:
-            print("no udp")
-            self.sock = -1
+        #try:
+        #    self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #    self.sock.bind((UDP_IP, UDP_PORT))
+        #except:
+        #    print("no udp")
+        #    self.sock = -1
 
         self.maxSpeed = 50
 
@@ -57,81 +57,91 @@ class visionmoveCommand(Command):
         #if self.num >= 1:
             #robot.drivetrain.setPositions(self.targetPositions)
 
-        if self.sock != -1:
-            data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
-            print("1 received message:" + str(data))
-            self.tmessage = data.decode("utf-8")
-            self.message = self.tmessage.split(",")
-            if len(self.message) > 2:
+        #if self.sock != -1:
+        #    data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
+        #    print("1 received message:" + str(data))
+        #    self.tmessage = data.decode("utf-8")
+        #    self.message = self.tmessage.split(",")
+        #    if len(self.message) > 2:
 
+        #self.tapeFound = self.message[0].split(":")[1]
+        #self.tapeX = float(self.message[1].split(":")[1])
+        #self.tapeDistance = float(self.message[2].split(":")[1])
 
-                self.tapeFound = self.message[0].split(":")[1]
-                self.tapeX = float(self.message[1].split(":")[1])
-                self.tapeDistance = float(self.message[2].split(":")[1])
+        #DriveTrain/ticksPerInch
 
-                if self.tapeFound == "True":
-                    self.reverse = False
-                    #print("has tape")
-                    #print("tapeX: "+str(self.tapeX))
-                    print("tapeDistance: " + str(self.tapeDistance))
-                    if self.tapeDistance <= 75 and self.tapeDistance > 55:
-                        print("slow down")
-                        speed = 25
-                        robot.drivetrain.move(0, 0, 0)
-                    elif self.tapeDistance <= 55:
-                        print("under 60: "+str(self.tapeDistance))
-                        if self.demo == True and self.tapeDistance <= 45:
-                            print("under 40: "+str(self.tapeDistance))
-                            speed = 50
-                            #self.tapeDistance -= 50
-                            self.reverse = True
-                        elif self.demo == True:
-                            print("demo mode and close, stop")
-                            speed = 0
-                            robot.drivetrain.move(0, 0, 0)
-                            robot.drivetrain.movePer(0, 0)
-                        else:
-                            print("not demo or between 40 and 60: "+str(self.tapeDistance))
-                            speed = 50
-                        print("close, now stop")
-                        robot.drivetrain.move(0, 0, 0)
-                    else:
-                        if self.demo == True:
-                            speed = 50
-                        else:
-                            #print("100 percent of max speed")
-                            speed = 100
+        self.tapeFound = abs(Config('cameraInfo/tapeFound',False))
+        print("tapefound- "+ str(self.tapeFound))
+        self.tapeX = int(Config('cameraInfo/tapeX',-1))
+        self.tapeDistance = float(Config('cameraInfo/distanceToTape',-1))
+        speed = 0
 
-                    if speed <= self.maxSpeed:
-                        tspeed = (speed / self.maxSpeed)/2
-                    else:
-                        tspeed = (self.maxSpeed / speed)
-
-                    print("setting speed: "+str(tspeed))
-
-                    lspeed = tspeed
-                    rspeed = tspeed
-
-                    #print("tapeX: "+str(self.tapeX))
-                    if self.tapeX <= -.5:
-                        #print("tape is left: "+str(self.tapeX))
-                        rspeed = tspeed - (.05 * self.tapeX)
-
-                    elif self.tapeX >= +.5:
-                        #print("tape is right: "+str(self.tapeX))
-                        rspeed = tspeed - (.05 * self.tapeX)
-
-                    if self.reverse == True:
-                        lspeed = lspeed * -1
-                        rspeed = rspeed * -1
-
-                    #print("r: "+str(rspeed)+" l:"+str(lspeed))
-                    robot.drivetrain.movePer(lspeed, rspeed)
-
-                else:
+        if self.tapeFound == True:
+            self.reverse = False
+            #print("has tape")
+            #print("tapeX: "+str(self.tapeX))
+            print("tapeDistance: " + str(self.tapeDistance))
+            if self.tapeDistance <= 95 and self.tapeDistance > 55:
+                print("slow down")
+                speed = 25
+                robot.drivetrain.move(0, 0, 0)
+            elif self.tapeDistance <= 55:
+                print("under 60: "+str(self.tapeDistance))
+                if self.demo == True and self.tapeDistance <= 45:
+                    print("under 40: "+str(self.tapeDistance))
+                    speed = 25
+                    #self.tapeDistance -= 50
+                    self.reverse = True
+                elif self.demo == True:
+                    print("demo mode and close, stop")
+                    speed = 0
                     robot.drivetrain.move(0, 0, 0)
                     robot.drivetrain.movePer(0, 0)
-                #self.num = 0
+                else:
+                    print("not demo or between 40 and 60: "+str(self.tapeDistance))
+                    #speed = 50
+                    robot.drivetrain.move(0, 0, 0)
+                    robot.drivetrain.movePer(0, 0)
+                    self._finished = True
+                #print("close, now stop")
+                #robot.drivetrain.move(0, 0, 0)
+            else:
+                if self.demo == True:
+                    speed = 50
+                else:
+                    #print("100 percent of max speed")
+                    speed = 50
+
+            if speed <= self.maxSpeed:
+                tspeed = (speed / self.maxSpeed)/2
+            else:
+                tspeed = (self.maxSpeed / speed)
+
+            print("setting speed: "+str(tspeed))
+
+            lspeed = tspeed
+            rspeed = tspeed
+
+            #print("tapeX: "+str(self.tapeX))
+            if self.tapeX <= -.5:
+                #print("tape is left: "+str(self.tapeX))
+                rspeed = tspeed - (.05 * self.tapeX)
+
+            elif self.tapeX >= +.5:
+                #print("tape is right: "+str(self.tapeX))
+                rspeed = tspeed - (.05 * self.tapeX)
+
+            if self.reverse == True:
+                lspeed = lspeed * -1
+                rspeed = rspeed * -1
+
+            #print("r: "+str(rspeed)+" l:"+str(lspeed))
+            robot.drivetrain.movePer(lspeed, rspeed)
+
+        else:
+            robot.drivetrain.move(0, 0, 0)
+            robot.drivetrain.movePer(0, 0)
+        #self.num = 0
 
             #self.num += 1
 

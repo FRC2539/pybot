@@ -27,7 +27,7 @@ class LeaveRampCommand(Command):
         #self.startAngle = robot.drivetrain.getAngle()
 
 
-        #print("init")
+        print("init")
 
 
     def initialize(self):
