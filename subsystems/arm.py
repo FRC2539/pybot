@@ -87,7 +87,7 @@ class Arm(DebuggableSubsystem):
 
 
     def setPosition(self, position):
-        self.PIDController.setReference(position, ControlType.kPosition)
+        self.PIDController.setReference(float(position), ControlType.kPosition)
 
 
     def getPosition(self):
