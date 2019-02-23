@@ -28,14 +28,14 @@ class Elevator(DebuggableSubsystem):
 
         #These are temporary and need to be finalized for competition.
         self.levels = {
-                        'floor' : 0,
-                        'lowHatches' : 30,
-                        'midHatches' : 60,
-                        'highHatches' : 100,
-                        'cargoBalls' : 115,
-                        'lowBalls' : 125,
-                        'midBalls' : 140,
-                        'highBalls' : 150
+                        'floor' : 0.0,
+                        'lowHatches' : 2.0,
+                        'midHatches' : 4.0,
+                        'highHatches' : 6.0,
+                        'cargoBalls' : 8.0,
+                        'lowBalls' : 10.0,
+                        'midBalls' : 12.0,
+                        'highBalls' : 13.0
                         }
 
 
