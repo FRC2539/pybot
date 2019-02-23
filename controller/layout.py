@@ -96,12 +96,14 @@ def init():
     controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
     controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
 
-    controller.A.toggleWhenPressed(IntakeCommand())
+    #controller.A.toggleWhenPressed(IntakeCommand())
     controller.B.whenPressed(EjectCommand())
 
     controller.X.whileHeld(DeelevateCommand()) # Elevator command
     controller.Y.whileHeld(ElevateCommand()) # Elevator command
     controller.DPadLeft.whenPressed(PanelEjectCommand()) # Lower the elevator slightly, just to removed the hatch panel.
+
+    controller.A.whenPressed(AscendLevelCommand())
 
     controller.DPadUp.whenPressed(AscendLevelCommand())
     controller.DPadDown.whenPressed(DescendLevelCommand())

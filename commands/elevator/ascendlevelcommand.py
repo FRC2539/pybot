@@ -12,24 +12,24 @@ class AscendLevelCommand(Command):
 
     def initialize(self):
         pos = robot.elevator.getPosition()
-        if pos <= self.levels['lowHatches']:
-            robot.elevator.setPosition(self.levels['lowHatches'])
+        if pos < self.levels['lowHatches']:
+            robot.elevator.goToLevel('lowHatches')
+            print('\nIm in low hatches\n')
 
-        elif pos <= self.levels['lowBalls']:
-            robot.elevator.setPosition(self.levels['lowBalls'])
+        elif pos < self.levels['lowBalls']:
+            robot.elevator.goToLevel('lowBalls')
 
-        elif pos <= self.levels['midHatches']:
-            robot.elevator.setPosition(self.levels['midHatches'])
+        elif pos < self.levels['midHatches']:
+            robot.elevator.goToLevel('lowHatches')
 
-        elif pos <= self.levels['midBalls']:
-            robot.elevator.setPosition(self.levels['midBalls'])
+        elif pos < self.levels['midBalls']:
+            robot.elevator.goToLevel('lowHatches')
 
-        elif pos <= self.levels['highHatches']:
-            robot.elevator.setPosition(self.levels['highHatches'])
+        elif pos < self.levels['highHatches']:
+            robot.elevator.goToLevel('lowHatches')
 
-        elif pos <= self.levels['highBalls']:
-            robot.elevator.setPosition(self.levels['highBalls'])
+        elif pos < self.levels['highBalls']:
+            robot.elevator.goToLevel('lowHatches')
 
-
-    def end(self):
-        robot.elevator.stop()
+        else:
+            print('rip lol it doidnt eork')

@@ -1,5 +1,5 @@
 from .debuggablesubsystem import DebuggableSubsystem
-from rev import CANSparkMax, MotorType, ControlType
+from rev import CANSparkMax, MotorType, ControlType, ConfigParameter
 from wpilib import DigitalInput
 
 import ports
@@ -18,6 +18,8 @@ class Elevator(DebuggableSubsystem):
         self.motor.setOpenLoopRampRate(0.4)
         self.motor.setClosedLoopRampRate(0.4)
 
+
+
         self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
 
         self.upperLimit = 150.0
@@ -25,22 +27,22 @@ class Elevator(DebuggableSubsystem):
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(0.0)
 
-
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0.0,
-                        'lowHatches' : 2.0,
-                        'midHatches' : 4.0,
-                        'highHatches' : 6.0,
-                        'cargoBalls' : 8.0,
-                        'lowBalls' : 10.0,
-                        'midBalls' : 12.0,
-                        'highBalls' : 13.0
+                        'lowHatches' : 20.0,
+                        'midHatches' : 40.0,
+                        'highHatches' : 60.0,
+                        'cargoBalls' : 80.0,
+                        'lowBalls' : 90.0,
+                        'midBalls' : 110.0,
+                        'highBalls' : 120.0
                         }
 
 
     def up(self):
-        isTop = (self.getPosition() >= self.upperLimit)
+        isTop = self.getPosition() >= self.upperLimit
+        print('Down ' + str(self.getPosition()))
 
         if isTop:
             self.stop()
@@ -51,7 +53,8 @@ class Elevator(DebuggableSubsystem):
 
 
     def down(self):
-        isZero = self.isAtZero()
+        isZero = False #self.isAtZero()
+        print('Down ' + str(self.getPosition()))
 
         if isZero:
             self.stop()
@@ -91,7 +94,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def goToLevel(self, level):
-        self.setPosition(self.levels[level])
+        self.setPosition(float(self.levels[level]))
 
 
     def goToFloor(self):

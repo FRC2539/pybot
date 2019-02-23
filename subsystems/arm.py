@@ -21,12 +21,10 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = -90.0
+        self.upperLimit = 90.0
 
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(self.upperLimit)
-
-        self.zero = 0
 
         #These are temporary and need to be finalized for competition.
         self.levels = {
@@ -43,31 +41,27 @@ class Arm(DebuggableSubsystem):
 
 
     def up(self):
-        print('Arm: ' + str(self.getPosition()))
-        isTop = False #self.getPosition() <= self.upperLimit
+        isTop = self.getPosition() >= self.upperLimit
 
         if isTop:
             self.stop()
         else:
             self.set(1)
-            #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isTop
 
 
     def down(self):
-        print('Arm: ' + str(self.getPosition()))
-        isZero = False #self.isAtZero()
+        isZero = self.isAtZero()
 
         if isZero:
             self.stop()
-            self.zero = self.getPosition()
-            self.reZero()
+            self.resetEncoder()
         else:
             self.set(-1)
-            #self.PIDController.setReference(5000, ControlType.kVelocity)
 
         return isZero
+
 
 
     def stop(self):
@@ -95,16 +89,11 @@ class Arm(DebuggableSubsystem):
 
 
     def isAtZero(self):
-        return (not self.lowerLimit.get()) or (self.getPosition() >= 0)
-
-
-    def reZero(self):
-        self.zero = self.getPosition()
-        self.setPosition(self.zero)
+        return (not self.lowerLimit.get()) or (self.getPosition() <= 0)
 
 
     def goToLevel(self, level):
-        self.setPosition(self.zero + self.levels[level])
+        self.setPosition(self.levels[level])
 
 
     def goToFloor(self):

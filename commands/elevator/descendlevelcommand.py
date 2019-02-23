@@ -12,27 +12,26 @@ class DescendLevelCommand(Command):
 
     def initialize(self):
         pos = robot.elevator.getPosition()
-        if pos >= self.levels['highBalls']:
-            robot.elevator.setPosition(self.levels['highBalls'])
+        if pos > self.levels['highBalls']:
+            robot.elevator.goToLevel('highBalls')
 
-        elif self.levels['highHatches'] <= pos < self.levels['highBalls']:
-            robot.elevator.setPosition(self.levels['highHatches'])
+        elif pos > self.levels['highHatches']:
+            robot.elevator.goToLevel('highHatches')
 
-        elif self.levels['midBalls'] <= pos < self.levels['highHatches']:
-            robot.elevator.setPosition(self.levels['highHatches'])
+        elif pos > self.levels['midBalls']:
+            robot.elevator.goToLevel('midBalls')
 
-        elif self.levels['midHatches'] <= pos < self.levels['midBalls']:
-            robot.elevator.setPosition(self.levels['highHatches'])
+        elif pos > self.levels['midHatches']:
+            robot.elevator.goToLevel('midHatches')
 
-        elif self.levels['lowBalls'] <= pos < self.levels['midHatches']:
-            robot.elevator.setPosition(self.levels['highHatches'])
+        elif pos > self.levels['lowBalls']:
+            robot.elevator.goToLevel('lowBalls')
 
-        elif self.levels['lowHatches'] <= pos < self.levels['lowBalls']:
-            robot.elevator.setPosition(self.levels['highHatches'])
+        elif pos > self.levels['lowHatches']:
+            robot.elevator.goToLevel('lowHatches')
 
-        elif self.levels['lowHatches'] > pos:
-            robot.elevator.setPosition(self.levels['floor'])
+        elif pos > self.levels['floor']:
+            robot.elevator.goToFloor()
 
-
-    def end(self):
-        robot.elevator.stop()
+        else:
+            print('rip lol it doidnt eork')
