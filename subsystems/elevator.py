@@ -16,6 +16,10 @@ class Elevator(DebuggableSubsystem):
         self.PIDController = self.motor.getPIDController()
 
         self.PIDController.setFF(0.5, 0)
+        self.PIDController.setP(0.1, 0)
+        self.PIDController.setI(0.001, 0)
+        self.PIDController.setD(20, 0)
+        self.PIDController.setIZone(3, 0)
 
         self.motor.setOpenLoopRampRate(0.6)
         self.motor.setClosedLoopRampRate(0.6)
@@ -33,8 +37,8 @@ class Elevator(DebuggableSubsystem):
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
                         'lowHatches' : 0.0,
-                        'midHatches' : 40.0,
-                        'highHatches' : 60.0,
+                        'midHatches' : 65.0,
+                        'highHatches' : 115.0,
                         'cargoBalls' : 80.0,
                         'lowBalls' : 0.0,
                         'midBalls' : 110.0,

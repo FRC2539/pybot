@@ -16,6 +16,12 @@ class Arm(DebuggableSubsystem):
 
         self.motor.setInverted(True)
 
+        self.PIDController.setFF(0.5, 0)
+        self.PIDController.setP(0.1, 0)
+        self.PIDController.setI(0.001, 0)
+        self.PIDController.setD(20, 0)
+        self.PIDController.setIZone(3, 0)
+
         self.motor.setOpenLoopRampRate(0.4)
         self.motor.setClosedLoopRampRate(0.4)
 
@@ -28,21 +34,22 @@ class Arm(DebuggableSubsystem):
 
         #These are temporary and need to be finalized for competition.
         self.levels = {
-                        'floor' : 0,
+                        'floor' : 0.0,
                         'aboveFloor' : 4.0,
-                        'lowHatches' : -10,
-                        'midHatches' : -20,
-                        'highHatches' : -35,
-                        'cargoBalls' : -55,
-                        'lowBalls' : -75,
-                        'midBalls' : -90,
-                        'highBalls' : -100,
-                        'start' : -105
+                        'lowHatches' : 7.0,
+                        'midHatches' : 20.0,
+                        'highHatches' : 35.0,
+                        'cargoBalls' : 55.0,
+                        'lowBalls' : 75.0,
+                        'midBalls' : 75.0,
+                        'highBalls' : 75.0,
+                        'start' : 90.0
                         }
 
 
     def up(self):
         isTop = self.getPosition() >= self.upperLimit
+        print('Up ' + str(self.getPosition()))
 
         if isTop:
             self.stop()
@@ -54,6 +61,7 @@ class Arm(DebuggableSubsystem):
 
     def down(self):
         isZero = self.isAtZero()
+        print('Down ' + str(self.getPosition()))
 
         if isZero:
             self.stop()
@@ -63,9 +71,17 @@ class Arm(DebuggableSubsystem):
 
         return isZero
 
+    def forceDown(self):
+        print('Down ' + str(self.getPosition()))
+        if self.lowerLimit.get():
+            self.set(-1)
+        else:
+            self.stop()
+            self.resetEncoder()
+            return 1
 
     def stop(self):
-        self.motor.disable()
+        self.set(0)
 
 
     def hold(self):
@@ -73,7 +89,7 @@ class Arm(DebuggableSubsystem):
 
 
     def set(self, speed):
-        self.motor.set(speed)
+        self.motor.set(float(speed))
 
 
     def resetEncoder(self):
@@ -81,7 +97,7 @@ class Arm(DebuggableSubsystem):
 
 
     def setPosition(self, position):
-        self.PIDController.setReference(float(position), ControlType.kPosition)
+        self.PIDController.setReference(float(position), ControlType.kPosition, 0, 0)
 
 
     def getPosition(self):
@@ -89,11 +105,12 @@ class Arm(DebuggableSubsystem):
 
 
     def isAtZero(self):
-        return (not self.lowerLimit.get()) or (self.getPosition() <= 0)
+        return (not self.lowerLimit.get()) or (self.getPosition() <= 0.0)
 
 
     def goToLevel(self, level):
-        self.setPosition(self.levels[level])
+        self.setPosition(float(self.levels[level]))
+        return float(self.levels[level])
 
 
     def goToFloor(self):

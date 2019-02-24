@@ -23,6 +23,7 @@ from commands.elevator.panelejectcommand import PanelEjectCommand
 
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
+from commands.arm.forcelowercommand import ForceLowerCommand
 
 from commands.superstructure.upcommand import UpCommand
 from commands.superstructure.downcommand import DownCommand
@@ -34,6 +35,8 @@ from commands.climber.rearretractcommand import RearRetractCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.climber.drivebackwardcommand import DriveBackwardCommand
 from commands.climber.climbcommandgroup import ClimbCommandGroup
+
+from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 
 from commands.lights.firelightscommand import FireLightsCommand
 from commands.lights.orangelightscommand import OrangeLightsCommand
@@ -67,7 +70,7 @@ def init():
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    rotateStick.trigger.whenPressed(EjectCommand())
+    rotateStick.trigger.whenPressed(SlowEjectCommand())
 
     rotateStick.Button8.whenPressed(ClimbCommandGroup())
 
@@ -77,6 +80,7 @@ def init():
     controller = LogitechDualShock(2)
 
     controller.Back.whenPressed(ResetCommand())
+    controller.Start.whenPressed(ForceLowerCommand())
 
     """
     controller.RightBumper.whileHeld(AllExtendCommand())
@@ -94,12 +98,14 @@ def init():
     controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
     controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
 
-    controller.A.toggleWhenPressed(IntakeCommand())
-    controller.B.whenPressed(EjectCommand())
+    controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
+    controller.X.whenPressed(SuperStructureGoToLevelCommand('lowHatches'))
+    controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
+    controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
 
-    controller.X.whileHeld(DeelevateCommand()) # Elevator command
-    controller.Y.whileHeld(ElevateCommand()) # Elevator command
+    controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    controller.LeftJoystick.whenPressed(EjectCommand())
+
     controller.DPadLeft.whenPressed(PanelEjectCommand()) # Lower the elevator slightly, just to removed the hatch panel.
-
     controller.DPadLeft.whenPressed(SlowEjectCommand())
     controller.DPadRight.whenPressed(PanelEjectCommand())
