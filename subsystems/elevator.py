@@ -15,9 +15,10 @@ class Elevator(DebuggableSubsystem):
         self.encoder = self.motor.getEncoder()
         self.PIDController = self.motor.getPIDController()
 
-        self.motor.setOpenLoopRampRate(0.4)
-        self.motor.setClosedLoopRampRate(0.4)
+        self.PIDController.setFF(0.5, 0)
 
+        self.motor.setOpenLoopRampRate(0.6)
+        self.motor.setClosedLoopRampRate(0.6)
 
 
         self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
@@ -30,19 +31,21 @@ class Elevator(DebuggableSubsystem):
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0.0,
-                        'lowHatches' : 20.0,
+                        'aboveFloor' : 0.0,
+                        'lowHatches' : 0.0,
                         'midHatches' : 40.0,
                         'highHatches' : 60.0,
                         'cargoBalls' : 80.0,
-                        'lowBalls' : 90.0,
+                        'lowBalls' : 0.0,
                         'midBalls' : 110.0,
-                        'highBalls' : 120.0
+                        'highBalls' : 120.0,
+                        'start' : 0.0
                         }
 
 
     def up(self):
         isTop = self.getPosition() >= self.upperLimit
-        print('Down ' + str(self.getPosition()))
+        print('Up ' + str(self.getPosition()))
 
         if isTop:
             self.stop()
@@ -51,19 +54,17 @@ class Elevator(DebuggableSubsystem):
 
         return isTop
 
-
     def down(self):
-        isZero = False #self.isAtZero()
+        isZero = self.isAtZero()
         print('Down ' + str(self.getPosition()))
 
         if isZero:
             self.stop()
             self.resetEncoder()
         else:
-            self.set(-1)
+            self.set(-1.0)
 
         return isZero
-
 
     def stop(self):
         self.motor.disable()
@@ -82,7 +83,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def setPosition(self, position):
-        self.PIDController.setReference(position, ControlType.kPosition)
+        self.PIDController.setReference(position, ControlType.kPosition, 0, 0)
 
 
     def getPosition(self):
@@ -95,6 +96,7 @@ class Elevator(DebuggableSubsystem):
 
     def goToLevel(self, level):
         self.setPosition(float(self.levels[level]))
+        return float(self.levels[level])
 
 
     def goToFloor(self):

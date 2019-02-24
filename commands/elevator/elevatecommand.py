@@ -11,8 +11,7 @@ class ElevateCommand(Command):
 
 
     def initialize(self):
-        self._finished = False
-        robot.elevator.up()
+        self._finished = robot.elevator.up()
 
 
     def execute(self):

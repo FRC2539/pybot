@@ -29,6 +29,7 @@ class Arm(DebuggableSubsystem):
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0,
+                        'aboveFloor' : 4.0,
                         'lowHatches' : -10,
                         'midHatches' : -20,
                         'highHatches' : -35,
@@ -61,7 +62,6 @@ class Arm(DebuggableSubsystem):
             self.set(-1)
 
         return isZero
-
 
 
     def stop(self):
