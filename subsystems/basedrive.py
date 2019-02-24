@@ -148,6 +148,18 @@ class BaseDrive(DebuggableSubsystem):
             self.stop()
             return
 
+    def movePer(self, left, right):
+        #speeds = self._calculateSpeeds(x, y, rotate / 2)
+        print("l: "+str(left)+" r:"+str(right))
+        x = 0
+        for motor in self.activeMotors:
+            #print("x: "+str(x%2))
+            motor.setIntegralAccumulator(0, 0, 0)
+            if x % 2 == 0:
+                motor.set(ControlMode.PercentOutput, left)
+            else:
+                motor.set(ControlMode.PercentOutput, right * -1)
+            x += 1
 
     def setPositions(self, positions):
         '''
