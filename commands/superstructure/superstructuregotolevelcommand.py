@@ -12,15 +12,18 @@ class SuperStructureGoToLevelCommand(Command):
 
         self.level = level
 
-
     def initialize(self):
-        robot.elevator.goToLevel(self.level)
-        robot.arm.goToLevel(self.level)
+        self.eleTarget = robot.elevator.goToLevel(self.level)
+        self.armTarget = robot.arm.goToLevel(self.level)
 
 
     def execute(self):
         pass
 
+    def isFinished(self):
+        if abs(robot.arm.getPosition() - self.armTarget) < 5 and abs(robot.elevator.getPosition() - self.eleTarget) < 5:
+            return 1
 
     def end(self):
-        pass
+        robot.elevator.stop()
+        robot.arm.stop()
