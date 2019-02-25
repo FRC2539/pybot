@@ -5,7 +5,13 @@ from custom.config import Config
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.visionmovecommand import VisionMoveCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
-#from commands.drivetrain.elevatorgotolevelcommand import ElevatorGoToLevelCommand
+from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
+from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.movecommand import MoveCommand
+
+from commands.intake.slowejectcommand import SlowEjectCommand
+
+from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 
 
 class AutonomousCommandGroup(CommandGroup):
@@ -13,7 +19,11 @@ class AutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Autonomous')
 
-        self.addSequential(VisionMoveCommand())
+        #self.addSequential(MoveCommand(100))
+        Config('DriveTrain/ticksPerInch', 350)
+        #self.addSequential(TransitionMoveCommand(30,60,30,150,0,0))
+
+ #       self.addSequential(VisionMoveCommand())
 
         #self.addSequential(HolonomicMoveCommand(70, 54, 45))
 
@@ -24,8 +34,10 @@ class AutonomousCommandGroup(CommandGroup):
 
         #cargoship to place first hatch then go to ham play place
         #self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
-        #self.addSequential(TurnCommand(160))
-        #self.addSequential(TransitionMoveCommand(30,60,30,270,140,50))
+        self.addSequential(SuperStructureGoToLevelCommand('midHatches'))
+        #self.addSequential(SlowEjectCommand(), 1)
+        #self.addSequential(TurnCommand(-160))
+        #self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
         #self.addSequential(VisionMoveCommand())
 
         #start right to rocket1

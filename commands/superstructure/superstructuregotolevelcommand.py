@@ -20,10 +20,13 @@ class SuperStructureGoToLevelCommand(Command):
     def execute(self):
         pass
 
+
     def isFinished(self):
         if abs(robot.arm.getPosition() - self.armTarget) < 5 and abs(robot.elevator.getPosition() - self.eleTarget) < 5:
+            print('BELOW')
             return 1
-
+        else:
+            print('ABOVE')
     def end(self):
         robot.elevator.stop()
         robot.arm.stop()

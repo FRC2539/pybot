@@ -12,6 +12,7 @@ from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrienta
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.donutscommand import DonutsCommand
+from commands.drivetrain.precisemodecommand import PreciseModeCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -24,6 +25,7 @@ from commands.elevator.panelejectcommand import PanelEjectCommand
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
 from commands.arm.forcelowercommand import ForceLowerCommand
+from commands.arm.forceraisecommand import ForceRaiseCommand
 
 from commands.superstructure.upcommand import UpCommand
 from commands.superstructure.downcommand import DownCommand
@@ -66,13 +68,14 @@ def init():
 
     logicalaxes.climb = rotateStick.bottomThing
 
-    driveStick.trigger.toggleWhenPressed(IntakeCommand())
+    driveStick.trigger.whileHeld(PreciseModeCommand())
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    rotateStick.trigger.whenPressed(SlowEjectCommand())
+    rotateStick.trigger.whenPressed(EjectCommand())
 
     rotateStick.Button8.whenPressed(ClimbCommandGroup())
+    rotateStick.Button10.whenPressed(ForceLowerCommand())
 
     #rotateStick.Button6.whenPressed(HolonomicMoveCommand(70, 54, 45))
 
@@ -97,15 +100,22 @@ def init():
 
     controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
     controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
-
+    '''
     controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
     controller.X.whenPressed(SuperStructureGoToLevelCommand('lowHatches'))
     controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
     controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
+    '''
 
-    controller.RightJoystick.toggleWhenPressed(IntakeCommand())
-    controller.LeftJoystick.whenPressed(EjectCommand())
+    controller.A.toggleWhenPressed(IntakeCommand())
+    controller.B.whenPressed(SlowEjectCommand())
+
+    controller.X.whileHeld(DeelevateCommand())
+    controller.Y.whileHeld(ElevateCommand())
+
+    #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    #controller.LeftJoystick.whenPressed(EjectCommand())
 
     controller.DPadLeft.whenPressed(PanelEjectCommand()) # Lower the elevator slightly, just to removed the hatch panel.
     controller.DPadLeft.whenPressed(SlowEjectCommand())
-    controller.DPadRight.whenPressed(PanelEjectCommand())
+    #controller.DPadRight.whenPressed(PanelEjectCommand())

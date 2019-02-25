@@ -21,7 +21,7 @@ class Intake(DebuggableSubsystem):
 
 
     def eject(self):
-        self.motor.set(-0.6)
+        self.motor.set(-0.8)
 
 
     def slowEject(self):

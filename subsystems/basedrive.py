@@ -58,7 +58,7 @@ class BaseDrive(DebuggableSubsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.setUseEncoders()
+        self.setUseEncoders(True)
         self.maxSpeed = Config('DriveTrain/maxSpeed')
         self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
