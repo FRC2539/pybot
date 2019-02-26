@@ -27,6 +27,7 @@ from commands.arm.lowercommand import LowerCommand
 from commands.arm.forcelowercommand import ForceLowerCommand
 from commands.arm.forceraisecommand import ForceRaiseCommand
 
+from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 from commands.superstructure.upcommand import UpCommand
 from commands.superstructure.downcommand import DownCommand
 
@@ -38,11 +39,7 @@ from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.climber.drivebackwardcommand import DriveBackwardCommand
 from commands.climber.climbcommandgroup import ClimbCommandGroup
 
-from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
-
-from commands.lights.firelightscommand import FireLightsCommand
 from commands.lights.orangelightscommand import OrangeLightsCommand
-from commands.lights.teamcolorlightscommand import TeamColorLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
 
