@@ -13,6 +13,7 @@ class Intake(DebuggableSubsystem):
 
         self.motor = WPI_TalonSRX(ports.intake.motorID)
         self.motor.setNeutralMode(NeutralMode.Brake)
+        self.motor.setSafetyEnabled(False)
 
         self.cargo = DigitalInput(ports.intake.lightSensor)
 
