@@ -19,7 +19,7 @@ class Arm(DebuggableSubsystem):
         self.PIDController.setFF(0.5, 0)
         self.PIDController.setP(0.1, 0)
         self.PIDController.setI(0.001, 0)
-        self.PIDController.setD(20, 0)
+        self.PIDController.setD(10, 0)
         self.PIDController.setIZone(3, 0)
 
         self.motor.setOpenLoopRampRate(0.4)
