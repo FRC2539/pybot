@@ -37,7 +37,7 @@ class Elevator(DebuggableSubsystem):
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
                         'lowHatches' : 0.0,
-                        'midHatches' : 65.0,
+                        'midHatches' : 55.0,
                         'highHatches' : 130.0,
                         'cargoBalls' : 50.0,
                         'lowBalls' : 0.0,
@@ -65,6 +65,7 @@ class Elevator(DebuggableSubsystem):
         if isZero:
             self.stop()
             self.resetEncoder()
+
         else:
             self.set(-1.0)
 
@@ -87,7 +88,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def setPosition(self, position):
-        self.PIDController.setReference(position, ControlType.kPosition, 0, 0)
+        self.PIDController.setReference(float(position), ControlType.kPosition, 0, 0)
 
 
     def getPosition(self):

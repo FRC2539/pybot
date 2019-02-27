@@ -19,8 +19,10 @@ class AutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Autonomous')
 
+        self.addParallel(SuperStructureGoToLevelCommand('lowHatches'))
+
         #self.addSequential(MoveCommand(100))
-        Config('DriveTrain/ticksPerInch', 350)
+        #Config('DriveTrain/ticksPerInch', 350)
         #self.addSequential(TransitionMoveCommand(30,60,30,150,0,0))
 
  #       self.addSequential(VisionMoveCommand())
@@ -34,7 +36,6 @@ class AutonomousCommandGroup(CommandGroup):
 
         #cargoship to place first hatch then go to ham play place
         #self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
-        self.addSequential(SuperStructureGoToLevelCommand('midHatches'))
         #self.addSequential(SlowEjectCommand(), 1)
         #self.addSequential(TurnCommand(-160))
         #self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))

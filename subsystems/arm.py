@@ -27,7 +27,7 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = 65.0
+        self.upperLimit = 70.0
         self.startPos = 105.0
 
         self.encoder.setPositionConversionFactor(1)
@@ -37,8 +37,8 @@ class Arm(DebuggableSubsystem):
         self.levels = {
                         'floor' : 0.0,
                         'aboveFloor' : 5.0,
-                        'lowHatches' : 35.0,
-                        'midHatches' : 70.0,
+                        'lowHatches' : 31.0,
+                        'midHatches' : 40.0,
                         'highHatches' : 35.0,
                         'cargoBalls' : 55.0,
                         'lowBalls' : 70.0,
@@ -53,6 +53,7 @@ class Arm(DebuggableSubsystem):
         print('Arm ' + str(self.getPosition()))
 
         if isTop:
+            self.setPosition(float(self.upperLimit))
             self.stop()
         else:
             self.set(1)
@@ -65,10 +66,29 @@ class Arm(DebuggableSubsystem):
         print('Arm ' + str(self.getPosition()))
 
         if isZero:
+            print('IS ZERO ')
             self.stop()
             self.resetEncoder()
+
         else:
             self.set(-1)
+            if isZero:
+                print('IS ZERO')
+                self.stop()
+                self.resetEncoder()
+        return isZero
+
+    def downSS(self):
+        isZero = self.isAtZero()
+        print('Arm ' + str(self.getPosition()))
+
+        if isZero:
+            print('IS ZERO ')
+            self.stop()
+            self.resetEncoder()
+
+        else:
+            self.set(-0.7)
 
         return isZero
 

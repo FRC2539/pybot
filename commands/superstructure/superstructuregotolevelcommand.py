@@ -43,22 +43,24 @@ class SuperStructureGoToLevelCommand(Command):
         robot.arm.goToLevel(self.level)
         robot.elevator.goToLevel(self.level)
 
+
     def execute(self):
         if (float(robot.arm.getPosition()) >= robot.arm.levels[self.level] and self.armUOD == 0) or (float(robot.arm.getPosition()) <= float(robot.arm.levels[self.level]) and self.armUOD == 1):
             robot.arm.stop()
-            print('arm goal ' + str(robot.arm.levels[self.level]))
+            print('arm goal ' + str(robot.arm.levels[self.level]) + ' arm UOD ' + str(self.armUOD))
             self.armDone = 1
 
         if (float(robot.elevator.getPosition()) >= float(robot.elevator.levels[self.level]) and self.eleUOD == 0) or (float(robot.elevator.getPosition()) <= robot.elevator.levels[self.level] and self.eleUOD == 1):
             robot.elevator.stop()
+            print('ele goal ' + str(robot.elevator.levels[self.level]) + ' ele UOD ' + str(self.eleUOD))
             self.eleDone = 1
 
         if self.eleDone == 1 and self.armDone == 1:
             print('done')
             self.done = True
 
-        robot.arm.goToLevel((self.level))
-        robot.elevator.goToLevel(str(self.level))
+        robot.arm.goToLevel(self.level)
+        robot.elevator.goToLevel(self.level)
     def isFinished(self):
         return self.done
 
