@@ -41,7 +41,9 @@ class SuperStructureGoToLevelCommand(Command):
             self.eleUOD = 1
 
         robot.arm.goToLevel(self.level)
+        print('Moving arm')
         robot.elevator.goToLevel(self.level)
+        print('Moving elevator')
 
 
     def execute(self):
@@ -61,13 +63,18 @@ class SuperStructureGoToLevelCommand(Command):
 
         robot.arm.goToLevel(self.level)
         robot.elevator.goToLevel(self.level)
+
+
     def isFinished(self):
         return self.done
+
 
     def end(self):
         self.armDone = 2
         self.eleDone = 2
         self.done = False
+
+        print('ended')
 
         robot.elevator.stop()
         robot.arm.stop()

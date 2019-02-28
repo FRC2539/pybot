@@ -42,6 +42,7 @@ from commands.climber.climbcommandgroup import ClimbCommandGroup
 from commands.lights.orangelightscommand import OrangeLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
+from commands.lights.visionbasedlightscommand import VisionBasedLightsCommand
 
 
 def init():
@@ -65,7 +66,7 @@ def init():
 
     logicalaxes.climb = rotateStick.bottomThing
 
-    driveStick.trigger.whileHeld(PreciseModeCommand())
+    driveStick.trigger.whileHeld(VisionBasedLightsCommand())
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())

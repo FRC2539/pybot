@@ -37,7 +37,7 @@ class Elevator(DebuggableSubsystem):
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
                         'lowHatches' : 0.0,
-                        'midHatches' : 55.0,
+                        'midHatches' : 29.0,
                         'highHatches' : 130.0,
                         'cargoBalls' : 50.0,
                         'lowBalls' : 0.0,
@@ -72,7 +72,7 @@ class Elevator(DebuggableSubsystem):
         return isZero
 
     def stop(self):
-        self.motor.disable()
+        self.motor.set(0.0)
 
 
     def hold(self):
@@ -96,6 +96,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def isAtZero(self):
+        print('ele height ' + str(self.getPosition()))
         return (self.getPosition() <= 0.0) or (not self.lowerLimit.get())
 
 

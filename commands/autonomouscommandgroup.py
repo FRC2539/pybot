@@ -42,7 +42,9 @@ class AutonomousCommandGroup(CommandGroup):
         ds = DriverStation.getInstance()
 
         Config('DriveTrain/ticksPerInch', 350)
-        self.addSequential(VisionMoveCommand())
+        #self.addSequential(VisionMoveCommand())
+        self.addParallel(SuperStructureGoToLevelCommand('midHatches'))
+
 
         #self.addParallel(SuperStructureGoToLevelCommand('lowHatches'))
 

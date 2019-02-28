@@ -38,7 +38,7 @@ class Arm(DebuggableSubsystem):
                         'floor' : 0.0,
                         'aboveFloor' : 5.0,
                         'lowHatches' : 31.0,
-                        'midHatches' : 40.0,
+                        'midHatches' : 37.0,
                         'highHatches' : 35.0,
                         'cargoBalls' : 55.0,
                         'lowBalls' : 70.0,
