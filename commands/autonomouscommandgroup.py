@@ -1,57 +1,121 @@
 from wpilib.command import CommandGroup
-import commandbased.flowcontrol as fc
+from wpilib.command import PrintCommand
+from wpilib.driverstation import DriverStation
 from custom.config import Config
+from commands.network.alertcommand import AlertCommand
+from wpilib.command.waitcommand import WaitCommand
+import commandbased.flowcontrol as fc
 
-from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
+#from commands.drivetrain.movecommand import MoveCommand
+#from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
+#from commands.drivetrain.pivotcommand import PivotCommand
+#from commands.drivetrain.turncommand import TurnCommand
+#from commands.drivetrain.runintowallcommand import RunIntoWallCommand
+#from commands.drivetrain.setspeedcommand import SetSpeedCommand
+#from commands.drivetrain.gotowallcommand import GoToWallCommand
+#from commands.elevator.gotoheightcommand import GoToHeightCommand
+#from commands.intake.intakecommand import IntakeCommand
+#from commands.intake.outtakecommand import OuttakeCommand
+#from commands.intake.slowouttakecommand import SlowOuttakeCommand
+
+from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
+from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
+#from commands.drivetrain.newrampingspeedcommand import NewRampingSpeedCommand
 from commands.drivetrain.visionmovecommand import VisionMoveCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
-#from commands.drivetrain.elevatorgotolevelcommand import ElevatorGoToLevelCommand
-
 
 class AutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('Autonomous')
 
+        ds = DriverStation.getInstance()
+
+        Config('DriveTrain/ticksPerInch', 350)
         self.addSequential(VisionMoveCommand())
 
-        #self.addSequential(HolonomicMoveCommand(70, 54, 45))
+        #self.addSequential(TransitionMoveCommand(30,60,30,100,0,0))
 
-        #go to rocket then go to ham play place
-        #self.addSequential(TransitionMoveCommand(30,60,30,220,1,45))
-        #self.addSequential(VisionMoveCommand())
-        #self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
-
-        #cargoship to place first hatch then go to ham play place
-        #self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
-        #self.addSequential(TurnCommand(160))
-        #self.addSequential(TransitionMoveCommand(30,60,30,270,140,50))
+        ###visionmove demo
         #self.addSequential(VisionMoveCommand())
 
-        #start right to rocket1
-        #self.addSequential(TransitionMoveCommand(30,60,30,310,35,15))
-        #self.addSequential(TransitionMoveCommand(60,60,0,115,10,150))
-        #self.addSequential(TurnCommand(90))
-        #self.addSequential(VisionMoveCommand())
         '''
+        @fc.IF(lambda: Config('Autonomous/Auto') == '1')
+        def rightAuto(self):
+            ###go to rocket then go to ham play place
+            self.addSequential(TransitionMoveCommand(30,60,30,220,1,45))
+            #self.addSequential(VisionMoveCommand())
+            self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
+
         @fc.IF(lambda: Config('Autonomous/Auto') == '1')
         def centerauto(self):
             ###cargoship to place first hatch then go to ham play place
             self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
-            self.addSequential(VisionMoveCommand())
-            self.addSequential(MoveWithGyroCommand(-5))
             self.addSequential(TurnCommand(160))
             self.addSequential(TransitionMoveCommand(30,60,30,270,140,50))
             self.addSequential(VisionMoveCommand())
-            self.addSequential(MoveWithGyroCommand(-10))
+        '''
 
-        @fc.IF(lambda: Config('Autonomous/Auto') == '1')
-        def leftAuto(self):
-            self.addSequential(TransitionMoveCommand(30,60,30,220,1,-45))
-            self.addSequential(VisionMoveCommand())
-            self.addSequential(ElevatorGoToLevelCommand('midHatches'))
-            self.addSequential(MoveWithGyroCommand(2))
-            self.addParallel(ElevatorGoToLevelCommand('floor'))
-            self.addSequential(MoveWithGyroCommand(-2))
-            self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,-145))
+
+
+
+
+        #slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0
+        #rotateDistance must be higher than transitionDistance for it to continue moving after the rotation.
+        #if rotatedistance is above 30, it moves until it hits the wall. IF rotateDistance is below 30, it moves the same small distance every time.
+        #we have no control over when it turn
+
+        #start right to rocket1
+        #self.addSequential(TransitionMoveCommand(30,80,30,155,5,50))
+        #self.addSequential(VisionMoveCommand())
+        #self.addSequential(TransitionMoveCommand(-35,80,-30,83,0.1,190))
+        #self.addSequential(VisionMoveCommand())
+
+        #start right to rocket2
+        #self.addSequential(TransitionMoveCommand(30,50,30,100,85,75))
+        #self.addSequential(VisionMoveCommand())
+        #self.addSequential(TransitionMoveCommand(-35,50,-24,83,0.1,55))
+
+        #start right to rocket3
+        #self.addSequential(TransitionMoveCommand(30,80,30,250,200,100))
+        #self.addSequential(VisionMoveCommand())
+        #self.addSequential(TransitionMoveCommand(0,0,0,0,0,0))
+
+        #start right to cargo1
+        #self.addSequential(TransitionMoveCommand(0,0,0,0,0,0))
+
+        #start right to cargo2
+        #self.addSequential(TransitionMoveCommand(0,0,0,0,0,0))
+
+
+        #vision move to tape
+        #self.addSequential(VisionMoveCommand())
+
+        #backup and turn from rocket
+        #self.addSequential(leaveRampCommand(-35,50,-24,35,.01,160))
+
+        #self.addSequential(leaveRampCommand(35,35,12,90,0,0))
+        #self.addSequential(leaveRampCommand(35.843219,60,45,100,50,36.236817265))
+
+
+        #self.addSequential(leaveRampCommand(35,85,10,130,90,90))
+        #self.addSequential(IntakeCommand(), 10)
+
+        #self.addSequential(StateMachineTempCommand())
+
+        #self.addSequential(NewRampingSpeedCommand(60, 600))
+
+        #self.addSequential(PivotCommand(20))
+
+        '''
+        #self.addSequential(SetSpeedCommand(1500))
+        self.addSequential(PivotCommand(45), 2)
+        self.addParallel(GoToHeightCommand('switch'))
+        self.addParallel(IntakeCommand(), 10)
+        self.addSequential(MoveWithGyroCommand(130))
+        self.addSequential(PivotCommand(-45), 2)
+        self.addSequential(OuttakeCommand(), 0.5)
+        self.addSequential(MoveWithGyroCommand(-10))
+        self.addSequential(SetSpeedCommand(800))
+        self.addSequential(GoToHeightCommand('ground'))
         '''
