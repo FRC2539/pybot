@@ -28,6 +28,10 @@ class Climber(DebuggableSubsystem):
         self.rearRackMotor.setInverted(True)
         self.rightRackMotor.setInverted(True)
 
+        self.rearRackMotor.setSafetyEnabled(False)
+        self.rightRackMotor.setSafetyEnabled(False)
+        self.leftRackMotor.setSafetyEnabled(False)
+
 
     def getRightLimit(self):
         return not self.rightLimit.get()

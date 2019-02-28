@@ -24,6 +24,16 @@ from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.visionmovecommand import VisionMoveCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
 
+from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
+from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.movecommand import MoveCommand
+
+from commands.intake.slowejectcommand import SlowEjectCommand
+
+from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
+
+
+
 class AutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
@@ -34,9 +44,31 @@ class AutonomousCommandGroup(CommandGroup):
         Config('DriveTrain/ticksPerInch', 350)
         self.addSequential(VisionMoveCommand())
 
+        #self.addParallel(SuperStructureGoToLevelCommand('lowHatches'))
+
+        #self.addSequential(MoveCommand(100))
+        #Config('DriveTrain/ticksPerInch', 350)
+        #self.addSequential(TransitionMoveCommand(30,60,30,150,0,0))
+
+
+
         #self.addSequential(TransitionMoveCommand(30,60,30,100,0,0))
 
         ###visionmove demo
+        #self.addSequential(VisionMoveCommand())
+
+
+        #cargoship to place first hatch then go to ham play place
+        #self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
+        #self.addSequential(SlowEjectCommand(), 1)
+        #self.addSequential(TurnCommand(-160))
+        #self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
+        #self.addSequential(VisionMoveCommand())
+
+        #start right to rocket1
+        #self.addSequential(TransitionMoveCommand(30,60,30,310,35,15))
+        #self.addSequential(TransitionMoveCommand(60,60,0,115,10,150))
+        #self.addSequential(TurnCommand(90))
         #self.addSequential(VisionMoveCommand())
 
         '''

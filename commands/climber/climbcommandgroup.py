@@ -6,6 +6,7 @@ from commands.climber.rearretractcommand import RearRetractCommand
 from commands.climber.keeprearextendedcommand import KeepRearExtendedCommand
 from commands.climber.getonplatformcommand import GetOnPlatformCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
+from commands.lights.seizurelightscommand import SeizureLightsCommand
 
 
 
@@ -26,7 +27,10 @@ class ClimbCommandGroup(CommandGroup):
         self.addSequential(KeepRearExtendedCommand(), 3.5)
 
         #Get back wheels on.
-        self.addSequential(DriveForwardCommand(), 4.5)
+        self.addSequential(DriveForwardCommand(), 3)
 
         #Rear rack up.
         self.addSequential(RearRetractCommand(), 3.5)
+
+        #Turn on Seizure Lights
+        self.addSequential(SeizureLightsCommand())

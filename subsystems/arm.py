@@ -19,7 +19,7 @@ class Arm(DebuggableSubsystem):
         self.PIDController.setFF(0.5, 0)
         self.PIDController.setP(0.1, 0)
         self.PIDController.setI(0.001, 0)
-        self.PIDController.setD(20, 0)
+        self.PIDController.setD(10, 0)
         self.PIDController.setIZone(3, 0)
 
         self.motor.setOpenLoopRampRate(0.4)
@@ -27,31 +27,33 @@ class Arm(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
-        self.upperLimit = 90.0
+        self.upperLimit = 70.0
+        self.startPos = 105.0
 
         self.encoder.setPositionConversionFactor(1)
-        self.encoder.setPosition(self.upperLimit)
+        self.encoder.setPosition(self.startPos)
 
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0.0,
-                        'aboveFloor' : 4.0,
-                        'lowHatches' : 7.0,
-                        'midHatches' : 20.0,
+                        'aboveFloor' : 5.0,
+                        'lowHatches' : 31.0,
+                        'midHatches' : 40.0,
                         'highHatches' : 35.0,
                         'cargoBalls' : 55.0,
-                        'lowBalls' : 75.0,
-                        'midBalls' : 75.0,
-                        'highBalls' : 75.0,
+                        'lowBalls' : 70.0,
+                        'midBalls' : 55.0,
+                        'highBalls' : 70.0,
                         'start' : 90.0
                         }
 
 
     def up(self):
         isTop = self.getPosition() >= self.upperLimit
-        print('Up ' + str(self.getPosition()))
+        print('Arm ' + str(self.getPosition()))
 
         if isTop:
+            self.setPosition(float(self.upperLimit))
             self.stop()
         else:
             self.set(1)
@@ -61,13 +63,32 @@ class Arm(DebuggableSubsystem):
 
     def down(self):
         isZero = self.isAtZero()
-        print('Down ' + str(self.getPosition()))
+        print('Arm ' + str(self.getPosition()))
 
         if isZero:
+            print('IS ZERO ')
             self.stop()
             self.resetEncoder()
+
         else:
             self.set(-1)
+            if isZero:
+                print('IS ZERO')
+                self.stop()
+                self.resetEncoder()
+        return isZero
+
+    def downSS(self):
+        isZero = self.isAtZero()
+        print('Arm ' + str(self.getPosition()))
+
+        if isZero:
+            print('IS ZERO ')
+            self.stop()
+            self.resetEncoder()
+
+        else:
+            self.set(-0.7)
 
         return isZero
 
@@ -78,10 +99,21 @@ class Arm(DebuggableSubsystem):
         else:
             self.stop()
             self.resetEncoder()
-            return 1
+
+        return self.lowerLimit.get()
+
+
+    def forceUp(self):
+        isTop = self.getPosition() >= self.startPos
+        if not isTop:
+            self.set(1.0)
+        else:
+            self.stop()
+
+        return isTop
 
     def stop(self):
-        self.set(0)
+        self.set(0.0)
 
 
     def hold(self):

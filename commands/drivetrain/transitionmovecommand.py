@@ -201,3 +201,4 @@ class TransitionMoveCommand(Command):
 
         print("end")
         print(str(self.distance) + "   " + str(self.endDistance))
+        print('TPI: ' + str(abs(Config('DriveTrain/ticksPerInch'))))

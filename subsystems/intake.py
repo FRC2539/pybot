@@ -13,6 +13,7 @@ class Intake(DebuggableSubsystem):
 
         self.motor = WPI_TalonSRX(ports.intake.motorID)
         self.motor.setNeutralMode(NeutralMode.Brake)
+        self.motor.setSafetyEnabled(False)
 
         self.cargo = DigitalInput(ports.intake.lightSensor)
 
@@ -21,7 +22,7 @@ class Intake(DebuggableSubsystem):
 
 
     def eject(self):
-        self.motor.set(-0.6)
+        self.motor.set(-0.8)
 
 
     def slowEject(self):

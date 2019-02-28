@@ -27,7 +27,7 @@ class Elevator(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
 
-        self.upperLimit = 150.0
+        self.upperLimit = 135.0
 
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(0.0)
@@ -37,19 +37,19 @@ class Elevator(DebuggableSubsystem):
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
                         'lowHatches' : 0.0,
-                        'midHatches' : 65.0,
-                        'highHatches' : 115.0,
-                        'cargoBalls' : 80.0,
+                        'midHatches' : 55.0,
+                        'highHatches' : 130.0,
+                        'cargoBalls' : 50.0,
                         'lowBalls' : 0.0,
-                        'midBalls' : 110.0,
-                        'highBalls' : 120.0,
+                        'midBalls' : 90.0,
+                        'highBalls' : 135.0,
                         'start' : 0.0
                         }
 
 
     def up(self):
         isTop = self.getPosition() >= self.upperLimit
-        print('Up ' + str(self.getPosition()))
+        print('Elevator ' + str(self.getPosition()))
 
         if isTop:
             self.stop()
@@ -60,11 +60,12 @@ class Elevator(DebuggableSubsystem):
 
     def down(self):
         isZero = self.isAtZero()
-        print('Down ' + str(self.getPosition()))
+        print('Elevator ' + str(self.getPosition()))
 
         if isZero:
             self.stop()
             self.resetEncoder()
+
         else:
             self.set(-1.0)
 
@@ -87,7 +88,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def setPosition(self, position):
-        self.PIDController.setReference(position, ControlType.kPosition, 0, 0)
+        self.PIDController.setReference(float(position), ControlType.kPosition, 0, 0)
 
 
     def getPosition(self):

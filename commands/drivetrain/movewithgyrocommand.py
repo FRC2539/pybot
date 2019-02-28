@@ -5,7 +5,7 @@ import robot
 
 class MoveWithGyroCommand(Command):
 
-    def __init__(self, distance, avoidCollisions=True, name=None):
+    def __init__(self, distance, avoidCollisions=False, name=None):
         '''
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -27,7 +27,7 @@ class MoveWithGyroCommand(Command):
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
-        offset = self.distance * Config('DriveTrain/ticksPerInch')
+        offset = self.distance * Config('DriveTrain/ticksPerInch', 225.5)
         sign = 1
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset * sign)
