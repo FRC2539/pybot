@@ -103,8 +103,7 @@ class Config:
         '''If we're requesting a string for a number, show its key.'''
 
         try:
-            float(self.getValue())
-            return self.key
+            return str(self.getValue())
         except MissingConfigError:
             return self.key
         except (TypeError, ValueError):
