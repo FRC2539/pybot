@@ -65,22 +65,18 @@ class TransitionMoveCommand(Command):
         #else:
         #    self.distance =  abs(currentPositions[1]) - abs(self.startPositions[1])
 
-        #currentPos = abs(currentPositions[0] - currentPositions[1])
-        #startPos = abs(self.startPositions[0] - self.startPositions[1])
-
-        currentPos = abs(currentPositions[0])
-        startPos = abs(self.startPositions[0])
+        currentPos = abs(currentPositions[0] - currentPositions[1])
+        startPos = abs(self.startPositions[0] - self.startPositions[1])
 
         if currentPos < 0:
             currentPos = currentPos *-1
-        print("cp: "+str(currentPos))
+
         if startPos < 0:
-            startPos = startPos *-1
-        print("sp: "+str(startPos))
+            startPos = self.distance *-1
 
         self.distance = currentPos - startPos
-        #if self.distance < 0:
-        #    self.distance = self.distance *-1
+        if self.distance < 0:
+            self.distance = self.distance *-1
 
         print("distance: "+ str(self.distance / Config('DriveTrain/ticksPerInch')) + " td: "+ str(self.transitionDistance / Config('DriveTrain/ticksPerInch')) + " ed: "+ str(self.endDistance / Config('DriveTrain/ticksPerInch')))
         if (abs(self.rotated) == True or abs(self.rotating) == True or (abs(self.distance) >= abs(self.transitionDistance) and abs(self.distance) <= abs(self.endDistance))) and self.transited == False:
