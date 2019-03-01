@@ -11,16 +11,15 @@ class VisionBasedLightsCommand(Command):
 
 
     def execute(self):
-        self.val, self.distance = robot.lights.visionBasedLights()
-        self.ratio = self.distance * 0.1
+        self.val = robot.lights.visionBasedLights()
 
-        if self.val == -10:
+        if self.val == 20:
             robot.lights.solidRed()
 
-        elif self.val <= self.ratio:
+        elif self.val < 3:
             robot.lights.solidBlue()
 
-        elif self.val > self.ratio:
+        elif self.val >= 4 and self.val <= 15:
             robot.lights.solidPurple()
 
     def end(self):

@@ -15,7 +15,9 @@ class Lights(DebuggableSubsystem):
         super().__init__('Lights')
         self.lights = Spark(ports.lights.lightControllerID)
 
-        cameraTable = NetworkTables.getTable('cameraTable')
+        cameraInfo = NetworkTables.getTable('cameraInfo')
+        self.position = Config('cameraInfo/tapeX', 0)
+        self.distance = Config('cameraInfo/distanceToTape', 0)
 
         self.colors = {
                         'black' : 0.99,
@@ -31,10 +33,6 @@ class Lights(DebuggableSubsystem):
                         'chase' : -0.31
             }
 
-
-        self.position = Config('cameraTable/finalCenter', 0)
-        self.width = Config('cameraTable/screenWidth', 0)
-        self.distance = Config('cameraTable/distanceToTape', 0)
 
     '''
     Light Mapping:
@@ -93,9 +91,21 @@ class Lights(DebuggableSubsystem):
         self.set(self.colors['chase'])
 
     def visionBasedLights(self):
+        pos = self.position.getValue()
+        distance = self.distance.getValue()
 
-        if self.position == 0 or self.width == 0 or self.distance == 0:
-            print('pos ' + str(self.position) + 'width ' + str(self.width) + ' dis ' + str(self.distance))
-            return -10, -10
+        if pos == -1:
+            pos = 20
+        self.width = 320 #Config('cameraInfo/screenWidth', 320)
+
+        if distance == -1:
+            distance = 20
+        print('pos ' + str(pos) + 'width ' + str(self.width) + ' dis ' + str(distance))
+
+        if int(pos) == 20 and int(distance) == 20:
+            print('pos ' + str(pos) + 'width ' + str(self.width) + ' dis ' + str(distance))
+            return 20
         else:
-            return abs((self.width / 2) - self.position), self.distance
+            return abs(pos)
+
+        # CONFIG ASSIGNMENT MUST BE IN __INIT__, (OR MAYBE AS AN ARGUEMENT, THIS WORKED)), USE SELF.POSITION AS EXAMPLE. -2019 HATBORO-HORSHAM BEN
