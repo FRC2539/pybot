@@ -1,18 +1,17 @@
 from .logitechdualshock import LogitechDualShock
-from . import logicalaxes
-
 from .logitechjoystick import LogitechJoystick
+from . import logicalaxes
 
 from custom.config import Config
 
-from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
+
+from commands.drivetrain.drivecommand import DriveCommand
+
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
-from commands.drivetrain.donutscommand import DonutsCommand
-from commands.drivetrain.precisemodecommand import PreciseModeCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -35,6 +34,11 @@ from commands.climber.allextendcommand import AllExtendCommand
 from commands.climber.allretractcommand import AllRetractCommand
 from commands.climber.frontretractcommand import FrontRetractCommand
 from commands.climber.rearretractcommand import RearRetractCommand
+from commands.climber.rightretractcommand import RightRetractCommand
+from commands.climber.leftretractcommand import LeftRetractCommand
+from commands.climber.extendleftcommand import ExtendLeftCommand
+from commands.climber.extendrightcommand import ExtendRightCommand
+from commands.climber.extendrearcommand import ExtendRearCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.climber.drivebackwardcommand import DriveBackwardCommand
 from commands.climber.l3climbcommandgroup import L3ClimbCommandGroup
@@ -65,8 +69,6 @@ def init():
     logicalaxes.driveY = driveStick.Y
     logicalaxes.driveRotate = rotateStick.X
 
-    logicalaxes.climb = rotateStick.bottomThing
-
     driveStick.trigger.whileHeld(VisionBasedLightsCommand())
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
@@ -78,7 +80,6 @@ def init():
 
     rotateStick.Button10.whenPressed(ForceLowerCommand())
 
-    #rotateStick.Button6.whenPressed(HolonomicMoveCommand(70, 54, 45))
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
@@ -110,13 +111,11 @@ def init():
     '''
 
     controller.A.toggleWhenPressed(IntakeCommand())
-    controller.B.whenPressed(SlowEjectCommand())
+    #controller.B.whenPressed(SlowEjectCommand())
 
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
 
+
     controller.RightJoystick.toggleWhenPressed(IntakeCommand())
     #controller.LeftJoystick.whenPressed(EjectCommand())
-
-    controller.DPadLeft.whenPressed(PanelEjectCommand()) # Lower the elevator slightly, just to removed the hatch panel.
-    controller.DPadLeft.whenPressed(SlowEjectCommand())
