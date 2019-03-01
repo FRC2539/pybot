@@ -10,7 +10,7 @@ from commands.lights.seizurelightscommand import SeizureLightsCommand
 
 
 
-class ClimbCommandGroup(CommandGroup):
+class L3ClimbCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('Climb')
