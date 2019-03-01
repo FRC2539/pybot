@@ -37,11 +37,13 @@ from commands.climber.frontretractcommand import FrontRetractCommand
 from commands.climber.rearretractcommand import RearRetractCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.climber.drivebackwardcommand import DriveBackwardCommand
-from commands.climber.climbcommandgroup import ClimbCommandGroup
+from commands.climber.l3climbcommandgroup import L3ClimbCommandGroup
+from commands.climber.l2climbcommandgroup import L2ClimbCommandGroup
 
 from commands.lights.orangelightscommand import OrangeLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
+from commands.lights.visionbasedlightscommand import VisionBasedLightsCommand
 
 
 def init():
@@ -65,13 +67,15 @@ def init():
 
     logicalaxes.climb = rotateStick.bottomThing
 
-    driveStick.trigger.whileHeld(PreciseModeCommand())
+    driveStick.trigger.whileHeld(VisionBasedLightsCommand())
 
     rotateStick.topThumb.whenPressed(ZeroGyroCommand())
     rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     rotateStick.trigger.whenPressed(EjectCommand())
 
-    rotateStick.Button8.whenPressed(ClimbCommandGroup())
+    rotateStick.Button8.whenPressed(L3ClimbCommandGroup())
+    rotateStick.Button9.whenPressed(L2ClimbCommandGroup())
+
     rotateStick.Button10.whenPressed(ForceLowerCommand())
 
     #rotateStick.Button6.whenPressed(HolonomicMoveCommand(70, 54, 45))

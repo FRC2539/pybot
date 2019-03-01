@@ -34,7 +34,7 @@ class Intake(DebuggableSubsystem):
 
 
     def hasCargo(self):
-        return self.cargo.get()
+        return not self.cargo.get()
 
 
     def initDefaultCommand(self):

@@ -1,5 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from custom import driverhud
+from custom.config import Config
+
 from wpilib import Spark
 from networktables import NetworkTables
 
@@ -12,6 +14,8 @@ class Lights(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Lights')
         self.lights = Spark(ports.lights.lightControllerID)
+
+        cameraTable = NetworkTables.getTable('cameraTable')
 
         self.colors = {
                         'black' : 0.99,
@@ -27,12 +31,17 @@ class Lights(DebuggableSubsystem):
                         'chase' : -0.31
             }
 
+
+        self.position = Config('cameraTable/finalCenter', 0)
+        self.width = Config('cameraTable/screenWidth', 0)
+        self.distance = Config('cameraTable/distanceToTape', 0)
+
     '''
     Light Mapping:
         Intake:     - Has Game Piece:       Solid Green
 
         Auto:       - No Target             Solid Red
-                    - Sees Target, Moving   Blink Purple (fast)
+                    - Sees Target, Moving   Solid Purple
                     - In position           Solid Blue
 
         Loading:    - Hatch Panel           Blink Yellow (fast)
@@ -82,3 +91,11 @@ class Lights(DebuggableSubsystem):
 
     def chase(self):
         self.set(self.colors['chase'])
+
+    def visionBasedLights(self):
+
+        if self.position == 0 or self.width == 0 or self.distance == 0:
+            print('pos ' + str(self.position) + 'width ' + str(self.width) + ' dis ' + str(self.distance))
+            return -10, -10
+        else:
+            return abs((self.width / 2) - self.position), self.distance

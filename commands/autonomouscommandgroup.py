@@ -74,6 +74,10 @@ class AutonomousCommandGroup(CommandGroup):
 
         #self.addSequential(VisionMoveCommand())
 
+        #self.addSequential(VisionMoveCommand())
+        #self.addParallel(SuperStructureGoToLevelCommand('midHatches'))
+
+
         #self.addParallel(SuperStructureGoToLevelCommand('lowHatches'))
 
         #self.addSequential(MoveCommand(100))
