@@ -6,6 +6,8 @@ from commands.network.alertcommand import AlertCommand
 from wpilib.command.waitcommand import WaitCommand
 import commandbased.flowcontrol as fc
 
+from networktables import NetworkTables
+
 #from commands.drivetrain.movecommand import MoveCommand
 #from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 #from commands.drivetrain.pivotcommand import PivotCommand
@@ -26,7 +28,9 @@ from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
 
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.pivotcommand import PivotCommand
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.setspeedcommand import SetSpeedCommand
 
 from commands.intake.slowejectcommand import SlowEjectCommand
 
@@ -39,17 +43,42 @@ class AutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Autonomous')
 
+        NetworkTables.initialize(server='10.25.39.2')
+
         ds = DriverStation.getInstance()
 
+        #self.addSequential(SetSpeedCommand(2500))
+        dt = NetworkTables.getTable('DriveTrain')
+        dt.putNumber('ticksPerInch', 300)
+        dt.putNumber('DriveTrain/width', 200)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        dt.putNumber('normalSpeed', 2500)
+        dt.putNumber('maxSpeed', 2500)
+
         Config('DriveTrain/ticksPerInch', 350)
-        self.addSequential(VisionMoveCommand())
+        Config('DriveTrain/width', 29.5)
+        Config('DriveTrain/Speed/P', 1)
+        Config('DriveTrain/Speed/IZone', 30)
+        Config('DriveTrain/Speed/D', 31)
+        Config('DriveTrain/Speed/I', 0.001)
+        Config('DriveTrain/Speed/F', 0.7)
+        Config('DriveTrain/normalSpeed', 2500)
+        Config('DriveTrain/maxSpeed', 2500)
+
+
+
+        #self.addSequential(VisionMoveCommand())
 
         #self.addParallel(SuperStructureGoToLevelCommand('lowHatches'))
 
         #self.addSequential(MoveCommand(100))
         #Config('DriveTrain/ticksPerInch', 350)
-        #self.addSequential(TransitionMoveCommand(30,60,30,150,0,0))
-
+        #
 
 
         #self.addSequential(TransitionMoveCommand(30,60,30,100,0,0))
@@ -57,19 +86,25 @@ class AutonomousCommandGroup(CommandGroup):
         ###visionmove demo
         #self.addSequential(VisionMoveCommand())
 
+        @fc.IF(lambda: Config('Autonomous/Auto', '') == 'RightRocketFront')
+        def rightFrontAuto(self):
+            #cargoship to place first hatch then go to ham play place
+            self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
+            #self.addSequential(VisionMoveCommand())
+            #self.addSequential(SlowEjectCommand(), 1)
+            #self.addSequential(TurnCommand(-160))
+            #self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
+            #self.addSequential(VisionMoveCommand())
 
-        #cargoship to place first hatch then go to ham play place
-        #self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
-        #self.addSequential(SlowEjectCommand(), 1)
-        #self.addSequential(TurnCommand(-160))
-        #self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
-        #self.addSequential(VisionMoveCommand())
 
-        #start right to rocket1
-        #self.addSequential(TransitionMoveCommand(30,60,30,310,35,15))
-        #self.addSequential(TransitionMoveCommand(60,60,0,115,10,150))
-        #self.addSequential(TurnCommand(90))
-        #self.addSequential(VisionMoveCommand())
+        @fc.IF(lambda: Config('Autonomous/Auto', '') == 'RightRocketBack')
+        def rightBackAuto(self):
+            #start right to rocket3
+            self.addSequential(TransitionMoveCommand(30,60,30,260,50,15))
+            self.addSequential(TurnCommand(250))
+            #self.addSequential(VisionMoveCommand())
+            #self.addSequential(TransitionMoveCommand(60,60,5,115,10,150))
+            #self.addSequential(VisionMoveCommand())
 
         '''
         @fc.IF(lambda: Config('Autonomous/Auto') == '1')

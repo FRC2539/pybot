@@ -33,6 +33,7 @@ class VisionMoveCommand(Command):
         self.tapeDistance = 0
         self.tapeFound = False
 
+        self.stopDistance = 120
         #self.num = 0
 
 
@@ -85,7 +86,7 @@ class VisionMoveCommand(Command):
                 print("slow down")
                 speed = 25
                 robot.drivetrain.move(0, 0, 0)
-            elif self.tapeDistance <= 55:
+            elif self.tapeDistance <= int(self.stopDistance):
                 print("under 60: "+str(self.tapeDistance))
                 if self.demo == True and self.tapeDistance <= 45:
                     print("under 40: "+str(self.tapeDistance))

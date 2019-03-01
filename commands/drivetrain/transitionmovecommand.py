@@ -65,9 +65,22 @@ class TransitionMoveCommand(Command):
         #else:
         #    self.distance =  abs(currentPositions[1]) - abs(self.startPositions[1])
 
-        self.distance = abs(currentPositions[0] - currentPositions[1]) - abs(self.startPositions[0] - self.startPositions[1])
-        if self.distance < 0:
-            self.distance = self.distance *-1
+        #currentPos = abs(currentPositions[0] - currentPositions[1])
+        #startPos = abs(self.startPositions[0] - self.startPositions[1])
+
+        currentPos = abs(currentPositions[0])
+        startPos = abs(self.startPositions[0])
+
+        if currentPos < 0:
+            currentPos = currentPos *-1
+        print("cp: "+str(currentPos))
+        if startPos < 0:
+            startPos = startPos *-1
+        print("sp: "+str(startPos))
+
+        self.distance = currentPos - startPos
+        #if self.distance < 0:
+        #    self.distance = self.distance *-1
 
         print("distance: "+ str(self.distance / Config('DriveTrain/ticksPerInch')) + " td: "+ str(self.transitionDistance / Config('DriveTrain/ticksPerInch')) + " ed: "+ str(self.endDistance / Config('DriveTrain/ticksPerInch')))
         if (abs(self.rotated) == True or abs(self.rotating) == True or (abs(self.distance) >= abs(self.transitionDistance) and abs(self.distance) <= abs(self.endDistance))) and self.transited == False:
@@ -122,10 +135,10 @@ class TransitionMoveCommand(Command):
                     self._finished = True
             else:
                 if self.rotating == True:
-                    lspeed = currentspeed + (.005) * angleDiff
-                    rspeed = currentspeed - (.005) * angleDiff
+                    lspeed = currentspeed + (.05) * angleDiff
+                    rspeed = currentspeed - (.05) * angleDiff
                 else:
-                    lspeed = currentspeed + (.005) * angleDiff
+                    lspeed = currentspeed + (.05) * angleDiff
 
             '''
             lowtarget = targetAngle - 5
@@ -187,6 +200,11 @@ class TransitionMoveCommand(Command):
         return r
 
     def isFinished(self):
+        if self.distance < 0:
+            self.distance = self.distance * -1
+
+        if self.endDistance < 0:
+            self.endDistance = self.endDistance * -1
 
         if abs(self.distance) >= abs(self.endDistance):
             print("finished")

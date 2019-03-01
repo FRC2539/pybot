@@ -59,8 +59,8 @@ class BaseDrive(DebuggableSubsystem):
         self.lastInputs = None
 
         self.setUseEncoders(True)
-        self.maxSpeed = Config('DriveTrain/maxSpeed')
-        self.speedLimit = Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 2500 #Config('DriveTrain/maxSpeed')
+        self.speedLimit = 2500
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
 
@@ -236,11 +236,11 @@ class BaseDrive(DebuggableSubsystem):
         for motor in self.activeMotors:
             motor.configClosedLoopRamp(0, 0)
             for profile in range(2):
-                motor.config_kP(profile, 0, 0)
-                motor.config_kI(profile, 0, 0)
-                motor.config_kD(profile, 0, 0)
-                motor.config_kF(profile, 0, 0)
-                motor.config_IntegralZone(profile, 0, 0)
+                motor.config_kP(profile, 1, 0)
+                motor.config_kI(profile, 0.001, 0)
+                motor.config_kD(profile, 31, 0)
+                motor.config_kF(profile, 0.7, 0)
+                motor.config_IntegralZone(profile, 30, 0)
 
 
     def resetGyro(self):
@@ -352,6 +352,9 @@ class BaseDrive(DebuggableSubsystem):
         Updates the max speed of the drive and changes to the appropriate
         mode depending on if encoders are enabled.
         '''
+        print("deadband:   ")
+        print(abs(self.deadband))
+        speed = int(speed)
 
         if speed <= 0:
             raise ValueError('DriveTrain speed must be greater than 0')

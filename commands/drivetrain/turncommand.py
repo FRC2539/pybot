@@ -18,6 +18,7 @@ class TurnCommand(MoveCommand):
 
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
+        robot.drivetrain.setSpeedLimit(2500)
 
         offset = self._calculateDisplacement()
         targetPositions = []
