@@ -33,6 +33,8 @@ class Lights(DebuggableSubsystem):
                         'chase' : -0.31
             }
 
+        self.off()
+
 
     '''
     Light Mapping:
