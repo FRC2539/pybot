@@ -99,6 +99,22 @@ class AutonomousCommandGroup(CommandGroup):
             ##self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
             ##self.addSequential(VisionMoveCommand())
 
+        @fc.IF(lambda: Config('Autonomous/autoModeSelect', '') == 4)
+        def lrfAuto(self):
+            #RightRocketFRont
+            self.addSequential(TransitionMoveCommand(30,80,60,150,10,-40))
+            ##self.addSequential(VisionMoveCommand())
+            ##self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
+
+        @fc.IF(lambda: Config('Autonomous/autoModeSelect', '') == 5)
+        def lrbAuto(self):
+            #RightRocketback
+            self.addSequential(TransitionMoveCommand(30,60,30,260,50,-15))
+            self.addSequential(TurnCommand(-250))
+            ##self.addSequential(VisionMoveCommand())
+            ##self.addSequential(TransitionMoveCommand(60,60,5,115,10,150))
+            ##self.addSequential(VisionMoveCommand())
+
         #leftCaRgoFRont
 
 
