@@ -110,7 +110,7 @@ def init():
     controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
     '''
 
-    controller.A.toggleWhenPressed(IntakeCommand())
+    #controller.A.toggleWhenPressed(IntakeCommand())
     #controller.B.whenPressed(SlowEjectCommand())
 
     controller.X.whileHeld(DeelevateCommand())

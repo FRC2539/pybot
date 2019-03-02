@@ -12,6 +12,7 @@ class AllExtendCommand(Command):
 
     def initialize(self):
         self._finished = False
+        robot.climber.driveForward()
 
 
     def execute(self):
@@ -23,4 +24,5 @@ class AllExtendCommand(Command):
 
 
     def end(self):
+        robot.climber.stopDrive()
         robot.climber.stopRacks()
