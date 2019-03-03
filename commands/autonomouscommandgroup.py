@@ -92,7 +92,13 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect', '')) == '3')
         def rcfAuto(self):
             #RightCaRgoFRont
-            self.addSequential(TransitionMoveCommand(30,60,20,80,1,-30))
+
+            self.addSequential(SetSpeedCommand(800))
+            self.addSequential(TransitionMoveCommand(30, 50, 20, 30, 0, 0))
+            self.addSequential(SuperStructureGoToLevelCommand('lowHatches'))
+
+
+            #self.addSequential(TransitionMoveCommand(30,60,20,80,1,-30))
             ##self.addSequential(VisionMoveCommand())
             ##self.addSequential(SlowEjectCommand(), 1)
             ##self.addSequential(TurnCommand(-160))
