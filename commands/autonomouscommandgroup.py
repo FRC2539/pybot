@@ -92,6 +92,11 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: Config('Autonomous/autoModeSelect', '') == 3)
         def rrcAuto(self):
             #RightCaRgoFRont
+            #
+
+            #self.addSequential(TransitionMoveCommand(25, 60, 40, , 30)
+
+
             self.addSequential(TransitionMoveCommand(30,60,30,120,1,-30))
             ##self.addSequential(VisionMoveCommand())
             ##self.addSequential(SlowEjectCommand(), 1)
