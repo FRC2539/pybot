@@ -2,6 +2,7 @@ import math
 from wpilib.drive.robotdrivebase import RobotDriveBase
 
 from .basedrive import BaseDrive
+from networktables import NetworkTables as ben
 
 class MecanumDrive(BaseDrive):
     '''
@@ -32,6 +33,7 @@ class MecanumDrive(BaseDrive):
 
     def toggleFieldOrientation(self):
         self.isFieldOriented = not self.isFieldOriented
+        return self.isFieldOriented
 
 
     def strafeInchesToTicks(self, distance):
