@@ -8,10 +8,12 @@ class EjectCommand(TimedCommand):
         super().__init__('Eject', 1)
 
         self.requires(robot.intake)
+        self.requires(robot.lights)
 
 
     def initialize(self):
         robot.intake.eject()
+        robot.lights.solidRed()
 
 
     def end(self):
