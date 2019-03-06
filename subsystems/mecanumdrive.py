@@ -1,8 +1,7 @@
 import math
 from wpilib.drive.robotdrivebase import RobotDriveBase
-
+from custom.config import Config
 from .basedrive import BaseDrive
-from networktables import NetworkTables as ben
 
 class MecanumDrive(BaseDrive):
     '''
@@ -18,7 +17,7 @@ class MecanumDrive(BaseDrive):
         self.resetGyro()
         self.isFieldOriented = True
 
-        self.strafeTicksPerInch = 258 #Experimental value, reccomended to re-test for every robot.
+        self.strafeTicksPerInch = Config('Drivetrain/strafeTicksPerInch', 258) #Experimental value, reccomended to re-test for every robot.
 
 
     def setUseFieldOrientation(self, isFieldOriented=True):
