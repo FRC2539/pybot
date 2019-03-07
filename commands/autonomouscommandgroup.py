@@ -34,7 +34,7 @@ from commands.drivetrain.setspeedcommand import SetSpeedCommand
 
 from commands.intake.slowejectcommand import SlowEjectCommand
 
-from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
+#from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 
 
 
@@ -42,45 +42,58 @@ class AutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('Autonomous')
-
-        NetworkTables.initialize(server='10.25.39.2')
+        print("auto init")
+        #NetworkTables.initialize(server='10.25.39.2')
 
         ds = DriverStation.getInstance()
 
-        #self.addSequential(SetSpeedCommand(2500))
-        dt = NetworkTables.getTable('DriveTrain')
-        dt.putNumber('ticksPerInch', 300)
-        dt.putNumber('DriveTrain/width', 200)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        dt.putNumber('normalSpeed', 2500)
-        dt.putNumber('maxSpeed', 2500)
+        #NetworkTables.initialize()
+        #dt = NetworkTables.getTable('DriveTrain')
 
-        Config('DriveTrain/ticksPerInch', 350)
-        Config('DriveTrain/width', 29.5)
-        Config('DriveTrain/Speed/P', 1)
-        Config('DriveTrain/Speed/IZone', 30)
-        Config('DriveTrain/Speed/D', 31)
-        Config('DriveTrain/Speed/I', 0.001)
-        Config('DriveTrain/Speed/F', 0.7)
-        Config('DriveTrain/normalSpeed', 2500)
-        Config('DriveTrain/maxSpeed', 2500)
+
+
+        #am.delete()
+
+        #NetworkTables.shutdown()
+        #NetworkTables.initialize()
+
+        #self.addSequential(SetSpeedCommand(2500))
+        #dt = NetworkTables.getTable('DriveTrain')
+        #dt.putNumber('ticksPerInch', 300)
+        #dt.putNumber('DriveTrain/width', 200)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('DriveTrain/width', 350)
+        #dt.putNumber('normalSpeed', 2500)
+        #dt.putNumber('maxSpeed', 2500)
+
+        #Config('DriveTrain/ticksPerInch', 350)
+        #Config('DriveTrain/width', 29.5)
+        #Config('DriveTrain/Speed/P', 1)
+        #Config('DriveTrain/Speed/IZone', 30)
+        #Config('DriveTrain/Speed/D', 31)
+        #Config('DriveTrain/Speed/I', 0.001)
+        #Config('DriveTrain/Speed/F', 0.7)
+        #Config('DriveTrain/normalSpeed', 2500)
+        #Config('DriveTrain/maxSpeed', 2500)
 
         print('dtms: '+str(Config('DriveTrain/maxSpeed', '')))
         print('citf: '+str(Config('CameraInfo/tapeFound', '')))
-        print('ac: '+str(Config('Autonomous/autoModeSelect', '')))
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect', '')) == '1')
+        print('ac: '+str(Config('Autonomous/autoModeSelect', 'None')))
+        print('dt: '+str(Config('DriveTrain/ticksPerInch')))
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
+            self.addSequential(TransitionMoveCommand(25,60,65,120,65,40))
             #RightRocketFRont
-            self.addSequential(TransitionMoveCommand(30,80,20,80,10,40))
+            #self.addSequential(TransitionMoveCommand(25,70,35,100,60,70))
             ##self.addSequential(VisionMoveCommand())
             ##self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect', '')) == '2')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRB')
         def rrbAuto(self):
             #RightRocketback
             self.addSequential(TransitionMoveCommand(30,60,30,160,50,15))
@@ -89,7 +102,7 @@ class AutonomousCommandGroup(CommandGroup):
             ##self.addSequential(TransitionMoveCommand(60,60,5,115,10,150))
             ##self.addSequential(VisionMoveCommand())
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect', '')) == '3')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
             #RightCaRgoFRont
             #
@@ -101,7 +114,7 @@ class AutonomousCommandGroup(CommandGroup):
 
             self.addSequential(SetSpeedCommand(800))
             self.addSequential(TransitionMoveCommand(30, 50, 20, 30, 0, 0))
-            self.addSequential(SuperStructureGoToLevelCommand('lowHatches'))
+            #self.addSequential(SuperStructureGoToLevelCommand('lowHatches'))
 
 
             #self.addSequential(TransitionMoveCommand(30,60,20,80,1,-30))
@@ -111,14 +124,14 @@ class AutonomousCommandGroup(CommandGroup):
             ##self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
             ##self.addSequential(VisionMoveCommand())
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect', '')) == '4')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRF')
         def lrfAuto(self):
             #LeftRocketFRont
             self.addSequential(TransitionMoveCommand(30,80,20,80,10,-40))
             ##self.addSequential(VisionMoveCommand())
             ##self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect', '')) == '5')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRB')
         def lrbAuto(self):
             #LeftRocketback
             self.addSequential(TransitionMoveCommand(30,60,30,160,50,-15))
