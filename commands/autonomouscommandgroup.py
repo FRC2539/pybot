@@ -8,29 +8,19 @@ import commandbased.flowcontrol as fc
 
 from networktables import NetworkTables
 
-#from commands.drivetrain.movecommand import MoveCommand
-#from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
-#from commands.drivetrain.pivotcommand import PivotCommand
-#from commands.drivetrain.turncommand import TurnCommand
-#from commands.drivetrain.runintowallcommand import RunIntoWallCommand
-#from commands.drivetrain.setspeedcommand import SetSpeedCommand
-#from commands.drivetrain.gotowallcommand import GoToWallCommand
-#from commands.elevator.gotoheightcommand import GoToHeightCommand
-#from commands.intake.intakecommand import IntakeCommand
-#from commands.intake.outtakecommand import OuttakeCommand
-#from commands.intake.slowouttakecommand import SlowOuttakeCommand
+import robot
 
+from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
-#from commands.drivetrain.newrampingspeedcommand import NewRampingSpeedCommand
 from commands.drivetrain.visionmovecommand import VisionMoveCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
-
-from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.pivotcommand import PivotCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
+from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 
 from commands.intake.slowejectcommand import SlowEjectCommand
 
@@ -57,7 +47,7 @@ class AutonomousCommandGroup(CommandGroup):
         #NetworkTables.shutdown()
         #NetworkTables.initialize()
 
-        #self.addSequential(SetSpeedCommand(2500))
+
         #dt = NetworkTables.getTable('DriveTrain')
         #dt.putNumber('ticksPerInch', 300)
         #dt.putNumber('DriveTrain/width', 200)
@@ -80,6 +70,22 @@ class AutonomousCommandGroup(CommandGroup):
         #Config('DriveTrain/normalSpeed', 2500)
         #Config('DriveTrain/maxSpeed', 2500)
 
+        dt = NetworkTables.getTable('DriveTrain')
+        dt.putNumber('ticksPerInch', 300)
+        dt.putNumber('normalSpeed', 2500)
+        dt.putNumber('maxSpeed', 2500)
+
+        Config('DriveTrain/ticksPerInch', 350)
+        Config('DriveTrain/width', 29.5)
+        Config('DriveTrain/Speed/P', 1)
+        Config('DriveTrain/Speed/IZone', 30)
+        Config('DriveTrain/Speed/D', 31)
+        Config('DriveTrain/Speed/I', 0.001)
+        Config('DriveTrain/Speed/F', 0.7)
+        Config('DriveTrain/normalSpeed', 2500)
+        Config('DriveTrain/maxSpeed', 2500)
+
+
         print('dtms: '+str(Config('DriveTrain/maxSpeed', '')))
         print('citf: '+str(Config('CameraInfo/tapeFound', '')))
         print('ac: '+str(Config('Autonomous/autoModeSelect', 'None')))
@@ -88,6 +94,8 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
             self.addSequential(TransitionMoveCommand(25,60,65,120,65,40))
+            self.addSequential(StrafeCommand(20))
+
             #RightRocketFRont
             #self.addSequential(TransitionMoveCommand(25,70,35,100,60,70))
             ##self.addSequential(VisionMoveCommand())
@@ -267,3 +275,6 @@ class AutonomousCommandGroup(CommandGroup):
         self.addSequential(SetSpeedCommand(800))
         self.addSequential(GoToHeightCommand('ground'))
         '''
+        @fc.IF(lambda: not robot.drivetrain.isFieldOriented)
+        def toggleBackToFieldOrientation(self):
+            self.addSequential(ToggleFieldOrientationCommand())

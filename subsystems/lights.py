@@ -5,6 +5,7 @@ from custom.config import Config
 from wpilib import Spark
 from networktables import NetworkTables
 
+import robot
 import time
 import ports
 
@@ -30,7 +31,10 @@ class Lights(DebuggableSubsystem):
                         'yellow' : 0.69,
                         'orange' : 0.63,
                         'fire' : -0.57,
-                        'chase' : -0.31
+                        'chase' : -0.31,
+                        'gold' : 0.67,
+                        'lime' : 0.73,
+                        'blinkWhite' : -0.21
             }
 
         self.off()
@@ -91,6 +95,19 @@ class Lights(DebuggableSubsystem):
 
     def chase(self):
         self.set(self.colors['chase'])
+
+    def blinkWhite(self):
+        self.set(self.colors['blinkWhite'])
+
+    def isZero(self):
+        if robot.arm.isAtZero() and robot.elevator.isAtZero():
+            self.solidWhite()
+
+        elif robot.arm.isAtZero() or robot.elevator.isAtZero():
+            self.blinkWhite()
+
+        else:
+            self.off()
 
     def visionBasedLights(self):
         pos = self.position.getValue()

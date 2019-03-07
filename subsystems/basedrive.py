@@ -352,8 +352,6 @@ class BaseDrive(DebuggableSubsystem):
         Updates the max speed of the drive and changes to the appropriate
         mode depending on if encoders are enabled.
         '''
-        print("deadband:   ")
-        print(abs(self.deadband))
         speed = int(speed)
 
         if speed <= 0:

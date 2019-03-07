@@ -2,14 +2,20 @@ from .debuggablesubsystem import DebuggableSubsystem
 from rev import CANSparkMax, MotorType, ControlType, ConfigParameter
 from wpilib import DigitalInput
 
-import ports
+from custom.config import Config
+from networktables import NetworkTables
 
+import ports
+import robot
 
 class Elevator(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
         super().__init__('Elevator')
+
+        NetworkTables.initialize(server='10.25.39.2')
+        self.Elevator = NetworkTables.getTable('Elevator')
 
         self.motor = CANSparkMax(ports.elevator.motorID, MotorType.kBrushless)
         self.encoder = self.motor.getEncoder()
@@ -54,17 +60,21 @@ class Elevator(DebuggableSubsystem):
         if isTop:
             self.stop()
         else:
+            robot.lights.isZero()
             self.set(1.0)
 
         return isTop
 
+
     def down(self):
+
         isZero = self.isAtZero()
         print('Elevator ' + str(self.getPosition()))
 
         if isZero:
             self.stop()
             self.resetEncoder()
+            robot.lights.isZero()
 
         else:
             self.set(-1.0)

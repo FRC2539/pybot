@@ -3,6 +3,8 @@ from rev import CANSparkMax, MotorType, ControlType
 import ports
 from wpilib import DigitalInput
 
+import robot
+from networktables import NetworkTables
 
 class Arm(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -56,6 +58,7 @@ class Arm(DebuggableSubsystem):
             self.setPosition(float(self.upperLimit))
             self.stop()
         else:
+            robot.lights.isZero()
             self.set(1)
 
         return isTop
@@ -69,6 +72,8 @@ class Arm(DebuggableSubsystem):
             print('IS ZERO ')
             self.stop()
             self.resetEncoder()
+            robot.lights.isZero()
+
 
         else:
             self.set(-1)
@@ -86,6 +91,8 @@ class Arm(DebuggableSubsystem):
             print('IS ZERO ')
             self.stop()
             self.resetEncoder()
+            robot.lights.isZero()
+
 
         else:
             self.set(-0.7)
