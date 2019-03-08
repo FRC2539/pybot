@@ -51,71 +51,133 @@ from commands.lights.visionbasedlightscommand import VisionBasedLightsCommand
 
 
 def init():
+    driveLayoutPrimary = Config('DriveTrain/Layout', True)
+
     '''
     Declare all controllers, assign axes to logical axes, and trigger
     commands on various button events. Available event types are:
         - whenPressed
         - whileHeld: cancelled when the button is released
         - whenReleased
-        - toggleWhenPressed: start on first press, cancel on next
+        - toggleWhenPressed: sta
+        rt on first press, cancel on next
         - cancelWhenPressed: good for commands started with a different button
     '''
 
     # The joysticks for driving the robot
-    driveStick = LogitechJoystick(0)
-    rotateStick = LogitechJoystick(1)
+    if driveLayoutPrimary:
 
-    logicalaxes.driveX = driveStick.X
-    logicalaxes.driveY = driveStick.Y
-    logicalaxes.driveRotate = rotateStick.X
+        driveStick = LogitechJoystick(0)
+        rotateStick = LogitechJoystick(1)
 
-    driveStick.trigger.whileHeld(VisionBasedLightsCommand())
+        logicalaxes.driveX = driveStick.X
+        logicalaxes.driveY = driveStick.Y
+        logicalaxes.driveRotate = rotateStick.X
 
-    rotateStick.topThumb.whenPressed(ZeroGyroCommand())
-    rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-    rotateStick.trigger.whenPressed(EjectCommand())
+        driveStick.trigger.whileHeld(VisionBasedLightsCommand())
 
-    rotateStick.Button8.whenPressed(L3ClimbCommandGroup())
-    rotateStick.Button9.whenPressed(L2ClimbCommandGroup())
+        rotateStick.topThumb.whenPressed(ZeroGyroCommand())
+        rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
+        rotateStick.trigger.whenPressed(EjectCommand())
 
-    rotateStick.Button10.whenPressed(ForceLowerCommand())
+        rotateStick.Button8.whenPressed(L3ClimbCommandGroup())
+        rotateStick.Button9.whenPressed(L2ClimbCommandGroup())
+
+        rotateStick.Button10.whileHeld(ForceLowerCommand())
 
 
+        controller = LogitechDualShock(2)
+
+        controller.Back.whenPressed(ResetCommand())
+        controller.Start.whenPressed(ForceLowerCommand())
+
+        """
+        controller.RightBumper.whileHeld(AllExtendCommand())
+        controller.RightTrigger.whileHeld(AllRetractCommand())
+
+        controller.A.whileHeld(DriveForwardCommand())
+        controller.B.whileHeld(DriveBackwardCommand())
+        controller.X.whileHeld(FrontRetractCommand())
+        controller.Y.whileHeld(RearRetractCommand())
+        """
+
+        controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
+        controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
+
+        controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
+        controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
+
+        '''
+        controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
+        controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
+        controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
+        controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
+        '''
+
+        #controller.A.toggleWhenPressed(IntakeCommand())
+        #controller.B.whenPressed(SlowEjectCommand())
+
+        controller.X.whileHeld(DeelevateCommand())
+        controller.Y.whileHeld(ElevateCommand())
+
+
+        controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+        #controller.LeftJoystick.whenPressed(EjectCommand())
+
+
+
+    else:
+        driveController = LogitechDualShock(0)
+
+        logicalaxes.driveX = driveController.LeftX
+        logicalaxes.driveY = driveController.LeftY
+
+        logicalaxes.driveRotate = driveController.RightX
+
+        driveController.A.whenPressed(ZeroGyroCommand())
+        driveController.X.whenPressed(ToggleFieldOrientationCommand())
+        driveController.B.whileHeld(ForceLowerCommand())
+        driveController.RightTrigger.whenPressed(EjectCommand())
+
+        driveController.DPadUp.whenPressed(L3ClimbCommandGroup())
+        driveController.DPadDown.whenPressed(L2ClimbCommandGroup())
     # The controller for non-driving subsystems of the robot
-    controller = LogitechDualShock(2)
-
-    controller.Back.whenPressed(ResetCommand())
-    controller.Start.whenPressed(ForceLowerCommand())
-
-    """
-    controller.RightBumper.whileHeld(AllExtendCommand())
-    controller.RightTrigger.whileHeld(AllRetractCommand())
-
-    controller.A.whileHeld(DriveForwardCommand())
-    controller.B.whileHeld(DriveBackwardCommand())
-    controller.X.whileHeld(FrontRetractCommand())
-    controller.Y.whileHeld(RearRetractCommand())
-    """
-
-    controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
-    controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
-
-    controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
-    controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
-
-    '''
-    controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
-    controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
-    controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
-    controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
-    '''
-
-    #controller.A.toggleWhenPressed(IntakeCommand())
-    #controller.B.whenPressed(SlowEjectCommand())
-
-    controller.X.whileHeld(DeelevateCommand())
-    controller.Y.whileHeld(ElevateCommand())
 
 
-    controller.RightJoystick.toggleWhenPressed(IntakeCommand())
-    #controller.LeftJoystick.whenPressed(EjectCommand())
+        controller = LogitechDualShock(1)
+
+        controller.Back.whenPressed(ResetCommand())
+        controller.Start.whenPressed(ForceLowerCommand())
+
+        """
+        controller.RightBumper.whileHeld(AllExtendCommand())
+        controller.RightTrigger.whileHeld(AllRetractCommand())
+
+        controller.A.whileHeld(DriveForwardCommand())
+        controller.B.whileHeld(DriveBackwardCommand())
+        controller.X.whileHeld(FrontRetractCommand())
+        controller.Y.whileHeld(RearRetractCommand())
+        """
+
+        controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
+        controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
+
+        controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
+        controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
+
+        '''
+        controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
+        controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
+        controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
+        controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
+        '''
+
+        #controller.A.toggleWhenPressed(IntakeCommand())
+        #controller.B.whenPressed(SlowEjectCommand())
+
+        controller.X.whileHeld(DeelevateCommand())
+        controller.Y.whileHeld(ElevateCommand())
+
+
+        controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+        #controller.LeftJoystick.whenPressed(EjectCommand())
