@@ -93,9 +93,10 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
-            self.addSequential(TransitionMoveCommand(25,60,65,120,65,40))
+            self.addSequential(TransitionMoveCommand(25,60,65,200,65,40))
             self.addSequential(StrafeCommand(20))
-
+            self.addSequential(MoveCommand(20))
+            self.addSequential(MoveCommand(-20))
             #RightRocketFRont
             #self.addSequential(TransitionMoveCommand(25,70,35,100,60,70))
             ##self.addSequential(VisionMoveCommand())
