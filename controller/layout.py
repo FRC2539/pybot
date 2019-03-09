@@ -1,5 +1,7 @@
 from .logitechdualshock import LogitechDualShock
 from .logitechjoystick import LogitechJoystick
+from .thrustmasterjoystick import ThrustmasterJoystick
+
 from . import logicalaxes
 
 from custom.config import Config
@@ -54,7 +56,7 @@ from commands.lights.visionbasedlightscommand import VisionBasedLightsCommand
 
 
 def init():
-    driveLayoutPrimary = Config('DriveTrain/Layout', True)
+    driveLayoutPrimary = Config('DriveTrain/Layout', False)
 
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -111,24 +113,27 @@ def init():
 
 
     else:
-        driveController = LogitechDualShock(0)
+        backupDriveStick = ThrustmasterJoystick(0)
+        backupRotateStick = ThrustmasterJoystick(1)
 
-        logicalaxes.driveX = driveController.LeftX
-        logicalaxes.driveY = driveController.LeftY
+        logicalaxes.driveX = backupDriveStick.X
+        logicalaxes.driveY = backupDriveStick.Y
 
-        logicalaxes.driveRotate = driveController.RightX
+        logicalaxes.driveRotate = backupRotateStick.X
 
-        driveController.A.whenPressed(ZeroGyroCommand())
-        driveController.X.whenPressed(ToggleFieldOrientationCommand())
-        driveController.B.whileHeld(ForceLowerCommand())
-        driveController.RightTrigger.whenPressed(EjectCommand())
+        backupDriveStick.trigger.whileHeld(GoToTapeCommand())
+        backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
-        driveController.DPadUp.whenPressed(L3ClimbCommandGroup())
-        driveController.DPadDown.whenPressed(L2ClimbCommandGroup())
+        backupRotateStick.rightThumb.whenPressed(ToggleFieldOrientationCommand())
+        backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
 
+        backupRotateStick.trigger.whenPressed(EjectCommand())
 
+        backupRotateStick.LeftRightTop.whenPressed(L3ClimbCommandGroup())
+        backupRotateStick.RightLeftTop.whenPressed(L2ClimbCommandGroup())
         # The controller for non-driving subsystems of the robot
-        controller = LogitechDualShock(1)
+
+        controller = LogitechDualShock(2)
 
         controller.Back.whenPressed(ResetCommand())
 
@@ -142,4 +147,4 @@ def init():
         controller.Y.whileHeld(ElevateCommand())
 
 
-        controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+        #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
