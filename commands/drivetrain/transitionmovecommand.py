@@ -1,5 +1,8 @@
 from wpilib.command.command import Command
 
+
+from networktables import NetworkTables
+
 from custom.config import Config
 
 import math
@@ -14,15 +17,18 @@ class TransitionMoveCommand(Command):
         #super().__init__(slowspeed, highspeed, transitionDistance, endDistance, rotateDistance, degrees)
         #super().__init__(degrees, False, name)
 
+
+
         self.requires(robot.drivetrain)
 
 
         self.slowspeed = slowspeed / 100
         self.highspeed = highspeed / 100
-        self.transitionDistance = transitionDistance * Config('DriveTrain/ticksPerInch')
-        self.endDistance = endDistance * Config('DriveTrain/ticksPerInch')
+        self.transitionDistance = transitionDistance
 
-        self.rotateDistance = rotateDistance * Config('DriveTrain/ticksPerInch')
+        self.endDistance = endDistance
+
+        self.rotateDistance = rotateDistance
         self.degrees = degrees
         #self.startAngle = robot.drivetrain.getAngle()
 
@@ -31,6 +37,17 @@ class TransitionMoveCommand(Command):
 
 
     def initialize(self):
+
+
+
+
+
+        #self.transitionDistance = self.transitionDistance * self.tpi
+        #self.endDistance = self.endDistance * self.tpi
+        #self.rotateDistance = self.rotateDistance * self.tpi
+
+        #print("raw endDistance: "+ str(self.endDistance)+" tpi: " + str(self.tpi))
+
         #print("command slow: " +str(self.slowspeed)+ "high: " + str(self.highspeed))
         self.startPositions = robot.drivetrain.getPositions()
         self.startAngle = robot.drivetrain.getAngle()
@@ -44,29 +61,23 @@ class TransitionMoveCommand(Command):
         self.travelturndistance = 0
 
     def execute(self):
-        #slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0
-        #print("execute: " + str(self.slowspeed) + ", " + str(self.highspeed)+", "+str(self.transitionDistance)+", "+str(self.endDistance)+", "+str(self.rotateDistance)+", "+str(self.degrees))
+
+        self.tpi = Config('DriveTrain/ticksPerInch', 0)
+
+        transitionDistance = self.transitionDistance * self.tpi
+        endDistance = self.endDistance * self.tpi
+        rotateDistance = self.rotateDistance * self.tpi
 
         currentPositions = robot.drivetrain.getPositions()
+        print("c0: "+str(currentPositions[0]) + "c1: "+str(currentPositions[1]))
 
-        #print("totalTravel: "+str((self.startPositions[0] - currentPositions[0])/Config('DriveTrain/ticksPerInch')))
-        #print("startPos: " + str(self.startPositions[0]) + " currentPos: " + str(currentPositions[0]))
-
-        #print("move and monitor: "+ str(currentPositions))
         if self.transited:
             currentspeed = self.highspeed
         else:
             currentspeed = self.slowspeed
 
-
-
-        #if abs(self.degrees > 0):
-        #     self.distance =  abs(currentPositions[0]) - abs(self.startPositions[0])
-        #else:
-        #    self.distance =  abs(currentPositions[1]) - abs(self.startPositions[1])
-
-        currentPos = abs(currentPositions[0] - currentPositions[1])
-        startPos = abs(self.startPositions[0] - self.startPositions[1])
+        currentPos = abs(currentPositions[0]) # - currentPositions[1])
+        startPos = abs(self.startPositions[0]) # - self.startPositions[1])
 
         if currentPos < 0:
             currentPos = currentPos *-1
@@ -78,38 +89,35 @@ class TransitionMoveCommand(Command):
         if self.distance < 0:
             self.distance = self.distance *-1
 
-        print("distance: "+ str(self.distance / Config('DriveTrain/ticksPerInch')) + " td: "+ str(self.transitionDistance / Config('DriveTrain/ticksPerInch')) + " ed: "+ str(self.endDistance / Config('DriveTrain/ticksPerInch')))
-        if (abs(self.rotated) == True or abs(self.rotating) == True or (abs(self.distance) >= abs(self.transitionDistance) and abs(self.distance) <= abs(self.endDistance))) and self.transited == False:
+        print("tpi: "+ str(self.tpi))
+        print("distance: "+ str(self.distance / self.tpi) + " td: "+ str(transitionDistance / self.tpi) + " ed: "+ str(endDistance / self.tpi) + " rd: "+ str(rotateDistance / self.tpi) + " d: "+ str(self.degrees))
+        #print("raw distance: "+ str(self.distance) + " td: "+ str(transitionDistance) + " ed: "+ str(endDistance))
+        if (abs(self.rotated) == True or abs(self.rotating) == True or (abs(self.distance) >= abs(transitionDistance) and abs(self.distance) <= abs(endDistance))) and self.transited == False:
             #if abs(self.rotated == True) or ((abs(self.rotating == False) and (abs(self.rotateDistance) > abs(self.distance)) or abs(self.rotateDistance) == 0)):
-            #print("td: " + str(self.transitionDistance / Config('DriveTrain/ticksPerInch')) + " d: " + str(self.distance / Config('DriveTrain/ticksPerInch')) + " r: " + str(self.rotated / Config('DriveTrain/ticksPerInch')) + " rd: " + str(self.rotateDistance / Config('DriveTrain/ticksPerInch')))
-            if (self.distance > self.transitionDistance and (abs(self.rotated) == True or abs(self.rotateDistance) == 0) or abs(self.rotateDistance) > self.transitionDistance):
+            #print("td: " + str(transitionDistance / self.tpi) + " d: " + str(self.distance / self.tpi) + " r: " + str(self.rotated / self.tpi) + " rd: " + str(self.rotateDistance / self.tpi))
+            if (self.distance > transitionDistance and (abs(self.rotated) == True or abs(rotateDistance) == 0) or abs(rotateDistance) > transitionDistance):
                 print("transition now")
                 self.transited = True
                 currentspeed = self.highspeed
                 #currentspeed = 0
-            elif abs(self.distance) >= abs(self.rotateDistance):
+            elif abs(self.distance) >= abs(rotateDistance):
                 self.rotating = True
                 self.travelturndistance = self.distance
                 print("finish rotating")
                 #currentspeed = 0
-        elif abs(self.distance) >= abs(self.endDistance):
+        elif abs(self.distance) >= abs(endDistance):
 
-            print("end now, d: "+ str(self.distance)+" ed: "+str(self.endDistance) + "ttd: " + str(self.travelturndistance))
+            print("end now, d: "+ str(self.distance)+" ed: "+str(endDistance) + "ttd: " + str(self.travelturndistance))
             #currentspeed = 0
             self._finished = True
 
-        print("currentspeed: "+str(currentspeed))
+        #print("currentspeed: "+str(currentspeed))
         rspeed = currentspeed
         lspeed = currentspeed
 
         #print("sd: "+ str(self.distance) + " rd: "+ str(self.rotateDistance))
         targetAngle = 0
-        if abs(self.distance) >= abs(self.rotateDistance):
-            #direction = ""
-            #if self.degrees > 0:
-            #    direction = "add"
-            #else:
-            #    direction = "subtract"
+        if abs(self.distance) >= abs(rotateDistance):
 
             targetAngle = self.startAngle + self.degrees
             if targetAngle > 360:
@@ -119,71 +127,22 @@ class TransitionMoveCommand(Command):
             currentAngle = robot.drivetrain.getAngle()
 
             angleDiff = self.angleDifference(currentAngle, targetAngle)
-            #print("angleDiff: "+str(angleDiff))
-            if (-1 <= angleDiff <= 1):
-                #print("good and done rotating")
-                self.rotating = False
-                self.rotated = True
-                if self.rotateDistance != 0 and abs(self.distance) >= abs(self.endDistance):
-                    self._finished = True
-                elif abs(self.distance) >= abs(self.endDistance):
-                    #print("turning done and past end distance")
-                    self._finished = True
-            else:
-                if self.rotating == True:
-                    lspeed = currentspeed + (.05) * angleDiff
-                    rspeed = currentspeed - (.05) * angleDiff
-                else:
-                    lspeed = currentspeed + (.05) * angleDiff
-
-            '''
-            lowtarget = targetAngle - 5
-            if lowtarget < 0:
-                if direction == "subtract":
-                    lowtarget = 360 + lowtarget
-                else:
-                    lowtarget = 360 - lowtarget
-            hightarget = targetAngle + 5
-            if hightarget > 360:
-                if direction == "subtract":
-                    hightarget = 360 + hightarget
-                else:
-                    hightarget = hightarget - 360
-            print("startAngle: " + str(self.startAngle) + "currentAngle: " +str(currentAngle) + " targetAngle: " + str(targetAngle) + " ht: " + str(hightarget) + " lt: " + str(lowtarget)  )
-            if ((lowtarget) <= currentAngle <= (hightarget)):
+            print("rotate now, ad: "+ str(angleDiff))
+            if (-2 <= angleDiff <= 2):
                 print("good and done rotating")
                 self.rotating = False
                 self.rotated = True
-                if self.rotateDistance != 0 and abs(self.distance) >= abs(self.endDistance):
+                if rotateDistance != 0 and abs(self.distance) >= abs(endDistance):
                     self._finished = True
-                elif abs(self.distance) >= abs(self.endDistance):
+                elif abs(self.distance) >= abs(endDistance):
+                    print("turning done and past end distance")
                     self._finished = True
             else:
-                if direction == "add":
-                    print("go right")
-                    #if abs(currentspeed) > 0:
-                    #    rspeed = currentspeed - (.5) #* targetAngle
-                    #else:
-                    if self.rotating == True:
-                        lspeed = currentspeed + (.5) #* targetAngle
-                        rspeed = currentspeed - (.5) #* targetAngle
-                    else:
-                        lspeed = currentspeed + (.5) #* targetAngle
+                if self.rotating == True:
+                    lspeed = currentspeed + (.005) * (angleDiff/.25)
+                    rspeed = currentspeed - (.005) * (angleDiff/.25)
                 else:
-                    print("go left")
-                    #if abs(currentspeed) > 0:
-                    #    lspeed = currentspeed - (.5) #* targetAngle
-                    #else:
-                    if self.rotating == True:
-                        rspeed = currentspeed + (.5) #* targetAngle
-                        lspeed = currentspeed - (.5) #* targetAngle
-                    else:
-                        rspeed = currentspeed + (.5) #* targetAngle
-            '''
-
-
-
-        #print("speed: "+str(currentspeed))
+                    lspeed = currentspeed + (.005) * (angleDiff/.25)
 
         robot.drivetrain.movePer(lspeed, rspeed)
 
@@ -196,13 +155,15 @@ class TransitionMoveCommand(Command):
         return r
 
     def isFinished(self):
-        if self.distance < 0:
-            self.distance = self.distance * -1
+        distance = self.distance #* Config('DriveTrain/ticksPerInch', 0)
+        endDistance = self.endDistance * Config('DriveTrain/ticksPerInch', 0)
+        if distance < 0:
+            distance = distance * -1
 
-        if self.endDistance < 0:
-            self.endDistance = self.endDistance * -1
+        if endDistance < 0:
+            endDistance = endDistance * -1
 
-        if abs(self.distance) >= abs(self.endDistance):
+        if abs(distance) >= abs(endDistance):
             print("finished")
             robot.drivetrain.move(0, 0, 0)
             robot.drivetrain.movePer(0, 0)
@@ -214,5 +175,5 @@ class TransitionMoveCommand(Command):
         #robot.drivetrain.stop()
 
         print("end")
-        print(str(self.distance) + "   " + str(self.endDistance))
-        print('TPI: ' + str(abs(Config('DriveTrain/ticksPerInch'))))
+        #print(str(self.distance) + "   " + str(self.endDistance))
+        #print('TPI: ' + str(abs(self.tpi)))

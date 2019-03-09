@@ -35,19 +35,21 @@ class SuperStructureGoToLevelCommand(Command):
 
 
     def isFinished(self):
-        if not self.armUOD == 'null':
+        if not self.armUOD == 'null' and not self.armDone:
             if robot.arm.goToLevel(self.level, self.armUOD):
                 robot.arm.stop()
                 self.armDone = True
         else:
+            print('DFGSDFGSDBVSDFBEFBEFG')
             robot.arm.stop()
             self.armDone = True
 
-        if not self.armUOD == 'null':
+        if not self.armUOD == 'null' and not self.eleDone:
             if robot.elevator.goToLevel(self.level, self.eleUOD):
                 robot.elevator.stop()
                 self.eleDone = True
         else:
+            print('EHVFRAHFVIADKFJOAFKOWKFOKWFOKF')
             robot.elevator.stop()
             self.eleDone = True
 

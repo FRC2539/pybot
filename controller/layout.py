@@ -115,7 +115,7 @@ def init():
         controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
         controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
         '''
-        controller.B.whenPressed(SuperStructureGoToLevelCommand('lowHatches'))
+        controller.B.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
         #controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
 
 

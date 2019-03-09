@@ -42,7 +42,7 @@ class Elevator(DebuggableSubsystem):
         self.levels = {
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
-                        'lowHatches' : 0.0,
+                        'lowHatches' : 10.0,
                         'midHatches' : 29.0,
                         'highHatches' : 130.0,
                         'cargoBalls' : 50.0,
@@ -105,15 +105,18 @@ class Elevator(DebuggableSubsystem):
             self.stop()
             return True
 
-        elif upOrDown == 'up' and position < target:
+        elif upOrDown == 'up' and position <= target:
+            print('im right here')
             self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
             return False
 
-        elif upOrDown == 'down' and position > target:
+        elif upOrDown == 'down' and position >= target:
+            print('Now im here')
             self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
             return False
 
         else:
+            print('I AM DONE or broken')
             self.stop()
             return True
 
