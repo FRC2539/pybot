@@ -8,7 +8,7 @@ from commands.climber.getonplatformcommand import GetOnPlatformCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
-from commands.drivetrain.movecommand import MoveCommand as Ben
+from commands.drivetrain.movecommand import MoveCommand
 
 class L2ClimbCommandGroup(CommandGroup):
 
@@ -36,7 +36,7 @@ class L2ClimbCommandGroup(CommandGroup):
         self.addSequential(SetSpeedCommand(800))
 
         #Move in
-        self.addSequential(Ben(7))
+        #self.addSequential(MoveCommand(6))
 
         #Turn on Seizure Lights
         self.addSequential(SeizureLightsCommand())

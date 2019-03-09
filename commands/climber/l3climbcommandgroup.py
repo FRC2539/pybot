@@ -9,7 +9,7 @@ from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
-from commands.drivetrain.movecommand import MoveCommand as Ben
+from commands.drivetrain.movecommand import MoveCommand
 
 class L3ClimbCommandGroup(CommandGroup):
 
@@ -22,22 +22,22 @@ class L3ClimbCommandGroup(CommandGroup):
         self.addSequential(AllExtendCommand())
 
         #Get front wheels on platform.
-        self.addSequential(GetOnPlatformCommand(), 3)
+        self.addSequential(GetOnPlatformCommand(), 2)
 
         #Front racks up.
-        self.addSequential(KeepRearExtendedCommand(), 3.5)
+        self.addSequential(KeepRearExtendedCommand(), 1.75)
 
         #Get back wheels on.
         self.addSequential(DriveForwardCommand(), 3)
 
         #Rear rack up.
-        self.addSequential(RearRetractCommand(), 3.5)
+        self.addSequential(RearRetractCommand(), 1.75)
 
         #Set lower speed.
-        self.addSequential(SetSpeedCommand(800))
+        #self.addSequential(SetSpeedCommand(800))
 
         #Move in
-        self.addSequential(Ben(7))
+        #self.addSequential(MoveCommand(6))
 
         #Turn on Seizure Lights
         self.addSequential(SeizureLightsCommand())
