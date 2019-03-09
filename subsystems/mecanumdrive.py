@@ -17,7 +17,7 @@ class MecanumDrive(BaseDrive):
         self.resetGyro()
         self.isFieldOriented = True
 
-        self.strafeTicksPerInch = Config('Drivetrain/strafeTicksPerInch', 258) #Experimental value, reccomended to re-test for every robot.
+        self.strafeTicksPerInch = Config('DriveTrain/strafeTicksPerInch', 258) #Experimental value, reccomended to re-test for every robot.
 
 
     def setUseFieldOrientation(self, isFieldOriented=True):
