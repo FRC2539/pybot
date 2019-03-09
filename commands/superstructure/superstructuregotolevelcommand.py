@@ -21,20 +21,33 @@ class SuperStructureGoToLevelCommand(Command):
 
         if robot.arm.levels[self.level] > robot.arm.getPosition():
             self.armUOD = 'up'
+        elif int(robot.arm.levels[self.level]) == 0:
+            self.armUOD = 'null'
         else:
             self.armUOD = 'down'
 
         if robot.elevator.levels[self.level] > robot.elevator.getPosition():
             self.eleUOD = 'up'
+        elif int(robot.elevator.levels[self.level]) == 0:
+            self.eleUOD = 'null'
         else:
             self.eleUOD = 'down'
 
 
     def isFinished(self):
-        if robot.arm.goToLevel(self.level, self.armUOD):
+        if not self.armUOD == 'null':
+            if robot.arm.goToLevel(self.level, self.armUOD):
+                robot.arm.stop()
+                self.armDone = True
+        else:
             robot.arm.stop()
             self.armDone = True
-        if robot.elevator.goToLevel(self.level, self.eleUOD):
+
+        if not self.armUOD == 'null':
+            if robot.elevator.goToLevel(self.level, self.eleUOD):
+                robot.elevator.stop()
+                self.eleDone = True
+        else:
             robot.elevator.stop()
             self.eleDone = True
 

@@ -13,7 +13,7 @@ class GrabHatchCommand(Command):
     def initialize(self):
         self._isFinished = False
         self.originalPos = robot.arm.getPosition()
-        robot.arm.setPosition(float(robot.arm.getPosition() + 10.0))
+        robot.arm.setPosition(float(robot.arm.getPosition() + 10.0), 'up')
 
 
     def execute(self):
