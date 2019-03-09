@@ -59,7 +59,7 @@ class Arm(DebuggableSubsystem):
             self.stop()
         else:
             robot.lights.isZero()
-            self.set(1)
+            self.set(0.93)
 
         return isTop
 

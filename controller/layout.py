@@ -13,6 +13,7 @@ from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrienta
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.gototapecommand import GoToTapeCommand
+from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -77,6 +78,7 @@ def init():
         logicalaxes.driveRotate = rotateStick.X
 
         driveStick.trigger.whileHeld(GoToTapeCommand())
+        driveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
         rotateStick.topThumb.whenPressed(ZeroGyroCommand())
         rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())

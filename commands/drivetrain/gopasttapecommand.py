@@ -3,16 +3,15 @@ from custom.config import Config
 import math
 import robot
 
-class GoToTapeCommand(Command):
+class GoPastTapeCommand(Command):
 
     def __init__(self):
-        super().__init__('Go To Tape')
+        super().__init__('Go Past Tape')
 
         self.requires(robot.drivetrain)
 
         self.tape = Config('limelight/tv', 0)
         self.strafe = Config('limelight/tx', 0)
-        self.distance = Config('limelight/ty', 0)
         #self.angle = Config('cameraTable/tapeAngle', 0)
 
         self.x = 0
@@ -35,15 +34,12 @@ class GoToTapeCommand(Command):
 
     def execute(self):
         if self.tape.getValue() == 1:
-            self.x = self.strafe.getValue()
-            self.y = self.distance.getValue()
-            oY = self.y
+            self.x = self.strafe.getValue() + 1.5
+            self.y = 0.15
             oX = self.x
 
-            self.x = math.copysign((self.x * 3) / 100, self.x)
-            self.y = math.copysign((self.y * 3) / 100, self.y)
+            self.x = math.copysign((self.x * 2) / 100, self.x)
             self.rotate = self.x / 2
-
 
             if self.x > 0.4:
                 self.x = math.copysign(0.4, self.x)
@@ -51,16 +47,9 @@ class GoToTapeCommand(Command):
             elif abs(oX) < 0.5:
                 self.x = oX / 5
                 self.rotate = self.x
-            elif abs(oX) > 0.5 and self.x < 0.1:
-                self.x = math.copysign(0.1, oX)
-                self.rotate = math.copysign(0.1, oX)
-
-            if self.y > 0.5:
-                self.y = 0.5
-            elif abs(oY) < 0.5:
-                self.y = 0
-            elif oY > 0.5 and self.y < 0.15:
-                self.y = 0.15
+            elif abs(oX) > 0.5 and self.x < 0.8:
+                self.x = math.copysign(0.08, oX)
+                self.rotate = math.copysign(0.08, oX)
 
             print('     X: ' + str(self.x))
             print('     Y: ' + str(self.y))
