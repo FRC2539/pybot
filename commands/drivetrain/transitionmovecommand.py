@@ -76,18 +76,18 @@ class TransitionMoveCommand(Command):
         else:
             currentspeed = self.slowspeed
 
-        currentPos = abs(currentPositions[0] - currentPositions[1])
-        startPos = abs(self.startPositions[0] - self.startPositions[1])
+        currentPos = abs(currentPositions[0]) # - currentPositions[1])
+        startPos = abs(self.startPositions[0]) # - self.startPositions[1])
 
-        #if currentPos < 0:
-        #    currentPos = currentPos *-1
+        if currentPos < 0:
+            currentPos = currentPos *-1
 
-        #if startPos < 0:
-        #    startPos = self.distance *-1
+        if startPos < 0:
+            startPos = self.distance *-1
 
         self.distance = currentPos - startPos
-        #if self.distance < 0:
-        #    self.distance = self.distance *-1
+        if self.distance < 0:
+            self.distance = self.distance *-1
 
         print("tpi: "+ str(self.tpi))
         print("distance: "+ str(self.distance / self.tpi) + " td: "+ str(transitionDistance / self.tpi) + " ed: "+ str(endDistance / self.tpi) + " rd: "+ str(rotateDistance / self.tpi) + " d: "+ str(self.degrees))

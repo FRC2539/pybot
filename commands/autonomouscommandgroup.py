@@ -22,6 +22,8 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 
+from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
+
 from commands.intake.slowejectcommand import SlowEjectCommand
 
 #from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
@@ -93,14 +95,13 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
-            self.addSequential(TransitionMoveCommand(25,60,65,200,65,40))
-            self.addSequential(StrafeCommand(20))
-            self.addSequential(MoveCommand(20))
-            self.addSequential(MoveCommand(-20))
-            #RightRocketFRont
-            #self.addSequential(TransitionMoveCommand(25,70,35,100,60,70))
-            ##self.addSequential(VisionMoveCommand())
-            ##self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
+            #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
+            self.addSequential(TransitionMoveCommand(25,60,25,80,0,30))
+            self.addSequential(StrafeCommand(39))
+            #self.addSequential(SuperStructureGoToLevelCommand("lowHatches"))
+            self.addSequential(MoveCommand(68))
+
+            self.addSequential(TransitionMoveCommand(-50,40,-60,180,1,147.5))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRB')
         def rrbAuto(self):
@@ -113,25 +114,14 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
-            #RightCaRgoFRont
-            #
+            self.addSequential(TransitionMoveCommand(30,60,30,60,1,-15))
+            self.addSequential(StrafeCommand(-15))
+            self.addSequential(TurnCommand(15))
+            self.addSequential(MoveCommand(25))
 
-            #self.addSequential(TransitionMoveCommand(25, 60, 40, , 30)
-
-
-            self.addSequential(TransitionMoveCommand(30,60,30,120,1,-30))
-
-            self.addSequential(SetSpeedCommand(800))
-            self.addSequential(TransitionMoveCommand(30, 50, 20, 30, 0, 0))
-            #self.addSequential(SuperStructureGoToLevelCommand('lowHatches'))
+            #self.addSequential(MoveCommand(-25))
 
 
-            #self.addSequential(TransitionMoveCommand(30,60,20,80,1,-30))
-            ##self.addSequential(VisionMoveCommand())
-            ##self.addSequential(SlowEjectCommand(), 1)
-            ##self.addSequential(TurnCommand(-160))
-            ##self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
-            ##self.addSequential(VisionMoveCommand())
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRF')
         def lrfAuto(self):
