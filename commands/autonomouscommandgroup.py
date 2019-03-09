@@ -24,6 +24,8 @@ from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrienta
 
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 
+from commands.drivetrain.gototapecommand import GoToTapeCommand
+
 from commands.intake.slowejectcommand import SlowEjectCommand
 
 #from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
@@ -95,177 +97,74 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
-            #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
-            self.addSequential(TransitionMoveCommand(25,60,25,80,0,30))
-            self.addSequential(StrafeCommand(39))
+            #self.addSequential(SuperStructureGoToLevelCommand("floor"))
             #self.addSequential(SuperStructureGoToLevelCommand("lowHatches"))
-            self.addSequential(MoveCommand(68))
+            #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
+            self.addSequential(TransitionMoveCommand(25,60,25,70,0,30))
+            self.addSequential(StrafeCommand(39))
 
-            self.addSequential(TransitionMoveCommand(-50,40,-60,180,1,147.5))
+            self.addSequential(GoToTapeCommand())
+            #self.addSequential(MoveCommand(1))
+
+            ##self.addSequential(SuperStructureGoToLevelCommand("lowHatches"))
+
+            self.addSequential(TransitionMoveCommand(-50,80,-60,120,1,147.5))
+            self.addSequential(GoToTapeCommand())
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRB')
         def rrbAuto(self):
             #RightRocketback
-            self.addSequential(TransitionMoveCommand(30,60,30,160,50,15))
+            self.addSequential(TransitionMoveCommand(50,80,30,145,50,15))
             self.addSequential(TurnCommand(250))
-            ##self.addSequential(VisionMoveCommand())
+            self.addSequential(StrafeCommand(-50))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(5))
+
+
+
             ##self.addSequential(TransitionMoveCommand(60,60,5,115,10,150))
-            ##self.addSequential(VisionMoveCommand())
+
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
-            self.addSequential(TransitionMoveCommand(30,60,30,60,1,-15))
-            self.addSequential(StrafeCommand(-15))
-            self.addSequential(TurnCommand(15))
-            self.addSequential(MoveCommand(25))
-
-            #self.addSequential(MoveCommand(-25))
-
-
+            self.addSequential(TransitionMoveCommand(30,90,15,40,1,0))
+            #position arm
+            self.addSequential(StrafeCommand(-20))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(6))
+            #lower arm
+            self.addSequential(MoveCommand(-8))
+            self.addSequential(TransitionMoveCommand(-90,90,-60,140,1,155.5))
+            self.addSequential(StrafeCommand(-50))
+            self.addSequential(GoToTapeCommand())
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRF')
         def lrfAuto(self):
-            #LeftRocketFRont
-            self.addSequential(TransitionMoveCommand(30,80,20,80,10,-40))
-            ##self.addSequential(VisionMoveCommand())
-            ##self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
+            self.addSequential(TransitionMoveCommand(25,60,25,80,0,-30))
+            self.addSequential(StrafeCommand(-39))
+
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(2))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRB')
         def lrbAuto(self):
-            #LeftRocketback
-            self.addSequential(TransitionMoveCommand(30,60,30,160,50,-15))
-            self.addSequential(TurnCommand(-250))
-            ##self.addSequential(VisionMoveCommand())
-            ##self.addSequential(TransitionMoveCommand(60,60,5,115,10,150))
-            ##self.addSequential(VisionMoveCommand())
+            self.addSequential(TransitionMoveCommand(50,80,30,180,50,-15))
+            self.addSequential(TurnCommand(250))
+            self.addSequential(StrafeCommand(50))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(5))
 
-        #leftCaRgoFRont
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
+        def lrbAuto(self):
+            self.addSequential(TransitionMoveCommand(50,80,30,180,50,15))
+            self.addSequential(TurnCommand(-90))
 
-
-        #leftRocketfront
-
-        #leftRocketFRont
-
-
-
-        #self.addSequential(VisionMoveCommand())
-
-        #self.addSequential(VisionMoveCommand())
-        #self.addParallel(SuperStructureGoToLevelCommand('midHatches'))
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
+        def lrbAuto(self):
+            self.addSequential(TransitionMoveCommand(50,80,30,180,50,-15))
+            self.addSequential(TurnCommand(90))
 
 
-        #self.addParallel(SuperStructureGoToLevelCommand('lowHatches'))
-
-        #self.addSequential(MoveCommand(100))
-        #Config('DriveTrain/ticksPerInch', 350)
-        #
-
-
-        #self.addSequential(TransitionMoveCommand(30,60,30,100,0,0))
-
-        ###visionmove demo
-        #self.addSequential(VisionMoveCommand())
-
-        #@fc.IF(lambda: Config('Autonomous/Auto', '') == 'RightRocketFront')
-        #def rightFrontAuto(self):
-        #cargoship to place first hatch then go to ham play place
-        #self.addSequential(TransitionMoveCommand(30,60,30,200,1,-30))
-        #self.addSequential(VisionMoveCommand())
-        #self.addSequential(SlowEjectCommand(), 1)
-        #self.addSequential(TurnCommand(-160))
-        #self.addSequential(TransitionMoveCommand(30,60,30,270,140,-50))
-        #self.addSequential(VisionMoveCommand())
-
-
-        #@fc.IF(lambda: Config('Autonomous/Auto', '') == 'RightRocketBack')
-        #def rightBackAuto(self):
-        #start right to rocket3
-        #self.addSequential(TransitionMoveCommand(30,60,30,260,50,15))
-        #self.addSequential(TurnCommand(250))
-        #self.addSequential(VisionMoveCommand())
-        #self.addSequential(TransitionMoveCommand(60,60,5,115,10,150))
-        #self.addSequential(VisionMoveCommand())
-
-        '''
-        @fc.IF(lambda: Config('Autonomous/Auto') == '1')
-        def rightAuto(self):
-            ###go to rocket then go to ham play place
-            self.addSequential(TransitionMoveCommand(30,60,30,220,1,45))
-            #self.addSequential(VisionMoveCommand())
-            self.addSequential(TransitionMoveCommand(-50,60,-60,220,1,145))
-
-        @fc.IF(lambda: Config('Autonomous/Auto') == '1')
-        def centerauto(self):
-            ###cargoship to place first hatch then go to ham play place
-            self.addSequential(TransitionMoveCommand(30,60,30,240,1,-30))
-            self.addSequential(TurnCommand(160))
-            self.addSequential(TransitionMoveCommand(30,60,30,270,140,50))
-            self.addSequential(VisionMoveCommand())
-        '''
-
-
-
-
-
-        #slowspeed,highspeed,transitionDistance,endDistance,rotateDistance=0,degrees=0
-        #rotateDistance must be higher than transitionDistance for it to continue moving after the rotation.
-        #if rotatedistance is above 30, it moves until it hits the wall. IF rotateDistance is below 30, it moves the same small distance every time.
-        #we have no control over when it turn
-
-        #start right to rocket1
-        #self.addSequential(TransitionMoveCommand(30,80,30,155,5,50))
-        #self.addSequential(VisionMoveCommand())
-        #self.addSequential(TransitionMoveCommand(-35,80,-30,83,0.1,190))
-        #self.addSequential(VisionMoveCommand())
-
-        #start right to rocket2
-        #self.addSequential(TransitionMoveCommand(30,50,30,100,85,75))
-        #self.addSequential(VisionMoveCommand())
-        #self.addSequential(TransitionMoveCommand(-35,50,-24,83,0.1,55))
-
-        #start right to rocket3
-        #self.addSequential(TransitionMoveCommand(30,80,30,250,200,100))
-        #self.addSequential(VisionMoveCommand())
-        #self.addSequential(TransitionMoveCommand(0,0,0,0,0,0))
-
-        #start right to cargo1
-        #self.addSequential(TransitionMoveCommand(0,0,0,0,0,0))
-
-        #start right to cargo2
-        #self.addSequential(TransitionMoveCommand(0,0,0,0,0,0))
-
-
-        #vision move to tape
-        #self.addSequential(VisionMoveCommand())
-
-        #backup and turn from rocket
-        #self.addSequential(leaveRampCommand(-35,50,-24,35,.01,160))
-
-        #self.addSequential(leaveRampCommand(35,35,12,90,0,0))
-        #self.addSequential(leaveRampCommand(35.843219,60,45,100,50,36.236817265))
-
-
-        #self.addSequential(leaveRampCommand(35,85,10,130,90,90))
-        #self.addSequential(IntakeCommand(), 10)
-
-        #self.addSequential(StateMachineTempCommand())
-
-        #self.addSequential(NewRampingSpeedCommand(60, 600))
-
-        #self.addSequential(PivotCommand(20))
-
-        '''
-        #self.addSequential(SetSpeedCommand(1500))
-        self.addSequential(PivotCommand(45), 2)
-        self.addParallel(GoToHeightCommand('switch'))
-        self.addParallel(IntakeCommand(), 10)
-        self.addSequential(MoveWithGyroCommand(130))
-        self.addSequential(PivotCommand(-45), 2)
-        self.addSequential(OuttakeCommand(), 0.5)
-        self.addSequential(MoveWithGyroCommand(-10))
-        self.addSequential(SetSpeedCommand(800))
-        self.addSequential(GoToHeightCommand('ground'))
-        '''
         @fc.IF(lambda: not robot.drivetrain.isFieldOriented)
         def toggleBackToFieldOrientation(self):
             self.addSequential(ToggleFieldOrientationCommand())

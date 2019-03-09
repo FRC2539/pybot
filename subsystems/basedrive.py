@@ -346,6 +346,11 @@ class BaseDrive(DebuggableSubsystem):
             encoders.append(motor.getQuadraturePosition())
         return encoders
 
+    def resetEncoders(self):
+        for motor in self.motors:
+            motor.set(0)
+
+
 
     def setSpeedLimit(self, speed):
         '''
