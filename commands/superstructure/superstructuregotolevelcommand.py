@@ -14,67 +14,33 @@ class SuperStructureGoToLevelCommand(Command):
 
 
     def initialize(self):
+        self.eleDone = False
+        self.armDone = False
+        self.armUOD = ''
+        self.eleUOD = ''
 
-        self.armDone = 2
-        self.eleDone = 2
-        self.done = False
-
-
-        self.armStart = robot.arm.getPosition()
-        self.eleStart = robot.elevator.getPosition()
-
-        print('Arm at ' + str(robot.arm.getPosition()))
-        print('elevator at ' + str(robot.elevator.getPosition()))
-        print('Going to ' + str(self.level))
-
-        # 0 = Up, 1 = Down
-
-        if robot.arm.levels[self.level] > self.armStart:
-            print('arm start ' + str(self.armStart))
-            self.armUOD = 0
+        if robot.arm.levels[self.level] > robot.arm.getPosition():
+            self.armUOD = 'up'
         else:
-            self.armUOD = 1
+            self.armUOD = 'down'
 
-        if robot.elevator.levels[self.level] > self.eleStart:
-            self.eleUOD = 0
+        if robot.elevator.levels[self.level] > robot.elevator.getPosition():
+            self.eleUOD = 'up'
         else:
-            self.eleUOD = 1
-
-        robot.arm.goToLevel(self.level)
-        print('Moving arm')
-        robot.elevator.goToLevel(self.level)
-        print('Moving elevator')
-
-
-    def execute(self):
-        if (float(robot.arm.getPosition()) >= robot.arm.levels[self.level] and self.armUOD == 0) or (float(robot.arm.getPosition()) <= float(robot.arm.levels[self.level]) and self.armUOD == 1):
-            robot.arm.stop()
-            print('arm goal ' + str(robot.arm.levels[self.level]) + ' arm UOD ' + str(self.armUOD))
-            self.armDone = 1
-
-        if (float(robot.elevator.getPosition()) >= float(robot.elevator.levels[self.level]) and self.eleUOD == 0) or (float(robot.elevator.getPosition()) <= robot.elevator.levels[self.level] and self.eleUOD == 1):
-            robot.elevator.stop()
-            print('ele goal ' + str(robot.elevator.levels[self.level]) + ' ele UOD ' + str(self.eleUOD))
-            self.eleDone = 1
-
-        if self.eleDone == 1 and self.armDone == 1:
-            print('done')
-            self.done = True
-
-        robot.arm.goToLevel(self.level)
-        robot.elevator.goToLevel(self.level)
+            self.eleUOD = 'down'
 
 
     def isFinished(self):
-        return self.done
+        if robot.arm.goToLevel(self.level, self.armUOD):
+            robot.arm.stop()
+            self.armDone = True
+        if robot.elevator.goToLevel(self.level, self.eleUOD):
+            robot.elevator.stop()
+            self.eleDone = True
 
+        if self.eleDone and self.armDone:
+            return True
 
     def end(self):
-        self.armDone = 2
-        self.eleDone = 2
-        self.done = False
-
-        print('ended')
-
         robot.elevator.stop()
         robot.arm.stop()

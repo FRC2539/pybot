@@ -55,7 +55,7 @@ class Arm(DebuggableSubsystem):
         print('Arm ' + str(self.getPosition()))
 
         if isTop:
-            self.setPosition(float(self.upperLimit))
+            self.setPosition(float(self.upperLimit), 'down')
             self.stop()
         else:
             robot.lights.isZero()
@@ -135,8 +135,24 @@ class Arm(DebuggableSubsystem):
         self.encoder.setPosition(0.0)
 
 
-    def setPosition(self, position):
-        self.PIDController.setReference(float(position), ControlType.kPosition, 0, 0)
+    def setPosition(self, target, upOrDown):
+        position = self.getPosition()
+
+        if position >= self.upperLimit or position <= 0:
+            self.stop()
+            return True
+
+        if upOrDown.lower() == 'up' and position < target:
+            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
+            return False
+
+        elif upOrDown.lower() == 'down' and position > target:
+            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
+            return False
+
+        else:
+            self.stop()
+            return True
 
 
     def getPosition(self):
@@ -147,9 +163,8 @@ class Arm(DebuggableSubsystem):
         return (not self.lowerLimit.get()) or (self.getPosition() <= 0.0)
 
 
-    def goToLevel(self, level):
-        self.setPosition(float(self.levels[level]))
-        return float(self.levels[level])
+    def goToLevel(self, level, upOrDown=''):
+        return self.setPosition(float(self.levels[level]), upOrDown)
 
 
     def goToFloor(self):

@@ -12,6 +12,7 @@ from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.gototapecommand import GoToTapeCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -75,7 +76,7 @@ def init():
         logicalaxes.driveY = driveStick.Y
         logicalaxes.driveRotate = rotateStick.X
 
-        driveStick.trigger.whileHeld(VisionBasedLightsCommand())
+        driveStick.trigger.whileHeld(GoToTapeCommand())
 
         rotateStick.topThumb.whenPressed(ZeroGyroCommand())
         rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
@@ -111,9 +112,10 @@ def init():
         '''
         controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
         controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
-        controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
-        controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
         '''
+        controller.B.whenPressed(SuperStructureGoToLevelCommand('lowHatches'))
+        #controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
+
 
         #controller.A.toggleWhenPressed(IntakeCommand())
         #controller.B.whenPressed(SlowEjectCommand())
