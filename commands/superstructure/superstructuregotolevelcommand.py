@@ -26,14 +26,14 @@ class SuperStructureGoToLevelCommand(Command):
             self.armUOD = ''
         elif robot.arm.levels[self.level] > armPos:
             self.armUOD = 'up'
-        else:
+        elif robot.arm.levels[self.level] < armPos:
             self.armUOD = 'down'
 
         if robot.elevator.levels[self.level] <= elePos + 1.0 and robot.elevator.levels[self.level] >= elePos - 1.0:
             self.eleUOD = ''
         elif robot.elevator.levels[self.level] > elePos:
             self.eleUOD = 'up'
-        else:
+        elif robot.elevator.levels[self.level] < elePos:
             self.eleUOD = 'down'
 
 
