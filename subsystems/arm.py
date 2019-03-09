@@ -59,12 +59,12 @@ class Arm(DebuggableSubsystem):
             self.stop()
         else:
             robot.lights.isZero()
-            self.set(0.93)
+            self.set(1)
 
         return isTop
 
 
-    def down(self):
+    def down(self, speed=-1.0):
         isZero = self.isAtZero()
         print('Arm ' + str(self.getPosition()))
 
@@ -74,30 +74,18 @@ class Arm(DebuggableSubsystem):
             self.resetEncoder()
             robot.lights.isZero()
 
-
         else:
-            self.set(-1)
+            self.set(speed)
             if isZero:
                 print('IS ZERO')
                 self.stop()
                 self.resetEncoder()
+
         return isZero
 
     def downSS(self):
-        isZero = self.isAtZero()
-        print('Arm ' + str(self.getPosition()))
+        return self.down(-0.7)
 
-        if isZero:
-            print('IS ZERO ')
-            self.stop()
-            self.resetEncoder()
-            robot.lights.isZero()
-
-
-        else:
-            self.set(-0.7)
-
-        return isZero
 
     def forceDown(self):
         print('Down ' + str(self.getPosition()))
@@ -138,23 +126,16 @@ class Arm(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
-        print('POSITION: ' + str(position))
-        print('TARGET: ' + str(target))
-        print('Up or down:  ' + str(upOrDown))
-
-        if position >= self.startPos or position <= 0:
+        if target > self.upperLimit or target < 0.0:
             self.stop()
+            print('Illegal arm target position')
             return True
 
-        if upOrDown.lower() == 'up' and position < target:
-            #target = target - position
-            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
-            return False
+        elif upOrDown == 'up' and position < target:
+            return self.up()
 
-        elif upOrDown.lower() == 'down' and position > target:
-            #target = -1 * (position - target)
-            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
-            return False
+        elif upOrDown == 'down' and position > target:
+            return self.down()
 
         else:
             self.stop()

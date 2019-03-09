@@ -67,9 +67,9 @@ def init():
         - cancelWhenPressed: good for commands started with a different button
     '''
 
-    # The joysticks for driving the robot
     if driveLayoutPrimary:
 
+        # The joysticks for driving the robot
         driveStick = LogitechJoystick(0)
         rotateStick = LogitechJoystick(1)
 
@@ -87,23 +87,11 @@ def init():
         rotateStick.Button8.whenPressed(L3ClimbCommandGroup())
         rotateStick.Button9.whenPressed(L2ClimbCommandGroup())
 
-        rotateStick.Button10.whileHeld(ForceLowerCommand())
-
 
         controller = LogitechDualShock(2)
 
         controller.Back.whenPressed(ResetCommand())
-        controller.Start.whenPressed(ForceLowerCommand())
 
-        """
-        controller.RightBumper.whileHeld(AllExtendCommand())
-        controller.RightTrigger.whileHeld(AllRetractCommand())
-
-        controller.A.whileHeld(DriveForwardCommand())
-        controller.B.whileHeld(DriveBackwardCommand())
-        controller.X.whileHeld(FrontRetractCommand())
-        controller.Y.whileHeld(RearRetractCommand())
-        """
 
         controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
         controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
@@ -111,23 +99,14 @@ def init():
         controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
         controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
 
-        '''
         controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
-        controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
-        '''
         controller.B.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
-        #controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
 
-
-        #controller.A.toggleWhenPressed(IntakeCommand())
-        #controller.B.whenPressed(SlowEjectCommand())
 
         controller.X.whileHeld(DeelevateCommand())
         controller.Y.whileHeld(ElevateCommand())
-        controller.A.whenPressed(GrabHatchCommand())
 
         controller.RightJoystick.toggleWhenPressed(IntakeCommand())
-        #controller.LeftJoystick.whenPressed(EjectCommand())
 
 
 
@@ -146,23 +125,12 @@ def init():
 
         driveController.DPadUp.whenPressed(L3ClimbCommandGroup())
         driveController.DPadDown.whenPressed(L2ClimbCommandGroup())
-    # The controller for non-driving subsystems of the robot
 
 
+        # The controller for non-driving subsystems of the robot
         controller = LogitechDualShock(1)
 
         controller.Back.whenPressed(ResetCommand())
-        controller.Start.whenPressed(ForceLowerCommand())
-
-        """
-        controller.RightBumper.whileHeld(AllExtendCommand())
-        controller.RightTrigger.whileHeld(AllRetractCommand())
-
-        controller.A.whileHeld(DriveForwardCommand())
-        controller.B.whileHeld(DriveBackwardCommand())
-        controller.X.whileHeld(FrontRetractCommand())
-        controller.Y.whileHeld(RearRetractCommand())
-        """
 
         controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
         controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
@@ -170,19 +138,8 @@ def init():
         controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
         controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
 
-        '''
-        controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
-        controller.X.whenPressed(SuperStructureGoToLevelCommand('aboveFloor'))
-        controller.Y.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
-        controller.B.whenPressed(SuperStructureGoToLevelCommand('highHatches'))
-        '''
-
-        #controller.A.toggleWhenPressed(IntakeCommand())
-        #controller.B.whenPressed(SlowEjectCommand())
-
         controller.X.whileHeld(DeelevateCommand())
         controller.Y.whileHeld(ElevateCommand())
 
 
         controller.RightJoystick.toggleWhenPressed(IntakeCommand())
-        #controller.LeftJoystick.whenPressed(EjectCommand())
