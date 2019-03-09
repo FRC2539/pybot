@@ -68,7 +68,6 @@ class Elevator(DebuggableSubsystem):
 
 
     def down(self):
-
         isZero = self.isAtZero()
         print('Elevator ' + str(self.getPosition()))
 
@@ -101,17 +100,16 @@ class Elevator(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
-        if position >= self.upperLimit or position <= 0:
+        if target > self.upperLimit or target < 0.0:
             self.stop()
+            print('Illegal elevator target position')
             return True
 
         elif upOrDown == 'up' and position < target:
-            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
-            return False
+            return self.up()
 
         elif upOrDown == 'down' and position > target:
-            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
-            return False
+            return self.down()
 
         else:
             self.stop()
@@ -123,7 +121,6 @@ class Elevator(DebuggableSubsystem):
 
 
     def isAtZero(self):
-        print('ele height ' + str(self.getPosition()))
         return (self.getPosition() <= 0.0) or (not self.lowerLimit.get())
 
 

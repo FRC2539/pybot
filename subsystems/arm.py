@@ -64,7 +64,7 @@ class Arm(DebuggableSubsystem):
         return isTop
 
 
-    def down(self):
+    def down(self, speed=-1.0):
         isZero = self.isAtZero()
         print('Arm ' + str(self.getPosition()))
 
@@ -74,30 +74,18 @@ class Arm(DebuggableSubsystem):
             self.resetEncoder()
             robot.lights.isZero()
 
-
         else:
-            self.set(-1)
+            self.set(speed)
             if isZero:
                 print('IS ZERO')
                 self.stop()
                 self.resetEncoder()
+
         return isZero
 
     def downSS(self):
-        isZero = self.isAtZero()
-        print('Arm ' + str(self.getPosition()))
+        return self.down(-0.7)
 
-        if isZero:
-            print('IS ZERO ')
-            self.stop()
-            self.resetEncoder()
-            robot.lights.isZero()
-
-
-        else:
-            self.set(-0.7)
-
-        return isZero
 
     def forceDown(self):
         print('Down ' + str(self.getPosition()))
@@ -138,17 +126,16 @@ class Arm(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
-        if position >= self.upperLimit or position <= 0:
+        if target > self.upperLimit or target < 0.0:
             self.stop()
+            print('Illegal arm target position')
             return True
 
-        if upOrDown.lower() == 'up' and position < target:
-            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
-            return False
+        elif upOrDown == 'up' and position < target:
+            return self.up()
 
-        elif upOrDown.lower() == 'down' and position > target:
-            self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
-            return False
+        elif upOrDown == 'down' and position > target:
+            return self.down()
 
         else:
             self.stop()

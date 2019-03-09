@@ -32,6 +32,7 @@ class Climber(DebuggableSubsystem):
         self.rearRackMotor.setSafetyEnabled(False)
         self.rightRackMotor.setSafetyEnabled(False)
         self.leftRackMotor.setSafetyEnabled(False)
+        self.driveMotor.setSafetyEnabled(False)
 
 
     def getRightLimit(self):

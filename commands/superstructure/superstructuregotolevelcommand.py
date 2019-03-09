@@ -14,45 +14,37 @@ class SuperStructureGoToLevelCommand(Command):
 
 
     def initialize(self):
-        self.eleDone = False
-        self.armDone = False
         self.armUOD = ''
         self.eleUOD = ''
+        self.armDone = False
+        self.eleDone = False
 
-        if robot.arm.levels[self.level] > robot.arm.getPosition():
+        armPos = robot.arm.getPosition()
+        elePos = robot.elevator.getPosition()
+
+        if robot.arm.levels[self.level] <= armPos + 1.0 and robot.arm.levels[self.level] >= armPos - 1.0:
+            self.armUOD = ''
+        elif robot.arm.levels[self.level] > armPos:
             self.armUOD = 'up'
-        elif int(robot.arm.levels[self.level]) == 0:
-            self.armUOD = 'null'
-        else:
+        elif robot.arm.levels[self.level] < armPos:
             self.armUOD = 'down'
 
-        if robot.elevator.levels[self.level] > robot.elevator.getPosition():
+        if robot.elevator.levels[self.level] <= elePos + 1.0 and robot.elevator.levels[self.level] >= elePos - 1.0:
+            self.eleUOD = ''
+        elif robot.elevator.levels[self.level] > elePos:
             self.eleUOD = 'up'
-        elif int(robot.elevator.levels[self.level]) == 0:
-            self.eleUOD = 'null'
-        else:
+        elif robot.elevator.levels[self.level] < elePos:
             self.eleUOD = 'down'
 
 
+    def execute(self):
+        self.armDone = robot.arm.goToLevel(self.level, self.armUOD)
+        self.eleDone = robot.elevator.goToLevel(self.level, self.eleUOD)
+
+
     def isFinished(self):
-        if not self.armUOD == 'null':
-            if robot.arm.goToLevel(self.level, self.armUOD):
-                robot.arm.stop()
-                self.armDone = True
-        else:
-            robot.arm.stop()
-            self.armDone = True
+        return self.armDone and self.eleDone
 
-        if not self.armUOD == 'null':
-            if robot.elevator.goToLevel(self.level, self.eleUOD):
-                robot.elevator.stop()
-                self.eleDone = True
-        else:
-            robot.elevator.stop()
-            self.eleDone = True
-
-        if self.eleDone and self.armDone:
-            return True
 
     def end(self):
         robot.elevator.stop()
