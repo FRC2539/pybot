@@ -138,15 +138,21 @@ class Arm(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
-        if position >= self.upperLimit or position <= 0:
+        print('POSITION: ' + str(position))
+        print('TARGET: ' + str(target))
+        print('Up or down:  ' + str(upOrDown))
+
+        if position >= self.startPos or position <= 0:
             self.stop()
             return True
 
         if upOrDown.lower() == 'up' and position < target:
+            #target = target - position
             self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
             return False
 
         elif upOrDown.lower() == 'down' and position > target:
+            #target = -1 * (position - target)
             self.PIDController.setReference(float(target), ControlType.kPosition, 0, 0)
             return False
 
