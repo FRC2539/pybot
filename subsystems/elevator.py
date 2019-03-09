@@ -42,7 +42,7 @@ class Elevator(DebuggableSubsystem):
         self.levels = {
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
-                        'lowHatches' : 0.0,
+                        'lowHatches' : 10.0,
                         'midHatches' : 29.0,
                         'highHatches' : 130.0,
                         'cargoBalls' : 50.0,

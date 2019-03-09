@@ -37,9 +37,30 @@ class GoToTapeCommand(Command):
         if self.tape.getValue() == 1:
             self.x = self.strafe.getValue()
             self.y = self.distance.getValue()
-            self.x = math.copysign((self.x ** 2) / 100, self.x)
-            self.y = math.copysign((self.y ** 2) / 100, self.y)
-            self.rotate = self.x
+            oY = self.y
+            oX = self.x
+
+            self.x = math.copysign((self.x * 3) / 100, self.x)
+            self.y = math.copysign((self.y * 3) / 100, self.y)
+            self.rotate = self.x / 2
+
+
+            if self.x > 0.4:
+                self.x = math.copysign(0.4, self.x)
+                self.rotate = self.x
+            elif abs(oX) < 0.5:
+                self.x = 0
+                self.rotate = 0
+            elif abs(oX) > 0.5 and self.x < 0.1:
+                self.x = math.copysign(0.1, oX)
+                self.rotate = math.copysign(0.1, oX)
+
+            if self.y > 0.45:
+                self.y = 0.45
+            elif abs(oY) < 0.5:
+                self.y = 0
+            elif oY > 0.5 and self.y < 0.15:
+                self.y = 0.15
 
             print('     X: ' + str(self.x))
             print('     Y: ' + str(self.y))
@@ -56,7 +77,6 @@ class GoToTapeCommand(Command):
 
 
     def isFinished(self):
-        #return (abs(self.x) <= 0.05 and abs(self.y) <= 0.05 and abs(self.rotate) <= 0.05) or (not self.seenTape)
         return self._finished
 
 
