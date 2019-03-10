@@ -33,7 +33,7 @@ class Elevator(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
 
-        self.upperLimit = 135.0
+        self.upperLimit = 145.0
 
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(0.0)
@@ -55,13 +55,11 @@ class Elevator(DebuggableSubsystem):
 
     def up(self):
         isTop = self.getPosition() >= self.upperLimit
-        print('Elevator ' + str(self.getPosition()))
 
         if isTop:
             self.setPosition(float(self.upperLimit), 'down')
             self.stop()
         else:
-            robot.lights.isZero()
             self.set(1.0)
 
         return isTop
@@ -69,12 +67,10 @@ class Elevator(DebuggableSubsystem):
 
     def down(self):
         isZero = self.isAtZero()
-        print('Elevator ' + str(self.getPosition()))
 
         if isZero:
             self.stop()
             self.resetEncoder()
-            robot.lights.isZero()
 
         else:
             self.set(-1.0)

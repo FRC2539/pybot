@@ -12,7 +12,7 @@ class AllExtendCommand(Command):
 
     def initialize(self):
         self._finished = False
-        robot.climber.driveForward()
+        robot.climber.creepForward()
 
 
     def execute(self):

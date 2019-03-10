@@ -13,7 +13,6 @@ class GoToTapeCommand(Command):
         self.tape = Config('limelight/tv', 0)
         self.strafe = Config('limelight/tx', 0)
         self.distance = Config('limelight/ty', 0)
-        #self.angle = Config('cameraTable/tapeAngle', 0)
 
         self.x = 0
         self.y = 0
@@ -70,10 +69,14 @@ class GoToTapeCommand(Command):
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
             self._finished = abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02
+            if self._finished:
+                robot.lights.solidGreen()
+            else:
+                robot.lights.solidPurple()
         else:
+            robot.lights.solidRed()
             print('No vision target found!')
             robot.drivetrain.move(0, 0, 0)
-            self._finished = True
 
 
     def isFinished(self):
@@ -85,3 +88,5 @@ class GoToTapeCommand(Command):
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
+
+        robot.lights.off()
