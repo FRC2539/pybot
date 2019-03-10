@@ -58,7 +58,6 @@ class Arm(DebuggableSubsystem):
             self.setPosition(float(self.upperLimit), 'down')
             self.stop()
         else:
-            robot.lights.isZero()
             self.set(1)
 
         return isTop
@@ -69,15 +68,12 @@ class Arm(DebuggableSubsystem):
         print('Arm ' + str(self.getPosition()))
 
         if isZero:
-            print('IS ZERO ')
             self.stop()
             self.resetEncoder()
-            robot.lights.isZero()
 
         else:
             self.set(speed)
             if isZero:
-                print('IS ZERO')
                 self.stop()
                 self.resetEncoder()
 

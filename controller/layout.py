@@ -56,7 +56,7 @@ from commands.lights.visionbasedlightscommand import VisionBasedLightsCommand
 
 
 def init():
-    driveLayoutPrimary = Config('DriveTrain/Layout', False)
+    driveLayoutPrimary = Config('DriveTrain/Layout', True)
 
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -69,49 +69,49 @@ def init():
         - cancelWhenPressed: good for commands started with a different button
     '''
 
-    if driveLayoutPrimary:
+    #if driveLayoutPrimary:
 
-        # The joysticks for driving the robot
-        driveStick = LogitechJoystick(0)
-        rotateStick = LogitechJoystick(1)
+    # The joysticks for driving the robot
+    driveStick = LogitechJoystick(0)
+    rotateStick = LogitechJoystick(1)
 
-        logicalaxes.driveX = driveStick.X
-        logicalaxes.driveY = driveStick.Y
-        logicalaxes.driveRotate = rotateStick.X
+    logicalaxes.driveX = driveStick.X
+    logicalaxes.driveY = driveStick.Y
+    logicalaxes.driveRotate = rotateStick.X
 
-        driveStick.trigger.whileHeld(GoToTapeCommand())
-        driveStick.bottomThumb.whileHeld(GoPastTapeCommand())
+    driveStick.trigger.whileHeld(GoToTapeCommand())
+    driveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
-        rotateStick.topThumb.whenPressed(ZeroGyroCommand())
-        rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
-        rotateStick.trigger.whenPressed(EjectCommand())
+    rotateStick.topThumb.whenPressed(ZeroGyroCommand())
+    rotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
+    rotateStick.trigger.whenPressed(EjectCommand())
 
-        rotateStick.Button8.whenPressed(L3ClimbCommandGroup())
-        rotateStick.Button9.whenPressed(L2ClimbCommandGroup())
-
-
-        controller = LogitechDualShock(2)
-
-        controller.Back.whenPressed(ResetCommand())
+    rotateStick.Button8.whenPressed(L3ClimbCommandGroup())
+    rotateStick.Button9.whenPressed(L2ClimbCommandGroup())
 
 
-        controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
-        controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
+    controller = LogitechDualShock(2)
 
-        controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
-        controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
-
-        controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
-        controller.B.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
+    controller.Back.whenPressed(ResetCommand())
 
 
-        controller.X.whileHeld(DeelevateCommand())
-        controller.Y.whileHeld(ElevateCommand())
+    controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
+    controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
 
-        controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
+    controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
+
+    controller.A.whenPressed(SuperStructureGoToLevelCommand('floor'))
+    controller.B.whenPressed(SuperStructureGoToLevelCommand('midHatches'))
 
 
+    controller.X.whileHeld(DeelevateCommand())
+    controller.Y.whileHeld(ElevateCommand())
 
+    controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+
+
+    """
     else:
         backupDriveStick = ThrustmasterJoystick(0)
         backupRotateStick = ThrustmasterJoystick(1)
@@ -145,6 +145,6 @@ def init():
 
         controller.X.whileHeld(DeelevateCommand())
         controller.Y.whileHeld(ElevateCommand())
-
+    """
 
         #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
