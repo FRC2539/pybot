@@ -164,6 +164,9 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(TransitionMoveCommand(50,80,30,180,50,-15))
             self.addSequential(TurnCommand(90))
 
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Demo')
+        def lrbAuto(self):
+            self.addSequential(VisionMoveCommand())
 
         @fc.IF(lambda: not robot.drivetrain.isFieldOriented)
         def toggleBackToFieldOrientation(self):

@@ -55,26 +55,12 @@ class VisionMoveCommand(Command):
 
 
     def execute(self):
-        #if self.num >= 1:
-            #robot.drivetrain.setPositions(self.targetPositions)
 
-        #if self.sock != -1:
-        #    data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
-        #    print("1 received message:" + str(data))
-        #    self.tmessage = data.decode("utf-8")
-        #    self.message = self.tmessage.split(",")
-        #    if len(self.message) > 2:
 
-        #self.tapeFound = self.message[0].split(":")[1]
-        #self.tapeX = float(self.message[1].split(":")[1])
-        #self.tapeDistance = float(self.message[2].split(":")[1])
-
-        #DriveTrain/ticksPerInch
-
-        self.tapeFound = abs(Config('cameraInfo/tapeFound',False))
+        self.tapeFound = abs(Config('limelight/tv',False))
         print("tapefound- "+ str(self.tapeFound))
-        self.tapeX = int(Config('cameraInfo/tapeX',-1))
-        self.tapeDistance = float(Config('cameraInfo/distanceToTape',-1))
+        self.tapeX = int(Config('limelight/tx',-1))
+        self.tapeDistance = float(Config('limelight/ty',-1))
         speed = 0
 
         if self.tapeFound == True:
