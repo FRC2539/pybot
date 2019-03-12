@@ -43,39 +43,33 @@ class GoToTapeCommand(Command):
             self.y = math.copysign((self.y * 3) / 100, self.y)
             self.rotate = self.x / 2
 
-
-            if self.x > 0.5:
-                self.x = math.copysign(0.5, self.x)
-                self.rotate = self.x / 2
-            elif abs(oX) <= 1:
-                self.x = math.copysign(0.1499963 * math.pow(abs(oX), 1.583103), oX)
+            if self.x > 0.4:
+                self.x = math.copysign(0.4, self.x)
                 self.rotate = self.x
-            elif abs(oX) > 1 and self.x < 0.1:
+            elif abs(oX) <= 0.5:
+                self.x = math.copysign(0.3476058 * math.pow(abs(oX), 1.787139), oX)
+                self.rotate = self.x
+            elif abs(oX) > 0.5 and self.x < 0.1:
                 self.x = math.copysign(0.1, oX)
                 self.rotate = math.copysign(0.1, oX)
 
-            if self.x < 0 and oY > 3.0:
-                self.x /= 2
-
-            if self.y > 0.6:
-                self.y = 0.6
+            if self.y > 0.5:
+                self.y = 0.5
             elif abs(oY) < 0.5:
                 self.y = 0
-            elif oY > 0.5 and self.y < 0.2:
-                self.y = 0.2
+            elif oY > 0.5 and self.y < 0.15:
+                self.y = 0.15
 
-            print('     X: ' + str(self.x))
-            print('     Y: ' + str(self.y))
-            print('Rotate: ' + str(self.rotate))
-            print('')
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
             self._finished = abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02
+
             if self._finished:
                 robot.lights.solidGreen()
             else:
                 robot.lights.solidPurple()
+
         else:
             robot.lights.solidRed()
             print('No vision target found!')
