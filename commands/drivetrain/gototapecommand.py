@@ -43,12 +43,11 @@ class GoToTapeCommand(Command):
             self.y = math.copysign((self.y * 3) / 100, self.y)
             self.rotate = self.x / 2
 
-
             if self.x > 0.4:
                 self.x = math.copysign(0.4, self.x)
                 self.rotate = self.x
-            elif abs(oX) < 0.5:
-                self.x = oX / 5
+            elif abs(oX) <= 0.5:
+                self.x = math.copysign(0.3476058 * math.pow(abs(oX), 1.787139), oX)
                 self.rotate = self.x
             elif abs(oX) > 0.5 and self.x < 0.1:
                 self.x = math.copysign(0.1, oX)
@@ -61,18 +60,16 @@ class GoToTapeCommand(Command):
             elif oY > 0.5 and self.y < 0.15:
                 self.y = 0.15
 
-            print('     X: ' + str(self.x))
-            print('     Y: ' + str(self.y))
-            print('Rotate: ' + str(self.rotate))
-            print('')
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
             self._finished = abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02
+
             if self._finished:
                 robot.lights.solidGreen()
             else:
                 robot.lights.solidPurple()
+
         else:
             robot.lights.solidRed()
             print('No vision target found!')
