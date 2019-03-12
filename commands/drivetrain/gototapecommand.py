@@ -44,22 +44,25 @@ class GoToTapeCommand(Command):
             self.rotate = self.x / 2
 
 
-            if self.x > 0.4:
-                self.x = math.copysign(0.4, self.x)
+            if self.x > 0.5:
+                self.x = math.copysign(0.5, self.x)
+                self.rotate = self.x / 2
+            elif abs(oX) <= 1:
+                self.x = math.copysign(0.1499963 * math.pow(abs(oX), 1.583103), oX)
                 self.rotate = self.x
-            elif abs(oX) < 0.5:
-                self.x = oX / 5
-                self.rotate = self.x
-            elif abs(oX) > 0.5 and self.x < 0.1:
+            elif abs(oX) > 1 and self.x < 0.1:
                 self.x = math.copysign(0.1, oX)
                 self.rotate = math.copysign(0.1, oX)
 
-            if self.y > 0.5:
-                self.y = 0.5
+            if self.x < 0 and oY > 3.0:
+                self.x /= 2
+
+            if self.y > 0.6:
+                self.y = 0.6
             elif abs(oY) < 0.5:
                 self.y = 0
-            elif oY > 0.5 and self.y < 0.15:
-                self.y = 0.15
+            elif oY > 0.5 and self.y < 0.2:
+                self.y = 0.2
 
             print('     X: ' + str(self.x))
             print('     Y: ' + str(self.y))
