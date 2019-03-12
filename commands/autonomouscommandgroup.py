@@ -99,23 +99,24 @@ class AutonomousCommandGroup(CommandGroup):
         def rrfAuto(self):
             self.addSequential(TransitionMoveCommand(25,60,25,70,0,30))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
+
+            self.addSequential(StrafeCommand(48), 1.7)
+            self.addSequential(GoToTapeCommand(), 8)
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(39))
-            self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(TransitionMoveCommand(-50,80,-60,120,1,147.5))
+            self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,162.5))
             self.addSequential(GoToTapeCommand())
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRB')
         def rrbAuto(self):
             #RightRocketback
-            self.addSequential(TransitionMoveCommand(50,80,30,180,40,25))
+            self.addSequential(TransitionMoveCommand(50,80,30,180,40,25), 7)
             self.addSequential(TurnCommand(250))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(-70))
+            self.addSequential(StrafeCommand(-70), 5)
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(5))
 
@@ -126,7 +127,7 @@ class AutonomousCommandGroup(CommandGroup):
             #position arm
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(-20))
+            self.addSequential(StrafeCommand(-20), 3)
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(6))
             #lower arm
@@ -141,7 +142,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(TransitionMoveCommand(25,60,25,70,0,-30))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(-39))
+            self.addSequential(StrafeCommand(-39),4)
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -155,7 +156,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(TurnCommand(-250))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(70))
+            self.addSequential(StrafeCommand(70), 5)
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(5))
 

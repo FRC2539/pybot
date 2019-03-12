@@ -38,7 +38,7 @@ class Arm(DebuggableSubsystem):
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0.0,
-                        'aboveFloor' : 5.0,
+                        'aboveFloor' : 3.0,
                         'lowHatches' : 31.0,
                         'midHatches' : 37.0,
                         'highHatches' : 35.0,
