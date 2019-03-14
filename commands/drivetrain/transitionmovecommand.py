@@ -20,11 +20,7 @@ class TransitionMoveCommand(Command):
 
 
         self.requires(robot.drivetrain)
-        oP = robot.drivetrain.getPositions()
-        print("oldEnc: "+str(oP[0]))
-        robot.drivetrain.resetEncoders()
-        nP = robot.drivetrain.getPositions()
-        print("oldEnc: "+str(nP[0]))
+
 
         self.slowspeed = slowspeed / 100
         self.highspeed = highspeed / 100
@@ -44,7 +40,11 @@ class TransitionMoveCommand(Command):
 
     def initialize(self):
 
-
+        oP = robot.drivetrain.getPositions()
+        print("oldEnc: "+str(oP[0]))
+        robot.drivetrain.resetEncoders()
+        nP = robot.drivetrain.getPositions()
+        print("newEnc: "+str(nP[0]))
 
 
 

@@ -14,6 +14,7 @@ from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 
@@ -110,6 +111,7 @@ def init():
     controller.Y.whileHeld(ElevateCommand())
 
     controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    controller.LeftJoystick.whenPressed(StrafeCommand(-36))
 
 
 

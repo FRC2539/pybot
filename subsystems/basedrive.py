@@ -157,8 +157,10 @@ class BaseDrive(DebuggableSubsystem):
             motor.setIntegralAccumulator(0, 0, 0)
             if x % 2 == 0:
                 motor.set(ControlMode.PercentOutput, left)
+                print("motor "+ str(x) + ": "+str(left))
             else:
                 motor.set(ControlMode.PercentOutput, right * -1)
+                print("motor "+ str(x) + ": "+str(right * -1))
             x += 1
 
     def setPositions(self, positions):

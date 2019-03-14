@@ -8,8 +8,6 @@ from commands.climber.getonplatformcommand import GetOnPlatformCommand
 from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 
-from commands.drivetrain.setspeedcommand import SetSpeedCommand
-from commands.drivetrain.movecommand import MoveCommand
 
 class L3ClimbCommandGroup(CommandGroup):
 
@@ -17,6 +15,9 @@ class L3ClimbCommandGroup(CommandGroup):
         super().__init__('Climb')
 
         # Add commands here with self.addSequential() and self.addParallel()
+
+        #Free mechanical hold on rear rack
+        self.addSequential(DriveForwardCommand(), 0.5)
 
         #Lift robot up.
         self.addSequential(AllExtendCommand())
@@ -28,16 +29,10 @@ class L3ClimbCommandGroup(CommandGroup):
         self.addSequential(KeepRearExtendedCommand(), 1.75)
 
         #Get back wheels on.
-        self.addSequential(DriveForwardCommand(), 3)
+        self.addSequential(DriveForwardCommand(), 2)
 
         #Rear rack up.
         self.addSequential(RearRetractCommand(), 1.75)
-
-        #Set lower speed.
-        #self.addSequential(SetSpeedCommand(800))
-
-        #Move in
-        #self.addSequential(MoveCommand(6))
 
         #Turn on Seizure Lights
         self.addSequential(SeizureLightsCommand())

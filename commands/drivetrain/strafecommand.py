@@ -47,9 +47,9 @@ class StrafeCommand(Command):
 
 
     def isFinished(self):
-        if self.isTimedOut() and robot.drivetrain.atPosition(self.precision):
+        if robot.drivetrain.atPosition(self.precision): #self.isTimedOut() and
             self.onTarget += 1
         else:
             self.onTarget = 0
 
-        return self.onTarget > 5
+        return self.onTarget > 3

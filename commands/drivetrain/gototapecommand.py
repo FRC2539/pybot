@@ -3,6 +3,8 @@ from custom.config import Config
 import math
 import robot
 
+from networktables import NetworkTables
+
 class GoToTapeCommand(Command):
 
     def __init__(self):
@@ -14,6 +16,8 @@ class GoToTapeCommand(Command):
         self.strafe = Config('limelight/tx', 0)
         self.distance = Config('limelight/ty', 0)
 
+        self.nt = NetworkTables.getTable('limelight')
+
         self.x = 0
         self.y = 0
         self.rotate = 0
@@ -22,7 +26,7 @@ class GoToTapeCommand(Command):
 
 
     def initialize(self):
-        #self.seenTape = self.tape.getValue()
+        self.nt.putNumber('ledMode', 3)
 
         self.originallyFieldOriented = robot.drivetrain.isFieldOriented
 
@@ -36,6 +40,7 @@ class GoToTapeCommand(Command):
         if self.tape.getValue() == 1:
             self.x = self.strafe.getValue()
             self.y = self.distance.getValue()
+
             oY = self.y
             oX = self.x
 
@@ -47,32 +52,30 @@ class GoToTapeCommand(Command):
             if self.x > 0.4:
                 self.x = math.copysign(0.4, self.x)
                 self.rotate = self.x
-            elif abs(oX) < 0.5:
+            elif abs(oX) <= 0.5:
                 self.x = oX / 5
                 self.rotate = self.x
             elif abs(oX) > 0.5 and self.x < 0.1:
                 self.x = math.copysign(0.1, oX)
                 self.rotate = math.copysign(0.1, oX)
 
-            if self.y > 0.5:
-                self.y = 0.5
+            if self.y > 0.45:
+                self.y = 0.45
             elif abs(oY) < 0.5:
                 self.y = 0
             elif oY > 0.5 and self.y < 0.15:
                 self.y = 0.15
 
-            print('     X: ' + str(self.x))
-            print('     Y: ' + str(self.y))
-            print('Rotate: ' + str(self.rotate))
-            print('')
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
             self._finished = abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02
+
             if self._finished:
                 robot.lights.solidGreen()
             else:
                 robot.lights.solidPurple()
+
         else:
             robot.lights.solidRed()
             print('No vision target found!')
@@ -88,5 +91,7 @@ class GoToTapeCommand(Command):
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
+
+        self.nt.putNumber('ledMode', 1)
 
         robot.lights.off()
