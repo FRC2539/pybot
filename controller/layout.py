@@ -72,6 +72,7 @@ def init():
     #if driveLayoutPrimary:
 
     # The joysticks for driving the robot
+    """
     driveStick = LogitechJoystick(0)
     rotateStick = LogitechJoystick(1)
 
@@ -111,40 +112,41 @@ def init():
     controller.RightJoystick.toggleWhenPressed(IntakeCommand())
 
 
-    """
+
     else:
-        backupDriveStick = ThrustmasterJoystick(0)
-        backupRotateStick = ThrustmasterJoystick(1)
-
-        logicalaxes.driveX = backupDriveStick.X
-        logicalaxes.driveY = backupDriveStick.Y
-
-        logicalaxes.driveRotate = backupRotateStick.X
-
-        backupDriveStick.trigger.whileHeld(GoToTapeCommand())
-        backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
-
-        backupRotateStick.rightThumb.whenPressed(ToggleFieldOrientationCommand())
-        backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
-
-        backupRotateStick.trigger.whenPressed(EjectCommand())
-
-        backupRotateStick.LeftRightTop.whenPressed(L3ClimbCommandGroup())
-        backupRotateStick.RightLeftTop.whenPressed(L2ClimbCommandGroup())
-        # The controller for non-driving subsystems of the robot
-
-        controller = LogitechDualShock(2)
-
-        controller.Back.whenPressed(ResetCommand())
-
-        controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
-        controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
-
-        controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
-        controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
-
-        controller.X.whileHeld(DeelevateCommand())
-        controller.Y.whileHeld(ElevateCommand())
     """
+    backupDriveStick = ThrustmasterJoystick(0)
+    backupRotateStick = ThrustmasterJoystick(1)
+
+    logicalaxes.driveX = backupDriveStick.X
+    logicalaxes.driveY = backupDriveStick.Y
+
+    logicalaxes.driveRotate = backupRotateStick.X
+
+    backupDriveStick.trigger.whileHeld(GoToTapeCommand())
+    backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
+
+    backupRotateStick.rightThumb.whenPressed(ToggleFieldOrientationCommand())
+    backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
+
+    backupRotateStick.trigger.whenPressed(EjectCommand())
+
+    backupRotateStick.LeftRightTop.whenPressed(L3ClimbCommandGroup())
+    backupRotateStick.RightLeftTop.whenPressed(L2ClimbCommandGroup())
+    # The controller for non-driving subsystems of the robot
+
+    controller = LogitechDualShock(2)
+
+    controller.Back.whenPressed(ResetCommand())
+
+    controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
+    controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
+
+    controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
+    controller.RightTrigger.whileHeld(DownCommand()) # Superstructure command
+
+    controller.X.whileHeld(DeelevateCommand())
+    controller.Y.whileHeld(ElevateCommand())
+
 
         #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
