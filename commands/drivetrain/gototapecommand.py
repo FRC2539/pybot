@@ -38,7 +38,7 @@ class GoToTapeCommand(Command):
 
     def execute(self):
         if self.tape.getValue() == 1:
-            self.x = self.strafe.getValue()
+            self.x = self.strafe.getValue() + 1.5 #Adjust for off center camera position
             self.y = self.distance.getValue()
 
             oY = self.y
@@ -69,7 +69,7 @@ class GoToTapeCommand(Command):
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
-            self._finished = abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02
+            self._finished = (abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02) or oY <= 0.25
 
             if self._finished:
                 robot.lights.solidGreen()

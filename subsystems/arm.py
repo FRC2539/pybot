@@ -38,8 +38,8 @@ class Arm(DebuggableSubsystem):
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0.0,
-                        'aboveFloor' : 3.0,
-                        'lowHatches' : 31.0,
+                        'aboveFloor' : 1.0,
+                        'lowHatches' : 2.0,
                         'midHatches' : 37.0,
                         'highHatches' : 35.0,
                         'cargoBalls' : 55.0,
@@ -121,6 +121,8 @@ class Arm(DebuggableSubsystem):
 
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
+
+        print("arm position target: "+str(target))
 
         if target > self.upperLimit or target < 0.0:
             self.stop()
