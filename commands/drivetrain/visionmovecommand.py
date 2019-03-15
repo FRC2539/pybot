@@ -25,13 +25,13 @@ class VisionMoveCommand(Command):
         self._finished = False
 
         self.degrees = -360
-        self.tapeDistance = 0
+        self.tapeDistance = 0.01
         self.tapeFound = False
 
-        self.stopDistance = 1
+        self.stopDistance = 0
 
 
-        self.maxSpeed = 20
+        self.maxSpeed = 60
 
         print("initialize visionmove")
 
@@ -51,12 +51,12 @@ class VisionMoveCommand(Command):
             #print("has tape")
             #print("tapeX: "+str(self.tapeX))
             print("tapeDistance: " + str(self.tapeDistance))
-            if self.tapeDistance <= 4 and self.tapeDistance > 1:
+            if self.tapeDistance <= 2 and self.tapeDistance > 1:
                 print("slow down")
-                speed = 5
+                speed = 25
                 #robot.drivetrain.move(0, 0, 0)
             elif self.tapeDistance <= int(self.stopDistance):
-                if self.demo == True and self.tapeDistance <= 2:
+                if self.demo == True and self.tapeDistance <= 1:
                     print("demo and close: "+str(self.tapeDistance))
                     speed = 20
                     #self.tapeDistance -= 50
@@ -79,7 +79,7 @@ class VisionMoveCommand(Command):
                     speed = 20
                 else:
                     #print("100 percent of max speed")
-                    speed = 20
+                    speed = 60
 
             if speed <= self.maxSpeed:
                 tspeed = (speed / self.maxSpeed)/6

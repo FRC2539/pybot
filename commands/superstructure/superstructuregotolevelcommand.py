@@ -15,6 +15,9 @@ class SuperStructureGoToLevelCommand(Command):
         self.armTarget = robot.arm.levels[self.level]
         self.eleTarget = robot.elevator.levels[self.level]
 
+        print("at: "+str(self.armTarget))
+        print("et: "+str(self.eleTarget))
+
 
     def initialize(self):
         self.armUOD = ''
@@ -43,6 +46,9 @@ class SuperStructureGoToLevelCommand(Command):
         self.armPos = robot.arm.getPosition()
         self.elePos = robot.elevator.getPosition()
 
+        print("armTarget: "+str(self.armTarget))
+
+
         if not self.armDone:
             if self.armUOD == 'up' and self.armPos < self.armTarget:
                 robot.arm.up()
@@ -53,6 +59,7 @@ class SuperStructureGoToLevelCommand(Command):
             else:
                 robot.arm.stop()
                 self.armDone = True
+                print("armDone: "+str(self.armPos))
 
         if not self.eleDone:
             if self.eleUOD == 'up' and self.elePos < self.eleTarget:
@@ -64,6 +71,7 @@ class SuperStructureGoToLevelCommand(Command):
             else:
                 robot.elevator.stop()
                 self.eleDone = True
+                print("armDone: "+str(self.eleDone))
 
 
     def isFinished(self):

@@ -349,9 +349,14 @@ class BaseDrive(DebuggableSubsystem):
         return encoders
 
     def resetEncoders(self):
-        for motor in self.motors:
-            motor.set(0)
 
+        for motor in self.motors:
+        #    motor.setSelectedSensorPosition(0)
+            #motor.setNeutralMode(NeutralMode.Brake)
+            #motor.setSafetyEnabled(False)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+            motor.setQuadraturePosition(0,10)
+        print("reseted enc")
 
 
     def setSpeedLimit(self, speed):

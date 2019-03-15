@@ -79,15 +79,15 @@ class AutonomousCommandGroup(CommandGroup):
         dt.putNumber('normalSpeed', 2500)
         dt.putNumber('maxSpeed', 2500)
 
-        Config('DriveTrain/ticksPerInch', 250)
-        Config('DriveTrain/width', 29.5)
-        Config('DriveTrain/Speed/P', 1)
-        Config('DriveTrain/Speed/IZone', 30)
-        Config('DriveTrain/Speed/D', 31)
-        Config('DriveTrain/Speed/I', 0.001)
-        Config('DriveTrain/Speed/F', 0.7)
-        Config('DriveTrain/normalSpeed', 2500)
-        Config('DriveTrain/maxSpeed', 2500)
+        #Config('DriveTrain/ticksPerInch', 250)
+        #Config('DriveTrain/width', 29.5)
+        #Config('DriveTrain/Speed/P', 1)
+        #Config('DriveTrain/Speed/IZone', 30)
+        #Config('DriveTrain/Speed/D', 31)
+        #Config('DriveTrain/Speed/I', 0.001)
+        #Config('DriveTrain/Speed/F', 0.7)
+        #Config('DriveTrain/normalSpeed', 2500)
+        #Config('DriveTrain/maxSpeed', 2500)
 
 
         print('dtms: '+str(Config('DriveTrain/maxSpeed', '')))
@@ -97,41 +97,48 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
-            self.addSequential(TransitionMoveCommand(25,60,25,70,0,30))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
+            self.addSequential(TransitionMoveCommand(25,60,25,80,0,30))
+            #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
-            self.addSequential(StrafeCommand(48), 1.7)
-            self.addSequential(GoToTapeCommand(), 8)
-            self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
+            self.addSequential(StrafeCommand(55))
+            #self.addSequential(TransitionMoveCommand(60,60,25,50,0,30))
+
+            self.addSequential(GoToTapeCommand())
+            #self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
+
             self.addSequential(MoveCommand(2))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,162.5))
+            #self.addSequential(SuperStructureGoToLevelCommand("floor"))
+            self.addSequential(MoveCommand(-18))
+            self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,170))
             self.addSequential(GoToTapeCommand())
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRB')
         def rrbAuto(self):
             #RightRocketback
-            self.addSequential(TransitionMoveCommand(50,80,30,180,40,25), 7)
+            self.addSequential(TransitionMoveCommand(30,80,30,160,40,25))
             self.addSequential(TurnCommand(250))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
+            #self.addParallel(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(StrafeCommand(-70), 5)
+
             self.addSequential(GoToTapeCommand())
-            self.addSequential(MoveCommand(5))
+            #self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
+            self.addSequential(MoveCommand(2))
+            #self.addSequential(SuperStructureGoToLevelCommand('floor'))
+            self.addSequential(MoveCommand(-5))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
-            self.addSequential(TransitionMoveCommand(30,90,15,40,1,0))
+            self.addSequential(TransitionMoveCommand(30,90,15,45,1,0))
             #position arm
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(-20), 3)
+            self.addSequential(StrafeCommand(-30))
+            #self.addParallel(SuperStructureGoToLevelCommand('floor'))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(6))
-            #lower arm
-            self.addSequential(MoveCommand(-8))
+            #self.addSequential(SuperStructureGoToLevelCommand('aboveFloor'))
+            self.addSequential(MoveCommand(-12))
+            #self.addParallel(SuperStructureGoToLevelCommand('floor'))
             self.addSequential(TransitionMoveCommand(-90,90,-60,140,1,155.5))
             self.addSequential(StrafeCommand(-50))
             self.addSequential(GoToTapeCommand())
@@ -142,7 +149,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(TransitionMoveCommand(25,60,25,70,0,-30))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(-39),4)
+            self.addSequential(StrafeCommand(-39))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -156,7 +163,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(TurnCommand(-250))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(70), 5)
+            self.addSequential(StrafeCommand(70))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(5))
 
@@ -176,15 +183,17 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'DEMO')
         def demoAuto(self):
-            self.addSequential(VisionMoveCommand(True))
+            self.addSequential(VisionMoveCommand())
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'TEST')
         def testAuto(self):
-            self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
+            #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
             self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            #self.addSequential(SuperStructureGoToLevelCommand("floor"))
+            robot.arm.resetEncoder()
+            self.addSequential(SuperStructureGoToLevelCommand("lowHatches"))
+            self.addSequential(SuperStructureGoToLevelCommand("floor"))
+            #self.addSequential(StrafeCommand(-20))
 
 
         @fc.IF(lambda: not robot.drivetrain.isFieldOriented)
