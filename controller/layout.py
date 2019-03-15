@@ -128,7 +128,7 @@ def init():
     backupDriveStick.trigger.whileHeld(GoToTapeCommand())
     backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
-    backupRotateStick.rightThumb.whenPressed(ToggleFieldOrientationCommand())
+    backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
 
     backupRotateStick.trigger.whenPressed(EjectCommand())
