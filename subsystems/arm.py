@@ -51,6 +51,7 @@ class Arm(DebuggableSubsystem):
 
 
     def up(self):
+
         isTop = self.getPosition() >= self.upperLimit
         print('Arm ' + str(self.getPosition()))
 
@@ -80,11 +81,12 @@ class Arm(DebuggableSubsystem):
         return isZero
 
     def downSS(self):
+        print("down ss")
         return self.down(-0.7)
 
 
     def forceDown(self):
-        print('Down ' + str(self.getPosition()))
+        print('Force Down ' + str(self.getPosition()))
         if self.lowerLimit.get():
             self.set(-1)
         else:
@@ -95,6 +97,7 @@ class Arm(DebuggableSubsystem):
 
 
     def forceUp(self):
+        print('Force Up ' + str(self.getPosition()))
         isTop = self.getPosition() >= self.startPos
         if not isTop:
             self.set(1.0)
