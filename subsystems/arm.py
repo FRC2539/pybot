@@ -52,8 +52,9 @@ class Arm(DebuggableSubsystem):
 
     def up(self):
 
+        print('ARM ' + str(self.getPosition()))
+
         isTop = self.getPosition() >= self.upperLimit
-        print('Arm ' + str(self.getPosition()))
 
         if isTop:
             self.setPosition(float(self.upperLimit), 'down')
@@ -65,8 +66,8 @@ class Arm(DebuggableSubsystem):
 
 
     def down(self, speed=-1.0):
-        isZero = self.isAtZero()
-        print('Arm ' + str(self.getPosition()))
+        print('ARM ' + str(self.getPosition()))
+        isZero = not self.lowerLimit.get()
 
         if isZero:
             self.stop()
@@ -74,11 +75,9 @@ class Arm(DebuggableSubsystem):
 
         else:
             self.set(speed)
-            if isZero:
-                self.stop()
-                self.resetEncoder()
 
         return isZero
+
 
     def downSS(self):
         print("down ss")
@@ -87,6 +86,23 @@ class Arm(DebuggableSubsystem):
 
     def forceDown(self):
         print('Force Down ' + str(self.getPosition()))
+
+
+    def downNoZero(self, speed=-1.0):
+        print('ARM ' + str(self.getPosition()))
+        isZero = self.isAtZero()
+
+        if isZero:
+            self.stop()
+
+        else:
+            self.set(speed)
+
+        return isZero
+
+
+    def forceDown(self):
+
         if self.lowerLimit.get():
             self.set(-1)
         else:
@@ -125,9 +141,9 @@ class Arm(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
-        print("arm position target: "+str(target))
+        print("arm position target: " + str(target))
 
-        if target > self.upperLimit or target < 0.0:
+        if target > self.upperLimit or target < -3.5:
             self.stop()
             print('Illegal arm target position')
             return True
@@ -136,7 +152,7 @@ class Arm(DebuggableSubsystem):
             return self.up()
 
         elif upOrDown == 'down' and position > target:
-            return self.down()
+            return self.downNoZero()
 
         else:
             self.stop()

@@ -28,9 +28,13 @@ from commands.elevator.panelejectcommand import PanelEjectCommand
 
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
+from commands.arm.lowernozerocommand import LowerNoZeroCommand
 from commands.arm.forcelowercommand import ForceLowerCommand
 from commands.arm.forceraisecommand import ForceRaiseCommand
 from commands.arm.grabhatchcommand import GrabHatchCommand
+from commands.arm.upstagecommand import UpStageCommand
+from commands.arm.downstagecommand import DownStageCommand
+from commands.arm.setarmcommandgroup import SetArmCommandGroup
 
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 from commands.superstructure.upcommand import UpCommand
@@ -135,13 +139,15 @@ def init():
 
     backupRotateStick.LeftRightTop.whenPressed(L3ClimbCommandGroup())
     backupRotateStick.RightLeftTop.whenPressed(L2ClimbCommandGroup())
-    # The controller for non-driving subsystems of the robot
 
+
+    # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
 
     controller.Back.whenPressed(ResetCommand())
+    controller.Start.whenPressed(LowerCommand())
 
-    controller.LeftTrigger.whileHeld(LowerCommand()) # Arm command
+    controller.LeftTrigger.whileHeld(LowerNoZeroCommand()) # Arm command
     controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
 
     controller.RightBumper.whileHeld(UpCommand()) # Superstructure command
@@ -150,5 +156,6 @@ def init():
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
 
+    controller.DPadUp.whenPressed(SetArmCommandGroup(20.0))
 
-        #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    controller.RightJoystick.toggleWhenPressed(IntakeCommand())

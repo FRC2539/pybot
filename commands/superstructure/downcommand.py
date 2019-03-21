@@ -13,7 +13,7 @@ class DownCommand(Command):
 
     def initialize(self):
         self.elevatorDone = robot.elevator.down()
-        self.armDone = robot.arm.downSS()
+        self.armDone = robot.arm.downNoZero(-0.7)
 
 
     def execute(self):
@@ -21,7 +21,7 @@ class DownCommand(Command):
             self.elevatorDone = robot.elevator.down()
 
         if not self.armDone:
-            self.armDone = robot.arm.downSS()
+            self.armDone = robot.arm.downNoZero(-0.7)
 
 
     def end(self):
