@@ -34,6 +34,7 @@ from commands.arm.forceraisecommand import ForceRaiseCommand
 from commands.arm.grabhatchcommand import GrabHatchCommand
 from commands.arm.upstagecommand import UpStageCommand
 from commands.arm.downstagecommand import DownStageCommand
+from commands.arm.setarmcommandgroup import SetArmCommandGroup
 
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 from commands.superstructure.upcommand import UpCommand
@@ -155,7 +156,6 @@ def init():
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
 
-    controller.DPadUp.whenPressed(UpStageCommand(20.0))
-    controller.DPadDown.whenPressed(DownStageCommand())
+    controller.DPadUp.whenPressed(SetArmCommandGroup(20.0))
 
     controller.RightJoystick.toggleWhenPressed(IntakeCommand())

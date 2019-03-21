@@ -17,11 +17,9 @@ class UpStageCommand(Command):
         if robot.arm.getPosition() >= robot.arm.upperLimit:
             self._isFinished = True
 
-        self.startPos = robot.arm.getPosition()
-
 
     def execute(self):
-        self._isFinished = robot.arm.setPosition(self.startPos + self.target, 'up')
+        self._isFinished = robot.arm.setPosition(self.target, 'up')
 
 
     def isFinished(self):

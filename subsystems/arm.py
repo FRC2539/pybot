@@ -130,7 +130,7 @@ class Arm(DebuggableSubsystem):
 
         print("arm position target: " + str(target))
 
-        if target > self.upperLimit or target < -3.0:
+        if target > self.upperLimit or target < -3.5:
             self.stop()
             print('Illegal arm target position')
             return True
