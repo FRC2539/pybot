@@ -26,6 +26,9 @@ class SetArmCommandGroup(CommandGroup):
         self.addSequential(WaitCommand(0.5))
 
         #Make sure arm is at correct zero position.
+        self.addSequential(LowerCommand())
+
+        #Remove any slack from the chain.
         self.addSequential(DownStageCommand())
 
         #Move arm to desired position.
