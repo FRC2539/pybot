@@ -16,18 +16,18 @@ class ThrustmasterJoystick(GenericController):
         'bottomThumb' : 2,
         'leftThumb' : 3,
         'rightThumb' : 4,
-        'LeftLeftTop' : 5,
-        'RightMiddleTop' : 6,
-        'RightLeftTop' : 7,
-        'RightLeftBottom' : 8,
-        'RightMiddleBottom' : 9,
-        'RightRightBottom' : 10,
         'RightRightTop' : 11,
-        'LeftMiddleTop' : 12,
-        'LeftRightTop' : 13,
-        'LeftRightBottom' : 14,
-        'LeftMiddleBottom' : 15,
-        'LeftLeftBottom' : 16
+        'RightMiddleTop' : 12,
+        'RightLeftTop' : 13,
+        'RightLeftBottom' : 14,
+        'RightMiddleBottom' : 15,
+        'RightRightBottom' : 16,
+        'LeftLeftTop' : 5,
+        'LeftMiddleTop' : 6,
+        'LeftRightTop' : 7,
+        'LeftRightBottom' : 8,
+        'LeftMiddleBottom' : 9,
+        'LeftLeftBottom' : 10
         }
 
     invertedAxes = ['Y', 'Slider']
