@@ -137,7 +137,7 @@ def init():
 
     backupRotateStick.trigger.whenPressed(EjectCommand())
 
-    backupRotateStick.LeftRightTop.whenPressed(L3ClimbCommandGroup())
+    backupRotateStick.RightLeftBottom.whenPressed(L3ClimbCommandGroup())
     backupRotateStick.RightLeftTop.whenPressed(L2ClimbCommandGroup())
 
 
@@ -156,6 +156,6 @@ def init():
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
 
-    controller.DPadUp.whenPressed(SetArmCommandGroup(20.0))
+    controller.DPadUp.whenPressed(SetArmCommandGroup(11.0))
 
     controller.RightJoystick.toggleWhenPressed(IntakeCommand())

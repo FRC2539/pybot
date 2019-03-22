@@ -22,6 +22,9 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 
+from commands.arm.setarmcommandgroup import SetArmCommandGroup
+from commands.arm.lowercommand import LowerCommand
+
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 
 from commands.drivetrain.gototapecommand import GoToTapeCommand
@@ -97,16 +100,19 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
         def rrfAuto(self):
-            self.addSequential(TransitionMoveCommand(25,60,25,80,0,30))
+            self.addSequential(TransitionMoveCommand(25,60,25,100,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
-
-            self.addSequential(StrafeCommand(55))
+            self.addSequential(SetArmCommandGroup(12.0))
+            self.addSequential(StrafeCommand(43))
             #self.addSequential(TransitionMoveCommand(60,60,25,50,0,30))
 
             self.addSequential(GoToTapeCommand())
             #self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
 
-            self.addSequential(MoveCommand(2))
+            #self.addSequential(MoveCommand(2))
+            self.addSequential(WaitCommand(.5))
+
+            self.addSequential(LowerCommand())
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
             self.addSequential(MoveCommand(-18))
             self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,170))
@@ -189,10 +195,15 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'TEST')
         def testAuto(self):
             #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            robot.arm.resetEncoder()
-            self.addSequential(SuperStructureGoToLevelCommand("lowHatches"))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
+
+            self.addSequential(SetArmCommandGroup(12.0))
+
+            self.addSequential(WaitCommand(.5))
+
+            self.addSequential(LowerCommand())
+
+            #self.addSequential(SuperStructureGoToLevelCommand("lowHatches"))
+            #self.addSequential(SuperStructureGoToLevelCommand("floor"))
             #self.addSequential(StrafeCommand(-20))
 
 

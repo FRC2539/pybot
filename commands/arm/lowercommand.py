@@ -24,3 +24,5 @@ class LowerCommand(Command):
 
     def end(self):
         robot.arm.stop()
+        robot.arm.resetEncoder()
+        print('finished with lower command! \nCURRENT POSITION    ' + str(robot.arm.getPosition()))
