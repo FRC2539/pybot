@@ -4,6 +4,7 @@ import commandbased.flowcontrol as fc
 from wpilib.command.waitcommand import WaitCommand
 
 from commands.elevator.deelevatecommand import DeelevateCommand
+from commands.elevator.bumpupcommand import BumpUpCommand
 
 from commands.arm.lowercommand import LowerCommand
 from commands.arm.downstagecommand import DownStageCommand
@@ -13,7 +14,7 @@ import robot
 
 class SetArmCommandGroup(CommandGroup):
 
-    def __init__(self, target):
+    def __init__(self, armTarget, eleTarget=0.0):
         super().__init__('Set Arm')
 
         # Add commands here with self.addSequential() and self.addParallel()
@@ -23,25 +24,24 @@ class SetArmCommandGroup(CommandGroup):
 
         #Lower arm to end of travel.
         self.addSequential(LowerCommand())
-        #print("lower1")
+
         #Wait for ramp rate to finish up.
         self.addSequential(WaitCommand(.5))
-        #print("wait")
+
+        #Spam zero to make sure it actually works.
         self.addSequential(LowerCommand())
         self.addSequential(LowerCommand())
         self.addSequential(LowerCommand())
         self.addSequential(LowerCommand())
         self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #Make sure arm is at correct zero position.
-        #print("lower2")
+
         #Remove any slack from the chain.
         self.addSequential(DownStageCommand())
 
+        #Move elevator to desired position.
+        @fc.IF(lambda: not eleTarget == 0.0)
+        def eleMove(self):
+            self.addParallel(BumpUpCommand(float(eleTarget)))
+
         #Move arm to desired position.
-        self.addSequential(UpStageCommand(float(target)))
+        self.addSequential(UpStageCommand(float(armTarget)))

@@ -96,6 +96,8 @@ class Elevator(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
+        print("elevator position target: " + str(target))
+
         if target > self.upperLimit or target < 0.0:
             self.stop()
             print('Illegal elevator target position')
