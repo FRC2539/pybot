@@ -137,9 +137,10 @@ def init():
 
     backupRotateStick.trigger.whenPressed(EjectCommand())
 
-    backupRotateStick.RightLeftBottom.whenPressed(L3ClimbCommandGroup())
-    backupRotateStick.RightLeftTop.whenPressed(L2ClimbCommandGroup())
+    backupRotateStick.LeftRightBottom.whenPressed(L3ClimbCommandGroup())
+    backupRotateStick.RightLeftBottom.whenPressed(L2ClimbCommandGroup())
 
+    backupRotateStick.LeftLeftTop.whileHeld(RearRetractCommand())
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
