@@ -38,10 +38,13 @@ class SetArmCommandGroup(CommandGroup):
         #Remove any slack from the chain.
         self.addSequential(DownStageCommand())
 
-        #Move elevator to desired position.
+        #Move elevator and arm to desired positions.
         @fc.IF(lambda: not eleTarget == 0.0)
         def eleMove(self):
             self.addParallel(BumpUpCommand(float(eleTarget)))
+            self.addSequential(UpStageCommand(float(armTarget)))
 
         #Move arm to desired position.
-        self.addSequential(UpStageCommand(float(armTarget)))
+        @fc.ELSE
+        def noEleMove(self):
+            self.addSequential(UpStageCommand(float(armTarget)))

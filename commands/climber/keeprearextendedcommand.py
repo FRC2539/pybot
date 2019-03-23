@@ -4,10 +4,12 @@ import robot
 
 class KeepRearExtendedCommand(Command):
 
-    def __init__(self):
+    def __init__(self, l2=False):
         super().__init__('Keep Rear Extended')
 
         self.requires(robot.climber)
+
+        self.l2 = l2
 
 
     def initialize(self):
@@ -15,7 +17,8 @@ class KeepRearExtendedCommand(Command):
 
 
     def execute(self):
-        robot.climber.extendRear()
+        if(not self.l2):
+            robot.climber.extendRear()
 
 
     def end(self):

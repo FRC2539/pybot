@@ -23,12 +23,7 @@ class GoPastTapeCommand(Command):
 
 
     def execute(self):
-        if self.tape.getValue() == 1:
-            robot.drivetrain.move(0, self.y, 0)
-
-        else:
-            print('No vision target found!')
-            robot.drivetrain.move(0, 0, 0)
+        robot.drivetrain.move(0, self.y, 0)
 
 
     def end(self):

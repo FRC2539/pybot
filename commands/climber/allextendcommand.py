@@ -26,3 +26,7 @@ class AllExtendCommand(Command):
     def end(self):
         robot.climber.stopDrive()
         robot.climber.stopRacks()
+
+
+    def interrupted(self):
+        self.end()

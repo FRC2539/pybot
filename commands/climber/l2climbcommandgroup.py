@@ -1,6 +1,7 @@
 from wpilib.command.commandgroup import CommandGroup
 import commandbased.flowcontrol as fc
 
+from commands.resetcommand import ResetCommand
 from commands.climber.allextendcommand import AllExtendCommand
 from commands.climber.rearretractcommand import RearRetractCommand
 from commands.climber.keeprearextendedcommand import KeepRearExtendedCommand
@@ -20,13 +21,13 @@ class L2ClimbCommandGroup(CommandGroup):
         self.addSequential(DriveForwardCommand(), 0.5)
 
         #Lift robot up.
-        self.addSequential(AllExtendCommand())
+        self.addSequential(AllExtendCommand(), 1.25)
 
         #Get front wheels on platform.
-        self.addSequential(GetOnPlatformCommand(), 2)
+        self.addSequential(GetOnPlatformCommand(True), 2)
 
         #Front racks up.
-        self.addSequential(KeepRearExtendedCommand(), 0.75)
+        self.addSequential(KeepRearExtendedCommand(True), 0.75)
 
         #Get back wheels on.
         self.addSequential(DriveForwardCommand(), 2)

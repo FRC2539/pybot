@@ -35,6 +35,7 @@ from commands.arm.grabhatchcommand import GrabHatchCommand
 from commands.arm.upstagecommand import UpStageCommand
 from commands.arm.downstagecommand import DownStageCommand
 from commands.arm.setarmcommandgroup import SetArmCommandGroup
+from commands.arm.zeroarmcommandgroup import ZeroArmCommandGroup
 
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 from commands.superstructure.upcommand import UpCommand
@@ -148,7 +149,7 @@ def init():
     controller = LogitechDualShock(2)
 
     controller.Back.whenPressed(ResetCommand())
-    controller.Start.whenPressed(LowerCommand())
+    controller.B.whenPressed(ZeroArmCommandGroup())
 
     controller.LeftTrigger.whileHeld(LowerNoZeroCommand()) # Arm command
     controller.LeftBumper.whileHeld(RaiseCommand()) # Arm command
@@ -159,6 +160,7 @@ def init():
     controller.X.whileHeld(DeelevateCommand())
     controller.Y.whileHeld(ElevateCommand())
 
-    controller.DPadUp.whenPressed(SetArmCommandGroup(11.0))
+    controller.DPadUp.whenPressed(SetArmCommandGroup(70.0, 20.0))
+    controller.DPadDown.whenPressed(SetArmCommandGroup(11.0))
 
     controller.RightJoystick.toggleWhenPressed(IntakeCommand())
