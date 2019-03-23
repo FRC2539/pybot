@@ -132,15 +132,17 @@ def init():
     backupDriveStick.trigger.whileHeld(GoToTapeCommand())
     backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
+    backupDriveStick.Misc.whileHeld(RearRetractCommand())
+
     backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
 
     backupRotateStick.trigger.whenPressed(EjectCommand())
 
-    backupRotateStick.LeftRightBottom.whenPressed(L3ClimbCommandGroup())
-    backupRotateStick.RightLeftBottom.whenPressed(L2ClimbCommandGroup())
+    backupRotateStick.ClimbL3.whenPressed(L3ClimbCommandGroup())
+    backupRotateStick.ClimbL2.whenPressed(L2ClimbCommandGroup())
 
-    backupRotateStick.LeftLeftTop.whileHeld(RearRetractCommand())
+    backupRotateStick.Misc.whileHeld(ResetCommand())
 
     # The controller for non-driving subsystems of the robot
     controller = LogitechDualShock(2)
