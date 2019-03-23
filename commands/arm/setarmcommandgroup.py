@@ -32,12 +32,12 @@ class SetArmCommandGroup(CommandGroup):
         self.addSequential(LowerCommand())
         self.addSequential(LowerCommand())
         self.addSequential(LowerCommand())
-        self.addSequential(LowerCommand())
-        self.addSequential(LowerCommand())
-        self.addSequential(LowerCommand())
-        self.addSequential(LowerCommand())
-        self.addSequential(LowerCommand())
-        self.addSequential(LowerCommand())
+        #self.addSequential(LowerCommand())
+        #self.addSequential(LowerCommand())
+        #self.addSequential(LowerCommand())
+        #self.addSequential(LowerCommand())
+        #self.addSequential(LowerCommand())
+        #self.addSequential(LowerCommand())
         #Make sure arm is at correct zero position.
         #print("lower2")
         #Remove any slack from the chain.
