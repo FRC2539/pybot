@@ -212,9 +212,9 @@ class AutonomousCommandGroup(CommandGroup):
         def testAuto(self):
             #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
 
-            #self.addSequential(SetArmCommandGroup(12.0))
+            self.addSequential(SetArmCommandGroup(12.0))
             #print("turn")
-            self.addSequential(TurnCommand(90))
+            #self.addSequential(TurnCommand(90))
 
             #self.addSequential(SetArmCommandGroup(12.0))
 

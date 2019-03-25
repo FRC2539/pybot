@@ -70,8 +70,10 @@ class Arm(DebuggableSubsystem):
         isZero = not self.lowerLimit.get()
 
         if isZero:
+            print("arm zero")
             self.stop()
             self.resetEncoder()
+            print("after encoder")
 
         else:
             self.set(speed)
@@ -135,7 +137,10 @@ class Arm(DebuggableSubsystem):
 
 
     def resetEncoder(self):
+        print("before reset: "+str(self.getPosition()))
         self.encoder.setPosition(0.0)
+        self.motor.setEncPosition(0.0)
+        print("after reset: "+str(self.getPosition()))
 
 
     def setPosition(self, target, upOrDown):
