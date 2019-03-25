@@ -67,7 +67,7 @@ class Arm(DebuggableSubsystem):
 
     def down(self, speed=-1.0):
         print('ARM ' + str(self.getPosition()))
-        isZero = not self.lowerLimit.get()
+        isZero = self.isAtZero()
 
         if isZero:
             print("arm zero")
