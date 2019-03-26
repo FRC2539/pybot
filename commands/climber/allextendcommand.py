@@ -12,11 +12,12 @@ class AllExtendCommand(Command):
 
     def initialize(self):
         self._finished = False
+        robot.climber.resetEncoders()
         robot.climber.creepForward()
 
 
     def execute(self):
-        self._finished = robot.climber.extendAll()
+        self._finished = robot.climber.extendAllEnc()
 
 
     def isFinished(self):
