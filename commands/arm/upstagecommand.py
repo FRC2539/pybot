@@ -19,7 +19,7 @@ class UpStageCommand(Command):
 
 
     def execute(self):
-        print("arm upstage pos: "+str(robot.arm.getPosition()))
+        print("arm upstage pos: "+str(self.target))
         self._isFinished = robot.arm.setPosition(self.target, 'up')
 
 

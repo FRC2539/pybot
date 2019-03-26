@@ -35,11 +35,13 @@ class Arm(DebuggableSubsystem):
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(self.startPos)
 
+        #self.zeroPosition = self.encoder.getPosition()
+
         #These are temporary and need to be finalized for competition.
         self.levels = {
                         'floor' : 0.0,
                         'aboveFloor' : 1.0,
-                        'lowHatches' : 2.0,
+                        'lowHatches' : 11.0,
                         'midHatches' : 37.0,
                         'highHatches' : 35.0,
                         'cargoBalls' : 55.0,
@@ -65,7 +67,7 @@ class Arm(DebuggableSubsystem):
         return isTop
 
 
-    def down(self, speed=-1.0):
+    def down(self, speed=-1):
         print('ARM ' + str(self.getPosition()))
         isZero = not self.lowerLimit.get()
 
@@ -137,10 +139,12 @@ class Arm(DebuggableSubsystem):
 
 
     def resetEncoder(self):
-        print("before reset: "+str(self.getPosition()))
+        #print("before reset: "+str(self.encoder.getPosition()))
+        self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(0.0)
         self.motor.setEncPosition(0.0)
-        print("after reset: "+str(self.getPosition()))
+        #print("after reset: "+str(self.encoder.getPosition()))
+        #self.zeroPosition = self.encoder.getPosition()
 
 
     def setPosition(self, target, upOrDown):
@@ -157,7 +161,7 @@ class Arm(DebuggableSubsystem):
             return self.up()
 
         elif upOrDown == 'down' and position > target:
-            return self.downNoZero()
+            return self.down()
 
         else:
             self.stop()
