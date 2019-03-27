@@ -30,6 +30,7 @@ class Climber(DebuggableSubsystem):
         self.driveMotor.setInverted(True)
 
         self.rightRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+        self.leftRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
         self.rearRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
 
@@ -76,12 +77,12 @@ class Climber(DebuggableSubsystem):
 
 
     def extendAllEnc(self):
-        diff = self.rightRackMotor.getSelectedSensorPosition(0) - self.rearRackMotor.getSelectedSensorPosition(0)
+        frontAvg = round((self.rightRackMotor.getSelectedSensorPosition(0) + self.leftRackMotor.getSelectedSensorPosition(0)) / 2)
+        frontDiff = self.rightRackMotor.getSelectedSensorPosition(0) - self.leftRackMotor.getSelectedSensorPosition(0)
+        diff = frontAvg - self.rearRackMotor.getSelectedSensorPosition(0)
 
-        print('difference: ' + str(diff))
-
-        self.extendRightEnc(diff)
-        self.extendLeftEnc(diff)
+        self.extendRightEnc(frontDiff - diff)
+        self.extendLeftEnc(frontDiff - diff)
         self.extendRearEnc(diff)
         return self.getRightLimit() and self.getLeftLimit() and self.getRearLimit()
 
@@ -113,14 +114,17 @@ class Climber(DebuggableSubsystem):
     def extendLeftEnc(self, diff):
         atLimit = self.getLeftLimit()
         if not atLimit:
-            if diff >= 2000:
+            if diff <= -2000:
                 self.leftRackMotor.set(0)
 
-            elif diff > 500:
-                speed = 0.9 * ((2000 - diff) / 2000)
+            elif diff < -500:
+                speed = 0.9 * ((2000 + diff) / 2000)
 
                 if speed < 0:
                     speed *= -1
+                if speed > 1.0:
+                    speed = 1.0
+
                 self.leftRackMotor.set(speed)
 
             else:
@@ -141,6 +145,9 @@ class Climber(DebuggableSubsystem):
 
                 if speed < 0:
                     speed *= -1
+                if speed > 1.0:
+                    speed = 1.0
+
                 self.rightRackMotor.set(speed)
 
             else:
@@ -161,6 +168,9 @@ class Climber(DebuggableSubsystem):
 
                 if speed < 0:
                     speed *= -1
+                if speed > 1.0:
+                    speed = 1.0
+
                 self.rearRackMotor.set(speed)
 
             else:
