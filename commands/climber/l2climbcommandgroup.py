@@ -17,9 +17,6 @@ class L2ClimbCommandGroup(CommandGroup):
 
         # Add commands here with self.addSequential() and self.addParallel()
 
-        #Free mechanical hold on rear rack
-        self.addSequential(DriveForwardCommand(), 0.5)
-
         #Lift robot up.
         self.addSequential(AllExtendCommand(), 1.25)
 
