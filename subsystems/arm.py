@@ -24,8 +24,10 @@ class Arm(DebuggableSubsystem):
         self.PIDController.setD(10, 0)
         self.PIDController.setIZone(3, 0)
 
-        self.motor.setOpenLoopRampRate(0.4)
-        self.motor.setClosedLoopRampRate(0.4)
+        self.motor.setOpenLoopRampRate(0.25)
+        self.motor.setClosedLoopRampRate(0.25)
+
+        self.motorspeed = 0.8
 
         self.lowerLimit = DigitalInput(ports.arm.lowerLimit)
 
@@ -53,7 +55,7 @@ class Arm(DebuggableSubsystem):
 
 
     def up(self):
-
+        speed = self.motorspeed
         print('ARM ' + str(self.getPosition()))
 
         isTop = self.getPosition() >= self.upperLimit
@@ -62,12 +64,13 @@ class Arm(DebuggableSubsystem):
             self.setPosition(float(self.upperLimit), 'down')
             self.stop()
         else:
-            self.set(1)
+            self.set(speed)
 
         return isTop
 
 
-    def down(self, speed=-1):
+    def down(self):
+        speed = self.motorspeed * -1
         print('ARM ' + str(self.getPosition()))
         isZero = self.isAtZero()
 
@@ -84,8 +87,9 @@ class Arm(DebuggableSubsystem):
 
 
     def downSS(self):
+        speed = self.motorspeed * -1
         print("down ss")
-        return self.down(-0.7)
+        return self.down(speed)
 
 
     def forceDown(self):
@@ -93,6 +97,7 @@ class Arm(DebuggableSubsystem):
 
 
     def downNoZero(self, speed=-1.0):
+        #speed = self.motor.speed * -1
         print('ARM ' + str(self.getPosition()))
         isZero = self.isAtZero()
 
@@ -117,10 +122,11 @@ class Arm(DebuggableSubsystem):
 
 
     def forceUp(self):
+        speed = self.motorspeed
         print('Force Up ' + str(self.getPosition()))
         isTop = self.getPosition() >= self.startPos
         if not isTop:
-            self.set(1.0)
+            self.set(speed)
         else:
             self.stop()
 

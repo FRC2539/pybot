@@ -15,6 +15,7 @@ from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.visionmovecommand import VisionMoveCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
+from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.pivotcommand import PivotCommand
@@ -101,11 +102,11 @@ class AutonomousCommandGroup(CommandGroup):
         print('ac: '+str(Config('Autonomous/autoModeSelect', 'None')))
         print('dt: '+str(Config('DriveTrain/ticksPerInch')))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRF')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RR')
         def rrfAuto(self):
             self.addSequential(TransitionMoveCommand(15,80,25,115,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addParallel(SetArmCommandGroup(12.0))
+            self.addParallel(SetArmCommandGroup(11.0))
             self.addSequential(StrafeCommand(32))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(4))
@@ -113,39 +114,48 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-18))
             #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
-            self.addSequential(TurnCommand(170))
-            self.addSequential(TransitionMoveCommand(80,80,25,90))
+            self.addSequential(TurnCommand(182))
+            self.addSequential(TransitionMoveCommand(80,80,25,96))
 
             self.addSequential(GoToTapeCommand())
             #self.addParallel(SetArmCommandGroup(20.0))
-            self.addSequential(MoveCommand(7))
+            self.addSequential(MoveCommand(3))
             self.addSequential(RaiseCommand(), .75)
-            self.addParallel(SetArmCommandGroup(11.0))
-            self.addSequential(TransitionMoveCommand(-60,-60,-85,-215,1,-8))
+            self.addParallel(SetArmCommandGroup(10.0))
+            self.addSequential(TransitionMoveCommand(-60,-60,-85,-208,1,-16))
 
-            self.addSequential(StrafeCommand(-40))
+            self.addSequential(StrafeCommand(-53))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(5),1)
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-5))
 
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RRB')
-        def rrbAuto(self):
-            #RightRocketback
-            self.addSequential(TransitionMoveCommand(30,80,30,160,40,25))
-            self.addSequential(TurnCommand(250))
-            #self.addParallel(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(StrafeCommand(-70), 5)
-
-            self.addSequential(GoToTapeCommand())
-            #self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(MoveCommand(2))
-            #self.addSequential(SuperStructureGoToLevelCommand('floor'))
-            self.addSequential(MoveCommand(-5))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
+        def rcfAuto(self):
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(TransitionMoveCommand(30,70,20,78,25,5))
+            #position arm
+
+            #self.addSequential(MoveCommand(36))
+            #self.addSequential(StrafeCommand(-38))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(4))
+            self.addSequential(WaitCommand(0.5))
+            self.addSequential(LowerCommand())
+            self.addSequential(MoveCommand(-12))
+            self.addSequential(TurnCommand(155))
+            self.addSequential(TransitionMoveCommand(60,60,10,145,75,150))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(2))
+            self.addSequential(RaiseCommand(), .75)
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(MoveCommand(-170))
+            self.addSequential(TurnCommand(190))
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCF')
         def rcfAuto(self):
             self.addSequential(TransitionMoveCommand(30,30,20,48,25,5))
             #position arm
@@ -166,28 +176,26 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(-18))
 
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRF')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LR')
         def lrfAuto(self):
-            self.addSequential(TransitionMoveCommand(25,60,25,70,0,-30))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(-39))
+            self.addSequential(TransitionMoveCommand(30,30,20,48,25,-5))
+            #position arm
+            self.addParallel(SetArmCommandGroup(14.0))
+            self.addSequential(MoveCommand(36))
+            #self.addSequential(StrafeCommand(-38))
             self.addSequential(GoToTapeCommand())
-            self.addSequential(MoveCommand(2))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(TransitionMoveCommand(-50,80,-60,120,1,-147.5))
+            self.addSequential(MoveCommand(4))
+            self.addSequential(WaitCommand(0.5))
+            self.addSequential(LowerCommand())
+            self.addSequential(MoveCommand(-12))
+            self.addSequential(TurnCommand(-140))
+            self.addSequential(TransitionMoveCommand(60,60,10,132,75,-80))
             self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(7))
+            self.addSequential(RaiseCommand(), .75)
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(MoveCommand(-18))
 
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LRB')
-        def lrbAuto(self):
-            self.addSequential(TransitionMoveCommand(50,80,30,180,40,-25))
-            self.addSequential(TurnCommand(-250))
-            self.addSequential(SuperStructureGoToLevelCommand("floor"))
-            self.addSequential(SuperStructureGoToLevelCommand("aboveFloor"))
-            self.addSequential(StrafeCommand(70))
-            self.addSequential(GoToTapeCommand())
-            self.addSequential(MoveCommand(5))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
@@ -210,11 +218,13 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'TEST')
         def testAuto(self):
+            #self.addParallel(SetArmCommandGroup(2.0))
+            #self.addSequential(StrafeCommand(32))
             #self.addSequential(TransitionMoveCommand(25,80,30,100,0,0))
 
-            self.addSequential(SetArmCommandGroup(12.0))
+            #self.addSequential(SetArmCommandGroup(12.0))
             #print("turn")
-            #self.addSequential(TurnCommand(90))
+            self.addSequential(TurnCommand(180))
 
             #self.addSequential(SetArmCommandGroup(12.0))
 

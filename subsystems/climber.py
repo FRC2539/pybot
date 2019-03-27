@@ -33,6 +33,9 @@ class Climber(DebuggableSubsystem):
         self.leftRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
         self.rearRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
+        self.fPower = 0.95
+        self.rPower = 1.0
+
 
     def getRightLimit(self):
         return not self.rightLimit.get()
@@ -118,7 +121,7 @@ class Climber(DebuggableSubsystem):
                 self.leftRackMotor.set(0)
 
             elif diff < -500:
-                speed = 0.9 * ((2000 + diff) / 2000)
+                speed = self.fPower * ((2000 + diff) / 2000)
 
                 if speed < 0:
                     speed *= -1
@@ -128,7 +131,7 @@ class Climber(DebuggableSubsystem):
                 self.leftRackMotor.set(speed)
 
             else:
-                self.leftRackMotor.set(0.9)
+                self.leftRackMotor.set(self.fPower)
 
         else:
             self.stopLeftRack()
@@ -141,7 +144,7 @@ class Climber(DebuggableSubsystem):
                 self.rightRackMotor.set(0)
 
             elif diff > 500:
-                speed = 0.9 * ((2000 - diff) / 2000)
+                speed = self.fPower * ((2000 - diff) / 2000)
 
                 if speed < 0:
                     speed *= -1
@@ -151,7 +154,7 @@ class Climber(DebuggableSubsystem):
                 self.rightRackMotor.set(speed)
 
             else:
-                self.rightRackMotor.set(0.9)
+                self.rightRackMotor.set(self.fPower)
 
         else:
             self.stopRightRack()
@@ -164,7 +167,7 @@ class Climber(DebuggableSubsystem):
                 self.rearRackMotor.set(0)
 
             elif diff < -500:
-                speed = 0.9 * ((2000 + diff) / 2000)
+                speed = self.rPower * ((2000 + diff) / 2000)
 
                 if speed < 0:
                     speed *= -1
@@ -174,7 +177,7 @@ class Climber(DebuggableSubsystem):
                 self.rearRackMotor.set(speed)
 
             else:
-                self.rearRackMotor.set(0.9)
+                self.rearRackMotor.set(self.rPower)
 
         else:
             self.stopRearRack()

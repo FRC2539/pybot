@@ -35,7 +35,7 @@ class TurnCommand(MoveCommand):
         '''
         print('Turn width ' + str(Config('DriveTrain/width').getValue()))
 
-        inchesPerDegree = math.pi / 180 #* float(Config('DriveTrain/width').getValue()) / 360.0
+        inchesPerDegree = math.pi * float(Config('DriveTrain/width').getValue()) / 180.0
         totalDistanceInInches = self.distance * inchesPerDegree
         ticks = robot.drivetrain.inchesToTicks(totalDistanceInInches)
 

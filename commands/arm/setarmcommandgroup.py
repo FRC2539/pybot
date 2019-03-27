@@ -29,11 +29,11 @@ class SetArmCommandGroup(CommandGroup):
         self.addSequential(WaitCommand(.5))
 
         #Spam zero to make sure it actually works.
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
-        #self.addSequential(LowerCommand())
+        self.addSequential(LowerCommand())
+        self.addSequential(LowerCommand())
+        self.addSequential(LowerCommand())
+        self.addSequential(LowerCommand())
+        self.addSequential(LowerCommand())
 
         #Remove any slack from the chain.
         self.addSequential(DownStageCommand())
