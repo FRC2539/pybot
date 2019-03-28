@@ -54,6 +54,10 @@ class Climber(DebuggableSubsystem):
         self.rearRackMotor.setSelectedSensorPosition(0, 0, 0)
 
 
+    def getAvgPosition(self):
+        return round((self.rightRackMotor.getSelectedSensorPosition(0) + self.leftRackMotor.getSelectedSensorPosition(0) + self.rearRackMotor.getSelectedSensorPosition(0)) / 3)
+
+
     def stopRacks(self):
         self.rightRackMotor.set(0)
         self.leftRackMotor.set(0)
