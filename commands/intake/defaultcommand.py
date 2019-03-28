@@ -14,20 +14,9 @@ class DefaultCommand(Command):
 
 
     def initialize(self):
-        self.hadBall = robot.intake.hasCargo()
+        self.hasBall = robot.intake.hasCargo
 
-
-    def execute(self):
-        if self.hadBall:
-            self.hasBall = robot.intake.hasCargo()
-            if not self.hasBall:
-                robot.intake.intake()
-            else:
-                robot.intake.stop()
-
+        if self.hasBall:
+            robot.intake.hold()
         else:
             robot.intake.stop()
-
-
-    def end(self):
-        pass

@@ -15,7 +15,8 @@ class Intake(DebuggableSubsystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setSafetyEnabled(False)
 
-        self.cargo = DigitalInput(ports.intake.lightSensor)
+        self.hasCargo = False
+
 
     def intake(self):
         self.motor.set(0.6)
@@ -29,16 +30,15 @@ class Intake(DebuggableSubsystem):
         self.motor.set(-0.4)
 
 
+    def hold(self):
+        self.motor.set(0.2)
+
+
     def stop(self):
         self.motor.stopMotor()
 
 
-    def hasCargo(self):
-        return not self.cargo.get()
-
-    '''
     def initDefaultCommand(self):
         from commands.intake.defaultcommand import DefaultCommand
 
         self.setDefaultCommand(DefaultCommand())
-    '''
