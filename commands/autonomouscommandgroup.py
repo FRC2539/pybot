@@ -200,8 +200,9 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
         def rcbAuto(self):
-            self.addSequential(TransitionMoveCommand(50,80,30,180,50,15))
-            self.addSequential(TurnCommand(-90))
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
+            self.addSequential(TurnCommand(-140))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
