@@ -12,9 +12,9 @@ drivetrain = PortsList()
 
 # CAN IDs for motors
 drivetrain.frontLeftMotorID = 1
-drivetrain.backRightMotorID = 3
+drivetrain.backRightMotorID = 4
 drivetrain.backLeftMotorID = 2
-drivetrain.frontRightMotorID = 4
+drivetrain.frontRightMotorID = 3
 
 # Analog Input
 drivetrain.ultrasonicPort = 0

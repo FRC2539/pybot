@@ -7,7 +7,8 @@ from wpilib.robotbase import RobotBase
 from custom import driverhud
 import controller.layout
 import subsystems
-
+from subsystems.basedrive import BaseDrive
+from subsystems.drivetrain import DriveTrain
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

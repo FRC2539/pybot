@@ -11,6 +11,8 @@ from commands.gear.waitonpilotcommand import WaitOnPilotCommand
 from commands.drive.movecommand import MoveCommand
 from commands.drive.turncommand import TurnCommand
 from commands.drive.setspeedcommand import SetSpeedCommand
+from commands.drive.percentruncommand import PercentRunCommand
+
 from commands.shooter.firecommand import FireCommand
 from commands.setconfigcommand import SetConfigCommand
 from commands.alterconfigcommand import AlterConfigCommand
@@ -24,8 +26,12 @@ class AutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('autonomous')
         ds = DriverStation.getInstance()
+        self.addSequential(PercentRunCommand(40))
 
         '''Lined up with the boiler. Shoot some fuel.'''
+
+
+    """
         @fc.IF(lambda: False)
         def launchFuel(self):
             self.addSequential(FireCommand(Config('Shooter/speed', 11000)), 8)
@@ -160,3 +166,5 @@ class AutonomousCommandGroup(CommandGroup):
                     TurnCommand(Config('Autonomous/robotLocation'))
                 )
                 self.addSequential(MoveCommand(200))
+
+        """

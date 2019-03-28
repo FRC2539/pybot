@@ -58,11 +58,11 @@ class BaseDrive(DebuggableSubsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.useEncoders = False #self.setUseEncoders()
+        self.setUseEncoders(False)
         self.maxSpeed = Config('DriveTrain/maxSpeed')
         self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
-        self.maxPercentVBus = 1
+        self.maxPercentVBus = 0.5
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
@@ -92,6 +92,10 @@ class BaseDrive(DebuggableSubsystem):
 
         self.setDefaultCommand(DriveCommand(self.speedLimit))
 
+    def percentOutputMove(self, percent):
+        '''Moves motor at certain percentage with a given time in auto. '''
+        for motor in self.motors:
+            motor.set(ControlMode.PercentOutput, int(percent))
 
     def move(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
@@ -102,6 +106,10 @@ class BaseDrive(DebuggableSubsystem):
         '''
         if [x, y, rotate] == self.lastInputs:
             return
+
+        if [x, y, rotate] == [0, 0, 0]:
+            for motor in self.motors:
+                motor.set(ControlMode.PercentOutput, 0)
 
         self.lastInputs = [x, y, rotate]
 
@@ -114,7 +122,7 @@ class BaseDrive(DebuggableSubsystem):
         speeds = self._calculateSpeeds(x, y, rotate / 2)
 
         '''Prevent speeds > 1'''
-        maxSpeed = 1
+        maxSpeed = 0
         for speed in speeds:
             maxSpeed = max(abs(speed), maxSpeed)
 
@@ -136,8 +144,10 @@ class BaseDrive(DebuggableSubsystem):
                 motor.set(ControlMode.Velocity, speed * self.speedLimit)
 
         else:
+            print('no encoders')
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+                print('speed * mpvb ' + str(speed * self.maxPercentVBus))
 
 
     def setPositions(self, positions):
@@ -273,6 +283,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Returns the speed of each active motors.'''
         return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
+
     def getPositions(self):
         '''Returns the position of each active motor.'''
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
@@ -284,7 +295,7 @@ class BaseDrive(DebuggableSubsystem):
         the motors will be set to speed mode. Disabling encoders should not be
         done lightly, as many commands rely on encoder information.
         '''
-        self.useEncoders = False #useEncoders
+        self.useEncoders = useEncoders
 
 
     def setSpeedLimit(self, speed):
@@ -301,31 +312,17 @@ class BaseDrive(DebuggableSubsystem):
             self.maxSpeed = speed
 
         '''If we can't use encoders, attempt to approximate that speed.'''
-        self.maxPercentVBus = speed / self.maxSpeed
+        self.maxPercentVBus = 0.5#speed / self.maxSpeed
 
 
-    def _setMode(self, mode):
-
+    def enableSimpleDriving(self):
         '''
         Allow the robot to drive without encoders or any input from Config.
         '''
 
-        maxVoltage = self.activeMotors[0].getBusVoltage()
-
-        for motor in self.activeMotors:
-            motor.configNominalOutputForward(maxVoltage, 0)
-
-            if mode == ControlMode.MotionMagic:
-                motor.setProfile(1)
-                motor.setMotionMagicCruiseVelocity(895/2)
-                motor.setMotionMagicAcceleration(895/2)
-
-            elif mode == ControlMode.Velocity:
-                motor.selectProfileSlot(0, 0)
-                motor.setIntegralAccumulator(0, 0, 0)
-
-
-            motor.set(mode, 0, 0, 0)
+        self.speedLimit = 1
+        self.maxSpeed = 1
+        self.setUseEncoders(False)
 
 
     def _publishPID(self, table, profile):
