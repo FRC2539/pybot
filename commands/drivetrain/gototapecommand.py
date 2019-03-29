@@ -61,7 +61,7 @@ class GoToTapeCommand(Command):
 
             if self.y > 0.45:
                 self.y = 0.45
-            elif abs(oY) < 0.5:
+            elif oY < 0.0:
                 self.y = 0
             elif oY > 0.5 and self.y < 0.15:
                 self.y = 0.15

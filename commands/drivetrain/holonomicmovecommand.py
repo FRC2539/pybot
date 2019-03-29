@@ -22,7 +22,7 @@ class HolonomicMoveCommand(TimedCommand):
 
         self.runtimeSecs = 0
         self.runtime = 0
-        self.speedLimit = 2500 #robot.drivetrain.speedLimit
+        self.speedLimit = 3100 #robot.drivetrain.speedLimit
 
         self.setup()
 
@@ -32,6 +32,7 @@ class HolonomicMoveCommand(TimedCommand):
 
 
     def setup(self):
+        print("holo setup")
         self.x = self.originalX
         self.y = self.originalY
         self.rotate = self.originalRotate
@@ -51,17 +52,18 @@ class HolonomicMoveCommand(TimedCommand):
         self.rotateTime = self.rotateTicks / (self.speedLimit * 10)
 
         self.runtimeSecs = 2 * (math.sqrt((self.xTime ** 2) + (self.yTime ** 2) + (self.rotateTime ** 2)))
-
+        print("calcTimeout: "+ str(self.runtimeSecs))
         return self.runtimeSecs
 
 
     def initialize(self):
+        print("holo init")
         self.setup()
 
         if not robot.drivetrain.isFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
-        robot.drivetrain.resetGyro()
-
+        #robot.drivetrain.resetGyro()
+        print("holo init runtime: "+str(self.runtime))
         self.runtime = self.runtimeSecs * 10 * 1.15
 
         self.x = (self.xTicks / self.runtime) / (self.speedLimit / 2)
