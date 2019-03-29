@@ -17,3 +17,4 @@ class SlowEjectCommand(TimedCommand):
     def end(self):
         robot.lights.off()
         robot.intake.stop()
+        robot.intake.hasCargo = False
