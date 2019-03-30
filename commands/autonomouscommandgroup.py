@@ -105,16 +105,16 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RR')
         def rrfAuto(self):
-            self.addParallel(SetArmCommandGroup(9.0))
-            self.addSequential(TransitionMoveCommand(15,91,25,128,0,30))
+            self.addParallel(SetArmCommandGroup(7.0))
+            self.addSequential(TransitionMoveCommand(15,80,35,120,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
-            self.addSequential(StrafeCommand(32))
+            self.addSequential(StrafeCommand(27))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(3))
             #self.addSequential(WaitCommand(.5))
             self.addSequential(LowerCommand())
-            self.addSequential(HolonomicMoveCommand(0,-175,-335))
+            self.addSequential(HolonomicMoveCommand(0,-175,-305))
             #self.addSequential(MoveCommand(-18))
             #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
             #self.addSequential(TurnCommand(182))
@@ -122,12 +122,14 @@ class AutonomousCommandGroup(CommandGroup):
 
             self.addSequential(GoToTapeCommand())
             #self.addParallel(SetArmCommandGroup(20.0))
-            self.addSequential(MoveCommand(2))
+            self.addSequential(MoveCommand(1))
             self.addSequential(RaiseCommand(), .55)
             self.addParallel(SetArmCommandGroup(10.0))
-            self.addSequential(TransitionMoveCommand(-100,-100,-85,-183,1,2))
+            #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
 
-            self.addSequential(StrafeCommand(-50))
+            self.addSequential(HolonomicMoveCommand(-40,145,-15))
+            #self.addSequential(StrafeCommand(-50))
+            self.addSequential(HolonomicMoveCommand(55,0,-25))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2))
             self.addSequential(LowerCommand())
@@ -234,8 +236,9 @@ class AutonomousCommandGroup(CommandGroup):
             #print("turn")
             #self.addSequential(TurnCommand(180))
             #self.addSequential(MoveCommand(-48))
-            self.addSequential(HolonomicMoveCommand(0,-140,-255))
-
+            #self.addSequential(HolonomicMoveCommand(0,-140,-255))
+            #self.addSequential(HolonomicMoveCommand(-130,-50,-25))
+            self.addSequential(HolonomicMoveCommand(-80,190,-25))
             #self.addSequential(SetArmCommandGroup(12.0))
 
             #self.addSequential(WaitCommand(.5))
