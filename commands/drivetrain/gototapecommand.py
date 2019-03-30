@@ -38,14 +38,11 @@ class GoToTapeCommand(Command):
 
     def execute(self):
         if self.tape.getValue() == 1:
-            self.x = self.strafe.getValue() + 1.5 #Adjust for off center camera position
-            self.y = self.distance.getValue()
+            oX = self.strafe.getValue() + 1.5 #Adjust for off center camera position
+            oY = self.distance.getValue()
 
-            oY = self.y
-            oX = self.x
-
-            self.x = math.copysign((self.x * 3) / 100, self.x)
-            self.y = math.copysign((self.y * 3) / 100, self.y)
+            self.x = math.copysign((oX * 3) / 100, oX)
+            self.y = math.copysign((oY * 3) / 100, oY)
             self.rotate = self.x / 2
 
 
@@ -56,15 +53,20 @@ class GoToTapeCommand(Command):
                 self.x = oX / 5
                 self.rotate = self.x
             elif abs(oX) > 0.5 and self.x < 0.1:
-                self.x = math.copysign(0.1, oX)
-                self.rotate = math.copysign(0.1, oX)
+                self.x = math.copysign(0.23, oX)
+                self.rotate = math.copysign(0.12, oX)
 
-            if self.y > 0.45:
-                self.y = 0.45
+            #if self.y > 0.45:
+             #   self.y = 0.5
+            if oY < 2.5:
+                self.y = 0.15
             elif oY < 0.0:
                 self.y = 0
-            elif oY > 0.5 and self.y < 0.15:
-                self.y = 0.15
+            elif oY > 0.8 and self.y < 0.15:
+                self.y = 0.2
+            elif oY > 4.5:
+                print('running bens stuff')
+                self.y = 0.6
 
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
