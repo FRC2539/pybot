@@ -43,38 +43,43 @@ class GoToTapeCommand(Command):
     def execute(self):
         #old
         if self.tape.getValue() == 1:
-            self.x = self.strafe.getValue() + 1.5 #Adjust for off center camera position
-            self.y = self.distance.getValue()
+            oX = self.strafe.getValue() #Adjust for off center camera position
+            oY = self.distance.getValue()
 
-            oY = self.y
-            oX = self.x
+            self.x = math.copysign((oX * 4) / 100, oX)
+            self.y = math.copysign((oY * 8) / 100, oY)
+            self.rotate = self.x / 3
 
-            self.x = math.copysign((self.x * 3) / 100, self.x)
-            self.y = math.copysign((self.y * 3) / 100, self.y)
-            self.rotate = self.x / 2
+            if abs(self.x) > 0.35:
+                self.x = math.copysign(0.35, self.x)
+                self.rotate = self.x / 3
+            elif abs(oX) <= 1.0:
+                self.x = oX / 10.0
+                self.rotate = self.x / 2.0
+            elif abs(oX) > 1.0 and abs(self.x) < 0.2:
+                self.x = math.copysign(0.2, oX)
+                self.rotate = math.copysign(0.2, oX) / 2.0
 
-
-            if self.x > 0.4:
-                self.x = math.copysign(0.4, self.x)
-                self.rotate = self.x
-            elif abs(oX) <= 0.5:
-                self.x = oX / 5
-                self.rotate = self.x
-            elif abs(oX) > 0.5 and self.x < 0.1:
-                self.x = math.copysign(0.1, oX)
-                self.rotate = math.copysign(0.1, oX)
-
-            if self.y > 0.45:
-                self.y = 0.45
-            elif oY < 0.0:
+            if self.y > 0.60:
+                self.y = 0.60
+            elif oY <= 0.0:
                 self.y = 0
-            elif oY > 0.5 and self.y < 0.15:
+            elif oY > 0.0 and self.y < 0.3:
+                self.y = 0.3
+
+            if oY <= 4.0:
+                self.rotate = 0.0
+
+            if oY <= 1.25:
+                self.y = 0.1
+            elif oY <= 2.5:
                 self.y = 0.15
+
 
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
-            self._finished = (abs(self.x) <= 0.02 and abs(self.y) <= 0.02 and abs(self.rotate) <= 0.02) or oY <= 0.25
+            self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 0.25
 
             if self._finished:
                 robot.lights.solidGreen()
