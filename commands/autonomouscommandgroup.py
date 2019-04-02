@@ -23,20 +23,16 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
+from commands.drivetrain.setpipelinecommand import SetPipelineCommand
 
 from commands.arm.setarmcommandgroup import SetArmCommandGroup
 from commands.arm.lowercommand import LowerCommand
 from commands.arm.raisecommand import RaiseCommand
 
-from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
-
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 
 from commands.intake.slowejectcommand import SlowEjectCommand
-
-#from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
-
 
 
 class AutonomousCommandGroup(CommandGroup):
@@ -44,42 +40,8 @@ class AutonomousCommandGroup(CommandGroup):
     def __init__(self):
         super().__init__('Autonomous')
         print("auto init")
-        #NetworkTables.initialize(server='10.25.39.2')
 
         ds = DriverStation.getInstance()
-
-        #NetworkTables.initialize()
-        #dt = NetworkTables.getTable('DriveTrain')
-
-
-
-        #am.delete()
-
-        #NetworkTables.shutdown()
-        #NetworkTables.initialize()
-
-
-        #dt = NetworkTables.getTable('DriveTrain')
-        #dt.putNumber('ticksPerInch', 300)
-        #dt.putNumber('DriveTrain/width', 200)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('normalSpeed', 2500)
-        #dt.putNumber('maxSpeed', 2500)
-
-        #Config('DriveTrain/ticksPerInch', 350)
-        #Config('DriveTrain/width', 29.5)
-        #Config('DriveTrain/Speed/P', 1)
-        #Config('DriveTrain/Speed/IZone', 30)
-        #Config('DriveTrain/Speed/D', 31)
-        #Config('DriveTrain/Speed/I', 0.001)
-        #Config('DriveTrain/Speed/F', 0.7)
-        #Config('DriveTrain/normalSpeed', 2500)
-        #Config('DriveTrain/maxSpeed', 2500)
 
         dt = NetworkTables.getTable('DriveTrain')
         dt.putNumber('ticksPerInch', 250)
@@ -97,14 +59,21 @@ class AutonomousCommandGroup(CommandGroup):
         #Config('DriveTrain/normalSpeed', 2500)
         #Config('DriveTrain/maxSpeed', 2500)
 
-
         print('dtms: '+str(Config('DriveTrain/maxSpeed', '')))
         print('citf: '+str(Config('CameraInfo/tapeFound', '')))
         print('ac: '+str(Config('Autonomous/autoModeSelect', 'None')))
         print('dt: '+str(Config('DriveTrain/ticksPerInch')))
 
+
+        #Zero the gyro before any auto starts.
+        @fc.IF(lambda: True)
+        def zeroGyro(self):
+            self.addSequential(ZeroGyroCommand())
+
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RR')
         def rrfAuto(self):
+            self.addSequential(SetPipelineCommand(0))
             self.addParallel(SetArmCommandGroup(13.0))
             self.addSequential(TransitionMoveCommand(15,80,35,114,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -135,10 +104,9 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(-5))
 
 
-
-
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
+            self.addSequential(SetPipelineCommand(2))
             self.addParallel(SetArmCommandGroup(12.0))
             self.addSequential(TransitionMoveCommand(30,70,20,70,25,5))
             #position arm
@@ -159,8 +127,10 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(-170))
             #self.addSequential(TurnCommand(190))
 
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCF')
         def rcfAuto(self):
+            self.addSequential(SetPipelineCommand(1))
             self.addSequential(TransitionMoveCommand(30,30,20,48,25,5))
             #position arm
             self.addParallel(SetArmCommandGroup(14.0))
@@ -183,6 +153,7 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LR')
         def lrfAuto(self):
             print("left rocket auto")
+            self.addSequential(SetPipelineCommand(0))
             self.addParallel(SetArmCommandGroup(11.0))
             self.addSequential(TransitionMoveCommand(35,95,25,90,30,-35))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -212,14 +183,19 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(2))
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-5))
+
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCH')
         def rcbAuto(self):
+            self.addSequential(SetPipelineCommand(1))
             self.addParallel(SetArmCommandGroup(11.0))
             self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
             self.addSequential(TurnCommand(-140))
 
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
         def rcbAuto(self):
+            self.addSequential(SetPipelineCommand(1))
             self.addParallel(SetArmCommandGroup(11.0))
             self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
             self.addSequential(TurnCommand(-140))
@@ -228,9 +204,11 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-18))
 
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
         def lcbAuto(self):
             print("lcb")
+            self.addSequential(SetPipelineCommand(2))
             self.addParallel(SetArmCommandGroup(11.0))
             #self.addSequential(TransitionMoveCommand(50,80,30,170,30,-35))
             self.addSequential(TransitionMoveCommand(50,80,30,160,30,-15))
@@ -284,3 +262,8 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: not robot.drivetrain.isFieldOriented)
         def toggleBackToFieldOrientation(self):
             self.addSequential(ToggleFieldOrientationCommand())
+
+
+        @fc.IF(lambda: True)
+        def setPipeline(self):
+            self.addSequential(SetPipelineCommand(0))
