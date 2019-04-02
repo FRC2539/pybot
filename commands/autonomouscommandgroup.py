@@ -157,7 +157,6 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LR')
         def lrfAuto(self):
-            print("left rocket auto")
             self.addSequential(SetPipelineCommand(0))
             self.addParallel(SetArmCommandGroup(11.0))
             self.addSequential(TransitionMoveCommand(35,95,25,90,30,-35))
@@ -212,6 +211,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
         def rcbAuto(self):
+            self.addSequential(SetPipelineCommand(1))
             self.addSequential(SetArmCommandGroup(70.0, 20.0))
             self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
             self.addSequential(TurnCommand(-140))
@@ -253,6 +253,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
         def lcbAuto(self):
+            self.addSequential(SetPipelineCommand(2))
             self.addSequential(SetArmCommandGroup(70.0, 20.0))
             #self.addSequential(TransitionMoveCommand(50,80,30,170,30,-35))
             self.addSequential(TransitionMoveCommand(50,80,30,160,30,-15))
@@ -304,11 +305,13 @@ class AutonomousCommandGroup(CommandGroup):
             #self.addSequential(StrafeCommand(-20))
 
 
+        #Reset to field orientation.
         @fc.IF(lambda: not robot.drivetrain.isFieldOriented)
         def toggleBackToFieldOrientation(self):
             self.addSequential(ToggleFieldOrientationCommand())
 
 
+        #Reset vision pipeline to 'closest' sorting option.
         @fc.IF(lambda: True)
         def setPipeline(self):
             self.addSequential(SetPipelineCommand(0))
