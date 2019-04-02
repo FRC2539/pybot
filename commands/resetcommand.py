@@ -13,6 +13,8 @@ class ResetCommand(InstantCommand):
     def __init__(self):
         super().__init__('Reset')
 
+        self.setRunWhenDisabled(True)
+
         '''Require all subsystems to reset.'''
         self.requires(robot.drivetrain)
         self.requires(robot.elevator)

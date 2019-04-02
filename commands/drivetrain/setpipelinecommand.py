@@ -1,5 +1,5 @@
 from wpilib.command.command import Command
-from networktables import NetworkTables as MergeConflict
+from networktables import NetworkTables
 
 import robot
 
@@ -10,13 +10,14 @@ class SetPipelineCommand(Command):
     2 / right
     '''
 
-    def __init__(self, table=0):
+    def __init__(self, pipeline):
         super().__init__('Set Pipeline')
 
-        self.requires(robot.drivetrain)
+        self.setRunWhenDisabled(True)
 
-        self.tableVal = table
-        self.table = MergeConflict.getTable('limelight')
+        self.pipeline = pipeline
+        self.table = NetworkTables.getTable('limelight')
+
 
     def initialize(self):
-        self.table.putNumber('pipeline', self.tableVal)
+        self.table.putNumber('pipeline', self.pipeline)
