@@ -33,7 +33,10 @@ from commands.superstructure.superstructuregotolevelcommand import SuperStructur
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
+
 
 #from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 
@@ -51,51 +54,11 @@ class AutonomousCommandGroup(CommandGroup):
         #NetworkTables.initialize()
         #dt = NetworkTables.getTable('DriveTrain')
 
-
-
-        #am.delete()
-
-        #NetworkTables.shutdown()
-        #NetworkTables.initialize()
-
-
-        #dt = NetworkTables.getTable('DriveTrain')
-        #dt.putNumber('ticksPerInch', 300)
-        #dt.putNumber('DriveTrain/width', 200)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('DriveTrain/width', 350)
-        #dt.putNumber('normalSpeed', 2500)
-        #dt.putNumber('maxSpeed', 2500)
-
-        #Config('DriveTrain/ticksPerInch', 350)
-        #Config('DriveTrain/width', 29.5)
-        #Config('DriveTrain/Speed/P', 1)
-        #Config('DriveTrain/Speed/IZone', 30)
-        #Config('DriveTrain/Speed/D', 31)
-        #Config('DriveTrain/Speed/I', 0.001)
-        #Config('DriveTrain/Speed/F', 0.7)
-        #Config('DriveTrain/normalSpeed', 2500)
-        #Config('DriveTrain/maxSpeed', 2500)
-
         dt = NetworkTables.getTable('DriveTrain')
         dt.putNumber('ticksPerInch', 250)
         dt.putNumber('normalSpeed', 2500)
         dt.putNumber('maxSpeed', 2500)
         dt.putNumber('width', 23)
-
-        #Config('DriveTrain/ticksPerInch', 250)
-        #Config('DriveTrain/width', 29.5)
-        #Config('DriveTrain/Speed/P', 1)
-        #Config('DriveTrain/Speed/IZone', 30)
-        #Config('DriveTrain/Speed/D', 31)
-        #Config('DriveTrain/Speed/I', 0.001)
-        #Config('DriveTrain/Speed/F', 0.7)
-        #Config('DriveTrain/normalSpeed', 2500)
-        #Config('DriveTrain/maxSpeed', 2500)
 
 
         print('dtms: '+str(Config('DriveTrain/maxSpeed', '')))
@@ -160,24 +123,26 @@ class AutonomousCommandGroup(CommandGroup):
             #self.addSequential(TurnCommand(190))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCF')
-        def rcfAuto(self):
-            self.addSequential(TransitionMoveCommand(30,30,20,48,25,5))
+        def lcfAuto(self):
+            self.addParallel(SetArmCommandGroup(12.0))
+            self.addSequential(TransitionMoveCommand(30,70,20,70,25,-15))
             #position arm
-            self.addParallel(SetArmCommandGroup(14.0))
-            self.addSequential(MoveCommand(36))
+
+            #self.addSequential(MoveCommand(36))
             #self.addSequential(StrafeCommand(-38))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(4),1)
-            self.addSequential(WaitCommand(0.5))
+            #self.addSequential(WaitCommand(0.5))
             self.addSequential(LowerCommand())
-            self.addSequential(MoveCommand(-12))
-            self.addSequential(TurnCommand(140))
-            self.addSequential(TransitionMoveCommand(60,60,10,132,75,80))
+            self.addSequential(MoveCommand(-8))
+            self.addSequential(TurnCommand(155))
+            self.addSequential(TransitionMoveCommand(60,60,10,145,45,150))
             self.addSequential(GoToTapeCommand())
-            self.addSequential(MoveCommand(4),1)
-            self.addSequential(RaiseCommand(), .75)
+            self.addSequential(MoveCommand(2), 1)
+            self.addSequential(RaiseCommand(), .65)
             self.addParallel(SetArmCommandGroup(11.0))
-            self.addSequential(MoveCommand(-18))
+            self.addSequential(MoveCommand(-170))
+            #self.addSequential(TurnCommand(190))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LR')
@@ -212,11 +177,6 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(2))
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-5))
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCH')
-        def rcbAuto(self):
-            self.addParallel(SetArmCommandGroup(11.0))
-            self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
-            self.addSequential(TurnCommand(-140))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
         def rcbAuto(self):
@@ -228,9 +188,36 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-18))
 
+            self.addSequential(HolonomicMoveCommand(80,-220,-200))
+
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(4),1)
+            self.addSequential(RaiseCommand(), .75)
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(MoveCommand(-18))
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCH')
+        def rchAuto(self):
+            self.addSequential(SetArmCommandGroup(70.0, 20.0))
+            self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
+            self.addSequential(TurnCommand(-140))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(4),1)
+            self.addSequential(EjectCommand(),1)
+            self.addSequential(MoveCommand(-18))
+
+            self.addSequential(HolonomicMoveCommand(80,-220,-200))
+
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(MoveCommand(4),1)
+            self.addSequential(RaiseCommand(), .75)
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(MoveCommand(-18))
+
+
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
         def lcbAuto(self):
-            print("lcb")
             self.addParallel(SetArmCommandGroup(11.0))
             #self.addSequential(TransitionMoveCommand(50,80,30,170,30,-35))
             self.addSequential(TransitionMoveCommand(50,80,30,160,30,-15))
@@ -249,6 +236,30 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(-18))
 
             #self.addSequential(TransitionMoveCommand(35,95,25,90,30,-35))
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCH')
+        def lchAuto(self):
+            self.addSequential(SetArmCommandGroup(70.0, 20.0))
+            #self.addSequential(TransitionMoveCommand(50,80,30,170,30,-35))
+            self.addSequential(TransitionMoveCommand(50,80,30,160,30,-15))
+            self.addSequential(TurnCommand(140))
+            self.addSequential(GoToTapeCommand())
+            self.addSequential(EjectCommand(),1)
+            #self.addSequential(MoveCommand(4),1)
+            self.addSequential(LowerCommand())
+            self.addSequential(MoveCommand(-18))
+
+            self.addSequential(HolonomicMoveCommand(-80,-220,200))
+
+            self.addSequential(GoToTapeCommand())
+
+            #self.addSequential(MoveCommand(4),1)
+            self.addSequential(RaiseCommand(), .75)
+            self.addParallel(SetArmCommandGroup(11.0))
+            self.addSequential(MoveCommand(-18))
+
+            #self.addSequential(TransitionMoveCommand(35,95,25,90,30,-35))
+
 
 
 
