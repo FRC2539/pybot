@@ -1,3 +1,5 @@
+from networktables import NetworkTables as nt
+
 from .logitechdualshock import LogitechDualShock
 from .logitechjoystick import LogitechJoystick
 from .thrustmasterjoystick import ThrustmasterJoystick
@@ -17,6 +19,7 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
+from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -137,6 +140,7 @@ def init():
 
     backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
+    backupRotateStick.rightThumb.toggleWhenPressed(AutonomousMeasureCommand())
 
     backupRotateStick.trigger.whenPressed(EjectCommand())
 

@@ -10,6 +10,7 @@ from networktables import NetworkTables
 
 import robot
 
+from commands.drivetrain.setpipelinecommand import SetPipelineCommand
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
@@ -103,9 +104,15 @@ class AutonomousCommandGroup(CommandGroup):
         print('ac: '+str(Config('Autonomous/autoModeSelect', 'None')))
         print('dt: '+str(Config('DriveTrain/ticksPerInch')))
 
+        firstLevelArmHeight = float(Config('Arm/firstLevelHeight', 11.0))
+
+        cargoshipArmHeight = float(Config('Arm/cargoshipArmHeight', 70.0))
+        cargoshipEleHeight = float(Config('Arm/cargoshipEleHeight', 20.0))
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RR')
         def rrfAuto(self):
-            self.addParallel(SetArmCommandGroup(9.0))
+            self.addParallel(SetPipelineCommand(2))
+            self.addParallel(SetArmCommandGroup(9.0)) # should be firstLevelArmHeight
             self.addSequential(TransitionMoveCommand(15,91,25,128,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
@@ -125,8 +132,8 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(2))
             self.addSequential(RaiseCommand(), .55)
             self.addParallel(SetArmCommandGroup(10.0))
+            self.addParallel(SetPipelineCommand(1))
             self.addSequential(TransitionMoveCommand(-100,-100,-85,-183,1,2))
-
             self.addSequential(StrafeCommand(-50))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2))
@@ -138,7 +145,8 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
-            self.addParallel(SetArmCommandGroup(11.0))
+            self.addParallel(SetPipelineCommand(2))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
             self.addSequential(TransitionMoveCommand(30,70,20,78,25,5))
             #position arm
 
@@ -154,15 +162,16 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2))
             self.addSequential(RaiseCommand(), .75)
-            self.addParallel(SetArmCommandGroup(11.0))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
             self.addSequential(MoveCommand(-170))
             self.addSequential(TurnCommand(190))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCF')
         def rcfAuto(self):
+            self.addParallel(SetPipelineCommand(1))
             self.addSequential(TransitionMoveCommand(30,30,20,48,25,5))
             #position arm
-            self.addParallel(SetArmCommandGroup(14.0))
+            self.addParallel(SetArmCommandGroup(14.0)) #should be firstLevelArmHeight
             self.addSequential(MoveCommand(36))
             #self.addSequential(StrafeCommand(-38))
             self.addSequential(GoToTapeCommand())
@@ -181,9 +190,10 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LR')
         def lrfAuto(self):
+            self.addParallel(SetPipelineCommand(1))
             self.addSequential(TransitionMoveCommand(30,30,20,48,25,-5))
             #position arm
-            self.addParallel(SetArmCommandGroup(14.0))
+            self.addParallel(SetArmCommandGroup(14.0)) #should be firstLevelArmHeight
             self.addSequential(MoveCommand(36))
             #self.addSequential(StrafeCommand(-38))
             self.addSequential(GoToTapeCommand())
@@ -193,30 +203,42 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(-12))
             self.addSequential(TurnCommand(-140))
             self.addSequential(TransitionMoveCommand(60,60,10,132,75,-80))
+            self.addParallel(SetPipelineCommand(2))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(7))
             self.addSequential(RaiseCommand(), .75)
-            self.addParallel(SetArmCommandGroup(11.0))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
             self.addSequential(MoveCommand(-18))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCH')
         def rcbAuto(self):
-            self.addParallel(SetArmCommandGroup(11.0))
+            self.addParallel(SetPipelineCommand(0))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
             self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
             self.addSequential(TurnCommand(-140))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
         def rcbAuto(self):
-            self.addParallel(SetArmCommandGroup(11.0))
+            self.addParallel(SetPipelineCommand(0))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
             self.addSequential(TransitionMoveCommand(50,80,30,170,30,15))
             self.addSequential(TurnCommand(-140))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
         def lcbAuto(self):
+            self.addParallel(SetPipelineCommand(0))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
             self.addSequential(TransitionMoveCommand(50,80,30,180,50,-15))
             self.addSequential(TurnCommand(90))
 
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCH')
+        def lcbAuto(self):
+            self.addParallel(SetPipelineCommand(0))
+            self.addParallel(SetArmCommandGroup(firstLevelArmHeight))
+            self.addSequential(TransitionMoveCommand(50,80,30,180,50,-15))
+            self.addSequential(TurnCommand(90))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'DEMO')
