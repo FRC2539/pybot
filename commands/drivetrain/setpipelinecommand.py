@@ -1,9 +1,9 @@
-from wpilib.command.command import Command
+from wpilib.command.instantcommand import InstantCommand
 from networktables import NetworkTables
 
 import robot
 
-class SetPipelineCommand(Command):
+class SetPipelineCommand(InstantCommand):
     '''
     0 / closest
     1 / left

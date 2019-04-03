@@ -48,6 +48,11 @@ class KryptonBot(CommandBasedRobot):
         driverhud.showInfo("Starting %s" % auton)
 
 
+    def teleopInit(self):
+        from commands.drivetrain.setpipelinecommand import SetPipelineCommand
+        SetPipelineCommand(0).start()
+
+
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)

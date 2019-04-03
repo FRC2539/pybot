@@ -47,7 +47,7 @@ class GoToTapeCommand(Command):
             oY = self.distance.getValue()
 
             self.x = math.copysign((oX * 4) / 100, oX)
-            self.y = math.copysign((oY * 8) / 100, oY)
+            self.y = math.copysign((oY * 7) / 100, oY)
             self.rotate = self.x / 3
 
             if abs(self.x) > 0.35:
@@ -56,12 +56,12 @@ class GoToTapeCommand(Command):
             elif abs(oX) <= 1.0:
                 self.x = oX / 10.0
                 self.rotate = self.x / 2.0
-            elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                self.x = math.copysign(0.2, oX)
-                self.rotate = math.copysign(0.2, oX) / 2.0
+            elif abs(oX) > 1.0 and abs(self.x) < 0.1:
+                self.x = math.copysign(0.1, oX)
+                self.rotate = math.copysign(0.1, oX) / 2.0
 
-            if self.y > 0.60:
-                self.y = 0.60
+            if self.y > 0.50:
+                self.y = 0.50
             elif oY <= 0.0:
                 self.y = 0
             elif oY > 0.0 and self.y < 0.3:
