@@ -56,8 +56,8 @@ class GoToTapeCommand(Command):
             elif abs(oX) <= 1.0:
                 self.x = oX / 10.0
                 self.rotate = self.x / 2.0
-            elif abs(oX) > 1.0 and abs(self.x) < 0.1:
-                self.x = math.copysign(0.1, oX)
+            elif abs(oX) > 1.0 and abs(self.x) < 0.18:
+                self.x = math.copysign(0.18, oX)
                 self.rotate = math.copysign(0.1, oX) / 2.0
 
             if self.y > 0.50:

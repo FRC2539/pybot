@@ -70,7 +70,8 @@ class AutonomousCommandGroup(CommandGroup):
         #Zero the gyro before any auto starts.
         @fc.IF(lambda: True)
         def zeroGyro(self):
-            self.addSequential(ZeroGyroCommand())
+            pass
+            #self.addSequential(ZeroGyroCommand())
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RR')
@@ -86,7 +87,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(2), 1)
             #self.addSequential(WaitCommand(.5))
             self.addSequential(LowerCommand())
-            self.addSequential(HolonomicMoveCommand(0,-150,-265))
+            self.addSequential(HolonomicMoveCommand(0,-130,-275))
             #self.addSequential(MoveCommand(-18))
             #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
             #self.addSequential(TurnCommand(182))
@@ -98,7 +99,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(RaiseCommand(), .55)
             self.addParallel(SetArmCommandGroup(10.0))
             #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-            self.addSequential(HolonomicMoveCommand(-45,145,-45))
+            self.addSequential(HolonomicMoveCommand(-50,150,-45))
             self.addSequential(HolonomicMoveCommand(35,0,10))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(4), 1)
@@ -118,7 +119,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-8))
             self.addSequential(TurnCommand(155))
-            self.addSequential(TransitionMoveCommand(60,60,10,150,70,180))
+            self.addSequential(TransitionMoveCommand(60,60,10,150,60,179))
             self.addSequential(GoToTapeCommand())
             self.addSequential(MoveCommand(2), 1)
             self.addSequential(RaiseCommand(), .65)
