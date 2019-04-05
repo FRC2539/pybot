@@ -43,11 +43,11 @@ class GoToTapeCommand(Command):
     def execute(self):
         #old
         if self.tape.getValue() == 1:
-            oX = self.strafe.getValue() #Adjust for off center camera position
+            oX = self.strafe.getValue() + 2.0 #Adjust for off center camera position
             oY = self.distance.getValue()
 
             self.x = math.copysign((oX * 4) / 100, oX)
-            self.y = math.copysign((oY * 7) / 100, oY)
+            self.y = math.copysign((oY * 6) / 100, oY)
             self.rotate = self.x / 3
 
             if abs(self.x) > 0.35:
@@ -56,12 +56,12 @@ class GoToTapeCommand(Command):
             elif abs(oX) <= 1.0:
                 self.x = oX / 10.0
                 self.rotate = self.x / 2.0
-            elif abs(oX) > 1.0 and abs(self.x) < 0.18:
-                self.x = math.copysign(0.18, oX)
+            elif abs(oX) > 1.0 and abs(self.x) < 0.2:
+                self.x = math.copysign(0.2, oX)
                 self.rotate = math.copysign(0.1, oX) / 2.0
 
-            if self.y > 0.50:
-                self.y = 0.50
+            if self.y > 0.40:
+                self.y = 0.40
             elif oY <= 0.0:
                 self.y = 0
             elif oY > 0.0 and self.y < 0.3:
@@ -70,9 +70,9 @@ class GoToTapeCommand(Command):
             if oY <= 4.0:
                 self.rotate = 0.0
 
-            if oY <= 1.25:
+            if oY <= 2.0:
                 self.y = 0.1
-            elif oY <= 2.5:
+            elif oY <= 3.5:
                 self.y = 0.15
 
 

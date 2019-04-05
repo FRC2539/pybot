@@ -56,7 +56,6 @@ class Arm(DebuggableSubsystem):
 
     def up(self):
         speed = self.motorspeed
-        print('ARM ' + str(self.getPosition()))
 
         isTop = self.getPosition() >= self.upperLimit
 
@@ -71,7 +70,6 @@ class Arm(DebuggableSubsystem):
 
     def down(self):
         speed = self.motorspeed * -1
-        print('ARM ' + str(self.getPosition()))
         isZero = self.isAtZero()
 
         if isZero:
@@ -88,7 +86,6 @@ class Arm(DebuggableSubsystem):
 
     def downSS(self):
         speed = self.motorspeed * -1
-        print("down ss")
         return self.down(speed)
 
 
@@ -98,7 +95,6 @@ class Arm(DebuggableSubsystem):
 
     def downNoZero(self, speed=-1.0):
         #speed = self.motor.speed * -1
-        print('ARM ' + str(self.getPosition()))
         isZero = self.isAtZero()
 
         if isZero:
@@ -123,7 +119,6 @@ class Arm(DebuggableSubsystem):
 
     def forceUp(self):
         speed = self.motorspeed
-        print('Force Up ' + str(self.getPosition()))
         isTop = self.getPosition() >= self.startPos
         if not isTop:
             self.set(speed)
@@ -155,8 +150,6 @@ class Arm(DebuggableSubsystem):
 
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
-
-        print("arm position target: " + str(target))
 
         if target > self.upperLimit or target < -3.5:
             self.stop()
