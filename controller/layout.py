@@ -12,6 +12,8 @@ from commands.resetcommand import ResetCommand
 
 from commands.drivetrain.drivecommand import DriveCommand
 
+from commands.rrautocommandgroup import rrAutoCommandGroup
+
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
@@ -137,6 +139,8 @@ def init():
     backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
     backupDriveStick.Misc.whileHeld(RearRetractCommand())
+
+    backupDriveStick.ClimbL3.whenPressed(rrAutoCommandGroup())
 
     backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
