@@ -13,6 +13,11 @@ from commands.resetcommand import ResetCommand
 from commands.drivetrain.drivecommand import DriveCommand
 
 from commands.rrautocommandgroup import rrAutoCommandGroup
+from commands.lrautocommandgroup import lrAutoCommandGroup
+
+from commands.rrsecondautocommandgroup import rrSecondAutoCommandGroup
+from commands.lrsecondautocommandgroup import lrSecondAutoCommandGroup
+
 
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
@@ -140,7 +145,11 @@ def init():
 
     backupDriveStick.Misc.whileHeld(RearRetractCommand())
 
-    backupDriveStick.ClimbL3.whenPressed(rrAutoCommandGroup())
+    backupDriveStick.ClimbL3.whenPressed(lrAutoCommandGroup())
+    backupDriveStick.ClimbL2.whenPressed(rrAutoCommandGroup())
+
+    backupDriveStick.LeftRightTop.whenPressed(lrSecondAutoCommandGroup())
+    backupDriveStick.RightLeftTop.whenPressed(rrSecondAutoCommandGroup())
 
     backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())

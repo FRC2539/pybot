@@ -37,19 +37,19 @@ from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
 
 
-class rrAutoCommandGroup(CommandGroup):
+class rrSecondAutoCommandGroup(CommandGroup):
 
     def __init__(self):
-        super().__init__('rr Auto')
+        super().__init__('rr Second Auto')
 
         # Add commands here with self.addSequential() and self.addParallel()
         print('right rocket')
         self.addSequential(SetPipelineCommand(0))
 
-        self.addParallel(SetArmCommandGroup(12.0))
+        #self.addParallel(SetArmCommandGroup(12.0))
 
         ##mid hatch
-        # use this self.addParallel(SetArmCommandGroup(0.0, 65.0))
+        self.addParallel(SetArmCommandGroup(10.0, 80.0))
 
         self.addSequential(TransitionMoveCommand(15,80,35,114,0,30))
         #self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -59,7 +59,7 @@ class rrAutoCommandGroup(CommandGroup):
         self.addSequential(MoveCommand(2), 1)
 
         #self.addSequential(WaitCommand(.5))
-        self.addSequential(LowerCommand())
+        self.addParallel(SetArmCommandGroup(0.0, 0.0))
         self.addSequential(MoveCommand(-3), 1)
         self.addSequential(HolonomicMoveCommand(0,-130,-305))
         #self.addSequential(MoveCommand(-18))
@@ -73,9 +73,10 @@ class rrAutoCommandGroup(CommandGroup):
         self.addSequential(RaiseCommand(), .75)
         self.addParallel(SetArmCommandGroup(10.0))
         #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-        self.addSequential(HolonomicMoveCommand(-50,150,-45))
+        self.addSequential(HolonomicMoveCommand(-50,140,-45))
         self.addSequential(HolonomicMoveCommand(35,0,10))
         self.addSequential(GoToTapeCommand())
         self.addSequential(MoveCommand(2), 1)
         self.addSequential(LowerCommand())
         self.addSequential(MoveCommand(-5))
+        # Add commands here with self.addSequential() and self.addParallel()

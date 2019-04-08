@@ -43,7 +43,7 @@ class GoToTapeCommand(Command):
     def execute(self):
         #old
         if self.tape.getValue() == 1:
-            oX = self.strafe.getValue() + 2.0 #Adjust for off center camera position
+            oX = self.strafe.getValue() + 3.5 #Adjust for off center camera position
             oY = self.distance.getValue()
 
             self.x = math.copysign((oX * 4) / 100, oX)
