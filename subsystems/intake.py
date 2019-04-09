@@ -15,6 +15,8 @@ class Intake(DebuggableSubsystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setSafetyEnabled(False)
 
+        #self.hatchLimitSwitch = DigitalInput(ports.intake.hatchLimitSwitch)
+
         self.hasCargo = False
 
 
@@ -33,10 +35,18 @@ class Intake(DebuggableSubsystem):
     def hold(self):
         self.motor.set(0.2)
 
+    '''
+    def hasHatchPanel(self):
+        return self.hatchLimitSwitch.get()
+
+    '''
 
     def stop(self):
         self.motor.stopMotor()
 
+
+    def hatchEject(self):
+        self.motor.set(1)
 
     def initDefaultCommand(self):
         from commands.intake.defaultcommand import DefaultCommand
