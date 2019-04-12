@@ -7,7 +7,7 @@ from networktables import NetworkTables
 
 class GoToTapeCommand(Command):
 
-    def __init__(self):
+    def __init__(self, pipeID=0):
         super().__init__('Go To Tape')
 
         self.requires(robot.drivetrain)
@@ -17,6 +17,10 @@ class GoToTapeCommand(Command):
         self.distance = Config('limelight/ty', 0)
 
         self.nt = NetworkTables.getTable('limelight')
+
+        self.pipeID = pipeID
+
+        self.drivePipeID = 0 # Make this your basic drive pipeline.
 
         self.x = 0
         self.y = 0
@@ -37,8 +41,9 @@ class GoToTapeCommand(Command):
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
 
-        self._finished = False
+        self.nt.putNumber('pipeline', self.pipeID)
 
+        self._finished = False
 
     def execute(self):
         #old
@@ -151,6 +156,8 @@ class GoToTapeCommand(Command):
 
     def end(self):
         robot.drivetrain.move(0, 0, 0)
+
+        self.nt.putNumber('pipeline', self.drivePipeID)
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()

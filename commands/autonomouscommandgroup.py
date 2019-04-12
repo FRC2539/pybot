@@ -77,7 +77,7 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RR')
         def rrfAuto(self):
             print('right rocket')
-            self.addSequential(SetPipelineCommand(0))
+            #self.addSequential(SetPipelineCommand(0))
             self.addParallel(SetArmCommandGroup(12.0))
             self.addSequential(TransitionMoveCommand(15,80,35,114,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -111,7 +111,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')
         def rcfAuto(self):
-            self.addSequential(SetPipelineCommand(2))
+            #self.addSequential(SetPipelineCommand(2))
             self.addParallel(SetArmCommandGroup(12.0))
             self.addSequential(TransitionMoveCommand(30,60,20,50,25,5))
             self.addSequential(WaitCommand(0.5))
@@ -133,7 +133,7 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCF')
 
         def lcfAuto(self):
-            self.addSequential(SetPipelineCommand(1))
+            #self.addSequential(SetPipelineCommand(1))
             self.addParallel(SetArmCommandGroup(12.0))
             self.addSequential(TransitionMoveCommand(30,70,20,70,25,-15))
             #position arm
@@ -157,7 +157,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LR')
         def lrfAuto(self):
-            self.addSequential(SetPipelineCommand(0))
+            #self.addSequential(SetPipelineCommand(0))
             self.addParallel(SetArmCommandGroup(12.0))
             self.addSequential(TransitionMoveCommand(35,95,25,90,30,-35))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
@@ -194,7 +194,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCH')
         def rchAuto(self):
-            self.addSequential(SetPipelineCommand(1))
+            #self.addSequential(SetPipelineCommand(1))
             self.addParallel(SetArmCommandGroup(10.0))
             self.addSequential(TransitionMoveCommand(50,80,30,162,30,15))
             self.addSequential(TurnCommand(-140))
@@ -214,7 +214,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCB')
         def rcbAuto(self):
-            self.addSequential(SetPipelineCommand(1))
+            #self.addSequential(SetPipelineCommand(1))
             self.addParallel(IntakeCommand(), 1)
             self.addParallel(SetArmCommandGroup(70.0, 25.0))
             self.addSequential(TransitionMoveCommand(50,80,30,162,30,15))
@@ -236,7 +236,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCH')
         def lchAuto(self):
-            self.addSequential(SetPipelineCommand(2))
+            #self.addSequential(SetPipelineCommand(2))
             self.addParallel(SetArmCommandGroup(11.0))
             #self.addSequential(TransitionMoveCommand(50,80,30,170,30,-35))
             self.addSequential(TransitionMoveCommand(50,80,30,162,30,-15))
@@ -258,7 +258,7 @@ class AutonomousCommandGroup(CommandGroup):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'LCB')
         def lcbAuto(self):
-            self.addSequential(SetPipelineCommand(2))
+            #self.addSequential(SetPipelineCommand(2))
             self.addSequential(SetArmCommandGroup(70.0, 20.0))
             #self.addSequential(TransitionMoveCommand(50,80,30,170,30,-35))
             self.addSequential(TransitionMoveCommand(50,80,30,160,30,-15))
