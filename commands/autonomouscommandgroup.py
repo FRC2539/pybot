@@ -51,6 +51,7 @@ class AutonomousCommandGroup(CommandGroup):
         dt.putNumber('maxSpeed', 2500)
         dt.putNumber('width', 23)
 
+
         #Config('DriveTrain/ticksPerInch', 250)
         #Config('DriveTrain/width', 29.5)
         #Config('DriveTrain/Speed/P', 1)
@@ -79,7 +80,7 @@ class AutonomousCommandGroup(CommandGroup):
             print('right rocket')
             #self.addSequential(SetPipelineCommand(0))
             self.addParallel(SetArmCommandGroup(12.0))
-            self.addSequential(TransitionMoveCommand(50,80,35,114,0,30))
+            self.addSequential(TransitionMoveCommand(15,80,35,114,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
             self.addSequential(StrafeCommand(27))

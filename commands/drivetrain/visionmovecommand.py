@@ -4,6 +4,8 @@ from custom.config import Config
 
 from commands.network.alertcommand import AlertCommand
 
+from networktables import NetworkTables
+
 import math
 
 import robot
@@ -20,6 +22,7 @@ class VisionMoveCommand(Command):
 
     def initialize(self):
 
+
         print("init vision move")
 
         self._finished = False
@@ -34,11 +37,13 @@ class VisionMoveCommand(Command):
         self.maxSpeed = 60
 
         print("initialize visionmove")
+        self.ll = NetworkTables.getTable('limelight')
+
 
 
 
     def execute(self):
-
+        self.ll.putNumber('pipeline', 9)
 
         self.tapeFound = Config('limelight/tv',0)
         self.tapeX = Config('limelight/tx',0)
@@ -47,44 +52,55 @@ class VisionMoveCommand(Command):
         speed = 0
 
         if self.tapeFound == 1:
-            self.reverse = False
+            print("td: " + str(self.tapeDistance))
+            #tspeed = (self.tapeDistance -1.5) / 16
+
+            if self.tapeDistance > 2:
+                tspeed = .25
+            elif self.tapeDistance < -2:
+                tspeed = -.25
+            else:
+                tspeed = 0
+
+            print("tspeed: "+str(tspeed))
+            #self.reverse = False
             #print("has tape")
             #print("tapeX: "+str(self.tapeX))
-            print("tapeDistance: " + str(self.tapeDistance))
-            if self.tapeDistance <= 2 and self.tapeDistance > 1:
-                print("slow down")
-                speed = 25
-                #robot.drivetrain.move(0, 0, 0)
-            elif self.tapeDistance <= int(self.stopDistance):
-                if self.demo == True and self.tapeDistance <= 1:
-                    print("demo and close: "+str(self.tapeDistance))
-                    speed = 20
-                    #self.tapeDistance -= 50
-                    self.reverse = True
-                elif self.demo == True:
-                    print("demo mode and close, stop")
-                    speed = 0
-                    #robot.drivetrain.move(0, 0, 0)
-                    robot.drivetrain.movePer(0, 0)
-                else:
-                    print("not demo and in stop zone: "+str(self.tapeDistance))
-                    speed = 0
-                    #robot.drivetrain.move(0, 0, 0)
-                    robot.drivetrain.movePer(0, 0)
-                    self._finished = True
-                #print("close, now stop")
-                #robot.drivetrain.move(0, 0, 0)
-            else:
-                if self.demo == True:
-                    speed = 20
-                else:
-                    #print("100 percent of max speed")
-                    speed = 60
+            #print("tapeDistance: " + str(self.tapeDistance))
+            #if self.tapeDistance <= 2 and self.tapeDistance > 1:
+                #print("slow down")
+                #speed = 25
+                ##robot.drivetrain.move(0, 0, 0)
+            #elif self.tapeDistance <= int(self.stopDistance):
+                #if self.demo == True and self.tapeDistance <= 1:
+                    #print("demo and close: "+str(self.tapeDistance))
+                    #speed = 20
+                    ##self.tapeDistance -= 50
+                    #self.reverse = True
+                #elif self.demo == True:
+                    #print("demo mode and close, stop")
+                    #speed = 0
+                    ##robot.drivetrain.move(0, 0, 0)
+                    #robot.drivetrain.movePer(0, 0)
+                #else:
+                    #print("not demo and in stop zone: "+str(self.tapeDistance))
+                    #speed = 0
+                    ##robot.drivetrain.move(0, 0, 0)
+                    #robot.drivetrain.movePer(0, 0)
+                    #self._finished = True
+                ##print("close, now stop")
+                ##robot.drivetrain.move(0, 0, 0)
+            #else:
+                #if self.demo == True:
+                    #speed = 20
+                #else:
+                    ##print("100 percent of max speed")
+                    #speed = 60
 
-            if speed <= self.maxSpeed:
-                tspeed = (speed / self.maxSpeed)/6
-            else:
-                tspeed = (self.maxSpeed / speed)/4
+            #if speed <= self.maxSpeed:
+                #tspeed = (speed / self.maxSpeed)/6
+            #else:
+                #tspeed = (self.maxSpeed / speed)/4
 
             #tspeed = 0
 
@@ -92,27 +108,42 @@ class VisionMoveCommand(Command):
 
             print("tapeX degrees: "+str(self.tapeX))
 
-            if self.tapeX > 12 or self.tapeX < -12:
+            moveReq = True
+
+            if self.tapeX > 11 or self.tapeX < -11:
 
                 self.tapeX = self.tapeX /3
                 print("over 12: "+str(self.tapeX))
-            elif self.tapeX > 1 or self.tapeX < -1:
-                print("under 5 but over 1")
+            elif self.tapeX > 2 or self.tapeX < -2:
+                print("under 12 but over 4")
                 if self.tapeX < 0:
                     self.tapeX = -6.2
                 else:
                     self.tapeX = 6.2
+            else:
+                moveReq = False
 
-            lspeed = tspeed + (.04 * self.tapeX)
-            rspeed = tspeed + (.04 * (self.tapeX)*-1)
+            print(self.tapeX + ' tx')
+            print(tspeed + 'tspeed')
+
+          #     robot.drivetrain.move(0, 0, 0)
+            #    robot.drivetrain.movePer(0, 0)
+            # Checks to see if a move is needed.
+            if moveReq:
+                if tspeed == 0:
+                    lspeed = .04 * self.tapeX
+                    rspeed = .04 * (self.tapeX * -1)
+                else:
+                    lspeed = tspeed + (.04 * self.tapeX)
+                    rspeed = tspeed + (.04 * (self.tapeX)*-1)
 
 
-            if self.reverse == True:
-                lspeed = lspeed * -1
-                rspeed = rspeed * -1
+                #if self.reverse == True:
+                #    lspeed = lspeed * -1
+                #    rspeed = rspeed * -1
 
-            print("r: "+str(rspeed)+" l:"+str(lspeed))
-            robot.drivetrain.movePer(lspeed, rspeed)
+                print("r: "+str(rspeed)+" l:"+str(lspeed))
+                robot.drivetrain.movePer(lspeed, rspeed)
 
         else:
             print("no tape")
@@ -121,21 +152,21 @@ class VisionMoveCommand(Command):
 
 
 
-    def isFinished(self):
+    #def isFinished(self):
         #print("check finished: "+ str(self._finished))
         #if self.heading == robot.drivetrain.getPositions():
         #    self._finished = True
         #    print("finished")
-        if self.demo == False and self.tapeDistance <= 2:
+        #if self.demo == False and self.tapeDistance <= 2:
             #robot.drivetrain.move(0, 0, 0)
             #robot.drivetrain.movePer(0, 0)
-            self.finished = True
-            print("el fin")
+            #self.finished = True
+            #print("el fin")
 
-        return self._finished
+        #return self._finished
 
 
     def end(self):
         #robot.drivetrain.stop()
-
-        print("ended visionmove")
+        self.ll.putNumber('pipeline', 0)
+        #print("ended visionmove")

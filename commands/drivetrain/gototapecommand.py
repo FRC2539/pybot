@@ -16,6 +16,8 @@ class GoToTapeCommand(Command):
         self.strafe = Config('limelight/tx', 0)
         self.distance = Config('limelight/ty', 0)
 
+        self.tapeoffset = Config('DriveTrain/tapeoffset', 0)
+
         self.nt = NetworkTables.getTable('limelight')
 
         self.pipeID = pipeID
@@ -46,7 +48,7 @@ class GoToTapeCommand(Command):
     def execute(self):
         #old
         if self.tape.getValue() == 1:
-            oX = self.strafe.getValue() + 1.0 #3.5 #Adjust for off center camera position
+            oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
             oY = self.distance.getValue()
 
             self.x = math.copysign((oX * 4) / 100, oX)
