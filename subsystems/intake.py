@@ -21,7 +21,7 @@ class Intake(DebuggableSubsystem):
 
 
     def intake(self):
-        self.motor.set(0.6)
+        self.motor.set(0.8)
 
 
     def eject(self):
@@ -33,7 +33,7 @@ class Intake(DebuggableSubsystem):
 
 
     def hold(self):
-        self.motor.set(0.2)
+        self.motor.set(0.6)
 
     '''
     def hasHatchPanel(self):

@@ -2,21 +2,21 @@ from wpilib.command.command import Command
 
 import robot
 
-class HatchIntakeCommand(Command):
+class HatchHoldCommand(Command):
 
     def __init__(self):
-        super().__init__('Hatch Intake')
+        super().__init__('Hatch Hold')
 
         self.requires(robot.intake)
 
 
     def initialize(self):
-        robot.intake.intake()
+        robot.intake.hold()
         self._isFinished = False
 
+
     def execute(self):
-        #if robot.intake.hasHatchPanel():
-        #    self._isFinished = True
+        #print("hatch holding")
         self._isFinished = False
 
     def isFinished(self):

@@ -115,16 +115,18 @@ class VisionMoveCommand(Command):
                 self.tapeX = self.tapeX /3
                 print("over 12: "+str(self.tapeX))
             elif self.tapeX > 2 or self.tapeX < -2:
-                print("under 12 but over 4")
+                #pass
+                #print("under 12 but over 4")
                 if self.tapeX < 0:
-                    self.tapeX = -6.2
+                    self.tapeX = -2.2
                 else:
-                    self.tapeX = 6.2
+                    self.tapeX = 2.2
             else:
+                #tspeed = 0
                 moveReq = False
 
-            print(self.tapeX + ' tx')
-            print(tspeed + 'tspeed')
+            print(str(self.tapeX) + ' tx')
+            print(str(tspeed) + 'tspeed')
 
           #     robot.drivetrain.move(0, 0, 0)
             #    robot.drivetrain.movePer(0, 0)
