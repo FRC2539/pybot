@@ -31,6 +31,8 @@ from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureComman
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
+from commands.intake.hatchejectcommand import HatchEjectCommand
+from commands.intake.hatchintakecommand import HatchIntakeCommand
 
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
@@ -155,7 +157,7 @@ def init():
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
     backupRotateStick.rightThumb.toggleWhenPressed(AutonomousMeasureCommand())
 
-    backupRotateStick.trigger.whenPressed(EjectCommand())
+#    backupRotateStick.trigger.whenPressed(EjectCommand())
 
     backupRotateStick.ClimbL3.whenPressed(L3ClimbCommandGroup())
     backupRotateStick.ClimbL2.whenPressed(L2ClimbCommandGroup())
@@ -180,4 +182,6 @@ def init():
     controller.DPadUp.whenPressed(SetArmCommandGroup(70.0, 20.0))
     controller.DPadDown.whenPressed(SetArmCommandGroup(11.0))
 
-    controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    controller.RightJoystick.toggleWhenPressed(HatchIntakeCommand())
+    controller.LeftJoystick.whenPressed(HatchEjectCommand())

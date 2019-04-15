@@ -11,15 +11,18 @@ class HatchIntakeCommand(Command):
 
 
     def initialize(self):
-        robot.intake.intake()
+        robot.intake.hatchGrab()
         self._isFinished = False
 
+
     def execute(self):
-        if robot.intake.hasHatchPanel():
-            self._isFinished = True
+        self._isFinished = False #robot.intake.hasHatchPanel()
+
 
     def isFinished(self):
         return self._isFinished
 
+
     def end(self):
+        robot.intake.hasCargo = True
         robot.intake.stop()

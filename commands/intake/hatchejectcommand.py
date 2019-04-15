@@ -1,11 +1,11 @@
-from wpilib.command.command import Command
+from wpilib.command.timedcommand import TimedCommand
 
 import robot
 
-class HatchEjectCommand(Command):
+class HatchEjectCommand(TimedCommand):
 
     def __init__(self):
-        super().__init__('Hatch Eject')
+        super().__init__('Hatch Eject', 1)
 
         self.requires(robot.intake)
 
@@ -15,4 +15,5 @@ class HatchEjectCommand(Command):
 
 
     def end(self):
+        robot.intake.hasCargo = False
         robot.intake.stop()
