@@ -87,36 +87,41 @@ class AutonomousCommandGroup(CommandGroup):
             self.addParallel(HatchHoldCommand())
             ##self.addParallel(SetArmCommandGroup(12.0))
             self.addParallel(LowerCommand())
-            self.addSequential(TransitionMoveCommand(15,80,35,114,0,30))
+            self.addSequential(TransitionMoveCommand(45,80,35,114,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
             self.addSequential(StrafeCommand(27))
             self.addSequential(GoToTapeCommand(), 5)
             ##self.addSequential(MoveCommand(2), 1)
 
-            self.addSequential(HatchEjectCommand(), 1)
+            self.addParallel(HatchEjectCommand(), 1)
 
             #self.addSequential(WaitCommand(.5))
-            self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-3), 1)
-            self.addSequential(HolonomicMoveCommand(0,-130,-290))#305
+            self.addSequential(HolonomicMoveCommand(0,-130,-280))#305
             #self.addSequential(MoveCommand(-18))
             #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
             #self.addSequential(TurnCommand(182))
             #self.addSequential(TransitionMoveCommand(80,80,25,96))
 
+            self.addParallel(HatchIntakeCommand())
+
             self.addSequential(GoToTapeCommand(), 5)
             #self.addParallel(SetArmCommandGroup(20.0))
-            self.addSequential(MoveCommand(1), 1)
-            self.addSequential(HatchIntakeCommand(), 1.5)
-            self.addSequential(RaiseCommand(), .25)
+
+            self.addSequential(MoveCommand(2), 1)
+
+            #self.addSequential(RaiseCommand(), .25)
+
+            self.addSequential(MoveCommand(-2))
+            self.addParallel(HatchHoldCommand())
             ##self.addParallel(SetArmCommandGroup(10.0))
             #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-            self.addSequential(HolonomicMoveCommand(-50,150,-45))
-            self.addSequential(LowerCommand())
-            self.addSequential(HolonomicMoveCommand(35,0,10))
+            self.addSequential(HolonomicMoveCommand(-50,175,-35))
+            #self.addSequential(LowerCommand())
+            self.addSequential(HolonomicMoveCommand(55,0,10))
             self.addSequential(GoToTapeCommand(), 5)
-            self.addSequential(MoveCommand(2), 1)
+            ##self.addSequential(MoveCommand(2), 1)
             self.addSequential(HatchEjectCommand(), 1)
             ##self.addSequential(LowerCommand())
             self.addSequential(MoveCommand(-5))
