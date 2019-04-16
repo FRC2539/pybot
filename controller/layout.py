@@ -25,14 +25,16 @@ from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.gototapecommand import GoToTapeCommand
+from commands.drivetrain.gototapecommandgroup import GoToTapeCommandGroup
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
-from commands.intake.hatchejectcommand import HatchEjectCommand
-from commands.intake.hatchintakecommand import HatchIntakeCommand
+
+from commands.hatch.hatchejectcommand import HatchEjectCommand
+from commands.hatch.hatchintakecommand import HatchIntakeCommand
 
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
@@ -142,7 +144,7 @@ def init():
 
     logicalaxes.driveRotate = backupRotateStick.X
 
-    backupDriveStick.trigger.whileHeld(GoToTapeCommand())
+    backupDriveStick.trigger.whileHeld(GoToTapeCommandGroup())
     backupDriveStick.bottomThumb.whileHeld(GoPastTapeCommand())
 
     backupDriveStick.Misc.whileHeld(RearRetractCommand())

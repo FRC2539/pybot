@@ -28,15 +28,12 @@ class GoToTapeCommand(Command):
         self.y = 0
         self.rotate = 0
 
-        self.fineRotate = 0.75
-        self.fineStrafe = 0.50
-        self.fineMove = 0.85
-
         self.originallyFieldOriented = True
 
 
     def initialize(self):
         self.originallyFieldOriented = robot.drivetrain.isFieldOriented
+        self.wantsHatch = not robot.hatch.hasHatchPanel()
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
@@ -84,7 +81,13 @@ class GoToTapeCommand(Command):
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
-            self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 0.25
+
+            if self.wantsHatch:
+                self._finished = robot.hatch.hasHatchPanel()
+
+            else:
+                self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 0.25
+
 
             if self._finished:
                 robot.lights.solidGreen()

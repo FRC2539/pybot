@@ -7,13 +7,13 @@ class HatchEjectCommand(TimedCommand):
     def __init__(self):
         super().__init__('Hatch Eject', 1)
 
-        self.requires(robot.intake)
+        self.requires(robot.hatch)
 
 
     def initialize(self):
-        robot.intake.hatchEject()
+        robot.hatch.eject()
 
 
     def end(self):
-        robot.intake.hasCargo = False
-        robot.intake.stop()
+        robot.hatch.hasHatch = False
+        robot.hatch.stop()

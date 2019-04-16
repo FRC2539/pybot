@@ -1,5 +1,6 @@
 from wpilib.command.command import Command
 
+import time
 import robot
 
 class HatchIntakeCommand(Command):
@@ -7,16 +8,16 @@ class HatchIntakeCommand(Command):
     def __init__(self):
         super().__init__('Hatch Intake')
 
-        self.requires(robot.intake)
+        self.requires(robot.hatch)
 
 
     def initialize(self):
-        robot.intake.hatchGrab()
+        robot.hatch.grab()
         self._isFinished = False
 
 
     def execute(self):
-        self._isFinished = False #robot.intake.hasHatchPanel()
+        self._isFinished = robot.hatch.hasHatchPanel()
 
 
     def isFinished(self):
@@ -24,5 +25,6 @@ class HatchIntakeCommand(Command):
 
 
     def end(self):
-        robot.intake.hasCargo = True
-        robot.intake.stop()
+        robot.hatch.hasHatch = True
+        time.sleep(1)
+        robot.hatch.stop()
