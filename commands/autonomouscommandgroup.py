@@ -36,9 +36,8 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
 
-from commands.intake.hatchintakecommand import HatchIntakeCommand
-from commands.intake.hatchejectcommand import HatchEjectCommand
-from commands.intake.hatchholdcommand import HatchHoldCommand
+from commands.hatch.hatchintakecommand import HatchIntakeCommand
+from commands.hatch.hatchejectcommand import HatchEjectCommand
 
 
 class AutonomousCommandGroup(CommandGroup):
@@ -84,7 +83,6 @@ class AutonomousCommandGroup(CommandGroup):
             print('right rocket')
             #self.addSequential(SetPipelineCommand(0))
             self.addSequential(HatchIntakeCommand(), .25)
-            self.addParallel(HatchHoldCommand())
             ##self.addParallel(SetArmCommandGroup(12.0))
             self.addParallel(LowerCommand())
             self.addSequential(TransitionMoveCommand(45,80,35,114,0,30))

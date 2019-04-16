@@ -15,13 +15,11 @@ class Intake(DebuggableSubsystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setSafetyEnabled(False)
 
-        self.hatchLimitSwitch = DigitalInput(ports.intake.hatchLimitSwitch)
-
         self.hasCargo = False
 
 
     def intake(self):
-        self.motor.set(0.8)
+        self.motor.set(0.6)
 
 
     def eject(self):
@@ -33,23 +31,11 @@ class Intake(DebuggableSubsystem):
 
 
     def hold(self):
-        self.motor.set(0.5)
-
-
-    def hasHatchPanel(self):
-        return self.hatchLimitSwitch.get()
+        self.motor.set(0.2)
 
 
     def stop(self):
         self.motor.stopMotor()
-
-
-    def hatchEject(self):
-        self.motor.set(-1)
-
-
-    def hatchGrab(self):
-        self.motor.set(1)
 
 
     def initDefaultCommand(self):
