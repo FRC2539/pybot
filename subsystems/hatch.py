@@ -29,7 +29,7 @@ class Hatch(DebuggableSubsystem):
 
 
     def stop(self):
-        self.motor.stopMotor()
+        self.motor.set(0)
 
 
     def eject(self):

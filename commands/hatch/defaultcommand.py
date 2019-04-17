@@ -11,7 +11,6 @@ class DefaultCommand(Command):
 
 
     def execute(self):
-        print('hatch ' + str(robot.hatch.hasHatchPanel()))
         if robot.hatch.hasHatchPanel():
             robot.hatch.hold()
         else:

@@ -1,6 +1,5 @@
 from wpilib.command.command import Command
 
-import time
 import robot
 
 class HatchIntakeCommand(Command):
@@ -12,6 +11,7 @@ class HatchIntakeCommand(Command):
 
 
     def initialize(self):
+        print('grab')
         robot.hatch.grab()
         self._isFinished = False
 
@@ -26,5 +26,4 @@ class HatchIntakeCommand(Command):
 
     def end(self):
         robot.hatch.hasHatch = True
-        time.sleep(1)
         robot.hatch.stop()

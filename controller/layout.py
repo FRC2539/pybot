@@ -157,9 +157,10 @@ def init():
 
     backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
-    backupRotateStick.rightThumb.toggleWhenPressed(AutonomousMeasureCommand())
 
-#    backupRotateStick.trigger.whenPressed(EjectCommand())
+    backupRotateStick.trigger.whenPressed(HatchEjectCommand())
+    #backupRotateStick.trigger.whenPressed(EjectCommand())
+
 
     backupRotateStick.ClimbL3.whenPressed(L3ClimbCommandGroup())
     backupRotateStick.ClimbL2.whenPressed(L2ClimbCommandGroup())
@@ -186,4 +187,3 @@ def init():
 
     #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
     controller.RightJoystick.toggleWhenPressed(HatchIntakeCommand())
-    controller.LeftJoystick.whenPressed(HatchEjectCommand())

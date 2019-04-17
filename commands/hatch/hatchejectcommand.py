@@ -11,6 +11,7 @@ class HatchEjectCommand(TimedCommand):
 
 
     def initialize(self):
+        print('eject')
         robot.hatch.eject()
 
 

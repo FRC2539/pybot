@@ -112,7 +112,6 @@ class AutonomousCommandGroup(CommandGroup):
             #self.addSequential(RaiseCommand(), .25)
 
             self.addSequential(MoveCommand(-2))
-            self.addParallel(HatchHoldCommand())
             ##self.addParallel(SetArmCommandGroup(10.0))
             #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
             self.addSequential(HolonomicMoveCommand(-50,175,-35))
