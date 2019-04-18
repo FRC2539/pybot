@@ -14,14 +14,14 @@ from commands.drivetrain.movecommand import MoveCommand
 
 class GoToTapeCommandGroup(CommandGroup):
 
-    def __init__(self):
+    def __init__(self, pipeline=1):
         super().__init__('Go To Tape')
 
         # Add commands here with self.addSequential() and self.addParallel()
         @fc.IF(lambda: not robot.hatch.hasHatchPanel())
         def grabHatch(self):
             self.addParallel(HatchIntakeCommand())
-            self.addSequential(GoToTapeCommand())
+            self.addSequential(GoToTapeCommand(pipeline))
             self.addParallel(HatchIntakeCommand(True), 3)
             self.addSequential(GoPastTapeCommand(), 1)
             #self.addParallel(DefaultCommand())
@@ -29,7 +29,7 @@ class GoToTapeCommandGroup(CommandGroup):
 
         @fc.IF(lambda: robot.hatch.hasHatchPanel())
         def placeHatch(self):
-            self.addSequential(GoToTapeCommand())
+            self.addSequential(GoToTapeCommand(pipeline))
             self.addSequential(GoPastTapeCommand(), 1)
             self.addParallel(HatchEjectCommand())
             self.addSequential(MoveCommand(-12))
