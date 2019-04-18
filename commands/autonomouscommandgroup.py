@@ -88,7 +88,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(TransitionMoveCommand(45,80,35,114,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
-            self.addSequential(StrafeCommand(27))
+            self.addSequential(StrafeCommand(32))
             self.addSequential(GoToTapeCommand(), 5)
             ##self.addSequential(MoveCommand(2), 1)
 
@@ -114,7 +114,7 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(MoveCommand(-2))
             ##self.addParallel(SetArmCommandGroup(10.0))
             #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-            self.addSequential(HolonomicMoveCommand(-50,175,-35))
+            self.addSequential(HolonomicMoveCommand(-65,175,-35))
             #self.addSequential(LowerCommand())
             self.addSequential(HolonomicMoveCommand(55,0,10))
             self.addSequential(GoToTapeCommand(), 5)
