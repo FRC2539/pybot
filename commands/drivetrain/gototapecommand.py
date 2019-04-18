@@ -85,8 +85,8 @@ class GoToTapeCommand(Command):
             if self.wantsHatch:
                 self._finished = robot.hatch.hasHatchPanel()
 
-            else:
-                self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 0.25
+            if not self._finished:
+                self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 2.5
 
 
             if self._finished:
