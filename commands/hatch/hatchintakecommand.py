@@ -13,6 +13,7 @@ class HatchIntakeCommand(Command):
 
 
     def initialize(self):
+        print('grab')
         robot.hatch.grab()
         self._isFinished = False
 
