@@ -28,6 +28,9 @@ class GoToTapeCommand(Command):
         self.y = 0
         self.rotate = 0
 
+        self.speedBoost = Config('DriveTrain/tapespeedboost', 1)
+
+
         self.originallyFieldOriented = True
 
 
@@ -78,7 +81,7 @@ class GoToTapeCommand(Command):
             if oY <= 3.5:
                 self.y = 0.15
 
-
+            self.y = self.y * self.speedBoost
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
