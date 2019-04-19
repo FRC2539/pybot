@@ -15,7 +15,8 @@ class Hatch(DebuggableSubsystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setSafetyEnabled(False)
 
-        self.limitSwitch = DigitalInput(ports.hatch.limitSwitch)
+        self.rightLimitSwitch = DigitalInput(ports.hatch.rightLimitSwitch)
+        self.leftLimitSwitch = DigitalInput(ports.hatch.leftLimitSwitch)
 
         self.hasHatch = False
 
@@ -25,7 +26,11 @@ class Hatch(DebuggableSubsystem):
 
 
     def hasHatchPanel(self):
-        return not self.limitSwitch.get()
+        return (not self.rightLimitSwitch.get()) or (not self.leftLimitSwitch.get())
+
+
+    def hasSecureHatchPanel(self):
+        return (not self.rightLimitSwitch.get()) and (not self.leftLimitSwitch.get())
 
 
     def stop(self):

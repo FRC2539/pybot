@@ -29,7 +29,8 @@ intake.hatchLimitSwitch = 0 #DIO
 
 hatch = PortsList()
 hatch.motorID = 10 #should be 12
-hatch.limitSwitch = 0 #DIO
+hatch.rightLimitSwitch = 0 #DIO
+hatch.leftLimitSwitch = 6 #DIO
 
 arm = PortsList()
 arm.motorID = 6

@@ -86,20 +86,23 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(HatchIntakeCommand(), .25)
             ##self.addParallel(SetArmCommandGroup(12.0))
             self.addParallel(LowerCommand())
-            self.addSequential(TransitionMoveCommand(45,80,35,114,0,30))
+            #self.addSequential(TransitionMoveCommand(45,80,35,114,0,30))
             #self.addSequential(SuperStructureGoToLevelCommand("floor"))
 
-            self.addSequential(StrafeCommand(32))
+            self.addSequential(TransitionMoveCommand(80,80,35,50,0,0))
+            self.addSequential(HolonomicMoveCommand(80,20,50))
+
+            #self.addSequential(StrafeCommand(47))
 
             self.addSequential(GoToTapeCommandGroup(), 5)
 
             ##self.addSequential(MoveCommand(2), 1)
 
-            self.addParallel(HatchEjectCommand(), 1)
+            #self.addParallel(HatchEjectCommand(), 1)
 
             #self.addSequential(WaitCommand(.5))
-            self.addSequential(MoveCommand(-3), 1)
-            self.addSequential(HolonomicMoveCommand(0,-130,-280))#305
+            #self.addSequential(MoveCommand(-3), 1)
+            self.addSequential(HolonomicMoveCommand(18,-130,-270))#305
             #self.addSequential(MoveCommand(-18))
             #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
             #self.addSequential(TurnCommand(182))
@@ -110,21 +113,21 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(GoToTapeCommandGroup(), 5)
             #self.addParallel(SetArmCommandGroup(20.0))
 
-            self.addSequential(MoveCommand(2), 1)
+            #self.addSequential(MoveCommand(2), 1)
 
             #self.addSequential(RaiseCommand(), .25)
 
-            self.addSequential(MoveCommand(-2))
+            #self.addSequential(MoveCommand(-2))
             ##self.addParallel(SetArmCommandGroup(10.0))
             #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-            self.addSequential(HolonomicMoveCommand(-65,175,-35))
+            self.addSequential(HolonomicMoveCommand(-65,155,-35))
             #self.addSequential(LowerCommand())
-            self.addSequential(HolonomicMoveCommand(55,0,10))
+            self.addSequential(HolonomicMoveCommand(30,0,5))
             self.addSequential(GoToTapeCommandGroup(), 5)
             ##self.addSequential(MoveCommand(2), 1)
-            self.addSequential(HatchEjectCommand(), 1)
+            #self.addSequential(HatchEjectCommand(), 1)
             ##self.addSequential(LowerCommand())
-            self.addSequential(MoveCommand(-5))
+            #self.addSequential(MoveCommand(-5))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'RCF')

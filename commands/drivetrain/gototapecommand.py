@@ -71,10 +71,11 @@ class GoToTapeCommand(Command):
 
             if oY <= 4.0:
                 self.rotate = 0.0
-
+            '''
             if oY <= 2.0:
                 self.y = 0.1
-            elif oY <= 3.5:
+            '''
+            if oY <= 3.5:
                 self.y = 0.15
 
 
@@ -86,7 +87,7 @@ class GoToTapeCommand(Command):
                 self._finished = robot.hatch.hasHatchPanel()
 
             if not self._finished:
-                self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 2.5
+                self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
 
 
             if self._finished:

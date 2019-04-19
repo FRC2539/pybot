@@ -11,7 +11,9 @@ class DefaultCommand(Command):
 
 
     def execute(self):
-        if robot.hatch.hasHatchPanel():
+        if robot.hatch.hasSecureHatchPanel():
             robot.hatch.hold()
+        elif robot.hatch.hasHatchPanel():
+            robot.hatch.grab()
         else:
             robot.hatch.stop()
