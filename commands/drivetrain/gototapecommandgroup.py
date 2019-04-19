@@ -7,11 +7,11 @@ from commands.hatch.hatchintakecommand import HatchIntakeCommand
 from commands.hatch.hatchejectcommand import HatchEjectCommand
 from commands.hatch.defaultcommand import DefaultCommand
 
-from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
+from commands.lights.seizurelightscommand import SeizureLightsCommand
 
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
-from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
 
 from commands.resetcommand import ResetCommand
 
@@ -27,17 +27,16 @@ class GoToTapeCommandGroup(CommandGroup):
             self.addParallel(HatchIntakeCommand())
             self.addSequential(GoToTapeCommand(pipeline))
             self.addParallel(HatchIntakeCommand(True), 2)
-            self.addSequential(GoPastTapeCommand(), 0.75)
-            #self.addParallel(DefaultCommand())
-            #self.addSequential(MoveCommand(-12))
+            self.addSequential(GoPastTapeCommand(), 0.25)
+            self.addParallel(SeizureLightsCommand(), 3)
             self.addSequential(TransitionMoveCommand(-100,-100,-12,-12,0,0))
             self.addSequential(ResetCommand())
 
         @fc.ELIF(lambda: robot.hatch.hasHatchPanel())
         def placeHatch(self):
             self.addSequential(GoToTapeCommand(pipeline))
-            self.addSequential(GoPastTapeCommand(), 0.75)
+            self.addSequential(GoPastTapeCommand(), 0.25)
             self.addParallel(HatchEjectCommand())
-            #self.addSequential(MoveCommand(-12))
+            self.addParallel(SeizureLightsCommand(), 3)
             self.addSequential(TransitionMoveCommand(-100,-100,-12,-12,0,0))
             self.addSequential(ResetCommand())

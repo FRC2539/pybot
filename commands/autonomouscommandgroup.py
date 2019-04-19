@@ -102,13 +102,13 @@ class AutonomousCommandGroup(CommandGroup):
 
             #self.addSequential(WaitCommand(.5))
             #self.addSequential(MoveCommand(-3), 1)
-            self.addSequential(HolonomicMoveCommand(18,-130,-270))#305
+            self.addSequential(HolonomicMoveCommand(18,-105,-240))#305
             #self.addSequential(MoveCommand(-18))
             #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
             #self.addSequential(TurnCommand(182))
             #self.addSequential(TransitionMoveCommand(80,80,25,96))
 
-            self.addParallel(HatchIntakeCommand())
+            #self.addParallel(HatchIntakeCommand())
 
             self.addSequential(GoToTapeCommandGroup(), 5)
             #self.addParallel(SetArmCommandGroup(20.0))
@@ -120,7 +120,7 @@ class AutonomousCommandGroup(CommandGroup):
             #self.addSequential(MoveCommand(-2))
             ##self.addParallel(SetArmCommandGroup(10.0))
             #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-            self.addSequential(HolonomicMoveCommand(-65,155,-35))
+            self.addSequential(HolonomicMoveCommand(-50,140,-35))
             #self.addSequential(LowerCommand())
             self.addSequential(HolonomicMoveCommand(30,0,5))
             self.addSequential(GoToTapeCommandGroup(), 5)
