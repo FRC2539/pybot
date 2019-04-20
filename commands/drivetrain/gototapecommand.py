@@ -45,7 +45,7 @@ class GoToTapeCommand(Command):
 
         self.low = False
 
-        if robot.elevator.getPosition() >= 5.0 or robot.arm.getPosition() >= 5.0:
+        if (not self.wantsHatch) and robot.elevator.getPosition() >= 25.0:
             self.low = True
             print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
         else:
@@ -100,7 +100,7 @@ class GoToTapeCommand(Command):
                 if oY <= 3.5:
                     self.y = 0.15
 
-                self.y = self.y * self.speedBoost
+                #self.y = self.y * self.speedBoost
 
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
@@ -108,7 +108,7 @@ class GoToTapeCommand(Command):
                 if self.wantsHatch:
                     self._finished = robot.hatch.hasHatchPanel()
 
-                if not self._finished:
+                elif not self._finished:
                     self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
 
         elif self.low:
@@ -130,12 +130,12 @@ class GoToTapeCommand(Command):
                     self.x = math.copysign(0.2, oX)
                     self.rotate = math.copysign(0.1, oX) / 2.0
 
-                if self.y > 0.50:
-                    self.y = 0.50
+                if self.y > 0.35:
+                    self.y = 0.35
                 elif oY <= 0.0:
                     self.y = 0
-                elif oY > 0.0 and self.y < 0.3:
-                    self.y = 0.3
+                elif oY > 0.0 and self.y < 0.2:
+                    self.y = 0.2
 
                 if oY <= 8.0:
                     self.rotate = 0.0
@@ -144,15 +144,12 @@ class GoToTapeCommand(Command):
                     self.y = 0.1
                 '''
                 if oY <= 7:
-                    self.y = 0.15
+                    self.y = 0.14
 
                 self.y = self.y * self.speedBoost
 
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
-
-                if self.wantsHatch:
-                    self._finished = robot.hatch.hasHatchPanel()
 
                 if not self._finished:
                     self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 2.0
@@ -161,7 +158,7 @@ class GoToTapeCommand(Command):
             if self._finished:
                 robot.lights.solidGreen()
             else:
-                robot.lights.solidPurple()
+                robot.lights.solidBlue()
 
         else:
             robot.lights.solidRed()
