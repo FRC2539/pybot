@@ -158,8 +158,8 @@ def init():
     backupRotateStick.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
     backupRotateStick.leftThumb.whenPressed(ZeroGyroCommand())
 
-    backupRotateStick.trigger.whenPressed(HatchEjectCommand())
-    #backupRotateStick.trigger.whenPressed(EjectCommand())
+    backupRotateStick.rightThumb.whenPressed(HatchEjectCommand())
+    backupRotateStick.trigger.whenPressed(EjectCommand())
 
 
     backupRotateStick.ClimbL3.whenPressed(L3ClimbCommandGroup())
@@ -185,5 +185,5 @@ def init():
     controller.DPadUp.whenPressed(SetArmCommandGroup(70.0, 20.0))
     controller.DPadDown.whenPressed(SetArmCommandGroup(11.0))
 
-    #controller.RightJoystick.toggleWhenPressed(IntakeCommand())
-    controller.RightJoystick.toggleWhenPressed(HatchIntakeCommand())
+    controller.RightJoystick.toggleWhenPressed(IntakeCommand())
+    controller.LeftJoystick.toggleWhenPressed(HatchIntakeCommand())

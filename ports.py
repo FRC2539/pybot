@@ -25,10 +25,9 @@ elevator.lowerLimit = 1 #DIO
 
 intake = PortsList()
 intake.motorID = 10
-intake.hatchLimitSwitch = 0 #DIO
 
 hatch = PortsList()
-hatch.motorID = 10 #should be 12
+hatch.motorID = 12
 hatch.rightLimitSwitch = 0 #DIO
 hatch.leftLimitSwitch = 6 #DIO
 
