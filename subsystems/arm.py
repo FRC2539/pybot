@@ -34,6 +34,10 @@ class Arm(DebuggableSubsystem):
         self.upperLimit = 70.0
         self.startPos = 105.0
 
+        self.armTable = NetworkTables.getTable('Arm')
+
+        self.armTable.putNumber('Position', self.getPosition())
+
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(self.startPos)
 
@@ -65,6 +69,9 @@ class Arm(DebuggableSubsystem):
         else:
             self.set(speed)
 
+        finalPos = self.getPosition()
+        self.armTable.putNumber('Position', int(finalPos))
+
         return isTop
 
 
@@ -80,6 +87,9 @@ class Arm(DebuggableSubsystem):
 
         else:
             self.set(speed)
+
+        finalPos = self.getPosition()
+        self.armTable.putNumber('Position', int(finalPos))
 
         return isZero
 
@@ -103,7 +113,10 @@ class Arm(DebuggableSubsystem):
         else:
             self.set(speed)
 
-        return isZero
+        return
+
+        finalPos = self.getPosition()
+        self.armTable.putNumber('Position', int(finalPos))
 
 
     def forceDown(self):

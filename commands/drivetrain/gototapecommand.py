@@ -16,9 +16,14 @@ class GoToTapeCommand(Command):
         self.strafe = Config('limelight/tx', 0)
         self.distance = Config('limelight/ty', 0)
 
+        self.tapeLow = Config('limelight-low/tv', 0)
+        self.strafeLow = Config('limelight-low/tx', 0)
+        self.distanceLow = Config('limelight-low/ty', 0)
+
         self.tapeoffset = Config('DriveTrain/tapeoffset', 0)
 
         self.nt = NetworkTables.getTable('limelight')
+        self.ntLow = NetworkTables.getTable('limelight-low')
 
         self.pipeID = pipeID
 
@@ -38,59 +43,119 @@ class GoToTapeCommand(Command):
         self.originallyFieldOriented = robot.drivetrain.isFieldOriented
         self.wantsHatch = not robot.hatch.hasHatchPanel()
 
+        self.low = False
+
+        if robot.elevator.getPosition() >= 5.0 or robot.arm.getPosition() >= 5.0:
+            self.low = True
+            print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
+        else:
+            print("standard camera")
+            print("standard camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
+
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
 
-        self.nt.putNumber('pipeline', self.pipeID)
+        if not self.low:
+            self.nt.putNumber('pipeline', self.pipeID)
+            self.ntLow.putNumber('pipeline', 0)
+        else:
+            self.ntLow.putNumber('pipeline', 1)
+
 
         self._finished = False
 
     def execute(self):
-        #old
-        if self.tape.getValue() == 1:
-            oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
-            oY = self.distance.getValue()
+        if not self.low:
+            if self.tape.getValue() == 1:
+                oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
+                oY = self.distance.getValue()
 
-            self.x = math.copysign((oX * 4) / 100, oX)
-            self.y = math.copysign((oY * 6) / 100, oY)
-            self.rotate = self.x / 3
-
-            if abs(self.x) > 0.35:
-                self.x = math.copysign(0.35, self.x)
+                self.x = math.copysign((oX * 4) / 100, oX)
+                self.y = math.copysign((oY * 6) / 100, oY)
                 self.rotate = self.x / 3
-            elif abs(oX) <= 1.0:
-                self.x = oX / 10.0
-                self.rotate = self.x / 2.0
-            elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                self.x = math.copysign(0.2, oX)
-                self.rotate = math.copysign(0.1, oX) / 2.0
 
-            if self.y > 0.40:
-                self.y = 0.40
-            elif oY <= 0.0:
-                self.y = 0
-            elif oY > 0.0 and self.y < 0.3:
-                self.y = 0.3
+                if abs(self.x) > 0.35:
+                    self.x = math.copysign(0.35, self.x)
+                    self.rotate = self.x / 3
+                elif abs(oX) <= 1.0:
+                    self.x = oX / 10.0
+                    self.rotate = self.x / 2.0
+                elif abs(oX) > 1.0 and abs(self.x) < 0.2:
+                    self.x = math.copysign(0.2, oX)
+                    self.rotate = math.copysign(0.1, oX) / 2.0
 
-            if oY <= 4.0:
-                self.rotate = 0.0
-            '''
-            if oY <= 2.0:
-                self.y = 0.1
-            '''
-            if oY <= 3.5:
-                self.y = 0.15
+                if self.y > 0.50:
+                    self.y = 0.50
+                elif oY <= 0.0:
+                    self.y = 0
+                elif oY > 0.0 and self.y < 0.3:
+                    self.y = 0.3
 
-            self.y = self.y * self.speedBoost
+                if oY <= 4.0:
+                    self.rotate = 0.0
+                '''
+                if oY <= 2.0:
+                    self.y = 0.1
+                '''
+                if oY <= 3.5:
+                    self.y = 0.15
 
-            robot.drivetrain.move(self.x, self.y, self.rotate)
+                self.y = self.y * self.speedBoost
+
+                robot.drivetrain.move(self.x, self.y, self.rotate)
 
 
-            if self.wantsHatch:
-                self._finished = robot.hatch.hasHatchPanel()
+                if self.wantsHatch:
+                    self._finished = robot.hatch.hasHatchPanel()
 
-            if not self._finished:
-                self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
+                if not self._finished:
+                    self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
+
+        elif self.low:
+            if self.tapeLow.getValue() == 1:
+                oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
+                oY = -1 * self.distanceLow.getValue()
+
+                self.x = math.copysign((oX * (4/2)) / 100, oX)
+                self.y = math.copysign((oY * (6/2)) / 100, oY)
+                self.rotate = self.x / 3
+
+                if abs(self.x) > 0.35:
+                    self.x = math.copysign(0.35, self.x)
+                    self.rotate = self.x / 3
+                elif abs(oX) <= 1.0:
+                    self.x = oX / 10.0
+                    self.rotate = self.x / 2.0
+                elif abs(oX) > 1.0 and abs(self.x) < 0.2:
+                    self.x = math.copysign(0.2, oX)
+                    self.rotate = math.copysign(0.1, oX) / 2.0
+
+                if self.y > 0.50:
+                    self.y = 0.50
+                elif oY <= 0.0:
+                    self.y = 0
+                elif oY > 0.0 and self.y < 0.3:
+                    self.y = 0.3
+
+                if oY <= 8.0:
+                    self.rotate = 0.0
+                '''
+                if oY <= 6.0:
+                    self.y = 0.1
+                '''
+                if oY <= 7:
+                    self.y = 0.15
+
+                self.y = self.y * self.speedBoost
+
+                robot.drivetrain.move(self.x, self.y, self.rotate)
+
+
+                if self.wantsHatch:
+                    self._finished = robot.hatch.hasHatchPanel()
+
+                if not self._finished:
+                    self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 2.0
 
 
             if self._finished:
@@ -112,6 +177,7 @@ class GoToTapeCommand(Command):
         robot.drivetrain.move(0, 0, 0)
 
         self.nt.putNumber('pipeline', self.drivePipeID)
+        self.ntLow.putNumber('pipeline', 0)
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()

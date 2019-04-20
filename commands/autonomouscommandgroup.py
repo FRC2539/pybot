@@ -89,11 +89,11 @@ class AutonomousCommandGroup(CommandGroup):
             self.addSequential(HolonomicMoveCommand(80,20,50))
             self.addSequential(GoToTapeCommandGroup(), 5)
 
-            self.addSequential(HolonomicMoveCommand(18,-105,-240))#305
+            self.addSequential(HolonomicMoveCommand(20,-95,-225))#305
             self.addSequential(GoToTapeCommandGroup(), 5)
 
-            self.addSequential(HolonomicMoveCommand(-50,140,-35))
-            self.addSequential(HolonomicMoveCommand(30,0,5))
+            self.addSequential(HolonomicMoveCommand(-50,130,-35))
+            self.addSequential(HolonomicMoveCommand(73,0,5))
             self.addSequential(GoToTapeCommandGroup(), 5)
 
 
