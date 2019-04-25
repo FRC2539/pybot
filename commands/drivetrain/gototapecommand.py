@@ -45,7 +45,7 @@ class GoToTapeCommand(Command):
 
         self.low = False
 
-        if (not self.wantsHatch) and robot.elevator.getPosition() >= 25.0:
+        if (not self.wantsHatch) and robot.elevator.getPosition() >= 10.0:
             self.low = True
             print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
         else:
@@ -67,6 +67,7 @@ class GoToTapeCommand(Command):
     def execute(self):
         if not self.low:
             if self.tape.getValue() == 1:
+                print(self.distance.getValue())
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = self.distance.getValue()
 
@@ -100,7 +101,7 @@ class GoToTapeCommand(Command):
                 if oY <= 3.5:
                     self.y = 0.15
 
-                #self.y = self.y * self.speedBoost
+                self.y = self.y * self.speedBoost
 
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
@@ -109,10 +110,12 @@ class GoToTapeCommand(Command):
                     self._finished = robot.hatch.hasHatchPanel()
 
                 elif not self._finished:
-                    self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
+                    #self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
+                    self._finished = abs(oX) <= 1.5 and oY <= 1.0
 
         elif self.low:
             if self.tapeLow.getValue() == 1:
+                print(self.distanceLow.getValue())
                 oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = -1 * self.distanceLow.getValue()
 
@@ -152,7 +155,7 @@ class GoToTapeCommand(Command):
 
 
                 if not self._finished:
-                    self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 2.0
+                    self._finished = abs(oX) <= 1.5 and oY <= 2.0
 
 
             if self._finished:

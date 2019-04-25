@@ -29,7 +29,7 @@ from commands.arm.setarmcommandgroup import SetArmCommandGroup
 from commands.arm.lowercommand import LowerCommand
 from commands.arm.raisecommand import RaiseCommand
 
-from commands.drivetrain.gototapecommand import GoToTapeCommand
+from commands.drivetrain.gototapecommandgroup import GoToTapeCommandGroup
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 
 from commands.intake.intakecommand import IntakeCommand
@@ -41,42 +41,23 @@ class lrAutoCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('lr Auto')
-        self.addSequential(SetPipelineCommand(0))
+        #self.addParallel(HatchIntakeCommand())
+        self.addParallel(LowerCommand())
 
-        self.addParallel(SetArmCommandGroup(12.0))
+        self.addSequential(TransitionMoveCommand(80,80,35,50,0,0))
+        self.addSequential(HolonomicMoveCommand(-100,20,-65))
+        #tf
+        #self.addSequential(TransitionMoveCommand(80,80,35,45,0,0))
+        #self.addSequential(HolonomicMoveCommand(85,11,65))
 
-        ##mid hatch
-        #self.addParallel(SetArmCommandGroup(10.0, 80.0))
+        self.addSequential(GoToTapeCommandGroup(), 5)
 
-        self.addSequential(TransitionMoveCommand(35,95,25,90,30,-35))
-        #self.addSequential(SuperStructureGoToLevelCommand("floor"))
+        self.addSequential(HolonomicMoveCommand(20,-90,235))#305305
+        #tf
+        #self.addSequential(HolonomicMoveCommand(20,-105,-250))#305
+        self.addSequential(GoToTapeCommandGroup(), 5)
 
-        self.addSequential(StrafeCommand(-70))
-        self.addSequential(GoToTapeCommand(), 3)
-        self.addSequential(MoveCommand(2), 1)
-
-
-        #self.addSequential(WaitCommand(.5))
-        self.addSequential(LowerCommand())
-        self.addSequential(MoveCommand(-3), 1)
-        self.addSequential(HolonomicMoveCommand(0,-160,305))
-        #self.addSequential(MoveCommand(-18))
-        #self.addSequential(TransitionMoveCommand(-50,80,-85,150,1,190))
-        #self.addSequential(TurnCommand(182))
-        #self.addSequential(TransitionMoveCommand(80,80,25,96))
-
-        self.addSequential(GoToTapeCommand())
-        #self.addParallel(SetArmCommandGroup(20.0))
-        self.addSequential(MoveCommand(1))
-        self.addSequential(RaiseCommand(), .75)
-        self.addParallel(SetArmCommandGroup(11.0))
-        #self.addSequential(TransitionMoveCommand(-100,-100,-85,-170,1,-55))
-
-        self.addSequential(HolonomicMoveCommand(40,136,20))
-        #self.addSequential(StrafeCommand(-50))
-        self.addSequential(HolonomicMoveCommand(-55,0,25))
-        self.addSequential(GoToTapeCommand())
-        self.addSequential(MoveCommand(2))
-        self.addSequential(LowerCommand())
-        self.addSequential(MoveCommand(-5))
-        # Add commands here with self.addSequential() and self.addParallel()
+        self.addSequential(HolonomicMoveCommand(40,100,35))
+        self.addSequential(HolonomicMoveCommand(-63,0,0))
+        self.addSequential(GoToTapeCommandGroup(), 5)
+        self.addSequential(HolonomicMoveCommand(24,-60,-45))

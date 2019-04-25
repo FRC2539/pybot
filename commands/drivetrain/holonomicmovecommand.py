@@ -22,7 +22,7 @@ class HolonomicMoveCommand(TimedCommand):
 
         self.runtimeSecs = 0
         self.runtime = 0
-        self.speedLimit = 2800 #robot.drivetrain.speedLimit
+        self.speedLimit = robot.drivetrain.speedLimit #2800
 
         self.setup()
 
