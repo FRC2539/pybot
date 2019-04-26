@@ -111,7 +111,7 @@ class GoToTapeCommand(Command):
 
                 elif not self._finished:
                     #self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
-                    self._finished = abs(oX) <= 1.5 and oY <= 1.0
+                    self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 1.0
 
         elif self.low:
             if self.tapeLow.getValue() == 1:
@@ -155,7 +155,7 @@ class GoToTapeCommand(Command):
 
 
                 if not self._finished:
-                    self._finished = abs(oX) <= 1.5 and oY <= 2.0
+                    self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 2.0
 
 
             if self._finished:

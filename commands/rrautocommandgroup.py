@@ -50,7 +50,7 @@ class rrAutoCommandGroup(CommandGroup):
         self.addParallel(LowerCommand())
 
         self.addSequential(TransitionMoveCommand(80,80,35,50,0,0))
-        self.addSequential(HolonomicMoveCommand(100,20,65))
+        self.addSequential(HolonomicMoveCommand(88,20,50))
         #tf
         #self.addSequential(TransitionMoveCommand(80,80,35,45,0,0))
         #self.addSequential(HolonomicMoveCommand(85,11,65))

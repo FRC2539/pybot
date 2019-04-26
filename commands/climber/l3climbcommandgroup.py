@@ -17,7 +17,7 @@ class L3ClimbCommandGroup(CommandGroup):
         # Add commands here with self.addSequential() and self.addParallel()
 
         #Lift robot up.
-        self.addSequential(AllExtendCommand())
+        self.addSequential(AllExtendCommand(), 5)
 
         #Get front wheels on platform.
         self.addSequential(GetOnPlatformCommand(), 2)
