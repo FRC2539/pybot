@@ -18,6 +18,7 @@ from commands.shooter.shootercommandgroup import ShooterCommandGroup
 from commands.shooter.vspeedshootcommandgroup import VariedSpeedShootCommandGroup
 from commands.shooter.increasefirespeedcommand import IncreaseFireSpeedCommand
 from commands.shooter.decreasefirespeedcommand import DecreaseFireSpeedCommand
+from commands.shooter.rapidfirecommand import RapidFireCommand
 
 
 def init():
@@ -46,6 +47,7 @@ def init():
     driveController.A.whileHeld(IndexForwardCommand())
     driveController.DPadUp.whenPressed(IncreaseFireSpeedCommand())
     driveController.DPadDown.whenPressed(DecreaseFireSpeedCommand())
+    driveController.X.whileHeld(RapidFireCommand())
 
     #driveController.DPadLeft.toggleWhenPressed(SlowShootCommand())
 
@@ -60,3 +62,4 @@ def init():
     componentController.A.whileHeld(IndexForwardCommand())
     componentController.DPadUp.whenPressed(IncreaseFireSpeedCommand())
     componentController.DPadDown.whenPressed(DecreaseFireSpeedCommand())
+    driveController.X.whileHeld(RapidFireCommand())
