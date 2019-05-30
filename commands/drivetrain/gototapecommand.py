@@ -45,7 +45,8 @@ class GoToTapeCommand(Command):
 
         self.low = False
 
-        if (not self.wantsHatch) and robot.elevator.getPosition() >= 25.0:
+        #if (not self.wantsHatch) and robot.elevator.getPosition() >= 25.0:
+        if robot.elevator.getPosition() >= 25.0:
             self.low = True
             print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
         else:
@@ -54,6 +55,8 @@ class GoToTapeCommand(Command):
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
+
+        #self.low = True
 
         if not self.low:
             self.nt.putNumber('pipeline', self.pipeID)
@@ -92,7 +95,7 @@ class GoToTapeCommand(Command):
                     self.y = 0.3
 
                 if oY <= 4.0:
-                    self.rotate = 0.0
+                    self.rotate = self.rotate * 0.5
                 '''
                 if oY <= 2.0:
                     self.y = 0.1
@@ -100,7 +103,7 @@ class GoToTapeCommand(Command):
                 if oY <= 3.5:
                     self.y = 0.15
 
-                #self.y = self.y * self.speedBoost
+                self.y = self.y * self.speedBoost
 
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
