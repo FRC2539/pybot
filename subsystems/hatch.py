@@ -38,7 +38,7 @@ class Hatch(DebuggableSubsystem):
 
 
     def eject(self):
-        self.motor.set(-.75)
+        self.motor.set(-1)
 
 
     def grab(self):
