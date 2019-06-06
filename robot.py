@@ -30,7 +30,7 @@ class KryptonBot(CommandBasedRobot):
             import mockdata
 
         self.subsystems()
-        controller.layout.init()
+        controller.layout.Layout.init(self)
         driverhud.init()
 
         from commands.startupcommandgroup import StartUpCommandGroup
@@ -52,7 +52,6 @@ class KryptonBot(CommandBasedRobot):
     def teleopInit(self):
         from commands.drivetrain.setpipelinecommand import SetPipelineCommand
         SetPipelineCommand(0).start()
-
 
     def handleCrash(self, error):
         super().handleCrash()

@@ -1,3 +1,4 @@
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -44,3 +45,5 @@ climber.driveMotorID = 7
 climber.rearRackLimit = 3 #DIO
 climber.leftRackLimit = 4 #DIO
 climber.rightRackLimit = 5 #DIO
+
+togglelayout = PortsList()

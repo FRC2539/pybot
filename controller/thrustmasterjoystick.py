@@ -21,7 +21,7 @@ class ThrustmasterJoystick(GenericController):
         'RightLeftTop' : 13,
         'ClimbL2' : 14,
         'RightMiddleBottom' : 15,
-        'RightRightBottom' : 16,
+        'Layout' : 16,
         'Misc' : 5,
         'LeftMiddleTop' : 6,
         'LeftRightTop' : 7,
