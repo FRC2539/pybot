@@ -10,6 +10,8 @@ from networktables import NetworkTables
 
 import robot
 
+'''
+
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
@@ -38,6 +40,7 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
 
+'''
 
 class rrAutoCommandGroup(CommandGroup):
 
@@ -47,6 +50,7 @@ class rrAutoCommandGroup(CommandGroup):
         # Add commands here with self.addSequential() and self.addParallel()
         print('right rocket')
         #self.addParallel(HatchIntakeCommand())
+        '''
         self.addParallel(LowerCommand())
 
         self.addSequential(TransitionMoveCommand(80,80,35,50,0,0))
@@ -66,3 +70,5 @@ class rrAutoCommandGroup(CommandGroup):
         self.addSequential(HolonomicMoveCommand(63,0,0))
         self.addSequential(GoToTapeCommandGroup(), 5)
         self.addSequential(HolonomicMoveCommand(-24,-60,45))
+
+        '''

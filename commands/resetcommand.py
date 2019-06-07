@@ -19,7 +19,5 @@ class ResetCommand(InstantCommand):
         self.requires(robot.drivetrain)
         self.requires(robot.elevator)
         self.requires(robot.intake)
-        self.requires(robot.arm)
         self.requires(robot.climber)
-        self.requires(robot.hatch)
         self.requires(robot.lights)

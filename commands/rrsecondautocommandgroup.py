@@ -10,6 +10,8 @@ from networktables import NetworkTables
 
 import robot
 
+'''
+
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
@@ -36,6 +38,7 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
 
+'''
 
 class rrSecondAutoCommandGroup(CommandGroup):
 
@@ -44,6 +47,9 @@ class rrSecondAutoCommandGroup(CommandGroup):
 
         # Add commands here with self.addSequential() and self.addParallel()
         print('right rocket')
+
+        '''
+
         self.addSequential(SetPipelineCommand(0))
 
         #self.addParallel(SetArmCommandGroup(12.0))
@@ -80,3 +86,5 @@ class rrSecondAutoCommandGroup(CommandGroup):
         self.addSequential(LowerCommand())
         self.addSequential(MoveCommand(-5))
         # Add commands here with self.addSequential() and self.addParallel()
+
+        '''

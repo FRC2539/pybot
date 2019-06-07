@@ -12,6 +12,8 @@ class GoToTapeCommand(Command):
 
         self.requires(robot.drivetrain)
 
+        '''
+
         self.tape = Config('limelight/tv', 0)
         self.strafe = Config('limelight/tx', 0)
         self.distance = Config('limelight/ty', 0)
@@ -99,10 +101,10 @@ class GoToTapeCommand(Command):
 
                 if oY <= 4.0:
                     self.rotate = self.rotate * 0.5
-                '''
+
                 if oY <= 2.0:
                     self.y = 0.1
-                '''
+
                 if oY <= 3.5:
                     self.y = 0.15
 
@@ -147,10 +149,10 @@ class GoToTapeCommand(Command):
 
                 if oY <= 8.0:
                     self.rotate = 0.0
-                '''
+
                 if oY <= 6.0:
                     self.y = 0.1
-                '''
+
                 if oY <= 7:
                     self.y = 0.14
 
@@ -188,3 +190,5 @@ class GoToTapeCommand(Command):
             robot.drivetrain.toggleFieldOrientation()
 
         robot.lights.off()
+
+    '''

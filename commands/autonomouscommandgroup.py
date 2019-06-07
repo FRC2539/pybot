@@ -10,6 +10,8 @@ from networktables import NetworkTables
 
 import robot
 
+'''
+
 from commands.drivetrain.strafecommand import StrafeCommand
 from commands.drivetrain.movewithgyrocommand import MoveWithGyroCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
@@ -40,6 +42,7 @@ from commands.intake.slowejectcommand import SlowEjectCommand
 from commands.hatch.hatchintakecommand import HatchIntakeCommand
 from commands.hatch.hatchejectcommand import HatchEjectCommand
 
+'''
 
 class AutonomousCommandGroup(CommandGroup):
 
@@ -47,6 +50,7 @@ class AutonomousCommandGroup(CommandGroup):
         super().__init__('Autonomous')
         print("auto init")
 
+        '''
         ds = DriverStation.getInstance()
 
         dt = NetworkTables.getTable('DriveTrain')
@@ -358,3 +362,5 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: True)
         def setPipeline(self):
             self.addSequential(SetPipelineCommand(0))
+
+        '''

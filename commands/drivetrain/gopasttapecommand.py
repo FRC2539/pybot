@@ -10,6 +10,8 @@ class GoPastTapeCommand(Command):
 
         self.requires(robot.drivetrain)
 
+        '''
+
         self.tape = Config('limelight/tv', 0)
         self.y = 0.2
         self.originallyFieldOriented = True
@@ -31,3 +33,5 @@ class GoPastTapeCommand(Command):
 
         if self.originallyFieldOriented:
             robot.drivetrain.toggleFieldOrientation()
+
+        '''

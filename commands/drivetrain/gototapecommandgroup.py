@@ -3,10 +3,6 @@ import commandbased.flowcontrol as fc
 
 import robot
 
-from commands.hatch.hatchintakecommand import HatchIntakeCommand
-from commands.hatch.hatchejectcommand import HatchEjectCommand
-from commands.hatch.defaultcommand import DefaultCommand
-
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 
 from commands.drivetrain.gototapecommand import GoToTapeCommand
@@ -20,6 +16,10 @@ class GoToTapeCommandGroup(CommandGroup):
 
     def __init__(self, pipeline=1):
         super().__init__('Go To Tape')
+
+        '''
+
+        Rewrite for cargo!
 
         # Add commands here with self.addSequential() and self.addParallel()
         @fc.IF(lambda: not robot.hatch.hasHatchPanel())
@@ -40,3 +40,5 @@ class GoToTapeCommandGroup(CommandGroup):
             self.addParallel(SeizureLightsCommand(), 3)
             self.addSequential(TransitionMoveCommand(-100,-100,-12,-12,0,0))
             self.addSequential(ResetCommand())
+
+        '''

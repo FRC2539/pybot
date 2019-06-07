@@ -38,7 +38,7 @@ class Elevator(DebuggableSubsystem):
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(0.0)
 
-        #These are temporary and need to be finalized for competition.
+        #These are temporary and need to be finalized for DEFENSE COMPETITION.
         self.levels = {
                         'floor' : 0.0,
                         'aboveFloor' : 0.0,
@@ -46,7 +46,7 @@ class Elevator(DebuggableSubsystem):
                         'midHatches' : 29.0,
                         'highHatches' : 130.0,
                         'cargoBalls' : 50.0,
-                        'lowBalls' : 0.0,
+                        'lowBalls' : 10.0,
                         'midBalls' : 90.0,
                         'highBalls' : 135.0,
                         'start' : 0.0
@@ -93,7 +93,7 @@ class Elevator(DebuggableSubsystem):
         self.encoder.setPosition(0.0)
 
 
-    def setPosition(self, target, upOrDown):
+    def setPosition(self, target):
         position = self.getPosition()
 
         print("elevator position target: " + str(target))
@@ -103,10 +103,10 @@ class Elevator(DebuggableSubsystem):
             print('Illegal elevator target position')
             return True
 
-        elif upOrDown == 'up' and position < target:
+        elif position < target:
             return self.up()
 
-        elif upOrDown == 'down' and position > target:
+        elif position > target:
             return self.down()
 
         else:
@@ -122,8 +122,8 @@ class Elevator(DebuggableSubsystem):
         return (self.getPosition() <= 0.0) or (not self.lowerLimit.get())
 
 
-    def goToLevel(self, level, upOrDown):
-        return self.setPosition(float(self.levels[level]), upOrDown)
+    def goToLevel(self, level):
+        return self.setPosition(float(self.levels[level]))
 
 
     def goToFloor(self):
