@@ -90,7 +90,8 @@ class Layout(DebuggableSubsystem):
             self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup())
             self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
 
-            self.joystickOne.Misc.whileHeld(RearRetractCommand())
+            self.joystickOne.Misc.whenPressed(AllRetractCommand())
+
             self.joystickOne.LeftRightTop.whenPressed(lrSecondAutoCommandGroup())
 
             self.joystickOne.ClimbL3.whenPressed(lrAutoCommandGroup())
@@ -137,14 +138,12 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommand())
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
-            self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
             self.controllerOne.RightTrigger.whenPressed(EjectCommand())
 
             self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
             self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())
 
-            self.controllerOne.RightJoystick.whenPressed(ToggleLayoutCommand())
-
+            self.controllerOne.DPadLeft.whenPressed(AllRetractCommand())
 
             # The self.controllerTwo for non-driving subsystems of the robot
             self.controllerTwo = LogitechDualShock(1)

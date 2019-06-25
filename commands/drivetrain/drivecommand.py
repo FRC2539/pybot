@@ -47,6 +47,8 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
+        print(str('X ' + str(logicalaxes.driveX.get()) + '\nY ' + str(y) + '\nRotate ' + str(logicalaxes.driveRotate.get())))
+
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
             y,
