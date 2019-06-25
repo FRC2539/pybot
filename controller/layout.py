@@ -114,6 +114,7 @@ class Layout(DebuggableSubsystem):
             self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
 
             self.joystickOne.Misc.whileHeld(RearRetractCommand())
+            self.joystickOne.RightRightTop.whenPressed(AllRetractCommand())
 
             self.joystickOne.ClimbL3.whenPressed(lrAutoCommandGroup())
             self.joystickOne.ClimbL2.whenPressed(rrAutoCommandGroup())
