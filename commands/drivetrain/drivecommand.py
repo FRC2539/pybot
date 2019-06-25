@@ -20,7 +20,6 @@ class DriveCommand(Command):
 
     def initialize(self):
         robot.drivetrain.stop()
-        robot.drivetrain.setProfile(0)
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
         except (ValueError, MissingConfigError):

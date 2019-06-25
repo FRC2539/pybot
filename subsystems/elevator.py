@@ -20,7 +20,6 @@ class Elevator(DebuggableSubsystem):
         self.motor = CANSparkMax(ports.elevator.motorID, MotorType.kBrushless)
         self.encoder = self.motor.getEncoder()
         self.PIDController = self.motor.getPIDController()
-
         self.PIDController.setFF(0.5, 0)
         self.PIDController.setP(0.1, 0)
         self.PIDController.setI(0.001, 0)

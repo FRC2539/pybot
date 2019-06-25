@@ -22,28 +22,19 @@ lights.lightControllerID = 0 #PWM
 
 elevator = PortsList()
 elevator.motorID = 5
-elevator.lowerLimit = 1 #DIO
+elevator.lowerLimit = 3 #DIO
 
 intake = PortsList()
 intake.motorID = 10
 
-hatch = PortsList()
-hatch.motorID = 12
-hatch.rightLimitSwitch = 0 #DIO
-hatch.leftLimitSwitch = 6 #DIO
-
-arm = PortsList()
-arm.motorID = 6
-arm.lowerLimit = 2 #DIO
-
 climber = PortsList()
-climber.rearRackMotorID = 11
-climber.leftRackMotorID = 9
-climber.rightRackMotorID = 8
-climber.driveMotorID = 7
+climber.rearRackMotorID = 8
+climber.leftRackMotorID = 6
+climber.rightRackMotorID = 7
+climber.driveMotorID = 9
 
-climber.rearRackLimit = 3 #DIO
-climber.leftRackLimit = 4 #DIO
-climber.rightRackLimit = 5 #DIO
+climber.rearRackLimit = 2 #DIO
+climber.leftRackLimit = 0 #DIO
+climber.rightRackLimit = 1 #DIO
 
 togglelayout = PortsList()

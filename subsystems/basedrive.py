@@ -3,7 +3,10 @@ from .debuggablesubsystem import DebuggableSubsystem
 import math
 
 from networktables import NetworkTables
-from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
+from ctre import ControlMode, NeutralMode, FeedbackDevice
+from rev import CANSparkMax, MotorType, ControlType, ConfigParameter, IdleMode
+from rev._impl import CANEncoder
+
 from navx.ahrs import AHRS
 
 from custom.config import Config
@@ -27,22 +30,24 @@ class BaseDrive(DebuggableSubsystem):
         '''
         try:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
+                CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
             ]
 
         except AttributeError:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.leftMotorID),
-                WPI_TalonSRX(ports.drivetrain.rightMotorID),
+                CANSparkMax(ports.drivetrain.leftMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.rightMotorID, MotorType.kBrushless),
             ]
 
+        self.encoders = []
+        self.PIDcontrollers = []
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Brake)
-            motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+            motor.setIdleMode(IdleMode.kBrake)
+            self.encoders.append(motor.getEncoder())
+            self.PIDcontrollers.append(motor.getPIDController())
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -71,16 +76,16 @@ class BaseDrive(DebuggableSubsystem):
 
         '''Add items that can be debugged in Test mode.'''
         self.debugSensor('navX', self.navX)
+        #self.debugMotor('Front Left Motor', self.motors[0])
+        #self.debugMotor('Front Right Motor', self.motors[1])
 
-        self.debugMotor('Front Left Motor', self.motors[0])
-        self.debugMotor('Front Right Motor', self.motors[1])
+        #try:
+            #self.debugMotor('Back Left Motor', self.motors[2])
+            #self.debugMotor('Back Right Motor', self.motors[3])
+        #except IndexError:
+            #pass
 
-        try:
-            self.debugMotor('Back Left Motor', self.motors[2])
-            self.debugMotor('Back Right Motor', self.motors[3])
-        except IndexError:
-            pass
-
+        #self.motors[3].setInverted()
 
     def initDefaultCommand(self):
         '''
@@ -133,14 +138,17 @@ class BaseDrive(DebuggableSubsystem):
                 come to a stop.
                 '''
                 for motor in self.activeMotors:
-                    motor.setIntegralAccumulator(0, 0, 0)
+                    motor.setIAccum(0)
+
+            speeds[1] = speeds[1] * -1.0
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
+                print(str(speed * self.speedLimit))
+                motor.set(speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+                motor.set(speed * self.maxPercentVBus)
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -227,22 +235,17 @@ class BaseDrive(DebuggableSubsystem):
         self.lastInputs = None
 
 
-    def setProfile(self, profile):
-        '''Select which PID profile to use.'''
-        for motor in self.activeMotors:
-            motor.selectProfileSlot(profile, 0)
-
-
     def resetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            motor.configClosedLoopRamp(0, 0)
+            controller = motor.getPIDController()
+            controller.setClosedLoopRampRate(0)
             for profile in range(2):
-                motor.config_kP(profile, 1, 0)
-                motor.config_kI(profile, 0.001, 0)
-                motor.config_kD(profile, 31, 0)
-                motor.config_kF(profile, 0.7, 0)
-                motor.config_IntegralZone(profile, 30, 0)
+                controller.setP(1, profile)
+                controller.setI(0.001, profile)
+                controller.setD(31, profile)
+                controller.setFF(0.7, profile)
+                controller.config_IntegralZone(30, profile)
 
 
     def resetGyro(self):
@@ -315,12 +318,12 @@ class BaseDrive(DebuggableSubsystem):
 
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
-        return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
+        return [CANEncoder(x).getVelocity() for x in self.activeMotors]
 
 
     def getPositions(self):
         '''Returns the position of each active motor.'''
-        return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+        return [CANEncoder(x).getPosition() for x in self.activeMotors]
 
 
     def getFrontClearance(self):
@@ -345,7 +348,7 @@ class BaseDrive(DebuggableSubsystem):
     def getEncoders(self):
         encoders = []
         for motor in self.motors:
-            encoders.append(motor.getQuadraturePosition())
+            encoders.append(motor.getEncoder())
         return encoders
 
     def resetEncoders(self):
@@ -354,8 +357,8 @@ class BaseDrive(DebuggableSubsystem):
         #    motor.setSelectedSensorPosition(0)
             #motor.setNeutralMode(NeutralMode.Brake)
             #motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
-            motor.setQuadraturePosition(0,10)
+            enc = motor.getEncoder()
+            enc.setPosition(0)
         print("reseted enc")
 
 

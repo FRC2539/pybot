@@ -79,8 +79,8 @@ class Layout(DebuggableSubsystem):
         selectedLayout = Config('/DriveTrain/Layout', 0)
 
         if selectedLayout == 0:
-            self.joystickOne = LogitechJoystick(0)
-            self.joystickTwo = LogitechJoystick(1)
+            self.joystickOne = ThrustmasterJoystick(0)
+            self.joystickTwo = ThrustmasterJoystick(1)
 
             logicalaxes.driveX = self.joystickOne.X
             logicalaxes.driveY = self.joystickOne.Y
@@ -90,22 +90,25 @@ class Layout(DebuggableSubsystem):
             self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup())
             self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
 
-            self.joystickOne.Button6.whileHeld(RearRetractCommand())
-            self.joystickOne.Button7.whenPressed(lrSecondAutoCommandGroup())
+            self.joystickOne.Misc.whileHeld(RearRetractCommand())
+            self.joystickOne.LeftRightTop.whenPressed(lrSecondAutoCommandGroup())
 
-            self.joystickOne.Button8.whenPressed(lrAutoCommandGroup())
-            self.joystickOne.Button9.whenPressed(rrAutoCommandGroup())
+            self.joystickOne.ClimbL3.whenPressed(lrAutoCommandGroup())
+            self.joystickOne.LeftMiddleTop.whenPressed(rrAutoCommandGroup())
 
-            self.joystickOne.Button10.whenPressed(rrSecondAutoCommandGroup())
+            self.joystickOne.LeftLeftBottom.whenPressed(rrSecondAutoCommandGroup())
 
             self.joystickTwo.trigger.whenPressed(EjectCommand())
 
-            self.joystickTwo.Button6.whenPressed(ToggleLayoutCommand())
+            self.joystickTwo.LeftMiddleTop.whenPressed(ToggleLayoutCommand())
 
-            self.joystickTwo.Button8.whenPressed(L3ClimbCommandGroup())
-            self.joystickTwo.Button9.whenPressed(L2ClimbCommandGroup())
+            self.joystickTwo.ClimbL3.whenPressed(L3ClimbCommandGroup())
+            self.joystickTwo.ClimbL2.whenPressed(L2ClimbCommandGroup())
 
-            self.joystickTwo.Button11.whenPressed(ResetCommand())
+            self.joystickTwo.leftThumb.whenPressed(ExtendRightCommand())
+            self.joystickTwo.rightThumb.whenPressed(ExtendLeftCommand())
+
+            self.joystickTwo.RightRightTop.whenPressed(ResetCommand())
 
             # The controller for non-driving subsystems of the robot
             self.controllerOne = LogitechDualShock(2)

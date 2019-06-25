@@ -14,6 +14,9 @@ class Climber(DebuggableSubsystem):
         self.rearRackMotor = WPI_TalonSRX(ports.climber.rearRackMotorID)
         self.rightRackMotor = WPI_TalonSRX(ports.climber.rightRackMotorID)
         self.leftRackMotor = WPI_TalonSRX(ports.climber.leftRackMotorID)
+
+        self.leftRackMotor.setInverted(True)
+
         self.driveMotor = WPI_TalonSRX(ports.climber.driveMotorID)
 
         self.motors = [self.rearRackMotor, self.rightRackMotor, self.leftRackMotor, self.driveMotor]
@@ -26,7 +29,7 @@ class Climber(DebuggableSubsystem):
         self.rightLimit = DigitalInput(ports.climber.rightRackLimit)
         self.leftLimit = DigitalInput(ports.climber.leftRackLimit)
 
-        self.rightRackMotor.setInverted(True)
+        self.rightRackMotor.setInverted(False)
         self.driveMotor.setInverted(True)
 
         self.rightRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
@@ -36,6 +39,7 @@ class Climber(DebuggableSubsystem):
         self.fPower = 0.95
         self.rPower = 1.0
 
+        self.resetEncoders()
 
     def getRightLimit(self):
         return not self.rightLimit.get()
@@ -51,6 +55,7 @@ class Climber(DebuggableSubsystem):
 
     def resetEncoders(self):
         self.rightRackMotor.setSelectedSensorPosition(0, 0, 0)
+        self.leftRackMotor.setSelectedSensorPosition(0, 0, 0)
         self.rearRackMotor.setSelectedSensorPosition(0, 0, 0)
 
 
@@ -62,6 +67,9 @@ class Climber(DebuggableSubsystem):
         self.rightRackMotor.set(0)
         self.leftRackMotor.set(0)
         self.rearRackMotor.set(0)
+        print(str(self.rightRackMotor.getQuadraturePosition()))
+        print(str(self.leftRackMotor.getQuadraturePosition()))
+        print(str(self.rearRackMotor.getQuadraturePosition()))
 
 
     def stopRightRack(self):
