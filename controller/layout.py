@@ -128,7 +128,6 @@ class Layout(DebuggableSubsystem):
             self.joystickTwo.rightThumb.whenPressed(HatchEjectCommand())
             self.joystickTwo.trigger.whenPressed(EjectCommand())
 
-
             self.joystickTwo.ClimbL3.whenPressed(L3ClimbCommandGroup())
             self.joystickTwo.ClimbL2.whenPressed(L2ClimbCommandGroup())
 
