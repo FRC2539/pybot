@@ -96,6 +96,12 @@ class Climber(DebuggableSubsystem):
         frontDiff = self.rightRackMotor.getSelectedSensorPosition(0) - self.leftRackMotor.getSelectedSensorPosition(0)
         diff = frontAvg - self.rearRackMotor.getSelectedSensorPosition(0)
 
+        print("leftRack: "+str(self.leftRackMotor.getSelectedSensorPosition(0)))
+        print("rightRack: "+str(self.rightRackMotor.getSelectedSensorPosition(0)))
+        print("frontAvg: "+str(frontAvg))
+        print("frontDiff: "+str(frontDiff))
+        print("diff: "+str(diff))
+
         self.extendRightEnc(frontDiff - diff)
         self.extendLeftEnc(frontDiff - diff)
         self.extendRearEnc(diff)

@@ -38,14 +38,14 @@ class MoveCommand(Command):
             self.targetPositions.append(position + offset * sign)
             sign *= -1
 
-        print('Targets: ' + str(self.targetPositions))
-        print('Starting: ' + str(robot.drivetrain.getPositions()))
+        #print('Targets: ' + str(self.targetPositions))
+        #print('Starting: ' + str(robot.drivetrain.getPositions()))
 
         robot.drivetrain.setPositions(self.targetPositions)
 
 
     def execute(self):
-        print('Current: ' + str(robot.drivetrain.getPositions()))
+        #print('Current: ' + str(robot.drivetrain.getPositions()))
         if self.avoidCollisions:
             try:
                 if self.distance < 0:

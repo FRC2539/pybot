@@ -143,11 +143,12 @@ class BaseDrive(DebuggableSubsystem):
             speeds[1] = speeds[1] * -1.0
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print(str(speed * self.speedLimit))
+                print("speed: "+str(speed * self.speedLimit))
                 motor.set(speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
+                print("no enc speed: "+str(speed * self.maxPercentVBus))
                 motor.set(speed * self.maxPercentVBus)
 
         if [x, y, rotate] == self.lastInputs:
@@ -158,17 +159,17 @@ class BaseDrive(DebuggableSubsystem):
 
     def movePer(self, left, right):
         #speeds = self._calculateSpeeds(x, y, rotate / 2)
-        print("l: "+str(left)+" r:"+str(right))
+        #print("l: "+str(left)+" r:"+str(right))
         x = 0
         for motor in self.activeMotors:
             #print("x: "+str(x%2))
             motor.setIntegralAccumulator(0, 0, 0)
             if x % 2 == 0:
                 motor.set(ControlMode.PercentOutput, left)
-                print("motor "+ str(x) + ": "+str(left))
+                #print("motor "+ str(x) + ": "+str(left))
             else:
                 motor.set(ControlMode.PercentOutput, right * -1)
-                print("motor "+ str(x) + ": "+str(right * -1))
+                #print("motor "+ str(x) + ": "+str(right * -1))
             x += 1
 
     def setPositions(self, positions):
@@ -359,7 +360,7 @@ class BaseDrive(DebuggableSubsystem):
             #motor.setSafetyEnabled(False)
             enc = motor.getEncoder()
             enc.setPosition(0)
-        print("reseted enc")
+        #print("reseted enc")
 
 
     def setSpeedLimit(self, speed):
@@ -378,6 +379,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
+        print("maxPercVBus: "+str(self.maxPercentVBus))
 
 
     def enableSimpleDriving(self):
