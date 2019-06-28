@@ -99,7 +99,7 @@ class Layout(DebuggableSubsystem):
     def init(self):
         from custom.config import Config
 
-        selectedLayout = Config('/DriveTrain/Layout', 0)
+        selectedLayout = 0#Config('/DriveTrain/Layout', 0)
 
         if selectedLayout == 0:
             self.joystickOne = ThrustmasterJoystick(0)
