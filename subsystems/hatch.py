@@ -41,6 +41,10 @@ class Hatch(DebuggableSubsystem):
         self.motor.set(-1)
 
 
+    def slowEject(self):
+        self.motor.set(-0.5)
+
+
     def grab(self):
         self.motor.set(0.9)
 
