@@ -33,10 +33,11 @@ from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureComman
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
-from commands.intake.slowejectcommand import SlowEjectCommand
+#from commands.intake.slowejectcommand import SlowEjectCommand
 
 from commands.hatch.hatchejectcommand import HatchEjectCommand
 from commands.hatch.hatchintakecommand import HatchIntakeCommand
+from commands.hatch.slowejectcommand import SlowEjectCommand
 
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
@@ -112,6 +113,8 @@ class Layout(DebuggableSubsystem):
 
             self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup())
             self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
+
+            self.joystickOne.leftThumb.whenPressed(SlowEjectCommand())
 
             self.joystickOne.Misc.whileHeld(RearRetractCommand())
             self.joystickOne.RightRightTop.whenPressed(AllRetractCommand())

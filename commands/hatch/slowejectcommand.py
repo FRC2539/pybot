@@ -5,7 +5,7 @@ import robot
 class SlowEjectCommand(Command):
 
     def __init__(self):
-        super().__init__('Slow Eject')
+        super().__init__('Slow Eject', 1)
 
         self.requires(robot.hatch)
 
