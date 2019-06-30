@@ -5,7 +5,7 @@ import robot
 class AllRetractCommand(Command):
 
     def __init__(self):
-        super().__init__('All Retract')
+        super().__init__('All Retract', 5)
 
         self.requires(robot.climber)
 

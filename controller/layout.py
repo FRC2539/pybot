@@ -47,6 +47,8 @@ from commands.climber.driveforwardcommand import DriveForwardCommand
 from commands.climber.drivebackwardcommand import DriveBackwardCommand
 from commands.climber.l3climbcommandgroup import L3ClimbCommandGroup
 from commands.climber.l2climbcommandgroup import L2ClimbCommandGroup
+from commands.climber.doubleclimbcommand import DoubleClimbCommand
+from commands.climber.holdupcommandgroup import HoldUpCommandGroup
 
 from commands.lights.orangelightscommand import OrangeLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
@@ -76,7 +78,7 @@ class Layout(DebuggableSubsystem):
     def init(self):
         from custom.config import Config
 
-        selectedLayout = Config('/DriveTrain/Layout', 0)
+        selectedLayout = Config('/DriveTrain/Layout', 1)
 
         if selectedLayout == 0:
             self.joystickOne = ThrustmasterJoystick(0)
@@ -105,6 +107,7 @@ class Layout(DebuggableSubsystem):
 
             self.joystickTwo.ClimbL3.whenPressed(L3ClimbCommandGroup())
             self.joystickTwo.ClimbL2.whenPressed(L2ClimbCommandGroup())
+            self.joystickTwo.RightMiddleBottom.whenPressed(HoldUpCommandGroup())
 
             self.joystickTwo.leftThumb.whenPressed(ExtendRightCommand())
             self.joystickTwo.rightThumb.whenPressed(ExtendLeftCommand())
@@ -131,9 +134,9 @@ class Layout(DebuggableSubsystem):
 
             self.controllerOne = LogitechDualShock(0)
 
-            logicalaxes.driveX = self.controllerOne.LeftX
-            logicalaxes.driveY = self.controllerOne.LeftY
-            logicalaxes.driveRotate = self.controllerOne.RightX
+            logicalaxes.driveX = self.controllerOne.RightX
+            logicalaxes.driveY = self.controllerOne.RightX
+            logicalaxes.driveRotate = self.controllerOne.LeftY
 
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommand())
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
@@ -143,18 +146,28 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
             self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())
 
+            self.controllerOne.DPadUp.whenPressed(HoldUpCommandGroup())
+            self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
+
             self.controllerOne.DPadLeft.whenPressed(AllRetractCommand())
 
-            # The self.controllerTwo for non-driving subsystems of the robot
+            self.controllerOne.X.whileHeld(DeelevateCommand())
+            self.controllerOne.Y.whileHeld(ElevateCommand())
+
+            self.controllerOne.B.whenPressed(DeelevateCommand())
+
+            self.controllerOne.A.toggleWhenPressed(IntakeCommand())
+
+            # The self.controllerTwo for non-driving subsystems of the robot (Operator)
             self.controllerTwo = LogitechDualShock(1)
 
             self.controllerTwo.Back.whenPressed(ResetCommand())
             self.controllerTwo.B.whenPressed(DeelevateCommand()) # Pressing it sends it down all the way. (B on 2019 Scoring bot.)
 
-            self.controllerTwo.X.whileHeld(DeelevateCommand())
-            self.controllerTwo.Y.whileHeld(ElevateCommand())
+            self.controllerTwo.RightTrigger.whileHeld(DeelevateCommand())
+            self.controllerTwo.RightBumper.whileHeld(ElevateCommand())
 
             self.controllerTwo.DPadUp.whenPressed(ElevatorGoToLevelCommand('cargoBalls'))
             self.controllerTwo.DPadDown.whenPressed(ElevatorGoToLevelCommand('lowBalls'))
 
-            self.controllerTwo.RightJoystick.toggleWhenPressed(IntakeCommand())
+            self.controllerTwo.A.toggleWhenPressed(IntakeCommand())

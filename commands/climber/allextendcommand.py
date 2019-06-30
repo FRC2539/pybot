@@ -18,8 +18,8 @@ class AllExtendCommand(Command):
 
     def execute(self):
         #encoder disable
-        #self._finished = robot.climber.extendAllEnc()
-        self._finished = robot.climber.extendAll()
+        self._finished = robot.climber.extendAllEnc()
+        #self._finished = robot.climber.extendAll()
 
 
     def isFinished(self):
