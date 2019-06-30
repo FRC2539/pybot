@@ -17,7 +17,7 @@ class MaintainPositionCommand(Command):
 
     def execute(self):
         if robot.climber.getAvgPosition() < self.startPos:
-            robot.climber.extendAll()
+            robot.climber.popAll()
 
         if robot.climber.getAvgPosition() >= self.startPos:
             robot.climber.stopRacks()
