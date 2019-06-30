@@ -26,7 +26,9 @@ class Climber(DebuggableSubsystem):
         self.rightLimit = DigitalInput(ports.climber.rightRackLimit)
         self.leftLimit = DigitalInput(ports.climber.leftRackLimit)
 
-        self.rightRackMotor.setInverted(True)
+        self.rightRackMotor.setInverted(False)
+        self.leftRackMotor.setInverted(True)
+
         self.driveMotor.setInverted(True)
 
         self.rightRackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
