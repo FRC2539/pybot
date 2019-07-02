@@ -2,6 +2,8 @@ from .debuggablesubsystem import DebuggableSubsystem
 
 import math
 
+import subsystems
+
 from networktables import NetworkTables
 from ctre import ControlMode, NeutralMode, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType, ConfigParameter, IdleMode
@@ -52,6 +54,9 @@ class BaseDrive(DebuggableSubsystem):
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
+
+        self.driveMode = True
+
         self.activeMotors = []
         self._configureMotors()
 
@@ -62,6 +67,9 @@ class BaseDrive(DebuggableSubsystem):
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
+
+        self.driveSpeedMult = Config('DriveTrain/driveSpeedMult', 0.9)
+        self.defenseSpeedMult = Config('DriveTrain/defenseSpeedMult', 1.3)
 
         self.setUseEncoders(True)
         self.maxSpeed = Config('DriveTrain/maxSpeed', 2500)
@@ -143,19 +151,26 @@ class BaseDrive(DebuggableSubsystem):
             speeds[1] = speeds[1] * -1.0
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print("speed: "+str(speed * self.speedLimit))
-                motor.set(speed * self.speedLimit)
+                motor.set(speed * self.chosenSpeed)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                print("no enc speed: "+str(speed * self.maxPercentVBus))
-                motor.set(speed * self.maxPercentVBus)
+                motor.set(speed * self.chosenSpeed)
 
         if [x, y, rotate] == self.lastInputs:
             return
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
+
+    def toggleSpeed(self):
+        if self.driveMode:
+            self.chosenSpeed = Config('DriveTrain/defenseSpeedMult', 1.3)
+            self.driveMode = False
+
+        else:
+            self.chosenSpeed = Config('DriveTrain/driveSpeedMult', 0.9)
+            self.driveMode = True
 
     def movePer(self, left, right):
         #speeds = self._calculateSpeeds(x, y, rotate / 2)
