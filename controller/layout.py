@@ -25,6 +25,7 @@ from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gototapecommandgroup import GoToTapeCommandGroup
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
+from commands.drivetrain.togglespeedcommand import ToggleSpeedCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -33,6 +34,7 @@ from commands.intake.slowejectcommand import SlowEjectCommand
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
 from commands.elevator.elevatorgotolevelcommand import ElevatorGoToLevelCommand
+from commands.elevator.forcelowercommand import ForceLowerCommand
 
 from commands.climber.allextendcommand import AllExtendCommand
 from commands.climber.allretractcommand import AllRetractCommand
@@ -141,7 +143,7 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommand())
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
-            self.controllerOne.RightTrigger.whenPressed(EjectCommand())
+            self.controllerOne.B.whenPressed(EjectCommand())
 
             self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
             self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())
@@ -149,12 +151,17 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.DPadUp.whenPressed(HoldUpCommandGroup())
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
 
-            self.controllerOne.DPadLeft.whenPressed(AllRetractCommand())
+            self.controllerOne.LeftJoystick.whenPressed(ToggleSpeedCommand())
+            self.controllerOne.DPadLeft.whileHeld(AllRetractCommand())
 
-            self.controllerOne.X.whileHeld(DeelevateCommand())
-            self.controllerOne.Y.whileHeld(ElevateCommand())
+            self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
 
-            self.controllerOne.B.whenPressed(DeelevateCommand())
+            self.controllerOne.X.whileHeld(ForceLowerCommand())
+
+            self.controllerOne.RightBumper.whileHeld(ElevateCommand())
+
+            self.controllerOne.Y.whenPressed(DeelevateCommand())
+            self.controllerOne.RightTrigger.whileHeld(DeelevateCommand())
 
             self.controllerOne.A.toggleWhenPressed(IntakeCommand())
 
@@ -164,10 +171,15 @@ class Layout(DebuggableSubsystem):
             self.controllerTwo.Back.whenPressed(ResetCommand())
             self.controllerTwo.B.whenPressed(DeelevateCommand()) # Pressing it sends it down all the way. (B on 2019 Scoring bot.)
 
+            self.controllerTwo.Y.whenPressed(DeelevateCommand())
             self.controllerTwo.RightTrigger.whileHeld(DeelevateCommand())
             self.controllerTwo.RightBumper.whileHeld(ElevateCommand())
 
+            self.controllerTwo.X.whileHeld(ForceLowerCommand())
+
             self.controllerTwo.DPadUp.whenPressed(ElevatorGoToLevelCommand('cargoBalls'))
             self.controllerTwo.DPadDown.whenPressed(ElevatorGoToLevelCommand('lowBalls'))
+
+            #self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
 
             self.controllerTwo.A.toggleWhenPressed(IntakeCommand())

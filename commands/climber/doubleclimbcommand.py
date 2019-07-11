@@ -20,7 +20,7 @@ class DoubleClimbCommand(Command):
         print('here')
 
     def isFinished(self):
-        return robot.climber.getAvgPosition() >= 20000
+        return robot.climber.getAvgPosition() >= 16500
 
 
     def end(self):

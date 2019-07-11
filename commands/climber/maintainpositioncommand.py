@@ -22,6 +22,7 @@ class MaintainPositionCommand(Command):
         if robot.climber.getAvgPosition() >= self.startPos:
             robot.climber.stopRacks()
 
+        robot.climber.creepBackward()
 
     def end(self):
-        pass
+        robot.climber.stopDrive()

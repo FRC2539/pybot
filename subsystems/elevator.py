@@ -32,7 +32,7 @@ class Elevator(DebuggableSubsystem):
 
         self.lowerLimit = DigitalInput(ports.elevator.lowerLimit)
 
-        self.upperLimit = 145.0
+        self.upperLimit = DigitalInput(ports.elevator.upperLimit)
 
         self.encoder.setPositionConversionFactor(1)
         self.encoder.setPosition(0.0)
@@ -40,26 +40,27 @@ class Elevator(DebuggableSubsystem):
         #These are temporary and need to be finalized for DEFENSE COMPETITION.
         self.levels = {
                         'floor' : 0.0,
-                        'aboveFloor' : 0.0,
-                        'lowHatches' : 0.0,
-                        'midHatches' : 29.0,
-                        'highHatches' : 130.0,
-                        'cargoBalls' : 50.0,
-                        'lowBalls' : 10.0,
-                        'midBalls' : 90.0,
-                        'highBalls' : 135.0,
-                        'start' : 0.0
+                        'cargoBalls' : 10.2,
+                        'lowBalls' : 5.0
                         }
+
+    def forceDown(self):
+        self.set(-1.0)
 
 
     def up(self):
-        isTop = self.getPosition() >= self.upperLimit
+        isTop = not self.upperLimit.get()
 
         if isTop:
-            self.setPosition(float(self.upperLimit), 'down')
             self.stop()
+            print('at Top')
         else:
-            self.set(1.0)
+            if self.getPosition() >= 60.0:
+                self.set(0.3)
+            else:
+                self.set(0.9)
+
+        print(self.getPosition())
 
         return isTop
 
@@ -67,12 +68,34 @@ class Elevator(DebuggableSubsystem):
     def down(self):
         isZero = self.isAtZero()
 
+        print(self.getPosition())
+
         if isZero:
             self.stop()
             self.resetEncoder()
 
         else:
-            self.set(-1.0)
+            if self.getPosition() <= 40.0:
+                self.set(-0.3)
+            else:
+                self.set(-0.7)
+
+        return isZero
+
+    def downReset(self):
+        isZero = self.isAtZero()
+
+        print(self.getPosition())
+
+        if isZero:
+            self.stop()
+            self.resetEncoder()
+
+        else:
+            if self.getPosition() > 10.0:
+                self.set(-0.7)
+            else:
+                self.set(-0.3)
 
         return isZero
 
@@ -97,7 +120,7 @@ class Elevator(DebuggableSubsystem):
 
         print("elevator position target: " + str(target))
 
-        if target > self.upperLimit or target < 0.0:
+        if not self.upperLimit.get() or target < 0.0:
             self.stop()
             print('Illegal elevator target position')
             return True
@@ -118,6 +141,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def isAtZero(self):
+        print(str(self.lowerLimit.get()))
         return (self.getPosition() <= 0.0) or (not self.lowerLimit.get())
 
 

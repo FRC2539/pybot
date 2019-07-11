@@ -23,6 +23,7 @@ lights.lightControllerID = 0 #PWM
 elevator = PortsList()
 elevator.motorID = 5
 elevator.lowerLimit = 3 #DIO
+elevator.upperLimit = 4
 
 intake = PortsList()
 intake.motorID = 10

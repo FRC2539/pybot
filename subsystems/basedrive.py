@@ -71,6 +71,8 @@ class BaseDrive(DebuggableSubsystem):
         self.driveSpeedMult = Config('DriveTrain/driveSpeedMult', 0.9)
         self.defenseSpeedMult = Config('DriveTrain/defenseSpeedMult', 1.3)
 
+        self.chosenSpeed = 0.9
+
         self.setUseEncoders(True)
         self.maxSpeed = Config('DriveTrain/maxSpeed', 2500)
         self.speedLimit = 1#Config('DriveTrain/normalSpeed', 2000)
@@ -109,6 +111,12 @@ class BaseDrive(DebuggableSubsystem):
     def move(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
 
+        self.boost = Config('DriveTrain/boost', False)
+
+        print(str(self.boost))
+
+        print('start move')
+
         '''
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
@@ -118,6 +126,7 @@ class BaseDrive(DebuggableSubsystem):
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
+
 
         self.lastInputs = [x, y, rotate]
 
@@ -137,6 +146,8 @@ class BaseDrive(DebuggableSubsystem):
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
 
+        print(str(speeds))
+
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
             if not any(speeds):
@@ -150,8 +161,18 @@ class BaseDrive(DebuggableSubsystem):
 
             speeds[1] = speeds[1] * -1.0
 
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed * self.chosenSpeed)
+            if self.boost:
+                for motor, speed in zip(self.activeMotors, speeds):
+
+                    motor.set(speed * 1.2)
+
+            else:
+                for motor, speed in zip(self.activeMotors, speeds):
+                    motor.set(speed * 0.7)
+
+            #for motor, speed in zip(self.activeMotors, speeds):
+                #print(str('speed' + str(self.chosenSpeed)))
+                #motor.set(speed * self.chosenSpeed)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
@@ -165,12 +186,17 @@ class BaseDrive(DebuggableSubsystem):
 
     def toggleSpeed(self):
         if self.driveMode:
-            self.chosenSpeed = Config('DriveTrain/defenseSpeedMult', 1.3)
+
+            self.chosenSpeed = self.defenseSpeedMult
             self.driveMode = False
 
-        else:
-            self.chosenSpeed = Config('DriveTrain/driveSpeedMult', 0.9)
+        elif not self.driveMode:
+
+            self.chosenSpeed = self.driveSpeedMult
             self.driveMode = True
+
+        print(str(self.driveMode))
+
 
     def movePer(self, left, right):
         #speeds = self._calculateSpeeds(x, y, rotate / 2)
