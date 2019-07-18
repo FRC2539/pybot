@@ -2,16 +2,16 @@ from wpilib.command.command import Command
 
 import robot
 
-class DropCommand(Command):
+class ReverseCommand(Command):
 
     def __init__(self):
-        super().__init__('Drop')
+        super().__init__('Reverse')
 
         self.requires(robot.dropper)
 
 
     def initialize(self):
-        robot.dropper.slowDrop()
+        robot.dropper.returnObject()
 
 
     def end(self):

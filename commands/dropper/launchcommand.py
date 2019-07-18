@@ -2,16 +2,16 @@ from wpilib.command.command import Command
 
 import robot
 
-class DropCommand(Command):
+class LaunchCommand(Command):
 
     def __init__(self):
-        super().__init__('Drop')
+        super().__init__('Launch')
 
         self.requires(robot.dropper)
 
 
     def initialize(self):
-        robot.dropper.slowDrop()
+        robot.dropper.shoot()
 
 
     def end(self):
