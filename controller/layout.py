@@ -1,6 +1,8 @@
 from .logitechdualshock import LogitechDualShock
 from . import logicalaxes
 
+from commands.intake.intakecommand import IntakeCommand
+
 from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
@@ -24,6 +26,8 @@ def init():
     logicalaxes.driveX = driveController.LeftX
     logicalaxes.driveY = driveController.LeftY
     logicalaxes.driveRotate = driveController.RightX
+
+    driveController.A.toggleWhenPressed(IntakeCommand())
 
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
