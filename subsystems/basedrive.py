@@ -57,7 +57,7 @@ class BaseDrive(DebuggableSubsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.setUseEncoders()
+        self.setUseEncoders(False)
         self.maxSpeed = Config('DriveTrain/maxSpeed')
         self.speedLimit = Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
@@ -132,12 +132,16 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
+                print('1 ' + str(speed))
+                motor.set(ControlMode.Velocity, speed)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+                print('2 ' + str(speed * self.maxPercentVBus))
 
+#ControlMode.Velocity, speed * self.speedLimit
+#ControlMode.PercentOutput, speed * self.maxPercentVBus
 
     def setPositions(self, positions):
         '''
