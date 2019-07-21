@@ -104,16 +104,18 @@ class Climber(DebuggableSubsystem):
         frontDiff = self.rightRackMotor.getSelectedSensorPosition(0) - self.leftRackMotor.getSelectedSensorPosition(0)
         diff = frontAvg - self.rearRackMotor.getSelectedSensorPosition(0)
 
-        print("LEFTRACK: "+str(self.leftRackMotor.getSelectedSensorPosition(0)))
-        print("rightRack: "+str(self.rightRackMotor.getSelectedSensorPosition(0)))
-        print('REAR RACK: ' + str(self.rearRackMotor.getSelectedSensorPosition(0)))
-        print("frontAvg: "+str(frontAvg))
-        print("frontDiff: "+str(frontDiff))
-        print("DIFF: "+str(diff))
+        #print("LEFTRACK: "+str(self.leftRackMotor.getSelectedSensorPosition(0)))
+        #print("rightRack: "+str(self.rightRackMotor.getSelectedSensorPosition(0)))
+        #print('REAR RACK: ' + str(self.rearRackMotor.getSelectedSensorPosition(0)))
+        #print("frontAvg: "+str(frontAvg))
+        #print("frontDiff: "+str(frontDiff))
+        #print("DIFF: "+str(diff))
 
+        #ORIGINAL COPY
         self.extendRightEnc(frontDiff - diff)
         self.extendLeftEnc(frontDiff - diff)
         self.extendRearEnc(diff)
+
         return self.getRightLimit() and self.getLeftLimit() and self.getRearLimit()
 
 
@@ -160,7 +162,7 @@ class Climber(DebuggableSubsystem):
     def extendRear(self):
         atLimit = self.getRearLimit()
         if not atLimit:
-            self.rearRackMotor.set(0.95)
+            self.rearRackMotor.set(0.97)
         else:
             self.stopRearRack()
 
