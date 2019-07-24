@@ -12,15 +12,31 @@ class MaintainPositionCommand(Command):
 
     def initialize(self):
         self._finished = False
-        self.startPos = robot.climber.getAvgPosition()
+
+        self.startLeft = robot.climber.getLeftPos()
+        self.startRight = robot.climber.getRightPos()
+        self.startRear = robot.climber.getRearPos()
 
 
     def execute(self):
-        if robot.climber.getAvgPosition() < self.startPos:
-            robot.climber.popAll()
+        print('Running execute')
+        if robot.climber.checkLeft(self.startLeft):
+            robot.climber.popLeft()
+            print('raise left')
+        else:
+            robot.climber.stopLeftRack()
 
-        if robot.climber.getAvgPosition() >= self.startPos:
-            robot.climber.stopRacks()
+        if robot.climber.checkRight(self.startRight):
+            robot.climber.popRight()
+            print('raise right')
+        else:
+            robot.climber.stopRightRack()
+
+        if robot.climber.checkRear(self.startRear):
+            robot.climber.popRear()
+            print('raise rear')
+        else:
+            robot.climber.stopRearRack()
 
         robot.climber.creepBackward()
 

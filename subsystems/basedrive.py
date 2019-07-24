@@ -168,7 +168,7 @@ class BaseDrive(DebuggableSubsystem):
 
             else:
                 for motor, speed in zip(self.activeMotors, speeds):
-                    motor.set(speed * 0.7)
+                    motor.set(speed * 0.6)
 
             #for motor, speed in zip(self.activeMotors, speeds):
                 #print(str('speed' + str(self.chosenSpeed)))

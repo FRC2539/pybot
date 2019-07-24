@@ -41,6 +41,18 @@ class Climber(DebuggableSubsystem):
 
         self.resetEncoders()
 
+    def getLeftPos(self):
+        return self.leftRackMotor.get()
+
+
+    def getRightPos(self):
+        return self.rightRackMotor.get()
+
+
+    def getRearPos(self):
+        return self.rearRackMotor.get()
+
+
     def getRightLimit(self):
         return not self.rightLimit.get()
 
@@ -138,7 +150,7 @@ class Climber(DebuggableSubsystem):
     def popLeft(self):
         atLimit = self.getLeftLimit()
         if not atLimit:
-            self.leftRackMotor.set(0.92)
+            self.leftRackMotor.set(0.95)
         else:
             self.stopLeftRack()
 
@@ -146,7 +158,7 @@ class Climber(DebuggableSubsystem):
     def popRight(self):
         atLimit = self.getRightLimit()
         if not atLimit:
-            self.rightRackMotor.set(0.92)
+            self.rightRackMotor.set(0.95)
         else:
             self.stopRightRack()
 
@@ -154,10 +166,39 @@ class Climber(DebuggableSubsystem):
     def popRear(self):
         atLimit = self.getRearLimit()
         if not atLimit:
-            self.rearRackMotor.set(0.915)
+            self.rearRackMotor.set(0.92)
         else:
             self.stopRearRack()
 
+
+    def checkLeft(self, stopPos):
+        atLimit = self.getRearLimit()
+        if not atLimit:
+            pos = self.leftRackMotor.get()
+            if pos >= stopPos:
+                return False
+            else:
+                return True
+
+
+    def checkRight(self, stopPos):
+        atLimit = self.getRearLimit()
+        if not atLimit:
+            pos = self.leftRackMotor.get()
+            if pos >= stopPos:
+                return False
+            else:
+                return True
+
+
+    def checkRear(self, stopPos):
+        atLimit = self.getRearLimit()
+        if not atLimit:
+            pos = self.leftRackMotor.get()
+            if pos >= stopPos:
+                return False
+            else:
+                return True
 
     def extendRear(self):
         atLimit = self.getRearLimit()
