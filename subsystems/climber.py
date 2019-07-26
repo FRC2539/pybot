@@ -42,15 +42,15 @@ class Climber(DebuggableSubsystem):
         self.resetEncoders()
 
     def getLeftPos(self):
-        return self.leftRackMotor.get()
+        return self.leftRackMotor.getSelectedSensorPosition(0)
 
 
     def getRightPos(self):
-        return self.rightRackMotor.get()
+        return self.rightRackMotor.getSelectedSensorPosition(0)
 
 
     def getRearPos(self):
-        return self.rearRackMotor.get()
+        return self.rearRackMotor.getSelectedSensorPosition(0)
 
 
     def getRightLimit(self):
@@ -79,9 +79,6 @@ class Climber(DebuggableSubsystem):
         self.rightRackMotor.set(0)
         self.leftRackMotor.set(0)
         self.rearRackMotor.set(0)
-        print(str(self.rightRackMotor.getQuadraturePosition()))
-        print(str(self.leftRackMotor.getQuadraturePosition()))
-        print(str(self.rearRackMotor.getQuadraturePosition()))
 
 
     def stopRightRack(self):
@@ -150,41 +147,51 @@ class Climber(DebuggableSubsystem):
     def popLeft(self):
         atLimit = self.getLeftLimit()
         if not atLimit:
-            self.leftRackMotor.set(0.95)
+            self.leftRackMotor.set(0.8)
         else:
             self.stopLeftRack()
 
+        print('left pos ' + str(self.leftRackMotor.getSelectedSensorPosition(0)))
+
+        return atLimit
 
     def popRight(self):
         atLimit = self.getRightLimit()
         if not atLimit:
-            self.rightRackMotor.set(0.95)
+            self.rightRackMotor.set(0.8)
         else:
             self.stopRightRack()
 
+        print('right pos ' + str(self.rightRackMotor.getSelectedSensorPosition(0)))
+
+        return atLimit
 
     def popRear(self):
         atLimit = self.getRearLimit()
         if not atLimit:
-            self.rearRackMotor.set(0.92)
+            self.rearRackMotor.set(0.8)
         else:
             self.stopRearRack()
 
+        print('rear pos ' + str(self.rearRackMotor.getSelectedSensorPosition(0)))
+
+        return atLimit
 
     def checkLeft(self, stopPos):
-        atLimit = self.getRearLimit()
+        atLimit = self.getLeftLimit()
         if not atLimit:
-            pos = self.leftRackMotor.get()
+            pos = self.leftRackMotor.getSelectedSensorPosition(0)
             if pos >= stopPos:
                 return False
             else:
+                print('NEED TO RUN LEFT')
                 return True
 
 
     def checkRight(self, stopPos):
-        atLimit = self.getRearLimit()
+        atLimit = self.getRightLimit()
         if not atLimit:
-            pos = self.leftRackMotor.get()
+            pos = self.rightRackMotor.getSelectedSensorPosition(0)
             if pos >= stopPos:
                 return False
             else:
@@ -194,7 +201,7 @@ class Climber(DebuggableSubsystem):
     def checkRear(self, stopPos):
         atLimit = self.getRearLimit()
         if not atLimit:
-            pos = self.leftRackMotor.get()
+            pos = self.rearRackMotor.getSelectedSensorPosition(0)
             if pos >= stopPos:
                 return False
             else:

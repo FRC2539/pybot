@@ -25,7 +25,7 @@ from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gototapecommandgroup import GoToTapeCommandGroup
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
-from commands.drivetrain.togglespeedcommand import ToggleSpeedCommand
+from commands.drivetrain.boostcommand import BoostCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -52,6 +52,7 @@ from commands.climber.l2climbcommandgroup import L2ClimbCommandGroup
 from commands.climber.doubleclimbcommand import DoubleClimbCommand
 from commands.climber.holdupcommandgroup import HoldUpCommandGroup
 
+from commands.lights.policechasecommandgroup import PoliceChaseCommandGroup
 from commands.lights.orangelightscommand import OrangeLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
@@ -151,7 +152,9 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.DPadUp.whenPressed(HoldUpCommandGroup())
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
 
-            self.controllerOne.LeftJoystick.whenPressed(ToggleSpeedCommand())
+            self.controllerOne.LeftJoystick.toggleWhenPressed(BoostCommand())
+            self.controllerOne.LeftJoystick.toggleWhenPressed(PoliceChaseCommandGroup())
+
             self.controllerOne.DPadLeft.whileHeld(AllRetractCommand())
 
             self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
@@ -180,6 +183,6 @@ class Layout(DebuggableSubsystem):
             self.controllerTwo.DPadUp.whenPressed(ElevatorGoToLevelCommand('cargoBalls'))
             self.controllerTwo.DPadDown.whenPressed(ElevatorGoToLevelCommand('lowBalls'))
 
-            #self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
+            self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
 
             self.controllerTwo.A.toggleWhenPressed(IntakeCommand())

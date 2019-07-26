@@ -78,6 +78,7 @@ class BaseDrive(DebuggableSubsystem):
         self.speedLimit = 1#Config('DriveTrain/normalSpeed', 2000)
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
+        self.boost = False
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
@@ -111,12 +112,6 @@ class BaseDrive(DebuggableSubsystem):
     def move(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
 
-        self.boost = Config('DriveTrain/boost', False)
-
-        print(str(self.boost))
-
-        print('start move')
-
         '''
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
@@ -146,7 +141,6 @@ class BaseDrive(DebuggableSubsystem):
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
 
-        print(str(speeds))
 
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
@@ -163,7 +157,6 @@ class BaseDrive(DebuggableSubsystem):
 
             if self.boost:
                 for motor, speed in zip(self.activeMotors, speeds):
-
                     motor.set(speed * 1.2)
 
             else:
@@ -194,8 +187,6 @@ class BaseDrive(DebuggableSubsystem):
 
             self.chosenSpeed = self.driveSpeedMult
             self.driveMode = True
-
-        print(str(self.driveMode))
 
 
     def movePer(self, left, right):
