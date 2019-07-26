@@ -1,3 +1,5 @@
+##This branch of DeepSpace was made with the goal of having a cleaner codebase in order to make things easier to read and to resolve a watchdog error.
+
 Krypton Cougars Robotics
 =====
 We are the [Krypton Cougars](http://www.team2539.com), [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) team 2539 from Palmyra, PA.
