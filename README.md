@@ -1,4 +1,4 @@
-##This branch of DeepSpace was made with the goal of having a cleaner codebase in order to make things easier to read and to resolve a watchdog error.
+## This branch of DeepSpace was made with the goal of having a cleaner codebase in order to make things easier to read and to resolve a watchdog error.
 
 Krypton Cougars Robotics
 =====
