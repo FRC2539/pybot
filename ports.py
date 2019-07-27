@@ -37,5 +37,3 @@ climber.driveMotorID = 9
 climber.rearRackLimit = 2 #DIO
 climber.leftRackLimit = 0 #DIO
 climber.rightRackLimit = 1 #DIO
-
-togglelayout = PortsList()

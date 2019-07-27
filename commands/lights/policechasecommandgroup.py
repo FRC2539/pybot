@@ -13,4 +13,3 @@ class PoliceChaseCommandGroup(CommandGroup):
         def lights(self):
             self.addSequential(BlueLightsCommand(), 1)
             self.addSequential(RedLightsCommand(), 1)
-        # Add commands here with self.addSequential() and self.addParallel()
