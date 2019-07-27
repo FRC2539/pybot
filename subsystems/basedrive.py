@@ -159,12 +159,12 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIAccum(0)
 
-            speeds[1] = speeds[1] * -1.0
+            speeds[1] = speeds[1] * 1.0
 
             if self.boost:
                 for motor, speed in zip(self.activeMotors, speeds):
 
-                    motor.set(speed * 1.2)
+                    motor.set(speed * 1.3)#.3
 
             else:
                 for motor, speed in zip(self.activeMotors, speeds):

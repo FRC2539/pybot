@@ -28,11 +28,11 @@ class LogitechDualShock(GenericController):
 
     namedAxes = {
         'LeftX': 0,
-        'LeftY': 1,
-        'RightX': 2,
+        'LeftY': 2,
+        'RightX': 1,
         'RightY': 3,
         'DPadX': 4,
         'DPadY': 5
     }
 
-    invertedAxes = ['LeftY', 'RightY', 'DPadY']
+    invertedAxes = ['RightX', 'RightY', 'DPadY']

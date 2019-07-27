@@ -91,7 +91,9 @@ class Layout(DebuggableSubsystem):
 
             logicalaxes.driveRotate = self.joystickTwo.X
 
-            self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup())
+            #the driver stuff
+
+            self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup(1))
             self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
 
             self.joystickOne.Misc.whenPressed(AllRetractCommand())
@@ -116,7 +118,7 @@ class Layout(DebuggableSubsystem):
 
             self.joystickTwo.RightRightTop.whenPressed(ResetCommand())
 
-            # The controller for non-driving subsystems of the robot
+            # The controller for non-driving subsystems of the robot (the operator stuff)
             self.controllerOne = LogitechDualShock(2)
 
             self.controllerOne.Back.whenPressed(ResetCommand())
@@ -140,7 +142,7 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveY = self.controllerOne.RightX
             logicalaxes.driveRotate = self.controllerOne.LeftY
 
-            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommand())
+            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
             self.controllerOne.B.whenPressed(EjectCommand())

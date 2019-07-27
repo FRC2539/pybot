@@ -8,6 +8,7 @@ from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
+from commands.drivetrain.movecommand import MoveCommand
 
 from commands.resetcommand import ResetCommand
 
@@ -16,6 +17,9 @@ class GoToTapeCommandGroup(CommandGroup):
 
     def __init__(self, pipeline=1):
         super().__init__('Go To Tape')
+
+        self.addSequential(GoToTapeCommand())
+        self.addSequential(MoveCommand(12))
 
         '''
 
