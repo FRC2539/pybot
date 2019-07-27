@@ -17,6 +17,8 @@ class MaintainPositionCommand(Command):
         self.startRight = robot.climber.getRightPos()
         self.startRear = robot.climber.getRearPos()
 
+        print('l ' + str(self.startLeft) + '\n r ' + str(self.startRight) + '\n rear ' + str(self.startRear))
+
 
     def execute(self):
         print('Running execute')
