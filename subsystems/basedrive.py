@@ -4,10 +4,12 @@ import math
 
 import subsystems
 
-from networktables import NetworkTables
 from ctre import ControlMode, NeutralMode, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType, ConfigParameter, IdleMode
 from rev._impl import CANEncoder
+
+from networktables import NetworkTables
+from networktables import NetworkTables as nt
 
 from navx.ahrs import AHRS
 
@@ -54,6 +56,8 @@ class BaseDrive(DebuggableSubsystem):
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
+
+        self.nt = nt.getTable('DriveTrain')
 
         self.driveMode = True
 
@@ -157,11 +161,11 @@ class BaseDrive(DebuggableSubsystem):
 
             if self.boost:
                 for motor, speed in zip(self.activeMotors, speeds):
-                    motor.set(speed * 1.3)
+                    motor.set(speed * 1.1)
 
             else:
                 for motor, speed in zip(self.activeMotors, speeds):
-                    motor.set(speed * 0.6)
+                    motor.set(speed * 0.7)
 
             #for motor, speed in zip(self.activeMotors, speeds):
                 #print(str('speed' + str(self.chosenSpeed)))
@@ -176,6 +180,16 @@ class BaseDrive(DebuggableSubsystem):
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
+
+    def toggleBoost(self):
+        self.boost = not self.boost
+
+        if not self.boost:
+            self.nt.putBoolean('boost', True)
+
+        else:
+            self.nt.putBoolean('boost', False)
+
 
     def toggleSpeed(self):
         if self.driveMode:

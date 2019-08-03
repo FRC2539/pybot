@@ -11,5 +11,5 @@ class PoliceChaseCommandGroup(CommandGroup):
 
         @fc.WHILE(lambda: True)
         def lights(self):
-            self.addSequential(BlueLightsCommand(), 1)
-            self.addSequential(RedLightsCommand(), 1)
+            self.addSequential(BlueLightsCommand(), 0.5)
+            self.addSequential(RedLightsCommand(), 0.5)

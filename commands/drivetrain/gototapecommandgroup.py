@@ -19,7 +19,6 @@ class GoToTapeCommandGroup(CommandGroup):
         super().__init__('Go To Tape')
 
         self.addSequential(GoToTapeCommand())
-        self.addSequential(MoveCommand(12))
 
         '''
 

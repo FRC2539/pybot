@@ -2,6 +2,8 @@ from wpilib.command.command import Command
 from custom.config import Config
 
 from networktables import NetworkTables as nt
+from controller.logicalaxes import registerAxis
+from commands.drivetrain.drivecommand import DriveCommand
 
 import robot
 
@@ -15,10 +17,11 @@ class BoostCommand(Command):
 
 
     def initialize(self):
-        robot.drivetrain.boost = True
-        self.nt.putBoolean('boost', True)
+        robot.drivetrain.toggleBoost()
 
 
     def end(self):
-        robot.drivetrain.boost = False
-        self.nt.putBoolean('boost', False)
+        DriveCommand(robot.drivetrain.speedLimit)
+        registerAxis('driveX')
+        registerAxis('driveY')
+        registerAxis('driveRotate')

@@ -61,17 +61,17 @@ class GoToTapeCommand(Command):
             print('OG X ' + str(oX))
             print('OG Y ' + str(oY))
 
-            self.y = ((oY * 6) / 100) * -1
-            self.x = (oX * 3) / 110
+            self.y = ((oY * 8) / 60) * -1
+            self.x = (oX * 4) / 100
 
             if abs(oX) < 15:
                 self.x = math.copysign(self.x * 0.8, self.x)
 
             if abs(oX) < 4.5:
-                self.x = math.copysign(self.x * 0.5, self.x)
+                self.x = math.copysign(self.x * 0.6, self.x)
 
             if abs(oX) < 2.5:
-                self.x = math.copysign(self.x * 0.3, self.x)
+                self.x = math.copysign(self.x * 0.4, self.x)
 
             if abs(oX) < 0.5:
                 self.x = 0

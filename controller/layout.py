@@ -154,7 +154,7 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.DPadUp.whenPressed(HoldUpCommandGroup())
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
 
-            self.controllerOne.LeftJoystick.toggleWhenPressed(BoostCommand())
+            self.controllerOne.LeftJoystick.whenPressed(BoostCommand())
             self.controllerOne.LeftJoystick.toggleWhenPressed(PoliceChaseCommandGroup())
 
             self.controllerOne.DPadLeft.whileHeld(AllRetractCommand())
