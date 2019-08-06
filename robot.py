@@ -17,6 +17,7 @@ from subsystems.lights import Lights as lights
 from subsystems.elevator import Elevator as elevator
 from subsystems.intake import Intake as intake
 from subsystems.climber import Climber as climber
+from subsystems.hatch import Hatch as hatch
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

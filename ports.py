@@ -1,4 +1,5 @@
 
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -23,7 +24,7 @@ lights.lightControllerID = 0 #PWM
 elevator = PortsList()
 elevator.motorID = 5
 elevator.lowerLimit = 3 #DIO
-elevator.upperLimit = 4
+elevator.upperLimit = 4 #DIO
 
 intake = PortsList()
 intake.motorID = 10
@@ -37,3 +38,8 @@ climber.driveMotorID = 9
 climber.rearRackLimit = 2 #DIO
 climber.leftRackLimit = 0 #DIO
 climber.rightRackLimit = 1 #DIO
+
+hatch = PortsList()
+hatch.motorID = 11
+hatch.rightLimitSwitch = 5 #PWM
+hatch.leftLimitSwitch = 6 #PWM

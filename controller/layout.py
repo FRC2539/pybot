@@ -31,6 +31,10 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 from commands.intake.slowejectcommand import SlowEjectCommand
 
+from commands.hatch.hatchintakecommand import HatchIntakeCommand
+from commands.hatch.hatchejectcommand import HatchEjectCommand
+from commands.hatch.slowejectcommand import SlowEjectCommand
+
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
 from commands.elevator.elevatorgotolevelcommand import ElevatorGoToLevelCommand
@@ -94,6 +98,8 @@ class Layout(DebuggableSubsystem):
 
             #the driver stuff
 
+            # NOTE: NOT UP TO DATE. USE CONTROLLERS.
+
             self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup(1))
             self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
 
@@ -147,6 +153,10 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
             self.controllerOne.B.whenPressed(EjectCommand())
+            self.controllerOne.Y.whenPressed(HatchEjectCommand())
+
+            self.controllerOne.X.toggleWhenPressed(HatchIntakeCommand())
+            self.controllerOne.A.toggleWhenPressed(IntakeCommand())
 
             self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
             self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())
@@ -161,14 +171,9 @@ class Layout(DebuggableSubsystem):
 
             self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
 
-            self.controllerOne.X.whileHeld(ForceLowerCommand())
-
             self.controllerOne.RightBumper.whileHeld(ElevateCommand())
 
-            self.controllerOne.Y.whenPressed(DeelevateCommand())
             self.controllerOne.RightTrigger.whileHeld(DeelevateCommand())
-
-            self.controllerOne.A.toggleWhenPressed(IntakeCommand())
 
             # The self.controllerTwo for non-driving subsystems of the robot (Operator)
             self.controllerTwo = LogitechDualShock(1)
@@ -176,7 +181,6 @@ class Layout(DebuggableSubsystem):
             self.controllerTwo.Back.whenPressed(ResetCommand())
             self.controllerTwo.B.whenPressed(DeelevateCommand()) # Pressing it sends it down all the way. (B on 2019 Scoring bot.)
 
-            self.controllerTwo.Y.whenPressed(DeelevateCommand())
             self.controllerTwo.RightTrigger.whileHeld(DeelevateCommand())
             self.controllerTwo.RightBumper.whileHeld(ElevateCommand())
 
@@ -188,3 +192,4 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.DPadRight.whileHeld(FrontRetractCommand())
 
             self.controllerTwo.A.toggleWhenPressed(IntakeCommand())
+            self.controllerTwo.B.toggleWhenPressed(HatchIntakeCommand())

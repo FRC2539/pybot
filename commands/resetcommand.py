@@ -21,3 +21,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.intake)
         self.requires(robot.climber)
         self.requires(robot.lights)
+        self.requires(robot.hatch)

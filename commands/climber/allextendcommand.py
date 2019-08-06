@@ -15,6 +15,8 @@ class AllExtendCommand(Command):
         robot.climber.resetEncoders()
         robot.climber.creepForward()
 
+        robot.climber.startRaise()
+
 
     def execute(self):
         #encoder disable
