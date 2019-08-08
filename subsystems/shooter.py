@@ -85,6 +85,7 @@ class Shooter(DebuggableSubsystem):
         if self.vspeed + 0.1 <= 1:
             self.vspeed += 0.1
             self.displayIncreaseSpeed()
+            print(str(self.vspeed))
         else:
             driverhud.showAlert('Unable to increase speed')
 
@@ -92,6 +93,7 @@ class Shooter(DebuggableSubsystem):
         if self.vspeed - 0.1 >= .1:
             self.vspeed -= 0.1
             self.displayDecreaseSpeed()
+            print(str(self.vspeed))
         else:
             driverhud.showAlert('Unable to decrease speed')
 

@@ -19,6 +19,8 @@ from commands.shooter.vspeedshootcommandgroup import VariedSpeedShootCommandGrou
 from commands.shooter.increasefirespeedcommand import IncreaseFireSpeedCommand
 from commands.shooter.decreasefirespeedcommand import DecreaseFireSpeedCommand
 from commands.shooter.rapidfirecommand import RapidFireCommand
+from commands.elevator.beltraisecommand import BeltRaiseCommand
+from commands.elevator.beltlowercommand import BeltLowerCommand
 
 
 def init():
@@ -48,6 +50,10 @@ def init():
     driveController.DPadUp.whenPressed(IncreaseFireSpeedCommand())
     driveController.DPadDown.whenPressed(DecreaseFireSpeedCommand())
     driveController.X.whileHeld(RapidFireCommand())
+    driveController.DPadRight.whileHeld(BeltRaiseCommand())
+    driveController.B.whileHeld(ShootCommand())
+    driveController.DPadLeft.whileHeld(BeltLowerCommand())
+
 
     #driveController.DPadLeft.toggleWhenPressed(SlowShootCommand())
 

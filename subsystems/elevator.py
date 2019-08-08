@@ -25,6 +25,9 @@ class Elevator(DebuggableSubsystem):
         self.elevatorBelt.set(speed)
         self.elevatorWheel.set(ControlMode.PercentOutput, speed)
 
+    def singleSet(self, speed):
+        self.elevatorBelt.set(speed)
+
     def slowElevate(self):
         self.set(0.5)
 
@@ -32,6 +35,12 @@ class Elevator(DebuggableSubsystem):
 
     def fastElevate(self):
         self.set(1)
+
+    def singleRaise(self):
+        self.singleSet(1)
+
+    def singleLower(self):
+        self.singleSet(-1)
 
     def slowLower(self):
         self.set(-0.5)
