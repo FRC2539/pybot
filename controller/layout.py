@@ -20,7 +20,6 @@ from commands.lrautocommandgroup import lrAutoCommandGroup
 from commands.rrsecondautocommandgroup import rrSecondAutoCommandGroup
 from commands.lrsecondautocommandgroup import lrSecondAutoCommandGroup
 
-
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
 from commands.drivetrain.holonomicmovecommand import HolonomicMoveCommand
@@ -30,6 +29,8 @@ from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gototapecommandgroup import GoToTapeCommandGroup
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
+from commands.drivetrain.gotocargoshipcommand import GoToCargoshipCommand
+from commands.drivetrain.gotocargoshipcommandgroup import GoToCargoshipCommandGroup
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -42,6 +43,8 @@ from commands.hatch.slowejectcommand import SlowEjectCommand
 from commands.elevator.elevatecommand import ElevateCommand
 from commands.elevator.deelevatecommand import DeelevateCommand
 from commands.elevator.panelejectcommand import PanelEjectCommand
+from commands.elevator.resetelevatorcommand import ResetElevatorCommand
+from commands.elevator.elevatorgotolevelcommand import ElevatorGoToLevelCommand
 
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
@@ -111,10 +114,12 @@ class Layout(DebuggableSubsystem):
 
             logicalaxes.driveRotate = self.joystickTwo.X
 
-            self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup())
-            self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
+
+            #self.joystickOne.trigger.whileHeld(GoToTapeCommandGroup())
+            #self.joystickOne.bottomThumb.whileHeld(GoPastTapeCommand())
 
             self.joystickOne.leftThumb.whenPressed(SlowEjectCommand())
+            self.joystickOne.rightThumb.whileHeld(GoToCargoshipCommandGroup())
 
             self.joystickOne.Misc.whileHeld(RearRetractCommand())
             self.joystickOne.RightRightTop.whileHeld(AllRetractCommand())
@@ -125,7 +130,7 @@ class Layout(DebuggableSubsystem):
             self.joystickOne.LeftRightTop.whenPressed(lrSecondAutoCommandGroup())
             self.joystickOne.RightLeftTop.whenPressed(rrSecondAutoCommandGroup())
 
-            self.joystickTwo.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
+            #self.joystickTwo.bottomThumb.whenPressed(ToggleFieldOrientationCommand())
             self.joystickTwo.leftThumb.whenPressed(ZeroGyroCommand())
 
             self.joystickTwo.rightThumb.whenPressed(HatchEjectCommand())
@@ -152,7 +157,8 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.X.whileHeld(DeelevateCommand())
             self.controllerOne.Y.whileHeld(ElevateCommand())
 
-            self.controllerOne.DPadUp.whenPressed(SetArmCommandGroup(70.0, 20.0))
+            self.controllerOne.DPadRight.whenPressed(ResetElevatorCommand())
+            self.controllerOne.DPadUp.whenPressed(ElevatorGoToLevelCommand('cargoBalls'))
             self.controllerOne.DPadDown.whenPressed(SetArmCommandGroup(11.0))
 
             self.controllerOne.RightJoystick.toggleWhenPressed(IntakeCommand())
@@ -172,8 +178,9 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
             self.controllerOne.Y.whenPressed(ZeroGyroCommand())
-            self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
+            #self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
             self.controllerOne.RightTrigger.whenPressed(EjectCommand())
+            self.controllerOne.B.whenPressed(HatchEjectCommand())
 
             self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
             self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())

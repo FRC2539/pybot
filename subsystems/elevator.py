@@ -92,27 +92,12 @@ class Elevator(DebuggableSubsystem):
     def resetEncoder(self):
         self.encoder.setPosition(0.0)
 
+    def zeroEncoder(self):
+        self.motor.setEncPosition(0)
 
-    def setPosition(self, target, upOrDown):
-        position = self.getPosition()
-
-        print("elevator position target: " + str(target))
-
-        if target > self.upperLimit or target < 0.0:
-            self.stop()
-            print('Illegal elevator target position')
-            return True
-
-        elif upOrDown == 'up' and position < target:
-            return self.up()
-
-        elif upOrDown == 'down' and position > target:
-            return self.down()
-
-        else:
-            self.stop()
-            return True
-
+    def setPosition(self, target):
+        currentPosition = self.getPosition()
+        self.encoder.setPosition(target)
 
     def getPosition(self):
         return self.encoder.getPosition()
@@ -122,14 +107,14 @@ class Elevator(DebuggableSubsystem):
         return (self.getPosition() <= 0.0) or (not self.lowerLimit.get())
 
 
-    def goToLevel(self, level, upOrDown):
-        return self.setPosition(float(self.levels[level]), upOrDown)
+    def goToLevel(self, level):
+        return self.encoder.setPosition(float(self.levels[level]))
 
 
     def goToFloor(self):
         self.goToLevel('floor')
 
 
-    def panelEject(self):
-        if not (self.getPosition() < 0.1):
-            self.setPosition(float(self.getPosition()) - 0.1)
+    #def panelEject(self):
+        #if not (self.getPosition() < 0.1):
+            #self.setPosition(float(self.getPosition()) - 0.1)

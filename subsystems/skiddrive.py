@@ -6,7 +6,6 @@ import ports
 class SkidDrive(BaseDrive):
     '''A drive base where all wheels on each side move together.'''
 
-
     def _configureMotors(self):
 
         '''Only the front motors are active in a skid system.'''
