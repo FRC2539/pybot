@@ -103,7 +103,7 @@ class Layout(DebuggableSubsystem):
     def init(self):
         from custom.config import Config
 
-        selectedLayout = 0#Config('/DriveTrain/Layout', 0)
+        selectedLayout = 1#Config('/DriveTrain/Layout', 0)
 
         if selectedLayout == 0:
             self.joystickOne = ThrustmasterJoystick(0)
@@ -174,7 +174,7 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveY = self.controllerOne.LeftY
             logicalaxes.driveRotate = self.controllerOne.RightX
 
-            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommand())
+            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
             self.controllerOne.Y.whenPressed(ZeroGyroCommand())

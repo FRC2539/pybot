@@ -1,4 +1,3 @@
-
 from wpilib.command import CommandGroup
 from wpilib.command import PrintCommand
 from wpilib.driverstation import DriverStation
@@ -72,6 +71,8 @@ class AutonomousCommandGroup(CommandGroup):
         print('ac: '+str(Config('Autonomous/autoModeSelect', 'None')))
         print('dt: '+str(Config('DriveTrain/ticksPerInch')))
 
+        '''
+        edited for tank
 
         #Zero the gyro before any auto starts.
         @fc.IF(lambda: True)
@@ -359,3 +360,5 @@ class AutonomousCommandGroup(CommandGroup):
         @fc.IF(lambda: True)
         def setPipeline(self):
             self.addSequential(SetPipelineCommand(0))
+
+        '''

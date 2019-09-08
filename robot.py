@@ -19,6 +19,7 @@ from subsystems.intake import Intake as intake
 from subsystems.arm import Arm as arm
 from subsystems.climber import Climber as climber
 from subsystems.hatch import Hatch as hatch
+from subsystems.limelighttests import LimelightTests as limelighttests
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

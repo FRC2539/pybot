@@ -97,6 +97,8 @@ class Elevator(DebuggableSubsystem):
 
     def setPosition(self, target):
         currentPosition = self.getPosition()
+        print('currentPosition = ' + str(currentPosition))
+        print('Target = ' + str(target))
         self.encoder.setPosition(target)
 
     def getPosition(self):
@@ -108,6 +110,7 @@ class Elevator(DebuggableSubsystem):
 
 
     def goToLevel(self, level):
+        print('going to level')
         return self.encoder.setPosition(float(self.levels[level]))
 
 

@@ -97,8 +97,8 @@ class GoToTapeCommand(Command):
                 elif oY > 0.0 and self.y < 0.3:
                     self.y = 0.3
 
-                if oY <= 4.0:
-                    self.rotate = self.rotate * 0.5
+                if oY <= 7.0: # Was 4.0
+                    self.rotate = self.rotate * 2 # Was 0.5
                 '''
                 if oY <= 2.0:
                     self.y = 0.1

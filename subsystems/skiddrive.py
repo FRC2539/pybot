@@ -5,6 +5,10 @@ import ports
 
 class SkidDrive(BaseDrive):
     '''A drive base where all wheels on each side move together.'''
+    def __init__(self, name):
+        super().__init__(name)
+        self.isFieldOriented = False
+
 
     def _configureMotors(self):
 
@@ -22,6 +26,14 @@ class SkidDrive(BaseDrive):
         for motor in self.activeMotors:
             motor.setSensorPhase(True)
 
+    def setUseFieldOrientation(self, isFieldOriented=True):
+        pass
+
+    def toggleFieldOrientation(self):
+        pass
+
+    def strafeInchesToTicks(self, distance):
+        pass
 
     def _calculateSpeeds(self, x, y, rotate):
         return [y + rotate, -y + rotate]
