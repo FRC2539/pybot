@@ -16,12 +16,16 @@ class BoostCommand(Command):
         self.nt = nt.getTable('DriveTrain')
 
 
-    def initialize(self):
-        robot.drivetrain.toggleBoost()
+    #def initialize(self):
+        #robot.drivetrain.toggleBoost()
 
+    #def execute(self):
+        #robot.drivetrain.toggleBoost()
+        #self._finished = True
 
-    def end(self):
-        DriveCommand(robot.drivetrain.speedLimit)
-        registerAxis('driveX')
-        registerAxis('driveY')
-        registerAxis('driveRotate')
+    #def end(self):
+        #robot.drivetrain.toggleBoost()
+        #DriveCommand(robot.drivetrain.speedLimit)
+        #registerAxis('driveX')
+        #registerAxis('driveY')
+        #registerAxis('driveRotate')

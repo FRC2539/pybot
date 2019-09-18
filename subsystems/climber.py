@@ -237,7 +237,7 @@ class Climber(DebuggableSubsystem):
     def extendRear(self):
         atLimit = self.getRearLimit()
         if not atLimit:
-            self.rearRackMotor.set(0.97)
+            self.rearRackMotor.set(0.85)
         else:
             self.stopRearRack()
 

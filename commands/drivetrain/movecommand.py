@@ -24,7 +24,7 @@ class MoveCommand(Command):
 
     def _initialize(self):
         super()._initialize()
-        self.precision = robot.drivetrain.inchesToTicks(1)
+        self.precision = robot.drivetrain.inchesToRotations(1)
 
 
     def initialize(self):
@@ -32,8 +32,9 @@ class MoveCommand(Command):
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
-        offset = robot.drivetrain.inchesToTicks(self.distance)
+        offset = robot.drivetrain.inchesToRotations(self.distance)
         sign = 1
+        print('OLD POSITIONS ' + str(robot.drivetrain.getPositions()))
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset * sign)
             sign *= -1
@@ -42,7 +43,12 @@ class MoveCommand(Command):
         #print('Starting: ' + str(robot.drivetrain.getPositions()))
 
         robot.drivetrain.setPositions(self.targetPositions)
+        #print('\nSET POSITIONS')
 
+        #if val:
+            #print('\nTRUE\n')
+        #else:
+            #print('\nFALSE\n')
 
     def execute(self):
         #print('Current: ' + str(robot.drivetrain.getPositions()))

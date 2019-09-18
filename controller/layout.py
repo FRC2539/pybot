@@ -26,6 +26,8 @@ from commands.drivetrain.gototapecommandgroup import GoToTapeCommandGroup
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
 from commands.drivetrain.boostcommand import BoostCommand
+from commands.drivetrain.getpositioncommand import GetPositionCommand
+from commands.drivetrain.moveonefootcommand import MoveOneFootCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -175,6 +177,8 @@ class Layout(DebuggableSubsystem):
 
             self.controllerOne.RightTrigger.whileHeld(DeelevateCommand())
 
+            #self.controllerOne.RightJoystick.whileHeld(MoveOneFootCommand())
+
             # The self.controllerTwo for non-driving subsystems of the robot (Operator)
             self.controllerTwo = LogitechDualShock(1)
 
@@ -193,3 +197,5 @@ class Layout(DebuggableSubsystem):
 
             self.controllerTwo.A.toggleWhenPressed(IntakeCommand())
             self.controllerTwo.B.toggleWhenPressed(HatchIntakeCommand())
+
+            self.controllerTwo.Y.whileHeld(GetPositionCommand())

@@ -6,7 +6,6 @@ import subsystems
 
 from ctre import ControlMode, NeutralMode, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType, ConfigParameter, IdleMode
-from rev._impl import CANEncoder
 
 from networktables import NetworkTables
 from networktables import NetworkTables as nt
@@ -39,8 +38,10 @@ class BaseDrive(DebuggableSubsystem):
                 CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
             ]
+            print("configured 4 motors separate")
 
         except AttributeError:
+            print('error in init basedrive')
             self.motors = [
                 CANSparkMax(ports.drivetrain.leftMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.rightMotorID, MotorType.kBrushless),
@@ -48,10 +49,38 @@ class BaseDrive(DebuggableSubsystem):
 
         self.encoders = []
         self.PIDcontrollers = []
+
         for motor in self.motors:
             motor.setIdleMode(IdleMode.kBrake)
             self.encoders.append(motor.getEncoder())
             self.PIDcontrollers.append(motor.getPIDController())
+            motor.setEncPosition(0.0)
+            motor.setClosedLoopRampRate(0.5)
+            motor.setOpenLoopRampRate(0.5)
+
+        self.activeEncoders = []
+
+        for motor in self.motors[0:2]:
+            self.activeEncoders.append(motor.getEncoder())
+
+
+
+        for encoder in self.encoders:
+            encoder.setPositionConversionFactor(1)
+            encoder.setVelocityConversionFactor(1)
+
+        #self.resetPID()
+
+        for controller in self.PIDcontrollers:
+            controller.setOutputRange(0, 1)
+            controller.setP(1)
+            controller.setI(0.001)
+            controller.setD(31)
+            controller.setFF(0.7)
+            controller.setIZone(30)
+            controller.setSmartMotionAllowedClosedLoopError(2.0)
+
+        self.resetEncoders()
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -75,7 +104,7 @@ class BaseDrive(DebuggableSubsystem):
         self.driveSpeedMult = Config('DriveTrain/driveSpeedMult', 0.9)
         self.defenseSpeedMult = Config('DriveTrain/defenseSpeedMult', 1.3)
 
-        self.chosenSpeed = 0.9
+        self.chosenSpeed = 1
 
         self.setUseEncoders(True)
         self.maxSpeed = Config('DriveTrain/maxSpeed', 2500)
@@ -83,6 +112,8 @@ class BaseDrive(DebuggableSubsystem):
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
         self.boost = False
+
+        self.rotationsPerInch = Config('DriveTrain/rotationsPerInch', 0.568)
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
@@ -102,6 +133,7 @@ class BaseDrive(DebuggableSubsystem):
 
         #self.motors[3].setInverted()
 
+
     def initDefaultCommand(self):
         '''
         By default, unless another command is running that requires this
@@ -114,6 +146,7 @@ class BaseDrive(DebuggableSubsystem):
 
 
     def move(self, x, y, rotate):
+
         '''Turns coordinate arguments into motor outputs.'''
 
         '''
@@ -136,6 +169,7 @@ class BaseDrive(DebuggableSubsystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
+        print(str(speeds))
 
         '''Prevent speeds > 1'''
         maxSpeed = 0
@@ -154,26 +188,50 @@ class BaseDrive(DebuggableSubsystem):
                 reduce overshooting, thereby shortening the time required to
                 come to a stop.
                 '''
-                for motor in self.activeMotors:
+                for motor in self.motors:
                     motor.setIAccum(0)
 
             speeds[1] = speeds[1] * 1.0
 
+
+            #print("moving")
+            #print(speeds)
+            #print("boost: "+ str(self.boost))
+
+            x = 0
             if self.boost:
-                for motor, speed in zip(self.activeMotors, speeds):
-                    motor.set(speed * 1.1)
+                for motor, speed in zip(self.motors, speeds):
+
+                    motor.set(speed)
+                    x = x + 1
 
             else:
-                for motor, speed in zip(self.activeMotors, speeds):
-                    motor.set(speed * 0.8)
+                for motor, speed in zip(self.motors, speeds):
+                    tmaxspeed = (self.maxSpeed / 100)
+                    speed = (speed * 0.6)
+
+                    if speed > 0.0 and speed > tmaxspeed:
+                        speed = tmaxspeed
+
+                    if speed < 0.0 and speed < (tmaxspeed * -1):
+                       speed = (tmaxspeed * -1)
+
+                    motor.set(speed)
+                    x = x + 1
+
+
+
+
 
             #for motor, speed in zip(self.activeMotors, speeds):
                 #print(str('speed' + str(self.chosenSpeed)))
                 #motor.set(speed * self.chosenSpeed)
 
         else:
-            for motor, speed in zip(self.activeMotors, speeds):
+            for motor, speed in zip(self.motors, speeds):
                 motor.set(speed * self.chosenSpeed)
+
+            print(str(speeds))
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -182,13 +240,16 @@ class BaseDrive(DebuggableSubsystem):
             return
 
     def toggleBoost(self):
-        self.boost = not self.boost
+        print("toggle boost, current: "+str(self.boost))
+        #self.boost = not self.boost
 
-        if not self.boost:
-            self.nt.putBoolean('boost', True)
+        #if not self.boost:
+        #    self.nt.putBoolean('boost', True)
 
-        else:
-            self.nt.putBoolean('boost', False)
+        #else:
+        #    self.nt.putBoolean('boost', False)
+
+        #self.initDefaultCommand()
 
 
     def toggleSpeed(self):
@@ -222,47 +283,81 @@ class BaseDrive(DebuggableSubsystem):
         '''
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
+        #'''
+        positions = [48.0, -48.0, 48.0, -48.0]
+        print('this is the positions var: '+ str(positions))
+
+        #for controller, position in zip(self.PIDcontrollers, positions):
+            #controller.setReference(position,ControlType.kPosition,0,0)
+            #print('applied this position to the controller ' + str(position))
+        print(str(self.PIDcontrollers))
+
+
+        self.PIDcontrollers[0].setReference(positions[0], ControlType.kPosition, 0, 0)
+        self.PIDcontrollers[1].setReference(positions[1], ControlType.kPosition, 0, 0)
+        self.PIDcontrollers[2].setReference(positions[2], ControlType.kPosition, 0, 0)
+        self.PIDcontrollers[3].setReference(positions[3], ControlType.kPosition, 0, 0)
+
+        for i, position in zip(self.encoders, positions):
+            i.setPosition(position)
+        print(str(self.encoders[0].getPosition()))
+
+
+        print('Current positions my dude ' + str(self.getPositions()))
+
+        #posOne = float(currentPos[0])
+        #posTwo = float(currentPos[1])
+
+        #if not self.useEncoders:
+         #   raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        #self.stop()
+        #self.activeEncoders[0].setPosition(0)
+        #self.activeEncoders[1].setPosition(0)
+
+
+
+        #for encoder, position,  in zip(self.activeEncoders, positions):
+            #encoder.setPosition(position)
+            #print('set ' + str(position))
+
+        #for motor, position, cont, encoder in zip(self.activeMotors, positions, self.PIDcontrollers, self.activeEncoders):
+            ##motor.selectProfileSlot(1, 0)
+            #cont.setSmartMotionMaxVelocity(2500, 0)
+            #cont.setSmartMotionMaxAccel(int(2500), 0)
+            #cont.setReference(position, ControlType.kSmartMotion, 1, 0)
+            #encoder.setPosition(position)
+            #print('set ' + str(encoder) + ' ' + str(position))
+
+            #self.move(0,.2,0)
+            #while(max(self.getPositions())<positions+max(currentPos):
+             #   print("still moving")
+            #self.stop()
+            #print("Done moving")
+        '''elif (positions<0)
+            self.move(0,-.2,0)
+            while(max(self.getPositions())>positions+max(currentPos):
+                print("still moving")
+            self.stop()
+            print("Done moving")
         '''
 
+
+    '''
+    def setPositions(self, positions):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
-        self.stop()
-        for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
-
-
-    def setPositionsWithGyro(self, positions):
-        if not self.useEncoders:
-            raise RuntimeError('Cannot set position. Encoders are disabled.')
-
-        index = 0
-        angle = self.getAngle() * 75
-
-        for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
-            if index == 0 and angle > 75:
-                motor.configMotionCruiseVelocity(int(self.speedLimit - angle), 0)
-
-            elif index == 1 and angle < -75:
-                motor.configMotionCruiseVelocity(int(self.speedLimit + angle), 0)
-
-            else:
-                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
-            index += 1
-
-
+        for motor, position, encoder in zip(self.activeMotors, positions, self.encoders):
+            encoder.setPosition(position)
+            motor.setSmartMotionMaxVelocity(4000)
+    '''
     def averageError(self):
         '''Find the average distance between setpoint and current position.'''
         error = 0
-        for motor in self.activeMotors:
-            error += abs(motor.getClosedLoopTarget(0) - motor.getSelectedSensorPosition(0))
+        for motor, encoder, cont in zip(self.activeMotors, self.encoders, self.PIDcontrollers):
+            error = cont.getSmartMotionAllowedClosedLoopError()
+#          error += abs(motor.getClosedLoopTarget(0) - encoder.getPosition())
 
         return error / len(self.activeMotors)
 
@@ -286,7 +381,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
             controller = motor.getPIDController()
-            controller.setClosedLoopRampRate(0)
+            controller.setClosedLoopRampRate(10.0)
             for profile in range(2):
                 controller.setP(1, profile)
                 controller.setI(0.001, profile)
@@ -343,11 +438,11 @@ class BaseDrive(DebuggableSubsystem):
         return (self.navX.getDisplacementY() * 39.3701)
 
 
-    def inchesToTicks(self, distance):
+    def inchesToRotations(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter'))
+        rotationsNeeded = (distance / (math.pi * 6)) * 10.7 #Config('DriveTrain/wheelDiameter', 6)) math * 6 is 18.85
 
-        return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
+        return int(rotationsNeeded) #* Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):
@@ -370,8 +465,17 @@ class BaseDrive(DebuggableSubsystem):
 
     def getPositions(self):
         '''Returns the position of each active motor.'''
-        return [CANEncoder(x).getPosition() for x in self.activeMotors]
+        self.pos = []
 
+        try:
+            for x in self.encoders:
+                self.pos.append(x.getPosition())
+
+            return self.pos
+
+        except(AssertionError):
+            print('Assertion Error raised . . . ignoring!')
+            return [0, 0, 0, 0]
 
     def getFrontClearance(self):
         '''Override this in drivetrain if a distance sensor is attached.'''
@@ -400,12 +504,11 @@ class BaseDrive(DebuggableSubsystem):
 
     def resetEncoders(self):
 
-        for motor in self.motors:
+        for encoder in self.motors:
         #    motor.setSelectedSensorPosition(0)
             #motor.setNeutralMode(NeutralMode.Brake)
             #motor.setSafetyEnabled(False)
-            enc = motor.getEncoder()
-            enc.setPosition(0)
+            encoder.setEncPosition(0)
         #print("reseted enc")
 
 
@@ -425,7 +528,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
-        print("maxPercVBus: "+str(self.maxPercentVBus))
+        #print("maxPercVBus: "+str(self.maxPercentVBus))
 
 
     def enableSimpleDriving(self):
@@ -462,27 +565,29 @@ class BaseDrive(DebuggableSubsystem):
             table.setPersistent(key)
 
             if key == 'RampRate':
-                for motor in self.activeMotors:
-                    motor.configClosedLoopRamp(value, 0)
+                for motor in self.motors:
+                    print('setting ramp rate: ' + str(value))
+                    print('Value is ' + str(value))
+                    motor.setClosedLoopRampRate(value, 0)
 
                 return
 
             if key == 'P':
                 for motor in self.activeMotors:
-                    motor.config_kP(1, value, 0)
+                    motor.setP(value, 1)
 
                 return
 
             funcs = {
-                'I': 'config_kI',
-                'D': 'config_kD',
-                'F': 'config_kF',
-                'IZone': 'config_IntegralZone'
+                'I': 'setI',
+                'D': 'setD',
+                'F': 'setFF',
+                'IZone': 'setIZone'
             }
 
             for motor in self.activeMotors:
-                getattr(motor, funcs[key])(0, value, 0)
-                getattr(motor, funcs[key])(1, value, 0)
+                getattr(motor, funcs[key])(value, 0)
+                getattr(motor, funcs[key])(value, 1)
 
         table.addTableListener(updatePID, localNotify=True)
 

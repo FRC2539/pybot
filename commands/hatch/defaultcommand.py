@@ -14,10 +14,10 @@ class DefaultCommand(Command):
         if robot.hatch.hasSecureHatchPanel():
             robot.hatch.hold()
             robot.lights.solidOrange()
-            print("Running")
+            #print("Running")
         elif robot.hatch.hasHatchPanel():
             robot.hatch.grab()
-            print('error')
+            #print('error')
         else:
             robot.hatch.stop()
-            print('idc')
+            #print('idc')

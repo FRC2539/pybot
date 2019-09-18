@@ -11,6 +11,7 @@ class SkidDrive(BaseDrive):
 
         '''Only the front motors are active in a skid system.'''
         self.activeMotors = self.motors[0:2]
+        #self.activeMotors = self.motors
 
         '''Make the back motors follow the front.'''
 
@@ -23,6 +24,7 @@ class SkidDrive(BaseDrive):
                 .follow(self.motors[RobotDriveBase.MotorType.kFrontRight])
 
             except:
+                print("was an error while setting up followers")
                 pass
 
 

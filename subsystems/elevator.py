@@ -103,6 +103,11 @@ class Elevator(DebuggableSubsystem):
         self.motor.set(0.0)
 
 
+    def upOneFoot(self):
+        currentPos = self.encoder.getPosition()
+        self.encoder.setPosition(float(currentPos + 10.0))
+        print('\nDONE\n')
+
     def hold(self):
         self.setPosition(self.getPosition())
 

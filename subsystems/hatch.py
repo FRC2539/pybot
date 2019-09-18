@@ -22,7 +22,7 @@ class Hatch(DebuggableSubsystem):
 
 
     def hold(self):
-        self.motor.set(0.4)
+        self.motor.set(0.2)
 
 
     def hasHatchPanel(self):

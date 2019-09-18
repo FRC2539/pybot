@@ -41,8 +41,8 @@ class GoToTapeCommand(Command):
             #self.low = True
             #print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
         #else:
-        print("standard camera")
-        print("have tape: " + str(self.tape.getValue())) #very necessary edit
+        #print("standard camera")
+        #print("have tape: " + str(self.tape.getValue())) #very necessary edit
         #print("standard camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
 
         #self.low = True
@@ -54,12 +54,12 @@ class GoToTapeCommand(Command):
     def execute(self):
         #if not self.low:
         if self.tape.getValue() == 1:
-            print(self.distance.getValue())
+            #print(self.distance.getValue())
             oX = self.strafe.getValue() - self.tapeoffset # 2.5
             oY = self.distance.getValue()
 
-            print('OG X ' + str(oX))
-            print('OG Y ' + str(oY))
+            #print('OG X ' + str(oX))
+            #print('OG Y ' + str(oY))
 
             self.y = ((oY * 9) / 60) * -1
             self.x = (oX * 8) / 100
@@ -79,9 +79,9 @@ class GoToTapeCommand(Command):
             if abs(oY) <= 2.5:
                 self.y = math.copysign(self.y - (self.y * 0.25), self.y)
 
-            print('x ' + str(self.x))
-            print('y ' + str(self.y))
-            print('rotate ' + str(self.rotate))
+            #print('x ' + str(self.x))
+            #print('y ' + str(self.y))
+            #print('rotate ' + str(self.rotate))
 
             # Takes away small y speed value based off of distance
 

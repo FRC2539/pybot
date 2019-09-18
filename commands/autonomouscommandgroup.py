@@ -18,6 +18,10 @@ class AutonomousCommandGroup(CommandGroup):
         super().__init__('Autonomous')
         print("auto init")
 
+        self.addSequential(MoveCommand(24))
+
+        print('I AM ROBOT AND SELF AWARE\n\n\n\n')
+
         #@fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'TEST')
         #def testAuto(self):
             #self.addParallel(SetArmCommandGroup(2.0))
