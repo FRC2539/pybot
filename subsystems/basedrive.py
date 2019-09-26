@@ -47,6 +47,8 @@ class BaseDrive(DebuggableSubsystem):
                 CANSparkMax(ports.drivetrain.rightMotorID, MotorType.kBrushless),
             ]
 
+        self.activeMotors = self.motors[0:2]
+
         self.encoders = []
         self.PIDcontrollers = []
 
@@ -55,8 +57,6 @@ class BaseDrive(DebuggableSubsystem):
             self.encoders.append(motor.getEncoder())
             self.PIDcontrollers.append(motor.getPIDController())
             motor.setEncPosition(0.0)
-            motor.setClosedLoopRampRate(0.5)
-            motor.setOpenLoopRampRate(0.5)
 
         self.activeEncoders = []
 
@@ -64,21 +64,11 @@ class BaseDrive(DebuggableSubsystem):
             self.activeEncoders.append(motor.getEncoder())
 
 
-
         for encoder in self.encoders:
             encoder.setPositionConversionFactor(1)
             encoder.setVelocityConversionFactor(1)
 
-        #self.resetPID()
-
-        for controller in self.PIDcontrollers:
-            controller.setOutputRange(0, 1)
-            controller.setP(1)
-            controller.setI(0.001)
-            controller.setD(31)
-            controller.setFF(0.7)
-            controller.setIZone(30)
-            controller.setSmartMotionAllowedClosedLoopError(2.0)
+        self.resetPID()
 
         self.resetEncoders()
 
@@ -101,8 +91,8 @@ class BaseDrive(DebuggableSubsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.driveSpeedMult = Config('DriveTrain/driveSpeedMult', 0.9)
-        self.defenseSpeedMult = Config('DriveTrain/defenseSpeedMult', 1.3)
+        self.driveSpeedMult = Config('DriveTrain/driveSpeedMult', 0.85)
+        self.defenseSpeedMult = Config('DriveTrain/defenseSpeedMult', 1.2)
 
         self.chosenSpeed = 1
 
@@ -169,7 +159,6 @@ class BaseDrive(DebuggableSubsystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
-        print(str(speeds))
 
         '''Prevent speeds > 1'''
         maxSpeed = 0
@@ -191,9 +180,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.motors:
                     motor.setIAccum(0)
 
-            speeds[1] = speeds[1] * 1.0
-
-
             #print("moving")
             #print(speeds)
             #print("boost: "+ str(self.boost))
@@ -201,14 +187,13 @@ class BaseDrive(DebuggableSubsystem):
             x = 0
             if self.boost:
                 for motor, speed in zip(self.motors, speeds):
-
-                    motor.set(speed)
+                    motor.set(speed * self.chosenSpeed)
                     x = x + 1
 
             else:
                 for motor, speed in zip(self.motors, speeds):
                     tmaxspeed = (self.maxSpeed / 100)
-                    speed = (speed * 0.6)
+                    speed = (speed * 1)
 
                     if speed > 0.0 and speed > tmaxspeed:
                         speed = tmaxspeed
@@ -216,7 +201,7 @@ class BaseDrive(DebuggableSubsystem):
                     if speed < 0.0 and speed < (tmaxspeed * -1):
                        speed = (tmaxspeed * -1)
 
-                    motor.set(speed)
+                    motor.set(speed * self.chosenSpeed)
                     x = x + 1
 
 
@@ -231,38 +216,24 @@ class BaseDrive(DebuggableSubsystem):
             for motor, speed in zip(self.motors, speeds):
                 motor.set(speed * self.chosenSpeed)
 
-            print(str(speeds))
-
         if [x, y, rotate] == self.lastInputs:
             return
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
 
-    def toggleBoost(self):
-        print("toggle boost, current: "+str(self.boost))
-        #self.boost = not self.boost
-
-        #if not self.boost:
-        #    self.nt.putBoolean('boost', True)
-
-        #else:
-        #    self.nt.putBoolean('boost', False)
-
-        #self.initDefaultCommand()
-
-
     def toggleSpeed(self):
         if self.driveMode:
-
-            self.chosenSpeed = self.defenseSpeedMult
+            self.chosenSpeed = abs(self.defenseSpeedMult.getValue())
+            self.nt.putBoolean('DriveTrain/boost', True)
             self.driveMode = False
 
-        elif not self.driveMode:
-
-            self.chosenSpeed = self.driveSpeedMult
+        else:
+            self.chosenSpeed = abs(self.driveSpeedMult.getValue())
+            self.nt.putBoolean('DriveTrain/boost', False)
             self.driveMode = True
 
+        return self.driveMode
 
     def movePer(self, left, right):
         #speeds = self._calculateSpeeds(x, y, rotate / 2)
@@ -291,6 +262,7 @@ class BaseDrive(DebuggableSubsystem):
             #controller.setReference(position,ControlType.kPosition,0,0)
             #print('applied this position to the controller ' + str(position))
         print(str(self.PIDcontrollers))
+
 
 
         self.PIDcontrollers[0].setReference(positions[0], ControlType.kPosition, 0, 0)
@@ -381,14 +353,15 @@ class BaseDrive(DebuggableSubsystem):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
             controller = motor.getPIDController()
-            controller.setClosedLoopRampRate(10.0)
+            motor.setClosedLoopRampRate(0.25)
+            motor.setOpenLoopRampRate(0.25)
+
             for profile in range(2):
                 controller.setP(1, profile)
                 controller.setI(0.001, profile)
                 controller.setD(31, profile)
                 controller.setFF(0.7, profile)
-                controller.config_IntegralZone(30, profile)
-
+                controller.setIZone(30, profile)
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
@@ -508,7 +481,7 @@ class BaseDrive(DebuggableSubsystem):
         #    motor.setSelectedSensorPosition(0)
             #motor.setNeutralMode(NeutralMode.Brake)
             #motor.setSafetyEnabled(False)
-            encoder.setEncPosition(0)
+            encoder.setEncPosition(0.0)
         #print("reseted enc")
 
 

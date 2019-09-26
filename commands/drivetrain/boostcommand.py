@@ -13,19 +13,14 @@ class BoostCommand(Command):
         super().__init__('Toggle Speed')
 
         self.requires(robot.drivetrain)
-        self.nt = nt.getTable('DriveTrain')
+        self.requires(robot.lights)
 
+    def initialize(self):
+        driveMode = robot.drivetrain.toggleSpeed()
+        if not driveMode:
+            robot.lights.chase()
+        else:
+            robot.lights.solidOrange()
 
-    #def initialize(self):
-        #robot.drivetrain.toggleBoost()
-
-    #def execute(self):
-        #robot.drivetrain.toggleBoost()
-        #self._finished = True
-
-    #def end(self):
-        #robot.drivetrain.toggleBoost()
-        #DriveCommand(robot.drivetrain.speedLimit)
-        #registerAxis('driveX')
-        #registerAxis('driveY')
-        #registerAxis('driveRotate')
+    def end(self):
+        pass
