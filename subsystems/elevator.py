@@ -95,11 +95,12 @@ class Elevator(DebuggableSubsystem):
     def zeroEncoder(self):
         self.motor.setEncPosition(0)
 
-    def setPosition(self, target):
+    def setPosition(self, target, direction):
         currentPosition = self.getPosition()
         print('currentPosition = ' + str(currentPosition))
         print('Target = ' + str(target))
         self.encoder.setPosition(target)
+        idc  = direction
 
     def getPosition(self):
         return self.encoder.getPosition()

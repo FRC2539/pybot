@@ -70,45 +70,90 @@ class GoToTapeCommand(Command):
         self._finished = False
 
     def execute(self):
+        slowdown=1
+        #closer rotate ratio
+        crr=2.0
+        #further rotate ratio
+        frr=3.0
+#if you are using the normal limelight
         if not self.low:
+
             if self.tape.getValue() == 1:
                 print(self.distance.getValue())
+                #ox=origninal x in degrees from tape and xy= original y from tape
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = self.distance.getValue()
+                #totalspeed = 0
+                #totalmotors = 0
+
+                #speed = robot.drivetrain.getSpeeds()
+                #for speeds in speed:
+                    #totalspeed += speeds
+                    #totalmotors += 1
+                #avgspeed = totalspeed/totalmotors
+                #totv = 0
+                #numm = 0
+                #for motors in self.motors:
+                    #totv += self.motors.getVelocity()
+                    #print ('Velocity: ' + self.motors.getVelocity())
+                    #numm += 1
+
+                #avgv = totv / numm
+                #print ('Avg Velocity: '+ avgv)
+                oY2  = oY
+
+                #trying to set up the consistency
+                if (oY<-5):
+                    oY2 = oY + 5
+                elif (oY>5):
+                    oY2 = oY - 5
+
 
                 self.x = math.copysign((oX * 4) / 100, oX)
-                self.y = math.copysign((oY * 6) / 100, oY)
-                self.rotate = self.x / 3
+                self.y = math.copysign((oY2 * 6) / 100, oY)
+                self.rotate = self.x / frr
 
+                #if the speed is greater than 35% then set it to 35% keeping the direction
                 if abs(self.x) > 0.35:
                     self.x = math.copysign(0.35, self.x)
-                    self.rotate = self.x / 3
+                    self.rotate = self.x / frr
+                #if the target in degrees is less than or equal to 1 then make the speed equal to the degrees over 10
+                #also stop turning as much
                 elif abs(oX) <= 1.0:
                     self.x = oX / 10.0
-                    self.rotate = self.x / 2.0
+                    self.rotate = self.x / crr
+                #if the target in degrees is greater than 1, and the speed is lower than 20% then set:
+                #the the x speed to the same directionas the target x and the 20% speed
+                #make the get the rotate from the x speed
                 elif abs(oX) > 1.0 and abs(self.x) < 0.2:
                     self.x = math.copysign(0.2, oX)
-                    self.rotate = math.copysign(0.1, oX) / 2.0
+                    self.rotate = math.copysign(0.1, oX) / crr
 
                 if self.y > 0.50:
                     self.y = 0.50
                 elif oY <= 0.0:
                     self.y = 0
                 elif oY > 0.0 and self.y < 0.3:
-                    self.y = 0.3
+                    self.y = 0.4
 
-                if oY <= 7.0: # Was 4.0
+                if oY <= 10.0: # Was 4.0
                     self.rotate = self.rotate * 2 # Was 0.5
                 '''
                 if oY <= 2.0:
                     self.y = 0.1
                 '''
-                if oY <= 3.5:
+                #slows  it down if it is closer than 3.5 degrees
+                if oY <= 5:
+                    #if avgspeed > 5:
+                        #self.stop()
+                    self.y = 0.15
+                self.y = self.y * self.speedBoost
+                if self.y < 0.15:
                     self.y = 0.15
 
-                self.y = self.y * self.speedBoost
 
-                robot.drivetrain.move(self.x, self.y, self.rotate)
+                robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
+
 
 
                 if self.wantsHatch:
@@ -117,7 +162,7 @@ class GoToTapeCommand(Command):
                 elif not self._finished:
                     #self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
                     self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 1.0
-
+# if using the lower limelight/ arm is high
         elif self.low:
             if self.tapeLow.getValue() == 1:
                 print(self.distanceLow.getValue())
@@ -126,37 +171,42 @@ class GoToTapeCommand(Command):
 
                 self.x = math.copysign((oX * (4/2)) / 100, oX)
                 self.y = math.copysign((oY * (6/2)) / 100, oY)
-                self.rotate = self.x / 3
+
+                if (oY<-5):
+                    oY2 = oY + 5
+                elif (oY>5):
+                    oY2 = oY - 5
+
+                self.rotate = self.x / frr
 
                 if abs(self.x) > 0.35:
-                    self.x = math.copysign(0.35, self.x)
-                    self.rotate = self.x / 3
+                    self.x = math.copysign(0.45, self.x)
+                    self.rotate = self.x / frr
                 elif abs(oX) <= 1.0:
                     self.x = oX / 10.0
-                    self.rotate = self.x / 2.0
+                    self.rotate = self.x / crr
                 elif abs(oX) > 1.0 and abs(self.x) < 0.2:
                     self.x = math.copysign(0.2, oX)
-                    self.rotate = math.copysign(0.1, oX) / 2.0
+                    self.rotate = math.copysign(0.3, oX) / crr
 
-                if self.y > 0.35:
-                    self.y = 0.35
-                elif oY <= 0.0:
-                    self.y = 0
-                elif oY > 0.0 and self.y < 0.2:
-                    self.y = 0.2
 
                 if oY <= 8.0:
                     self.rotate = 0.0
-                '''
-                if oY <= 6.0:
-                    self.y = 0.1
-                '''
-                if oY <= 7:
-                    self.y = 0.14
+
+
+                if oY > 5 :
+                    self.y = .22
+                elif oY >3.5:
+                    self.y = .15
+                elif oY <=0:
+                    self.y = 0
 
                 self.y = self.y * self.speedBoost
 
-                robot.drivetrain.move(self.x, self.y, self.rotate)
+                if self.y < 0.15:
+                    self.y = 0.15
+
+                robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
 
 
                 if not self._finished:

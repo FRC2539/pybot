@@ -35,6 +35,7 @@ from commands.drivetrain.gotocargoshipcommandgroup import GoToCargoshipCommandGr
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
 #from commands.intake.slowejectcommand import SlowEjectCommand
+from commands.intake.intakeruncommand import IntakerunCommand
 
 from commands.hatch.hatchejectcommand import HatchEjectCommand
 from commands.hatch.hatchintakecommand import HatchIntakeCommand
@@ -187,6 +188,9 @@ class Layout(DebuggableSubsystem):
 
             self.controllerOne.RightJoystick.whenPressed(ToggleLayoutCommand())
 
+            self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
+
+            self.controllerOne.A.toggleWhenPressed(IntakerunCommand())
 
             # The self.controllerTwo for non-driving subsystems of the robot
             self.controllerTwo = LogitechDualShock(1)
