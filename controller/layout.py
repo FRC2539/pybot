@@ -190,7 +190,6 @@ class Layout(DebuggableSubsystem):
 
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
 
-            self.controllerOne.A.toggleWhenPressed(IntakerunCommand())
 
             # The self.controllerTwo for non-driving subsystems of the robot
             self.controllerTwo = LogitechDualShock(1)
