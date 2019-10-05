@@ -6,7 +6,15 @@ from commands.network.alertcommand import AlertCommand
 from wpilib.command.waitcommand import WaitCommand
 import commandbased.flowcontrol as fc
 
+from commands.drivetrain.movecommand import MoveCommand
+
 from networktables import NetworkTables
+
+from commands.resetcommand import ResetCommand
+
+from commands.drivetrain.resetencoderscommand import ResetEncodersCommand
+
+from commands.intake.intakecommand import IntakeCommand
 
 import robot
 
@@ -18,9 +26,8 @@ class AutonomousCommandGroup(CommandGroup):
         super().__init__('Autonomous')
         print("auto init")
 
-        self.addSequential(MoveCommand(24))
-
-        print('I AM ROBOT AND SELF AWARE\n\n\n\n')
+        self.addParallel(ResetEncodersCommand())
+        self.addSequential(MoveCommand(-24))
 
         #@fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'TEST')
         #def testAuto(self):

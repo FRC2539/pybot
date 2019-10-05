@@ -38,7 +38,6 @@ class BaseDrive(DebuggableSubsystem):
                 CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
             ]
-            print("configured 4 motors separate")
 
         except AttributeError:
             print('error in init basedrive')
@@ -59,9 +58,11 @@ class BaseDrive(DebuggableSubsystem):
             motor.setEncPosition(0.0)
 
         self.activeEncoders = []
+        self.activePIDControllers = []
 
         for motor in self.motors[0:2]:
             self.activeEncoders.append(motor.getEncoder())
+            self.activePIDControllers.append(motor.getPIDController())
 
 
         for encoder in self.encoders:
@@ -97,8 +98,8 @@ class BaseDrive(DebuggableSubsystem):
         self.chosenSpeed = 1
 
         self.setUseEncoders(True)
-        self.maxSpeed = Config('DriveTrain/maxSpeed', 2500)
-        self.speedLimit = 1#Config('DriveTrain/normalSpeed', 2000)
+        self.maxSpeed = 1#Config('DriveTrain/maxSpeed', 2500)
+        self.speedLimit = Config('DriveTrain/normalSpeed', 2000)
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
         self.boost = False
@@ -136,7 +137,6 @@ class BaseDrive(DebuggableSubsystem):
 
 
     def move(self, x, y, rotate):
-
         '''Turns coordinate arguments into motor outputs.'''
 
         '''
@@ -159,7 +159,7 @@ class BaseDrive(DebuggableSubsystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
-
+        print(speeds)
         '''Prevent speeds > 1'''
         maxSpeed = 0
         for speed in speeds:
@@ -251,11 +251,12 @@ class BaseDrive(DebuggableSubsystem):
             x += 1
 
     def setPositions(self, positions):
+        print('STARTED SETPOSITIONS\n\n')
+
         '''
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
         #'''
-        positions = [48.0, -48.0, 48.0, -48.0]
         print('this is the positions var: '+ str(positions))
 
         #for controller, position in zip(self.PIDcontrollers, positions):
@@ -263,45 +264,22 @@ class BaseDrive(DebuggableSubsystem):
             #print('applied this position to the controller ' + str(position))
         print(str(self.PIDcontrollers))
 
+        self.resetPID()
+        self.resetEncoders()
 
+        self.PIDcontrollers[0].setReference(float(positions[0]), ControlType.kPosition, 0, 0.0)
+        self.PIDcontrollers[1].setReference(float(positions[1]), ControlType.kPosition, 0, 0.0)
+        self.PIDcontrollers[2].setReference(float(positions[2]), ControlType.kPosition, 0, 0.0)
+        self.PIDcontrollers[3].setReference(float(positions[3]), ControlType.kPosition, 0, 0.0)
 
-        self.PIDcontrollers[0].setReference(positions[0], ControlType.kPosition, 0, 0)
-        self.PIDcontrollers[1].setReference(positions[1], ControlType.kPosition, 0, 0)
-        self.PIDcontrollers[2].setReference(positions[2], ControlType.kPosition, 0, 0)
-        self.PIDcontrollers[3].setReference(positions[3], ControlType.kPosition, 0, 0)
-
-        for i, position in zip(self.encoders, positions):
-            i.setPosition(position)
-        print(str(self.encoders[0].getPosition()))
+        print(str(self.encoders[2].getPosition()))
+        print(str(self.encoders[3].getPosition()))
 
 
         print('Current positions my dude ' + str(self.getPositions()))
 
-        #posOne = float(currentPos[0])
-        #posTwo = float(currentPos[1])
+        return self.getPositions()
 
-        #if not self.useEncoders:
-         #   raise RuntimeError('Cannot set position. Encoders are disabled.')
-
-        #self.stop()
-        #self.activeEncoders[0].setPosition(0)
-        #self.activeEncoders[1].setPosition(0)
-
-
-
-        #for encoder, position,  in zip(self.activeEncoders, positions):
-            #encoder.setPosition(position)
-            #print('set ' + str(position))
-
-        #for motor, position, cont, encoder in zip(self.activeMotors, positions, self.PIDcontrollers, self.activeEncoders):
-            ##motor.selectProfileSlot(1, 0)
-            #cont.setSmartMotionMaxVelocity(2500, 0)
-            #cont.setSmartMotionMaxAccel(int(2500), 0)
-            #cont.setReference(position, ControlType.kSmartMotion, 1, 0)
-            #encoder.setPosition(position)
-            #print('set ' + str(encoder) + ' ' + str(position))
-
-            #self.move(0,.2,0)
             #while(max(self.getPositions())<positions+max(currentPos):
              #   print("still moving")
             #self.stop()
@@ -328,9 +306,10 @@ class BaseDrive(DebuggableSubsystem):
         '''Find the average distance between setpoint and current position.'''
         error = 0
         for motor, encoder, cont in zip(self.activeMotors, self.encoders, self.PIDcontrollers):
-            error = cont.getSmartMotionAllowedClosedLoopError()
+            error += abs(cont.getSmartMotionAllowedClosedLoopError() - encoder.getPosition())
 #          error += abs(motor.getClosedLoopTarget(0) - encoder.getPosition())
 
+        print(str(error))
         return error / len(self.activeMotors)
 
 
@@ -357,11 +336,12 @@ class BaseDrive(DebuggableSubsystem):
             motor.setOpenLoopRampRate(0.25)
 
             for profile in range(2):
-                controller.setP(1, profile)
-                controller.setI(0.001, profile)
-                controller.setD(31, profile)
-                controller.setFF(0.7, profile)
-                controller.setIZone(30, profile)
+                controller.setP(0.05, profile)
+                controller.setI(0, profile)
+                controller.setD(0.1, profile)
+                controller.setFF(0, profile)
+                controller.setIZone(0, profile)
+                controller.setOutputRange(-1, 1, profile)
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
@@ -415,7 +395,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotationsNeeded = (distance / (math.pi * 6)) * 10.7 #Config('DriveTrain/wheelDiameter', 6)) math * 6 is 18.85
 
-        return int(rotationsNeeded) #* Config('DriveTrain/ticksPerRotation', 4096))
+        return float(rotationsNeeded) #* Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):
@@ -433,8 +413,11 @@ class BaseDrive(DebuggableSubsystem):
 
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
-        return [CANEncoder(x).getVelocity() for x in self.activeMotors]
+        speeds = []
+        for enc in self.activeEncoders:
+            speeds.append(enc.getVelocity())
 
+        return speeds
 
     def getPositions(self):
         '''Returns the position of each active motor.'''
@@ -476,12 +459,12 @@ class BaseDrive(DebuggableSubsystem):
         return encoders
 
     def resetEncoders(self):
+        for motor, encoder in zip(self.motors, self.encoders):
+            motor.setEncPosition(0.0)
+            encoder.setPosition(0.0)
+            encoder.setPositionConversionFactor(1.0)
 
-        for encoder in self.motors:
-        #    motor.setSelectedSensorPosition(0)
-            #motor.setNeutralMode(NeutralMode.Brake)
-            #motor.setSafetyEnabled(False)
-            encoder.setEncPosition(0.0)
+        print('reset ' + str(self.getPositions()))
         #print("reseted enc")
 
 
@@ -538,15 +521,13 @@ class BaseDrive(DebuggableSubsystem):
             table.setPersistent(key)
 
             if key == 'RampRate':
-                for motor in self.motors:
-                    print('setting ramp rate: ' + str(value))
-                    print('Value is ' + str(value))
+                for motor in self.activePIDControllers:
                     motor.setClosedLoopRampRate(value, 0)
 
                 return
 
             if key == 'P':
-                for motor in self.activeMotors:
+                for motor in self.activePIDControllers:
                     motor.setP(value, 1)
 
                 return
@@ -558,7 +539,7 @@ class BaseDrive(DebuggableSubsystem):
                 'IZone': 'setIZone'
             }
 
-            for motor in self.activeMotors:
+            for motor in self.activePIDControllers:
                 getattr(motor, funcs[key])(value, 0)
                 getattr(motor, funcs[key])(value, 1)
 

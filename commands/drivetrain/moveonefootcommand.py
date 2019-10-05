@@ -25,3 +25,6 @@ class MoveOneFootCommand(Command):
 
 
         #print('\nSET POSITIONS')
+
+    def end(self):
+        robot.drivetrain.stop()

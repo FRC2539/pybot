@@ -24,25 +24,32 @@ class MoveCommand(Command):
 
     def _initialize(self):
         super()._initialize()
+        print('BEGAN INITIALIZE\n\n')
+
         self.precision = robot.drivetrain.inchesToRotations(1)
 
 
     def initialize(self):
+        print('BEGAN INITIALIZE\n\n')
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
-        offset = robot.drivetrain.inchesToRotations(self.distance)
+        self.offset = robot.drivetrain.inchesToRotations(self.distance)
+        print('offset ' + str(self.offset))
         sign = 1
         print('OLD POSITIONS ' + str(robot.drivetrain.getPositions()))
         for position in robot.drivetrain.getPositions():
-            self.targetPositions.append(position + offset * sign)
+            self.targetPositions.append(position + self.offset * sign)
             sign *= -1
 
         #print('Targets: ' + str(self.targetPositions))
         #print('Starting: ' + str(robot.drivetrain.getPositions()))
 
-        robot.drivetrain.setPositions(self.targetPositions)
+        pos = robot.drivetrain.setPositions(self.targetPositions)
+        print('target positions ' + str(self.targetPositions))
+
+        #robot.drivetrain.setPositions(self.targetPositions)
         #print('\nSET POSITIONS')
 
         #if val:
@@ -51,7 +58,10 @@ class MoveCommand(Command):
             #print('\nFALSE\n')
 
     def execute(self):
-        #print('Current: ' + str(robot.drivetrain.getPositions()))
+        print('Current: ' + str(robot.drivetrain.getPositions()))
+
+        # Checks for a passing value
+
         if self.avoidCollisions:
             try:
                 if self.distance < 0:
@@ -86,8 +96,12 @@ class MoveCommand(Command):
             except NotImplementedError:
                 pass
 
-
     def isFinished(self):
+        '''
+        for target, position in zip(self.targetPositions, robot.drivetrain.getPositions()):
+            if abs(target) <= abs(position) + abs(self.offset):
+                print('target ' + str(target) + ' position + offset ' + str(position + self.offset))
+                return True
         if self.blocked:
             return False
 
@@ -97,3 +111,8 @@ class MoveCommand(Command):
             self.onTarget = 0
 
         return self.onTarget > 5
+        '''
+        return False
+
+    def end(self):
+        robot.drivetrain.stop()

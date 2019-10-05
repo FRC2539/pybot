@@ -32,7 +32,6 @@ the average error is less than 10.
 For details see the Motion Magic Closed-Loop Walkthrough section of the Talon
 SRX Software Reference Manual.
         '''
-
         self.addSequential(AlertCommand('Do not disable the robot!'))
         self.addSequential(WaitCommand(1))
         self.addSequential(

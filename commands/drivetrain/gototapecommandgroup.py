@@ -29,16 +29,16 @@ class GoToTapeCommandGroup(CommandGroup):
         def placeHatch(self):
             print("Has hatch")
             self.addSequential(GoToTapeCommand())
-            self.addSequential(TimedMoveCommand(1, 0.3))
+            #self.addSequential(TimedMoveCommand(1, 0.3))
             self.addParallel(HatchEjectCommand())
-            self.addSequential(TimedMoveCommand(1, -0.3))
-            self.addSequential(SeizureLightsCommand(), 1.5)
+            #self.addSequential(TimedMoveCommand(1, -0.3))
+            #self.addSequential(SeizureLightsCommand(), 1.5)
 
         @fc.ELIF(lambda: not robot.hatch.hasHatchPanel())
         def grabHatch(self):
             print("No hatch")
             self.addSequential(GoToTapeCommand())
             self.addParallel(HatchIntakeCommand())
-            self.addSequential(TimedMoveCommand(1.5, 0.2))
-            self.addSequential(TimedMoveCommand(1, -0.3))
-            self.addSequential(SeizureLightsCommand(), 1.5)
+            #self.addSequential(TimedMoveCommand(1.5, 0.2))
+            #self.addSequential(TimedMoveCommand(1, -0.3))
+            #self.addSequential(SeizureLightsCommand(), 1.5)

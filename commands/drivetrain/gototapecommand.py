@@ -62,14 +62,17 @@ class GoToTapeCommand(Command):
             if abs(oY) <= 2.0:
                 self.y = math.copysign(self.y - (self.y * 0.25), self.y)
 
-            self.rotate = self.x
+            self.rotate = self.x /3
             self.x = 0
+
+            self.y = self.y * self.speedBoost.getValue()
 
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
+
             if not self._finished:
-                self._finished = (abs(oX - self.tapeoffset)) <= 2.0 and oY <= 1.0
+                self._finished = oY <= 1 and oY >= -1
 
 
         else:

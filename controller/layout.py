@@ -1,5 +1,7 @@
 from networktables import NetworkTables as nt
 
+from commands.tools.configurepidcommandgroup import ConfigurePIDCommandGroup
+
 from subsystems.debuggablesubsystem import DebuggableSubsystem
 
 from .logitechdualshock import LogitechDualShock
@@ -167,6 +169,7 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
 
             self.controllerOne.LeftJoystick.whileHeld(BoostCommand())
+            self.controllerOne.RightJoystick.whenPressed(ConfigurePIDCommandGroup())
 
             self.controllerOne.DPadLeft.whileHeld(AllRetractCommand())
 
