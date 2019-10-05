@@ -1,6 +1,9 @@
 from .debuggablesubsystem import DebuggableSubsystem
 from ctre import ControlMode, NeutralMode, WPI_TalonSRX
 from wpilib import DigitalInput
+from custom.config import Config
+
+from networktables import NetworkTables as nt
 
 import ports
 
@@ -17,6 +20,13 @@ class Hatch(DebuggableSubsystem):
 
         self.rightLimitSwitch = DigitalInput(ports.hatch.rightLimitSwitch)
         self.leftLimitSwitch = DigitalInput(ports.hatch.leftLimitSwitch)
+
+        #self.tape = Config('limelight/tv', 0)
+
+        #self.nt = nt.getTable('limelight')
+        #self.ntLow = nt.getTable('limelight-low')
+
+        #self.pipeID = 1
 
         self.hasHatch = False
 
@@ -53,3 +63,38 @@ class Hatch(DebuggableSubsystem):
         from commands.hatch.defaultcommand import DefaultCommand
 
         self.setDefaultCommand(DefaultCommand())
+
+    #def getTapeValue(self):
+        #self.nt.putNumber('pipeline', 1)
+        #self.ntLow.putNumber('pipeline', 0)
+        #x=0
+        #while x<125000:
+            #x+=1
+
+
+        #if self.tape == 0 :
+            #self.nt.putNumber('pipeline', 0)
+            #self.ntLow.putNumber('pipeline', 1)
+            #x=0
+            #while x<125000:
+                #x+=1
+
+            #if self.tape == 1:
+                #self.nt.putNumber('pipeline', 0)
+                #self.ntLow.putNumber('pipeline', 0)
+                #return True
+
+            #else:
+                #self.nt.putNumber('pipeline', 0)
+                #self.ntLow.putNumber('pipeline', 0)
+                #return False
+
+        #elif self.tape == 1 :
+            #self.nt.putNumber('pipeline', 0)
+            #self.ntLow.putNumber('pipeline', 0)
+            #return True
+
+
+    #def limeLightOff(self):
+        #self.nt.putNumber('pipeline', 0)
+        #self.ntLow.putNumber('pipeline', 0)

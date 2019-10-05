@@ -79,15 +79,18 @@ class GoToTapeCommand(Command):
         if not self.low:
 
             if self.tape.getValue() == 1:
+                cald=4
                 print(self.distance.getValue())
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = self.distance.getValue()
                 oY2  = oY
 
-                if (oY<-5):
-                    oY2 = oY + 5
-                elif (oY>5):
-                    oY2 = oY - 5
+                if (oY<-cald):
+                    oY2 = oY + cald
+                elif (oY>cald):
+                    oY2 = oY - cald
+                else:
+                    oY2 = oY
 
 
                 self.x = math.copysign((oX * 4) / 100, oX)
@@ -139,6 +142,7 @@ class GoToTapeCommand(Command):
 # if using the lower limelight/ arm is high
         elif self.low:
             if self.tapeLow.getValue() == 1:
+                cald=4
                 print(self.distanceLow.getValue())
                 oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = -1 * self.distanceLow.getValue()
@@ -146,10 +150,10 @@ class GoToTapeCommand(Command):
                 self.x = math.copysign((oX * (4/2)) / 100, oX)
                 self.y = math.copysign((oY * (6/2)) / 100, oY)
 
-                if (oY<-5):
-                    oY2 = oY + 5
+                if (oY<-cald):
+                    oY2 = oY + cald
                 elif (oY>5):
-                    oY2 = oY - 5
+                    oY2 = oY - cald
 
                 #self.rotate = self.x / frr
 

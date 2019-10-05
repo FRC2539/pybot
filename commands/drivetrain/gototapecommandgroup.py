@@ -13,7 +13,7 @@ from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
-
+#from commands.drivetrain.limelightoffcommand import limeLightOffCommand
 from commands.resetcommand import ResetCommand
 
 
@@ -25,7 +25,9 @@ class GoToTapeCommandGroup(CommandGroup):
         # Add commands here with self.addSequential() and self.addParallel()
         #@fc.IF(lambda: not robot.hatch.getTapeValue())
         #def checkHatch(self):
-            #self.addSequential(SolidRedCommand)
+            ##self.addSequential(SolidRedCommand())
+           ##self.addSequential(limeLightOffCommand())
+           #pass
         @fc.IF(lambda: not robot.hatch.hasHatchPanel())
         def grabHatch(self):
             self.addParallel(HatchIntakeCommand())
