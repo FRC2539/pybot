@@ -83,52 +83,85 @@ class GoToTapeCommand(Command):
                 print(self.distance.getValue())
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = self.distance.getValue()
-                oY2  = oY
 
-                if (oY<-cald):
-                    oY2 = oY + cald
-                elif (oY>cald):
-                    oY2 = oY - cald
+
+                h= 28.5 - 10.875
+
+                oD = h / math.tan((oY+121))
+
+                self.y = .15
+
+                if (abs(oX) > 10):
+                    self.rotate = math.copysign(.25, oX)
+                elif (abs(oX) >5):
+                    self.rotate = math.copysign(.20, oX)
+                elif (abs(oX) >3):
+                    self.rotate = math.copysign(.15, oX)
+                elif (abs(oX) >1):
+                    self.rotate = math.copysign(.10, oX)
                 else:
-                    oY2 = oY
+                    self.rotate = 0
+                    if (oD > 36 ):
+                        self.y = .40
+                    elif (oD > 24):
+                        self.y = .30
+                    elif (oD > 12):
+                        self.y = .01
 
-
-                self.x = math.copysign((oX * 4) / 100, oX)
-                self.y = math.copysign((oY2 * 6) / 100, oY)
-                self.rotate = self.x / frr
-
-                if abs(self.x) > 0.35:
-                    self.rotate = math.copysign(0.35, self.x)
-                elif abs(oX) <= 1.0:
-                    self.rotate = (oX / 10.0)/1.5
-                elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                    self.rotate = math.copysign(0.1, oX)/1.5
-
-
-                if self.y > 0.50:
-                    self.y = 0.50
-                elif oY <= 0.0:
-                    self.y = 0
-                elif oY > 0.0 and self.y < 0.3:
-                    self.y = 0.4
-
-                self.rotate = self.rotate * 2 # Was 0.5
-
-                '''
-                if oY <= 2.0:
-                    self.y = 0.1
-                '''
-                #slows  it down if it is closer than 3.5 degrees
-                if oY > 5 :
-                    self.y = .25
-                if oY <= 5:
-                    self.y = 0.15
-                    self.rotate = self.rotate * .75
                 self.y = self.y * self.speedBoost
-                if self.y < 0.15:
-                    self.y = 0.15
 
-                self.x = 0
+                if (self.y < .175) :
+                    self.y = .175
+
+
+
+                #oY2  = oY
+
+                #if (oY<-cald):
+                    #oY2 = oY + cald
+                #elif (oY>cald):
+                    #oY2 = oY - cald
+                #else:
+                    #oY2 = oY
+
+
+                #self.x = math.copysign((oX * 4) / 100, oX)
+                #self.y = math.copysign((oY2 * 6) / 100, oY)
+                #self.rotate = self.x / frr
+
+                #if abs(self.x) > 0.35:
+                    #self.rotate = math.copysign(0.35, self.x)
+                #elif abs(oX) <= 1.0:
+                    #self.rotate = (oX / 10.0)/1.5
+                #elif abs(oX) > 1.0 and abs(self.x) < 0.2:
+                    #self.rotate = math.copysign(0.1, oX)/1.5
+
+
+                #oD = h / math.tan((oY+121))
+                #if self.y > 0.50:
+                    #self.y = 0.50
+                #elif oY <= 0.0:
+                    #self.y = 0
+                #elif oY > 0.0 and self.y < 0.3:
+                    #self.y = 0.4
+
+                #self.rotate = self.rotate * 2 # Was 0.5
+
+                #'''
+                #if oY <= 2.0:
+                    #self.y = 0.1
+                #'''
+                ##slows  it down if it is closer than 3.5 degrees
+                #if oY > 5 :
+                    #self.y = .25
+                #if oY <= 5:
+                    #self.y = 0.15
+                    #self.rotate = self.rotate * .75
+                #self.y = self.y * self.speedBoost
+                #if self.y < 0.15:
+                    #self.y = 0.15
+
+                #self.x = 0
                 robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
 
 
@@ -150,46 +183,66 @@ class GoToTapeCommand(Command):
                 self.x = math.copysign((oX * (4/2)) / 100, oX)
                 self.y = math.copysign((oY * (6/2)) / 100, oY)
 
-                if (oY<-cald):
-                    oY2 = oY + cald
-                elif (oY>5):
-                    oY2 = oY - cald
+                h= 39.5-28.4
+
+                oD = h / math.tan((oY-15))
+
+                self.y = .15
+
+                if (abs(oX) > 10):
+                    self.rotate = math.copysign(.25, oX)
+                elif (abs(oX) >5):
+                    self.rotate = math.copysign(.20, oX)
+                elif (abs(oX) >3):
+                    self.rotate = math.copysign(.15, oX)
+                elif (abs(oX) >1):
+                    self.rotate = math.copysign(.10, oX)
+                else:
+                    self.rotate = 0
+                    if (oD > 36 ):
+                        self.y = .40
+                    elif (oD > 24):
+                        self.y = .20
+                    elif (oD > 12):
+                        self.y = .01
+
+                self.y = self.y * self.speedBoost
+
+                if (self.y < .175) :
+                    self.y = .175
+
+
+                #start of working code
+                #if (oY<-cald):
+                    #oY2 = oY + cald
+                #elif (oY>5):
+                    #oY2 = oY - cald
 
                 #self.rotate = self.x / frr
 
                 #if abs(self.x) > 0.35:
-                    #self.x = math.copysign(0.45, self.x)
-                    #self.rotate = self.x/3
+                    #self.rotate = math.copysign(0.35, self.x)
                 #elif abs(oX) <= 1.0:
-                    #self.x = oX / 2
-                    #self.rotate = self.x/2
+                    #self.rotate = (oX / 10.0)/1.5
                 #elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                    #self.x = math.copysign(0.2, oX)
-                    #self.rotate = math.copysign(0.3, oX)/2
+                    #self.rotate = math.copysign(0.1, oX)/1.5
 
-                self.rotate = self.x / frr
-
-                if abs(self.x) > 0.35:
-                    self.rotate = math.copysign(0.35, self.x)
-                elif abs(oX) <= 1.0:
-                    self.rotate = (oX / 10.0)/1.5
-                elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                    self.rotate = math.copysign(0.1, oX)/1.5
-
-                self.rotate = self.rotate * 2
+                #self.rotate = self.rotate * 2
 
 
-                if oY > 5 :
-                    self.y = .22
-                elif oY >3.5:
-                    self.y = .15
-                elif oY <=0:
-                    self.y = 0
+                #if oY > 5 :
+                    #self.y = .22
+                #elif oY >3.5:
+                    #self.y = .15
+                #elif oY <=0:
+                    #self.y = 0
 
-                self.y = self.y * self.speedBoost
+                #self.y = self.y * self.speedBoost
 
-                if self.y < 0.15:
-                    self.y = 0.15
+                #if self.y < 0.15:
+                    #self.y = 0.15
+
+                #end of working code
 
                 robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
 
