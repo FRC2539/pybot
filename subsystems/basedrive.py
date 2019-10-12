@@ -159,7 +159,6 @@ class BaseDrive(DebuggableSubsystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
-        print(speeds)
         '''Prevent speeds > 1'''
         maxSpeed = 0
         for speed in speeds:
@@ -264,9 +263,6 @@ class BaseDrive(DebuggableSubsystem):
             #print('applied this position to the controller ' + str(position))
         print(str(self.PIDcontrollers))
 
-        self.resetPID()
-        self.resetEncoders()
-
         self.PIDcontrollers[0].setReference(float(positions[0]), ControlType.kPosition, 0, 0.0)
         self.PIDcontrollers[1].setReference(float(positions[1]), ControlType.kPosition, 0, 0.0)
         self.PIDcontrollers[2].setReference(float(positions[2]), ControlType.kPosition, 0, 0.0)
@@ -302,22 +298,22 @@ class BaseDrive(DebuggableSubsystem):
             encoder.setPosition(position)
             motor.setSmartMotionMaxVelocity(4000)
     '''
-    def averageError(self):
+    def averageError(self, targetPos):
         '''Find the average distance between setpoint and current position.'''
         error = 0
-        for motor, encoder, cont in zip(self.activeMotors, self.encoders, self.PIDcontrollers):
-            error += abs(cont.getSmartMotionAllowedClosedLoopError() - encoder.getPosition())
+        for motor, encoder, target in zip(self.activeMotors, self.encoders, targetPos):
+            error += abs(target - encoder.getPosition())
 #          error += abs(motor.getClosedLoopTarget(0) - encoder.getPosition())
 
-        print(str(error))
+        print('error ' + str(error))
         return error / len(self.activeMotors)
 
 
-    def atPosition(self, tolerance=10):
+    def atPosition(self, target, tolerance=10):
         '''
         Check setpoint error to see if it is below the given tolerance.
         '''
-        return self.averageError() <= tolerance
+        return self.averageError(target) <= tolerance
 
 
     def stop(self):

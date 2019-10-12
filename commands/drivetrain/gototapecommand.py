@@ -42,37 +42,74 @@ class GoToTapeCommand(Command):
         if self.tape.getValue() == 1:
             oX = self.strafe.getValue() - self.tapeoffset # 2.5
             oY = self.distance.getValue()
+            theta = math.radians(oY+79.9)
+
+            oD = 2.5 * math.tan(theta)
+            oD = oD - 14
+            #oD = abs(oD)
 
 
-            self.y = ((oY * 9) / 60) * -1
-            self.x = (oX * 8) / 100
+            if abs(oX) > 10 :
+                self.rotate = math.copysign(.30,oX)
+            elif abs(oX) > 5 :
+                self.rotate = math.copysign(.25, oX)
+            elif abs(oX) > 3 :
+                self.rotate = math.copysign(.20, oX)
+            elif abs(oX) > 1 :
+                self.rotate = math.copysign(.15, oX)
+            else:
+                self.rotate = 0
 
-            if abs(oX) < 15:
-                self.x = math.copysign(self.x * 0.9, self.x)
 
-            if abs(oX) < 4.5:
-                self.x = math.copysign(self.x * 0.7, self.x)
+            #if oD > 36 :
+                #self.y = .30
+            #elif oD > 24 :
+                #self.y = .25
+            #elif oD > 12 :
+                #self.y = .20
+            #else:
+                #self.y = .15
 
-            if abs(oX) < 2.5:
-                self.x = math.copysign(self.x * 0.4, self.x)
+            #self.y = self.y * self.speedBoost
 
-            if abs(oX) < 0.5:
-                self.x = 0
+            #if self.y < .15:
+                #self.y = .15
 
-            if abs(oY) <= 2.0:
-                self.y = math.copysign(self.y - (self.y * 0.25), self.y)
+            self.y = (oD*oD)/5000 + .15
 
-            self.rotate = self.x /3
+
+            #self.y = ((oY * 9) / 60) * -1
+            #self.x = (oX * 8) / 100
+
+            #if abs(oX) < 15:
+                #self.x = math.copysign(self.x * 0.9, self.x)
+
+            #if abs(oX) < 4.5:
+                #self.x = math.copysign(self.x * 0.7, self.x)
+
+            #if abs(oX) < 2.5:
+                #self.x = math.copysign(self.x * 0.4, self.x)
+
+            #if abs(oX) < 0.5:
+                #self.x = 0
+
+            #if abs(oY) <= 1.0:
+                #self.y = (oY * oY) * -1#math.copysign(self.y - (self.y * 0.25), self.y)
+
+            #self.rotate = self.x /3
+            #self.x = 0
+
+            #self.y = self.y * self.speedBoost.getValue()
+
             self.x = 0
-
-            self.y = self.y * self.speedBoost.getValue()
-
+            self.rotate = self.rotate
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
-
+            print('oy = ' + str(oY) + " od = "+ str(oD))
             if not self._finished:
-                self._finished = oY <= 1 and oY >= -1
+                self._finished = oD <= 0.390
+                #self._finished = oY <= .5
 
 
         else:
@@ -86,6 +123,7 @@ class GoToTapeCommand(Command):
 
 
     def end(self):
+        print('GOTO TAPE ENDED\n\n\n\n\n')
         robot.drivetrain.move(0, 0, 0)
 
         self.nt.putNumber('pipeline', self.drivePipeID)

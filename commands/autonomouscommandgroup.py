@@ -26,8 +26,8 @@ class AutonomousCommandGroup(CommandGroup):
         super().__init__('Autonomous')
         print("auto init")
 
-        self.addParallel(ResetEncodersCommand())
-        self.addSequential(MoveCommand(-24))
+        #self.addParallel(ResetEncodersCommand())
+        self.addSequential(MoveCommand(24))
 
         #@fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'TEST')
         #def testAuto(self):

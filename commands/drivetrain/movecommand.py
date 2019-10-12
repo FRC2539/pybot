@@ -24,30 +24,25 @@ class MoveCommand(Command):
 
     def _initialize(self):
         super()._initialize()
-        print('BEGAN INITIALIZE\n\n')
 
-        self.precision = robot.drivetrain.inchesToRotations(1)
+        self.precision = 1
 
 
     def initialize(self):
-        print('BEGAN INITIALIZE\n\n')
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
         self.offset = robot.drivetrain.inchesToRotations(self.distance)
-        print('offset ' + str(self.offset))
         sign = 1
-        print('OLD POSITIONS ' + str(robot.drivetrain.getPositions()))
         for position in robot.drivetrain.getPositions():
-            self.targetPositions.append(position + self.offset * sign)
+            self.targetPositions.append(position + (self.offset * sign))
             sign *= -1
 
         #print('Targets: ' + str(self.targetPositions))
         #print('Starting: ' + str(robot.drivetrain.getPositions()))
 
         pos = robot.drivetrain.setPositions(self.targetPositions)
-        print('target positions ' + str(self.targetPositions))
 
         #robot.drivetrain.setPositions(self.targetPositions)
         #print('\nSET POSITIONS')
@@ -58,7 +53,6 @@ class MoveCommand(Command):
             #print('\nFALSE\n')
 
     def execute(self):
-        print('Current: ' + str(robot.drivetrain.getPositions()))
 
         # Checks for a passing value
 
@@ -97,22 +91,20 @@ class MoveCommand(Command):
                 pass
 
     def isFinished(self):
-        '''
-        for target, position in zip(self.targetPositions, robot.drivetrain.getPositions()):
-            if abs(target) <= abs(position) + abs(self.offset):
-                print('target ' + str(target) + ' position + offset ' + str(position + self.offset))
-                return True
         if self.blocked:
             return False
 
-        if self.isTimedOut() and robot.drivetrain.atPosition(self.precision):
-            self.onTarget += 1
-        else:
-            self.onTarget = 0
+        #if self.isTimedOut() and robot.drivetrain.atPosition(self.precision):
+            #self.onTarget += 1
+        #else:
+            #self.onTarget = 0
 
-        return self.onTarget > 5
-        '''
-        return False
+        if robot.drivetrain.atPosition(self.targetPositions, self.precision):
+            return True
+        else:
+            return False
+
+        #return self.onTarget > 5
 
     def end(self):
         robot.drivetrain.stop()
