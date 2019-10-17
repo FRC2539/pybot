@@ -6,6 +6,8 @@ from custom.config import Config
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 
+from commands.pneumatics.intakeaircommand import IntakeAirCommand
+from commands.pneumatics.stopintakecommand import StopIntakeCommand
 
 def init():
     '''
@@ -28,6 +30,8 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
 
+    driveController.A.whenPressed(IntakeAirCommand()) # Should stop by itself.
+    driveController.B.whenPressed(StopIntakeCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
