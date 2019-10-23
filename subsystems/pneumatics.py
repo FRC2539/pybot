@@ -1,7 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 from wpilib.compressor import Compressor
-
 import ports
 
 
