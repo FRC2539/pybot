@@ -55,9 +55,6 @@ class GoToTapeCommand(Command):
             print("standard camera")
             print("standard camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
 
-        if self.originallyFieldOriented:
-            robot.drivetrain.toggleFieldOrientation()
-
         #self.low = True
 
         if not self.low:
@@ -84,9 +81,9 @@ class GoToTapeCommand(Command):
                 oY = self.distance.getValue()
 
 
-                h= 28.5 - 10.875
+                h = 39.5 - 28.5
 
-                theta = math.radians(63.9 + oY)
+                theta = math.radians(73 + oY)
 
                 oD = h * math.tan(theta) - 36
 
@@ -100,59 +97,17 @@ class GoToTapeCommand(Command):
                     self.rotate = math.copysign(.10, oX)
                 else:
                     self.rotate = 0
-                    #if (oD > 36 ):
-                        #self.y = .40
-                    #elif (oD > 24):
-                        #self.y = .30
-                    #elif (oD > 12):
-                        #self.y = .01
 
-                self.y = (oD * oD) / self.speedBoost + .15
+                self.y = oD * .001
 
 
                 if (self.y < .15) :
                     self.y = .15
 
-
-
-                #oY2  = oY
-
-
-
-
-                #self.x = math.copysign((oX * 4) / 100, oX)
-                #self.y = math.copysign((oY2 * 6) / 100, oY)
-                #self.rotate = self.x / frr
-
-                #if abs(self.x) > 0.35:
-                    #self.rotate = math.copysign(0.35, self.x)
-                #elif abs(oX) <= 1.0:
-                    #self.rotate = (oX / 10.0)/1.5
-                #elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                    #self.rotate = math.copysign(0.1, oX)/1.5
-
-
-                #if self.y > 0.50:
-                    #self.y = 0.50
-                #elif oY <= 0.0:
-                    #self.y = 0
-                #elif oY > 0.0 and self.y < 0.3:
-                    #self.y = 0.4
-
-                #self.rotate = self.rotate * 2 # Was 0.5
-
-                #'''
-                #if oY <= 2.0:
-                    #self.y = 0.1
-                #'''
-                ##slows  it down if it is closer than 3.5 degrees
-                #if oY > 5 :
-                    #self.y = .25
-                #if oY <= 5:
-                    #self.y = 0.15
-                    #self.rotate = self.rotate * .75
-
                 self.x = 0
+
+                print("oD= "+str(oD))
+
                 robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
 
 
@@ -166,7 +121,6 @@ class GoToTapeCommand(Command):
 # if using the lower limelight/ arm is high
         elif self.low:
             if self.tapeLow.getValue() == 1:
-                cald=4
                 print(self.distanceLow.getValue())
                 oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = -1 * self.distanceLow.getValue()
@@ -174,11 +128,11 @@ class GoToTapeCommand(Command):
                 self.x = math.copysign((oX * (4/2)) / 100, oX)
                 self.y = math.copysign((oY * (6/2)) / 100, oY)
 
-                h= 39.5-28.4
+                h = 28.5 - 10.875
 
-                oD = h / math.tan((oY-15))
+                oD = (h / math.tan(math.radians(oY+36.3)) ) - 24
 
-                self.y = .15
+                self.y = .05 * oD
 
                 if (abs(oX) > 10):
                     self.rotate = math.copysign(.25, oX)
@@ -190,56 +144,16 @@ class GoToTapeCommand(Command):
                     self.rotate = math.copysign(.10, oX)
                 else:
                     self.rotate = 0
-                    if (oD > 36 ):
-                        self.y = .40
-                    elif (oD > 24):
-                        self.y = .20
-                    elif (oD > 12):
-                        self.y = .01
 
 
                 if (self.y < .175) :
                     self.y = .175
-
-
-                #start of working code
-                #if (oY<-cald):
-                    #oY2 = oY + cald
-                #elif (oY>5):
-                    #oY2 = oY - cald
-
-                #self.rotate = self.x / frr
-
-                #if abs(self.x) > 0.35:
-                    #self.rotate = math.copysign(0.35, self.x)
-                #elif abs(oX) <= 1.0:
-                    #self.rotate = (oX / 10.0)/1.5
-                #elif abs(oX) > 1.0 and abs(self.x) < 0.2:
-                    #self.rotate = math.copysign(0.1, oX)/1.5
-
-                #self.rotate = self.rotate * 2
-
-
-                #if oY > 5 :
-                    #self.y = .22
-                #elif oY >3.5:
-                    #self.y = .15
-                #elif oY <=0:
-                    #self.y = 0
-
-                #self.y = self.y * self.speedBoost
-
-                #if self.y < 0.15:
-                    #self.y = 0.15
-
-                #end of working code
+                print("oD= "+str(oD))
 
                 robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
 
-
                 if not self._finished:
                     self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 2.0
-
 
             if self._finished:
                 robot.lights.solidGreen()
@@ -261,8 +175,5 @@ class GoToTapeCommand(Command):
 
         self.nt.putNumber('pipeline', self.drivePipeID)
         self.ntLow.putNumber('pipeline', 0)
-
-        if self.originallyFieldOriented:
-            robot.drivetrain.toggleFieldOrientation()
 
         robot.lights.off()
