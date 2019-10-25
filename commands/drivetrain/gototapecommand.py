@@ -75,7 +75,12 @@ class GoToTapeCommand(Command):
             #if self.y < .15:
                 #self.y = .15
 
-            self.y = (oD*oD)/5000 + .15
+            self.y = oD * self.speedBoost * .01
+            if self.y < .15:
+                self.y = .15
+            if self.y > .25:
+                self.y = .25
+
 
 
             #self.y = ((oY * 9) / 60) * -1
