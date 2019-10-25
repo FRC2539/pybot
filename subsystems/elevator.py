@@ -57,7 +57,7 @@ class Elevator(DebuggableSubsystem):
         isTop = self.getPosition() >= self.upperLimit
 
         if isTop:
-            self.setPosition(float(self.upperLimit), 'down')
+            self.setPosition(float(self.upperLimit))
             self.stop()
         else:
             self.set(1.0)

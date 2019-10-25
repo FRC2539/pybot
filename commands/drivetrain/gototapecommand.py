@@ -50,24 +50,27 @@ class GoToTapeCommand(Command):
             #if robot.elevator.getPosition() >= 25.0:
 
             self.low = True
-            print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
+            #print("low camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
         else:
-            print("standard camera")
-            print("standard camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
+            #print("standard camera")
+            pass
+            #print("standard camera, elev: "+ str(robot.elevator.getPosition()) + " arm: "+ str(robot.arm.getPosition()))
 
         #self.low = True
 
         if not self.low:
             self.nt.putNumber('pipeline', self.pipeID)
             self.ntLow.putNumber('pipeline', 0)
+            self.nt.putBoolean('snapshot', True)
         else:
             self.ntLow.putNumber('pipeline', 1)
+            self.ntLow.putBoolean('snapshot', True)
+
 
 
         self._finished = False
 
     def execute(self):
-        slowdown=1
         #closer rotate ratio
         crr=2.0
         #further rotate ratio
@@ -88,27 +91,30 @@ class GoToTapeCommand(Command):
                 oD = h * math.tan(theta) - 36
 
                 if (abs(oX) > 10):
-                    self.rotate = math.copysign(.25, oX)
-                elif (abs(oX) >5):
                     self.rotate = math.copysign(.20, oX)
-                elif (abs(oX) >3):
+                elif (abs(oX) >7):
                     self.rotate = math.copysign(.15, oX)
-                elif (abs(oX) >1):
+                elif (abs(oX) >5):
                     self.rotate = math.copysign(.10, oX)
+                elif (abs(oX) >1):
+                    self.rotate = math.copysign(.05, oX)
                 else:
                     self.rotate = 0
 
-                self.y = oD * .001
-
+                self.y = oD * .02
+                self.y = self.y*self.speedBoost
 
                 if (self.y < .15) :
                     self.y = .15
+
+                if (self.y > .25):
+                    self.y = .25
 
                 self.x = 0
 
                 print("oD= "+str(oD))
 
-                robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
+                robot.drivetrain.move(self.x, self.y, self.rotate)
 
 
 
@@ -125,14 +131,16 @@ class GoToTapeCommand(Command):
                 oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = -1 * self.distanceLow.getValue()
 
+                #self.ntLow.putBoolean('snapshot', True)
+
                 self.x = math.copysign((oX * (4/2)) / 100, oX)
                 self.y = math.copysign((oY * (6/2)) / 100, oY)
 
                 h = 28.5 - 10.875
 
-                oD = (h / math.tan(math.radians(oY+36.3)) ) - 24
+                oD = (h / math.tan(math.radians(oY+36.3)) ) - 25
 
-                self.y = .05 * oD
+                self.y = .02 * oD
 
                 if (abs(oX) > 10):
                     self.rotate = math.copysign(.25, oX)
@@ -149,8 +157,9 @@ class GoToTapeCommand(Command):
                 if (self.y < .175) :
                     self.y = .175
                 print("oD= "+str(oD))
+                self.y = self.y*self.speedBoost
 
-                robot.drivetrain.move(self.x/slowdown, self.y/slowdown, self.rotate)
+                robot.drivetrain.move(self.x, self.y, self.rotate)
 
                 if not self._finished:
                     self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 2.0
@@ -175,5 +184,9 @@ class GoToTapeCommand(Command):
 
         self.nt.putNumber('pipeline', self.drivePipeID)
         self.ntLow.putNumber('pipeline', 0)
+        if not self.low:
+            self.nt.putBoolean('snapshot', True)
+        else:
+            self.ntLow.putBoolean('snapshot', True)
 
         robot.lights.off()
