@@ -61,10 +61,11 @@ class GoToTapeCommand(Command):
         if not self.low:
             self.nt.putNumber('pipeline', self.pipeID)
             self.ntLow.putNumber('pipeline', 0)
-            self.nt.putBoolean('snapshot', True)
+            #self.nt.putNumber('snapshot', 1)
         else:
             self.ntLow.putNumber('pipeline', 1)
-            self.ntLow.putBoolean('snapshot', True)
+            #self.ntLow.putNumber('snapshot', 1)
+        self.count = 0
 
 
 
@@ -82,6 +83,12 @@ class GoToTapeCommand(Command):
                 print(self.distance.getValue())
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = self.distance.getValue()
+
+                if (self.count < 4):
+                    self.count += 1
+                elif (self.count == 4):
+                    self.count = 0
+                    self.nt.putNumber('snapshot', 1)
 
 
                 h = 39.5 - 28.5
@@ -130,6 +137,12 @@ class GoToTapeCommand(Command):
                 print(self.distanceLow.getValue())
                 oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = -1 * self.distanceLow.getValue()
+
+                if (self.count < 4):
+                    self.count += 1
+                elif (self.count == 4):
+                    self.count = 0
+                    self.ntLow.putNumber('snapshot', 1)
 
                 #self.ntLow.putBoolean('snapshot', True)
 
@@ -184,9 +197,9 @@ class GoToTapeCommand(Command):
 
         self.nt.putNumber('pipeline', self.drivePipeID)
         self.ntLow.putNumber('pipeline', 0)
-        if not self.low:
-            self.nt.putBoolean('snapshot', True)
-        else:
-            self.ntLow.putBoolean('snapshot', True)
+        #if not self.low:
+            #self.nt.putNumber('snapshot', 1)
+        #else:
+            #self.ntLow.putNumber('snapshot', 1)
 
         robot.lights.off()
