@@ -13,6 +13,7 @@ class GoToTapeCommand(Command):
         self.requires(robot.drivetrain)
 
         self.nt = NetworkTables.getTable('limelight')
+        self.drive = NetworkTables.getTable('DriveTrain')
 
         self.tape = Config('limelight/tv', 5)
         self.strafe = Config('limelight/tx', 0)
@@ -29,9 +30,12 @@ class GoToTapeCommand(Command):
         self.rotate = 0
 
         self.speedBoost = Config('DriveTrain/tapespeedboost', 1)
+        #self.yfinshed = Config('DriveTrain/yfinished', .5)
+
 
 
     def initialize(self):
+        self.fY = self.drive.getValue('degreesfinished', 1)
 
         self.nt.putNumber('pipeline', self.pipeID)
 
@@ -76,10 +80,10 @@ class GoToTapeCommand(Command):
                 #self.y = .15
 
             self.y = oD * self.speedBoost * .01
-            if self.y < .15:
-                self.y = .15
-            if self.y > .25:
-                self.y = .25
+            if self.y < .175:
+                self.y = .175
+            if self.y > .35:
+                self.y = .35
 
 
 
@@ -113,8 +117,8 @@ class GoToTapeCommand(Command):
 
             print('oy = ' + str(oY) + " od = "+ str(oD))
             if not self._finished:
-                self._finished = oD <= 0.390
-                #self._finished = oY <= .5
+                #self._finished = oD <= 0.390
+                self._finished = oY <= self.fY
 
 
         else:

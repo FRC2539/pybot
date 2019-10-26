@@ -9,6 +9,7 @@ from commands.drivetrain.gototapecommand import GoToTapeCommand
 from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.transitionmovecommand import TransitionMoveCommand
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.movepercentcommand import MovePercentCommand
 from commands.drivetrain.timedmovecommand import TimedMoveCommand
 from commands.hatch.hatchejectcommand import HatchEjectCommand
 from commands.hatch.hatchintakecommand import HatchIntakeCommand
@@ -29,6 +30,7 @@ class GoToTapeCommandGroup(CommandGroup):
         def placeHatch(self):
             print("Has hatch")
             self.addSequential(GoToTapeCommand(), 3)
+            self.addSequential(MovePercentCommand(0.175), 0.75)
             self.addSequential(HatchEjectCommand(), 0.3)
             self.addSequential(MoveCommand(-12))
             #self.addSequential(TimedMoveCommand(1, -0.3))
@@ -39,6 +41,7 @@ class GoToTapeCommandGroup(CommandGroup):
             print("No hatch")
             self.addParallel(HatchIntakeCommand(),3)
             self.addSequential(GoToTapeCommand())
+            self.addSequential(MovePercentCommand(), 0.75)
             self.addSequential(MoveCommand(-12))
             #self.addSequential(TimedMoveCommand(1.5, 0.2))
             #self.addSequential(TimedMoveCommand(1, -0.3))
