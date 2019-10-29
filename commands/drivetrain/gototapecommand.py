@@ -30,7 +30,6 @@ class GoToTapeCommand(Command):
         self.rotate = 0
 
         self.speedBoost = Config('DriveTrain/tapespeedboost', 1)
-        #self.yfinshed = Config('DriveTrain/yfinished', .5)
 
 
 
@@ -40,6 +39,8 @@ class GoToTapeCommand(Command):
         self.nt.putNumber('pipeline', self.pipeID)
 
         self._finished = False
+
+        self.count = 0
 
     def execute(self):
         print(self.tape.getValue())
@@ -52,6 +53,11 @@ class GoToTapeCommand(Command):
             oD = oD - 14
             #oD = abs(oD)
 
+            if self.count < 4:
+                self.count += 1
+            else:
+                self.count = 0
+                self.nt.putNumber('snapshot', 1)
 
             if abs(oX) > 10 :
                 self.rotate = math.copysign(.30,oX)
@@ -65,53 +71,12 @@ class GoToTapeCommand(Command):
                 self.rotate = 0
 
 
-            #if oD > 36 :
-                #self.y = .30
-            #elif oD > 24 :
-                #self.y = .25
-            #elif oD > 12 :
-                #self.y = .20
-            #else:
-                #self.y = .15
-
-            #self.y = self.y * self.speedBoost
-
-            #if self.y < .15:
-                #self.y = .15
-
             self.y = oD * self.speedBoost * .01
             if self.y < .175:
                 self.y = .175
             if self.y > .35:
                 self.y = .35
 
-
-
-            #self.y = ((oY * 9) / 60) * -1
-            #self.x = (oX * 8) / 100
-
-            #if abs(oX) < 15:
-                #self.x = math.copysign(self.x * 0.9, self.x)
-
-            #if abs(oX) < 4.5:
-                #self.x = math.copysign(self.x * 0.7, self.x)
-
-            #if abs(oX) < 2.5:
-                #self.x = math.copysign(self.x * 0.4, self.x)
-
-            #if abs(oX) < 0.5:
-                #self.x = 0
-
-            #if abs(oY) <= 1.0:
-                #self.y = (oY * oY) * -1#math.copysign(self.y - (self.y * 0.25), self.y)
-
-            #self.rotate = self.x /3
-            #self.x = 0
-
-            #self.y = self.y * self.speedBoost.getValue()
-
-            self.x = 0
-            self.rotate = self.rotate
 
             robot.drivetrain.move(self.x, self.y, self.rotate)
 
