@@ -62,6 +62,10 @@ class BaseDrive(DebuggableSubsystem):
         self.maxSpeed = Config('DriveTrain/maxSpeed', 2500)
         self.speedLimit = Config('DriveTrain/normalSpeed', 2000)
         self.deadband = Config('DriveTrain/deadband', 0.05)
+
+        self.leftDifferential = Config('DriveTrain/leftDifferential', 0)
+        self.rightDifferential = Config('DriveTrain/rightDifferential', 0)
+
         self.maxPercentVBus = 1
 
         '''Allow changing CAN Talon settings from dashboard'''
@@ -114,7 +118,9 @@ class BaseDrive(DebuggableSubsystem):
             y = math.copysign(max(abs(y) - self.deadband, 0), y)
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
-        speeds = self._calculateSpeeds(x, y, rotate)
+        speeds = self._calculateSpeeds(x, y, rotate, self.rightDifferential, self.leftDifferential) #Right perecent differential, then left!
+
+        print('speeds '+ str(speeds))
 
         '''Prevent speeds > 1'''
         maxSpeed = 0

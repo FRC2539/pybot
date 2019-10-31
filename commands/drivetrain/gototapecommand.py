@@ -18,9 +18,10 @@ class GoToTapeCommand(Command):
 
         self.tapeLow = Config('limelight-low/tv', 0)
         self.strafeLow = Config('limelight-low/tx', 0)
-        self.distanceLow = Config('limelight-low/ty', 0)
+        self.distanceLow = Config('limelight-low/ty', 1.5)
 
         self.tapeoffset = Config('DriveTrain/tapeoffset', 0)
+        self.tapeoffsetlow = Config('DriveTrain/tapeoffsetlow', 0)
 
         self.nt = NetworkTables.getTable('limelight')
         self.ntLow = NetworkTables.getTable('limelight-low')
@@ -98,13 +99,13 @@ class GoToTapeCommand(Command):
                 oD = h * math.tan(theta) - 36
 
                 if (abs(oX) > 10):
-                    self.rotate = math.copysign(.20, oX)
+                    self.rotate = math.copysign(.25, oX)
                 elif (abs(oX) >7):
-                    self.rotate = math.copysign(.15, oX)
+                    self.rotate = math.copysign(.20, oX)
                 elif (abs(oX) >5):
-                    self.rotate = math.copysign(.10, oX)
+                    self.rotate = math.copysign(.15, oX)
                 elif (abs(oX) >1):
-                    self.rotate = math.copysign(.05, oX)
+                    self.rotate = math.copysign(.10, oX)
                 else:
                     self.rotate = 0
 
@@ -130,8 +131,8 @@ class GoToTapeCommand(Command):
 
                 elif not self._finished:
                     #self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
-                    self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 1.0
-# if using the lower limelight/ arm is high
+                    self._finished = oY <= 1.0 #and self.tape == 1
+                    # if using the lower limelight/ arm is high
         elif self.low:
             if self.tapeLow.getValue() == 1:
                 print(self.distanceLow.getValue())
@@ -175,7 +176,7 @@ class GoToTapeCommand(Command):
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
                 if not self._finished:
-                    self._finished = (abs(oX) - self.tapeoffset) <= 2.0 and oY <= 2.0
+                    self._finished = oY <= 2.1 #and self.tapeLow == 1
 
             if self._finished:
                 robot.lights.solidGreen()

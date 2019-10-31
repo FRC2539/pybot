@@ -31,6 +31,8 @@ from commands.drivetrain.gopasttapecommand import GoPastTapeCommand
 from commands.drivetrain.autonomousmeasurecommand import AutonomousMeasureCommand
 from commands.drivetrain.gotocargoshipcommand import GoToCargoshipCommand
 from commands.drivetrain.gotocargoshipcommandgroup import GoToCargoshipCommandGroup
+#from commands.drivetrain.testgototapecommand import TestGoToTapeCommand
+from commands.drivetrain.testgototapecommandgroup import TestGoToTapeCommandGroup
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.ejectcommand import EjectCommand
@@ -176,7 +178,7 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveRotate = self.controllerOne.RightX
 
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
-            self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
+            self.controllerOne.LeftBumper.whileHeld(TestGoToTapeCommandGroup())
 
             self.controllerOne.Y.whenPressed(ZeroGyroCommand())
             #self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
@@ -196,6 +198,7 @@ class Layout(DebuggableSubsystem):
 
             self.controllerTwo.Back.whenPressed(ResetCommand())
             self.controllerTwo.B.whenPressed(ZeroArmCommandGroup())
+            #self.controllerTwo.A.whileHeld(TestGoToTapeCommandGroup())
 
             self.controllerTwo.LeftTrigger.whileHeld(LowerNoZeroCommand()) # Arm command
             self.controllerTwo.LeftBumper.whileHeld(RaiseCommand()) # Arm command

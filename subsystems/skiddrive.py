@@ -35,5 +35,5 @@ class SkidDrive(BaseDrive):
     def strafeInchesToTicks(self, distance):
         pass
 
-    def _calculateSpeeds(self, x, y, rotate):
-        return [y + rotate, -y + rotate]
+    def _calculateSpeeds(self, x, y, rotate, differentialRightMult=0, differentialLeftMult=0):
+        return [(y + rotate) * differentialLeftMult + (y + rotate), (-y + rotate) * differentialRightMult + (-y + rotate)]
