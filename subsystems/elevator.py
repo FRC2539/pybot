@@ -157,6 +157,12 @@ class Elevator(DebuggableSubsystem):
     def goToFloor(self):
         self.goToLevel('floor')
 
+    def elevatorIsHigh(self):
+        self.high = False
+        if (robot.elevator.getPosition() > 5) :
+            self.high = True
+        return self.high
+
 
     def panelEject(self):
         if not (self.getPosition() < 0.1):
