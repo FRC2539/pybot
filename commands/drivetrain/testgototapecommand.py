@@ -63,6 +63,7 @@ class TestGoToTapeCommand(Command):
             if self.tape.getValue() == 1:
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oA = self.area.getValue()
+                tape = self.tape.getValue()
 
                 if (self.count < 4):
                     self.count += 1
@@ -73,7 +74,7 @@ class TestGoToTapeCommand(Command):
 
                 self.rotate = .05 * oX
 
-                eA = 4.9 - oA
+                eA = 5 - oA
 
                 self.y = eA * .1 * self.speedBoost
 
@@ -83,18 +84,24 @@ class TestGoToTapeCommand(Command):
                 if (self.y > .5):
                     self.y = .5
 
+                if tape == 0 :
+                    self.y =0
+                    self.rotate=0
+
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
                 if self.wantsHatch:
                     self._finished = robot.hatch.hasHatchPanel()
 
                 elif not self._finished:
-                    self._finished = oA >= 4.9
+                    self._finished = oA>= 5
 
         elif self.low:
             if self.tapeLow.getValue() == 1:
                 oX = self.strafeLow.getValue() + self.tapeoffset
                 oA = self.areaLow.getValue()
+                tapeLow= self.tapeLow.getValue()
+
 
                 if (self.count < 4):
                     self.count += 1
@@ -113,7 +120,9 @@ class TestGoToTapeCommand(Command):
 
                 if (self.y > .5):
                     self.y = .5
-
+                if tapeLow == 0 :
+                    self.y =0
+                    self.rotate=0
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
                 if not self._finished:

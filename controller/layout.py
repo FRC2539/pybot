@@ -178,7 +178,7 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveRotate = self.controllerOne.RightX
 
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
-            self.controllerOne.LeftBumper.whileHeld(TestGoToTapeCommandGroup())
+            self.controllerOne.X.whileHeld(TestGoToTapeCommandGroup())
 
             self.controllerOne.Y.whenPressed(ZeroGyroCommand())
             #self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())

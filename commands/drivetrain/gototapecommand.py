@@ -84,6 +84,7 @@ class GoToTapeCommand(Command):
                 print(self.distance.getValue())
                 oX = self.strafe.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = self.distance.getValue()
+                tape = self.tape.getValue()
 
                 if (self.count < 4):
                     self.count += 1
@@ -108,6 +109,10 @@ class GoToTapeCommand(Command):
                     self.rotate = math.copysign(.10, oX)
                 else:
                     self.rotate = 0
+                #self.rotate = .03 * oX
+                #if self.rotate > .25:
+                    #self.rotate =.25
+
 
                 self.y = oD * .02
                 self.y = self.y*self.speedBoost
@@ -117,10 +122,13 @@ class GoToTapeCommand(Command):
 
                 if (self.y > .25):
                     self.y = .25
+                if tape == 0 :
+                    self.y =0
+                    self.rotate=0
 
                 self.x = 0
 
-                print("oD= "+str(oD))
+                #print("oD= "+str(oD))
 
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
@@ -131,13 +139,14 @@ class GoToTapeCommand(Command):
 
                 elif not self._finished:
                     #self._finished = (abs(self.x) <= 0.03 and abs(self.y) <= 0.03 and abs(self.rotate) <= 0.03) or oY <= 1.0
-                    self._finished = oY <= 1.0 #and self.tape == 1
+                    self._finished = abs(oY) <= 1.0 and tape == 1
                     # if using the lower limelight/ arm is high
         elif self.low:
             if self.tapeLow.getValue() == 1:
                 print(self.distanceLow.getValue())
                 oX = self.strafeLow.getValue() + self.tapeoffset #0.0 #3.5 #Adjust for off center camera position
                 oY = -1 * self.distanceLow.getValue()
+                tapeLow= self.tapeLow.getValue()
 
                 if (self.count < 4):
                     self.count += 1
@@ -172,11 +181,14 @@ class GoToTapeCommand(Command):
                     self.y = .175
                 print("oD= "+str(oD))
                 self.y = self.y*self.speedBoost
+                if tapeLow == 0 :
+                    self.y =0
+                    self.rotate=0
 
                 robot.drivetrain.move(self.x, self.y, self.rotate)
 
                 if not self._finished:
-                    self._finished = oY <= 2.1 #and self.tapeLow == 1
+                    self._finished = abs(oY) <= 2.0 and tapeLow == 1
 
             if self._finished:
                 robot.lights.solidGreen()

@@ -131,6 +131,61 @@ class Elevator(DebuggableSubsystem):
     def goToFloor(self):
         self.goToLevel('floor')
 
+    def isMid(self):
+        self.position = self.encoder.getPosition()
+        self.dif0 = self.position - 0
+        self.dif1 = self.position - 41
+        self.dif2 = self.position - 69
+
+        if self.dif0 < self.dif1 :
+            if  self.dif0 < self.dif2:
+                return False
+        elif self.dif1 < self.dif0:
+            if self.dif1 < self.dif2:
+                return True
+        elif self.dif2 < self.dif0:
+            if self.dif2 < self.dif1:
+                return False
+        else:
+            return False
+
+    def isHigh(self):
+        self.position = self.encoder.getPosition()
+        self.dif0 = self.position - 0
+        self.dif1 = self.position - 41
+        self.dif2 = self.position - 69
+
+        if self.dif0 < self.dif1 :
+            if  self.dif0 < self.dif2:
+                return False
+        elif self.dif1 < self.dif0:
+            if self.dif1 < self.dif2:
+                return False
+        elif self.dif2 < self.dif0:
+            if self.dif2 < self.dif1:
+                return True
+        else:
+            return False
+
+    def isLow(self):
+        self.position = self.encoder.getPosition()
+        self.dif0 = self.position - 0
+        self.dif1 = self.position - 41
+        self.dif2 = self.position - 69
+
+        if self.dif0 < self.dif1 :
+            if  self.dif0 < self.dif2:
+                return True
+        elif self.dif1 < self.dif0:
+            if self.dif1 < self.dif2:
+                return False
+        elif self.dif2 < self.dif0:
+            if self.dif2 < self.dif1:
+                return False
+        else:
+            return False
+
+
 
     #def panelEject(self):
         #if not (self.getPosition() < 0.1):
