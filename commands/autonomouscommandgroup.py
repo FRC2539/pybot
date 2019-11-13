@@ -28,4 +28,4 @@ class AutonomousCommandGroup(CommandGroup):
         print("auto init")
 
         #self.addParallel(ResetEncodersCommand())
-        self.addSequential(PathfinderMoveCommand([[6,3,0], [6, 8, 45]]))
+        self.addSequential(PathfinderMoveCommand([[6, 3, 0], [6, 5, 45], [6, -2, 0]]))

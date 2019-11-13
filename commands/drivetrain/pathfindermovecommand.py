@@ -12,7 +12,7 @@ class PathfinderMoveCommand(Command):
         super().__init__('Pathfinder Move')
 
         self.requires(robot.drivetrain)
-        self.points = points
+        self.points = points#[[-4, -1, 0], [-2, -2, 0], [0, 0, 0]]#points
 
     def initialize(self):
         if self.points is []:
@@ -21,11 +21,12 @@ class PathfinderMoveCommand(Command):
         pfPoints = robot.drivetrain.pointsToPathfinder(self.points)
         print(str(pfPoints))
 
-        pfPoints = [
+        pdfPoints = [
             pf.Waypoint(-4, -1, math.radians(-45.0)),
             pf.Waypoint(-2, -2, 0),
             pf.Waypoint(0, 0, 0),
             ]
+        print(str(pdfPoints))
 
         info, trajectory = pf.generate(pfPoints, pf.FIT_HERMITE_CUBIC, pf.SAMPLES_HIGH,
                                        dt=0.05,

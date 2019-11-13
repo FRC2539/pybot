@@ -405,10 +405,11 @@ class BaseDrive(DebuggableSubsystem):
 
     def pointsToPathfinder(self, points):
         finalList = []
-
+        var = 0
         try:
             for coordinate in points:
-                finalList.append(pf.Waypoint(int(coordinate[0]), int(coordinate[1]), math.radians(coordinate[2])))
+                var = pf.Waypoint(int(coordinate[0]), int(coordinate[1]), math.radians(coordinate[2]))
+                finalList.append(var)
         except ValueError:
             raise ValueError('Submitted a noninteger value to pathfinder')
 
