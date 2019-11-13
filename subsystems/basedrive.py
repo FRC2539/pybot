@@ -12,6 +12,9 @@ from networktables import NetworkTables as nt
 
 from navx.ahrs import AHRS
 
+import pathfinder as pf
+from pathfinder.followers import EncoderFollower
+
 from custom.config import Config
 import ports
 import robot
@@ -376,6 +379,40 @@ class BaseDrive(DebuggableSubsystem):
 
         return degrees
 
+    def setSideSpeeds(self, left, right):
+        self.activeMotors[0].set(left)
+        self.activeMotors[1].set(right)
+
+    def getFrontLeftPosition(self):
+        return self.encoders[0].getPosition()
+
+    def getFrontRightPosition(self):
+        return self.encoders[1].getPosition()
+
+    def createEncoderFollowers(self, modifier):
+        left = EncoderFollower(modifier.getLeftTrajectory())
+        right = EncoderFollower(modifier.getRightTrajectory())
+
+        left.configureEncoder(int(self.activeEncoders[0].getPosition()), 11,  0.1524)
+        right.configureEncoder(int(self.activeEncoders[1].getPosition()), 11,  0.1524)
+        # refer to documentation
+
+        # 1.7 is the max velocity
+        left.configurePIDVA(0.05, 0.0, 0.1, (1 / 1.7), 0)
+        right.configurePIDVA(0.05, 0.0, 0.1, (1 / 1.7), 0)
+
+        return left, right
+
+    def pointsToPathfinder(self, points):
+        finalList = []
+
+        try:
+            for coordinate in points:
+                finalList.append(pf.Waypoint(int(coordinate[0]), int(coordinate[1]), math.radians(coordinate[2])))
+        except ValueError:
+            raise ValueError('Submitted a noninteger value to pathfinder')
+
+        return finalList
 
     def getXDisplacement(self):
         '''Returns x-axis displacement of robot since the last reset, in INCHES'''
