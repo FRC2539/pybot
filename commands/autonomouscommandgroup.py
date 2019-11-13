@@ -27,5 +27,4 @@ class AutonomousCommandGroup(CommandGroup):
         super().__init__('Autonomous')
         print("auto init")
 
-        #self.addParallel(ResetEncodersCommand())
         self.addSequential(PathfinderMoveCommand([[6, 3, 0], [6, 5, 45], [6, -2, 0]]))

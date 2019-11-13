@@ -21,18 +21,14 @@ class PathfinderMoveCommand(Command):
         pfPoints = robot.drivetrain.pointsToPathfinder(self.points)
         print(str(pfPoints))
 
-        pdfPoints = [
-            pf.Waypoint(-4, -1, math.radians(-45.0)),
-            pf.Waypoint(-2, -2, 0),
-            pf.Waypoint(0, 0, 0),
-            ]
+        pdfPoints = [pf.Waypoint(-4, -1, math.radians(-45.0)), pf.Waypoint(-2, -2, 0), pf.Waypoint(0, 0, 0)]
         print(str(pdfPoints))
 
         info, trajectory = pf.generate(pfPoints, pf.FIT_HERMITE_CUBIC, pf.SAMPLES_HIGH,
                                        dt=0.05,
                                        max_velocity=1.7,
                                        max_acceleration=2.0,
-                                       max_jerk=60.0,
+                                       max_jerk=1.0
                                        )
 
         print('trajectory ' + str(trajectory))
@@ -51,6 +47,8 @@ class PathfinderMoveCommand(Command):
         angleDifference = pf.boundHalfDegrees(desiredHeading - gyroHeading)
 
         turn = 0.8 * (-1.0 / 80.0) * angleDifference
+
+        print(str(leftOut + turn) + ' ' + str(rightOut - turn))
 
         robot.drivetrain.setSideSpeeds(leftOut + turn, rightOut - turn)
 
