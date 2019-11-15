@@ -56,6 +56,8 @@ class KryptonBot(CommandBasedRobot):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)
 
+    def getPeriod_(self):
+        return self.getPeriod()
 
     @classmethod
     def subsystems(cls):

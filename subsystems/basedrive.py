@@ -393,8 +393,8 @@ class BaseDrive(DebuggableSubsystem):
         left = EncoderFollower(modifier.getLeftTrajectory())
         right = EncoderFollower(modifier.getRightTrajectory())
 
-        left.configureEncoder(int(self.activeEncoders[0].getPosition()), 11,  0.1524)
-        right.configureEncoder(int(self.activeEncoders[1].getPosition()), 11,  0.1524)
+        left.configureEncoder(int(self.activeEncoders[0].getPosition()), 11,  0.5)
+        right.configureEncoder(int(self.activeEncoders[1].getPosition()), 11,  0.5)
         # refer to documentation
 
         # 1.7 is the max velocity

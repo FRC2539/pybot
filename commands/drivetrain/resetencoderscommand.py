@@ -1,8 +1,8 @@
-from wpilib.command.command import Command
+from wpilib.command.instantcommand import InstantCommand
 
 import robot
 
-class ResetEncodersCommand(Command):
+class ResetEncodersCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Reset Encoders')
@@ -11,7 +11,7 @@ class ResetEncodersCommand(Command):
 
 
     def initialize(self):
-        #robot.drivetrain.resetEncoders()
+        robot.drivetrain.resetEncoders()
         print('\n\nreset\n\n')
 
     def end(self):
