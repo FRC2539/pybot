@@ -1,5 +1,6 @@
 
 
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -22,3 +23,6 @@ relay = PortsList()
 relay.relayDIO = 0
 
 pneumatics = PortsList()
+
+turret = PortsList()
+turret.motorID = 5

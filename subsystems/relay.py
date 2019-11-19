@@ -11,15 +11,21 @@ class Relay(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Relay')
         self.relay = WPIRelay(ports.relay.relayDIO)
+        self.relay.stopMotor()
+        self.changeDirection(True)
+        self.stop()
 
     def setForward(self):
         self.relay.set(WPIRelay.Value.kOn)
+
     def stop(self):
         self.relay.set(WPIRelay.Value.kOff)
+
     def changeDirection(self, direction):
         if direction:
-            self.relay.setDirection(WPIRelay.Direction.kForwardOnly)
+            self.relay.setDirection(WPIRelay.Direction.kForward)
         else:
-            return self.relay.setDirection(WPIRelay.Direction.kReverseOnly)
+            self.relay.setDirection(WPIRelay.Direction.kReverse)
+
     def getState(self):
         return self.relay.get()
