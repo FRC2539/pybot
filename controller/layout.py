@@ -9,6 +9,13 @@ from commands.resetcommand import ResetCommand
 from commands.pneumatics.intakeaircommand import IntakeAirCommand
 from commands.pneumatics.stopintakecommand import StopIntakeCommand
 
+from commands.turret.quicklowercommand import QuickLowerCommand
+from commands.turret.quickraisecommand import QuickRaiseCommand
+from commands.turret.slowlowercommand import SlowLowerCommand
+from commands.turret.slowraisecommand import SlowRaiseCommand
+from commands.relay.shootcommand import ShootCommand
+
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -28,10 +35,14 @@ def init():
     logicalaxes.driveRotate = driveController.RightX
 
     driveController.Back.whenPressed(ResetCommand())
-    driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
+    driveController.A.whileHeld(ShootCommand()) # Should stop by itself.
 
-    driveController.A.whenPressed(IntakeAirCommand()) # Should stop by itself.
-    driveController.B.whenPressed(StopIntakeCommand())
+    driveController.LeftBumper.whileHeld(SlowRaiseCommand())
+    driveController.LeftTrigger.whileHeld(SlowLowerCommand())
+    driveController.RightBumper.whileHeld(QuickRaiseCommand())
+    driveController.RightTrigger.whileHeld(QuickLowerCommand())
+
+
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)

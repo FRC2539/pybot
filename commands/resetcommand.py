@@ -17,3 +17,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.drivetrain)
         self.requires(robot.relay)
         self.requires(robot.pneumatics)
+        self.requires(robot.turret)
