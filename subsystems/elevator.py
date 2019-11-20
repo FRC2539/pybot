@@ -20,13 +20,21 @@ class Elevator(DebuggableSubsystem):
         self.motor = CANSparkMax(ports.elevator.motorID, MotorType.kBrushless)
         self.encoder = self.motor.getEncoder()
         self.PIDController = self.motor.getPIDController()
+        self.FFk = Config('/Elevator/FFk', 0)
+        self.Pk = Config('/Elevator/Pk', .045)
+        self.Ik = Config('/Elevator/Ik', 0)
+        self.Dk = Config('/Elevator/Dk', 1)
+        self.IZk = Config('/Elevator/IZk', 0)
+
+        print ('pk' + str(self.Pk.getValue()))
+
         
         for slot in range(2):
-            self.PIDController.setFF(0.5, slot)
-            self.PIDController.setP(0.1, slot)
-            self.PIDController.setI(0.001, slot)
-            self.PIDController.setD(20, slot)
-            self.PIDController.setIZone(3, slot)
+            self.PIDController.setFF(self.FFk.getValue(), slot) # was .5
+            self.PIDController.setP(self.Pk.getValue(), slot)
+            self.PIDController.setI(self.Ik.getValue(), slot)# was .001
+            self.PIDController.setD(self.Dk.getValue(), slot)# was 20
+            self.PIDController.setIZone(self.IZk.getValue(), slot)# was 3
 
         self.motor.setOpenLoopRampRate(0.6)
         self.motor.setClosedLoopRampRate(0.6)
@@ -97,7 +105,7 @@ class Elevator(DebuggableSubsystem):
         self.motor.setEncPosition(0)
 
     def inchesToRotations(self, value):
-        return (value / 2.638) * 50
+        return (value / (2*2.638 * 3.14159)) * 50
         # 2.638" is the distance in inches in which the chain moves from one rotation. Gear ratio is 50:1.
 
     def setPosition(self, target):
@@ -120,12 +128,12 @@ class Elevator(DebuggableSubsystem):
     
     def increaseHeight(self, value): # Give value in inches!
         rotations = self.inchesToRotations(value)
-        self.PIDController.setReference(self.getPosition() + rotations, ControlType.kPosition, 0, 0)
+        self.PIDController.setReference(self.getPosition() + rotations, ControlType.kPosition, 1, 0)
         
         
     def decreaseHeight(self, value): # Give value in inches!
         rotations = self.inchesToRotations(value)
-        self.PIDController.setReference(self.getPosition() - rotations, ControlType.kPosition, 0, 0)
+        self.PIDController.setReference(self.getPosition() - rotations, ControlType.kPosition, 1, 0)
         
 
     def goToFloor(self):

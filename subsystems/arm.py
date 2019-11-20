@@ -2,6 +2,7 @@ from .debuggablesubsystem import DebuggableSubsystem
 from rev import CANSparkMax, MotorType, ControlType
 import ports
 from wpilib import DigitalInput
+from custom.config import Config
 
 import robot
 from networktables import NetworkTables
@@ -18,11 +19,17 @@ class Arm(DebuggableSubsystem):
 
         self.motor.setInverted(True)
 
-        self.PIDController.setFF(0.5, 0)
-        self.PIDController.setP(0.1, 0)
-        self.PIDController.setI(0.001, 0)
-        self.PIDController.setD(10, 0)
-        self.PIDController.setIZone(3, 0)
+        self.FFk = Config('/Arm/FFk', 0)
+        self.Pk = Config('/Arm/Pk', .00001)
+        self.Ik = Config('/Arm/Ik', 0)
+        self.Dk = Config('/Arm/Dk', 1)
+        self.IZk = Config('/Arm/IZk', 0)
+
+        self.PIDController.setFF(self.FFk.getValue(), 0)
+        self.PIDController.setP(self.Pk.getValue(), 0)
+        self.PIDController.setI(self.Ik.getValue(), 0)
+        self.PIDController.setD(self.Dk.getValue(), 0)
+        self.PIDController.setIZone(self.IZk.getValue(), 0)
 
         self.motor.setOpenLoopRampRate(0.25)
         self.motor.setClosedLoopRampRate(0.25)
@@ -98,6 +105,10 @@ class Arm(DebuggableSubsystem):
         speed = self.motorspeed * -1
         return self.down(speed)
 
+    def degreesToRotations(self, degrees):
+        self.rotations = degrees*1.4
+        return self.rotations
+
 
     def forceDown(self):
         print('Force Down ' + str(self.getPosition()))
@@ -164,6 +175,7 @@ class Arm(DebuggableSubsystem):
     def setPosition(self, target, upOrDown):
         position = self.getPosition()
 
+
         if target > self.upperLimit or target < -3.5:
             self.stop()
             print('Illegal arm target position')
@@ -182,6 +194,13 @@ class Arm(DebuggableSubsystem):
 
     def getPosition(self):
         return self.encoder.getPosition()
+
+    def positionPID(self, target):
+        if target < 50 and target  > 0:
+            self.target = self.degreesToRotations(target)
+            self.PIDController.setReference(float(self.target), ControlType.kPosition, 0, 0)
+        else:
+            print("target was invalid")
 
 
     def isAtZero(self):

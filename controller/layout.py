@@ -48,6 +48,7 @@ from commands.elevator.deelevatecommand import DeelevateCommand
 from commands.elevator.panelejectcommand import PanelEjectCommand
 from commands.elevator.resetelevatorcommand import ResetElevatorCommand
 from commands.elevator.elevatorgotolevelcommand import ElevatorGoToLevelCommand
+from commands.elevator.elevatorpidcommand import ElevatorPidCommand
 
 from commands.arm.raisecommand import RaiseCommand
 from commands.arm.lowercommand import LowerCommand
@@ -59,10 +60,12 @@ from commands.arm.upstagecommand import UpStageCommand
 from commands.arm.downstagecommand import DownStageCommand
 from commands.arm.setarmcommandgroup import SetArmCommandGroup
 from commands.arm.zeroarmcommandgroup import ZeroArmCommandGroup
+from commands.arm.armpidcommand import ArmPidCommand
 
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 from commands.superstructure.upcommand import UpCommand
 from commands.superstructure.downcommand import DownCommand
+from commands.superstructure.superpidcommand import SuperPidCommand
 
 from commands.climber.allextendcommand import AllExtendCommand
 from commands.climber.allretractcommand import AllRetractCommand
@@ -178,7 +181,7 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveRotate = self.controllerOne.RightX
 
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
-            self.controllerOne.X.whileHeld(TestGoToTapeCommandGroup())
+            self.controllerOne.X.whileHeld(SuperPidCommand(29.5,45))
 
             self.controllerOne.Y.whenPressed(ZeroGyroCommand())
             #self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
@@ -191,6 +194,7 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.RightJoystick.whenPressed(ToggleLayoutCommand())
 
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
+            self.controllerOne.A.whileHeld(ElevatorPidCommand(24))
 
 
             # The self.controllerTwo for non-driving subsystems of the robot
