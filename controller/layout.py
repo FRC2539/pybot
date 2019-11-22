@@ -66,6 +66,10 @@ from commands.superstructure.superstructuregotolevelcommand import SuperStructur
 from commands.superstructure.upcommand import UpCommand
 from commands.superstructure.downcommand import DownCommand
 from commands.superstructure.superpidcommand import SuperPidCommand
+from commands.superstructure.superpidlevel2command import SuperPidLevel2Command
+from commands.superstructure.superpidlevel3command import SuperPidLevel3Command
+from commands.superstructure.superballpidlevel1command import SuperBallPidLevel1Command
+from commands.superstructure.superballpidlevel2command import SuperBallPidLevel2Command
 
 from commands.climber.allextendcommand import AllExtendCommand
 from commands.climber.allretractcommand import AllRetractCommand
@@ -181,9 +185,9 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveRotate = self.controllerOne.RightX
 
             self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
-            self.controllerOne.X.whileHeld(SuperPidCommand(29.5,45))
+            self.controllerOne.X.whileHeld(SuperPidLevel3Command())
 
-            self.controllerOne.Y.whenPressed(ZeroGyroCommand())
+            #self.controllerOne.Y.whenPressed(SuperPidCommand(56,50))
             #self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
             self.controllerOne.RightTrigger.whenPressed(EjectCommand())
             self.controllerOne.B.whenPressed(HatchEjectCommand())
@@ -194,7 +198,7 @@ class Layout(DebuggableSubsystem):
             self.controllerOne.RightJoystick.whenPressed(ToggleLayoutCommand())
 
             self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
-            self.controllerOne.A.whileHeld(ElevatorPidCommand(24))
+            self.controllerOne.A.whileHeld(SuperPidLevel2Command())
 
 
             # The self.controllerTwo for non-driving subsystems of the robot
@@ -213,8 +217,10 @@ class Layout(DebuggableSubsystem):
             self.controllerTwo.X.whileHeld(DeelevateCommand())
             self.controllerTwo.Y.whileHeld(ElevateCommand())
 
-            self.controllerTwo.DPadUp.whenPressed(SetArmCommandGroup(70.0, 20.0))
-            self.controllerTwo.DPadDown.whenPressed(SetArmCommandGroup(11.0))
+            self.controllerTwo.DPadUp.whenPressed(SuperPidLevel3Command())
+            self.controllerTwo.DPadRight.whenPressed((SuperPidLevel2Command()))
+            self.controllerTwo.DPadDown.whenPressed(SuperBallPidLevel1Command())
+            self.controllerTwo.Start.whileHeld(SuperBallPidLevel2Command())
 
             self.controllerTwo.RightJoystick.toggleWhenPressed(IntakeCommand())
             self.controllerTwo.LeftJoystick.toggleWhenPressed(HatchIntakeCommand())

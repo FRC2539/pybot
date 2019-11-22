@@ -3,10 +3,10 @@ from wpilib.command.command import Command
 import robot
 
 
-class SuperPidLevel3Command(Command):
+class SuperBallPidLevel2Command(Command):
 
     def __init__(self):
-        super().__init__('Super Pid Level3')
+        super().__init__('Super Ball Pid Level2')
 
         self.requires(robot.elevator)
         self.requires(robot.arm)
@@ -14,7 +14,10 @@ class SuperPidLevel3Command(Command):
 
     def initialize(self):
         robot.arm.positionPID(45)
-        robot.elevator.setPosition(41)
+        robot.elevator.setPosition(2.5)
+
+    def initialize(self):
+        pass
 
 
     def execute(self):

@@ -16,9 +16,11 @@ class SuperPidCommand(Command):
 
 
     def initialize(self):
-        if self.inches < 48 and self.inches > 0 and self.degrees < 50 and self.degrees>0:
+        if self.inches < 56.1 and self.inches > 0:
             robot.arm.positionPID(self.degrees)
             robot.elevator.setPosition(self.inches)
+        elif self.inches ==0:
+            robot.arm.positionPID(self.degrees)
         else:
             pass
 

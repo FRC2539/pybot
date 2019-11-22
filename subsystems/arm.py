@@ -196,7 +196,7 @@ class Arm(DebuggableSubsystem):
         return self.encoder.getPosition()
 
     def positionPID(self, target):
-        if target < 50 and target  > 0:
+        if target < 51 and target  > 0:
             self.target = self.degreesToRotations(target)
             self.PIDController.setReference(float(self.target), ControlType.kPosition, 0, 0)
         else:
