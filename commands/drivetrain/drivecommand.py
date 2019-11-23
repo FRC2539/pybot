@@ -48,7 +48,7 @@ class DriveCommand(Command):
 
         #print(str('X ' + str(logicalaxes.driveX.get()) + '\nY ' + str(y) + '\nRotate ' + str(logicalaxes.driveRotate.get())))
 
-
+        print(robot.drivetrain.getAngle())
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
             y,

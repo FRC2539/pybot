@@ -344,8 +344,8 @@ class BaseDrive(DebuggableSubsystem):
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
-
-        self.setGyroAngle(0)
+        self.navX.reset()
+        self.setGyroAngle(0.0)
 
     def resetNavXDisplacement(self):
         '''Resets the accelerometer on the navX'''
@@ -359,6 +359,11 @@ class BaseDrive(DebuggableSubsystem):
         self.navX.reset()
         self.navX.setAngleAdjustment(angle)
 
+    def manipulateStupidGyro(self, value):
+        '''Manipulates a reset and stupid gyro'''
+
+        self.navX.reset()
+        self.setGyroAngle(self.getAngle() + value)
 
     def getAngle(self):
         '''Current gyro reading'''
@@ -389,19 +394,38 @@ class BaseDrive(DebuggableSubsystem):
     def getFrontRightPosition(self):
         return self.encoders[1].getPosition()
 
+    def enableConversionFactor(self, factor=10.7): # 10.7
+        for encoder in self.encoders:
+            encoder.setPositionConversionFactor(factor)
+
+    def disableConversionFactor(self):
+        for encoder in self.encoders:
+            encoder.setPositionConversionFactor(1)
+
     def createEncoderFollowers(self, modifier):
         left = EncoderFollower(modifier.getLeftTrajectory())
         right = EncoderFollower(modifier.getRightTrajectory())
 
-        left.configureEncoder(int(self.activeEncoders[0].getPosition()), 11,  0.5)
-        right.configureEncoder(int(self.activeEncoders[1].getPosition()), 11,  0.5)
+        # REPLACE ZERO BELOW WITH ACTIVE ENCODER POSITIONS IF IT DOES NOT WORK
+
+        left.configureEncoder(int(self.getFrontLeftPosition()), 1, 0.1542) # This is set to 1 because of the enabled conversion factor. Look up!
+        right.configureEncoder(int(self.getFrontRightPosition()), 1, 0.1542)
         # refer to documentation
 
         # 1.7 is the max velocity
-        left.configurePIDVA(0.05, 0.0, 0.1, (1 / 1.7), 0)
-        right.configurePIDVA(0.05, 0.0, 0.1, (1 / 1.7), 0)
+        left.configurePIDVA(0.8, 0.1, 0.0, (1 / 10), 0.0)
+        right.configurePIDVA(0.8, 0.1, 0.0, (1 / 10), 0.0)
 
         return left, right
+
+    def getTrajectory(self):
+        import os
+        import pickle
+
+        with open(os.path.join(os.path.dirname(__file__), 'trajectory.pickle'), 'rb') as file_:
+            bytes = pickle.load(file_)
+
+        return list(bytes) # Returns decoded string.
 
     def pointsToPathfinder(self, points):
         finalList = []

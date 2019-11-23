@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import wpilib
 
 from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
@@ -18,6 +19,7 @@ from subsystems.elevator import Elevator as elevator
 from subsystems.intake import Intake as intake
 from subsystems.climber import Climber as climber
 from subsystems.hatch import Hatch as hatch
+from subsystems import picklegenerate
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
@@ -31,10 +33,10 @@ class KryptonBot(CommandBasedRobot):
         self.subsystems()
         controller.layout.Layout.init(self)
         driverhud.init()
+        picklegenerate.run()
 
         from commands.startupcommandgroup import StartUpCommandGroup
         StartUpCommandGroup().start()
-
 
     def autonomousInit(self):
         '''This function is called each time autonomous mode starts.'''
@@ -55,9 +57,6 @@ class KryptonBot(CommandBasedRobot):
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)
-
-    def getPeriod_(self):
-        return self.getPeriod()
 
     @classmethod
     def subsystems(cls):
