@@ -1,22 +1,36 @@
 import wpilib
+import magicbot
+import ports
+
+from components.drivebase.robotdrive import RobotDrive
+
+from controller.logitechdualshock import LogitechDualshock
+from . import logicalaxes
+
+from ctre import WPI_TalonSRX
 
 import shutil, sys
 
-class CleanRobot(wpilib.TimedRobot):
+class CleanRobot(magicbot.MagicRobot):
+    drivetrain: RobotDrive('tank') # creates a drivetrain object
     
-    def robotInit(self):
-        '''Initializes robot code here'''
-        pass
-    
-    def autonomousInit(self):
-        pass
+    def createObjects(self):
+        self.drivetrainMotors = [
+                    WPI_TalonSRX(ports.DrivetrainPorts.FrontLeftMotor),
+                    WPI_TalonSRX(ports.DrivetrainPorts.FrontRightMotor),
+                    WPI_TalonSRX(ports.DrivetrainPorts.BackLeftMotor),
+                    WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
+                    ]
+        ''' Create motors and stuff here (init)'''    
+        
+        self.controller = BuildLayout(0)
     
     def teleopInit(self):
-        pass
+        ''' Starts at the beginning of teleop (initialize) '''
+        
+    def teleopPeriodic(self):
+        ''' Starts on each iteration of the control loop (execute) '''
     
-    def handleCrash(self):
-        super().handleCrash()
-        ''' investigate '''
     
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':
