@@ -32,9 +32,9 @@ class TankDrive(VelocityProducer):
         self.speedMultiplier = speedMultiplier
         self.rotateModifier = rotateModifier
         
-        self.getSpeed = self.getSimpleTankSpeed
+        self.getSpeedT = self.getSimpleTankSpeed
         
-        if not self.checkSimpleDriving():
+        if not self.checkSimpleDriving():   # Configures for quick calculations based off of presets
             self.getSpeed = self.getComplexTankSpeed
         
     def configureFourTank(self, motors):
@@ -44,8 +44,8 @@ class TankDrive(VelocityProducer):
         if len(motors) != 4:
             raise 'Could not configure for four motor tank because there were not four given motors!' 
         else:
-            motors[ports.DrivetrainPorts.BackLeftMotor].follow(motor[ports.DrivetrainPorts.FrontLeftMotor])
-            motors[ports.DrivetrainPorts.BackRightMotor].follow(motor[ports.DrivetrainPorts.FrontRightMotor])
+            motors[ports.DrivetrainPorts.BackLeftMotor].follow(motors[ports.DrivetrainPorts.FrontLeftMotor])
+            motors[ports.DrivetrainPorts.BackRightMotor].follow(motors[ports.DrivetrainPorts.FrontRightMotor])
     
         return self.activeMotors
     
@@ -53,7 +53,7 @@ class TankDrive(VelocityProducer):
         return [y + rotate, -y + rotate]
     
     def getComplexTankSpeed(self, x, y, rotate):
-        return [(y + (rotate * self.rotateModifier)) * self.speedMultiplier, (-y + (rotate * self.rotateModifier)) * self.speedMultiplier
+        return [(y + (rotate * self.rotateModifier)) * self.speedMultiplier, (-y + (rotate * self.rotateModifier)) * self.speedMultiplier]
         
 class MecanumDrive(VelocityProducer):
     def __init__(self, speedMultiplier=1, rotateModifier=1):
@@ -62,7 +62,7 @@ class MecanumDrive(VelocityProducer):
         self.speedMultiplier = speedMultiplier
         self.rotateModifier = rotateModifier
         
-        self.getSpeed = self.getSimpleMecanumSpeed
+        self.getSpeedM = self.getSimpleMecanumSpeed
         
         if not self.checkSimpleDriving():
             self.getSpeed = self.getComplexMecanumSpeed
