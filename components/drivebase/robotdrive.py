@@ -8,18 +8,23 @@ from .drivevelocities import TankDrive, MecanumDrive
 from controller import logicalaxes
 
 class RobotDrive:
+    # This class acts as a subsystem (component)
+    frontLeftMotor = WPI_TalonSRX
+    frontRightMotor = WPI_TalonSRX
+    backLeftMotor = WPI_TalonSRX
+    backRightMotor = WPI_TalonSRX
     def __init__(self, _type='tank'):
-        self.motors = [
-                    WPI_TalonSRX(ports.DrivetrainPorts.FrontLeftMotor),
-                    WPI_TalonSRX(ports.DrivetrainPorts.FrontRightMotor),
-                    WPI_TalonSRX(ports.DrivetrainPorts.BackLeftMotor),
-                    WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
-                    ]
-
         self.fallbackDrive = 'tank' # Configure this here only! (maybe nt value later)
-        
+
+        self.motors = [
+                       self.frontLeftMotor,
+                       self.frontRightMotor,
+                       self.backLeftMotor,
+                       self.backRightMotor
+                       ]
+        print(frontLeftMotor)
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Brake)
+            motor.setNeutralMode(2)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
             # Add in motor specifications here               
@@ -67,7 +72,7 @@ class RobotDrive:
 
     def stop(self):
         for motor in self.motors:
-            motor.stopMotor()
+            motor.set(0.0)
 
     def registerAxes(self): # Called before drive method
         logicalaxes.registerAxis('driveX')
@@ -84,9 +89,13 @@ class RobotDrive:
     def moveTank(self, x, y, rotate):
         # Given axises
         speeds = self.drivetrain.getSpeedT(x, y, rotate)
+
+        print(speeds)
+        print(self.activeMotors)
+        print(ports.DrivetrainPorts.FrontLeftMotor)
         
         for motor, velocity in zip(self.activeMotors, speeds):
-            motor.set(ControlMode.PercentOutput, velocity)
+            motor.set(ControlMode.PercentOutput, float(velocity))
 
     def driveRobotMecanum(self):
         self.moveMecanum(
@@ -97,6 +106,6 @@ class RobotDrive:
         
     def moveMecanum(self, x, y, rotate):
         speeds = self.drivetrain.getSpeedM(x, y, rotate)
-
+    
         for motor, velocity in zip(self.activeMotors, speeds):
             motor.set(ControlMode.PercentOutput, velocity)

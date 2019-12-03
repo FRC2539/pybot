@@ -4,6 +4,8 @@ import magicbot
 import controller.logicalaxes
 import ports
 
+from statemachines.driverobot import DriveRobot
+
 from components.drivebase.robotdrive import RobotDrive
 
 from controller.logitechdualshock import LogitechDualshock
@@ -13,31 +15,26 @@ from ctre import WPI_TalonSRX
 
 import shutil, sys
 
-class CleanRobot(magicbot.MagicRobot):
+class CleanRobot(magicbot.MagicRobot):    
+    drivetrain = RobotDrive
     
     def createObjects(self):
-        self.drivetrain = RobotDrive('tank') # creates a drivetrain object
-
-        self.drivetrainMotors = [
-                    WPI_TalonSRX(ports.DrivetrainPorts.FrontLeftMotor),
-                    WPI_TalonSRX(ports.DrivetrainPorts.FrontRightMotor),
-                    WPI_TalonSRX(ports.DrivetrainPorts.BackLeftMotor),
-                    WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
-                    ]
-        ''' Create motors and stuff here (init)'''    
+        self.frontLeftMotor = WPI_TalonSRX(0)
+        self.frontRightotor = WPI_TalonSRX(1)
+        self.backLeftMotor = WPI_TalonSRX(2)
+        self.backRightMotor = WPI_TalonSRX(3)
         
         self.layout = BuildLayout(0)
         self.controller = self.layout.returnObj()
             
     def teleopInit(self):
         ''' Starts at the beginning of teleop (initialize) '''
-
-        self.drivetrain.registerAxes()
-        
+        #self.drivetrain.beginDrive()
+        pass
     def teleopPeriodic(self):
         ''' Starts on each iteration of the control loop (execute) '''
 
-        self.drivetrain.driveRobot()
+        self.drivetrain.beginDrive()
     
     
 if __name__ == "__main__":
