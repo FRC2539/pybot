@@ -41,7 +41,7 @@ class PathfinderMoveCommand(Command):
         #print('trajectory ' + str(trajectory))
 
         trajectory = robot.drivetrain.getTrajectory()
-        modifier = pf.modifiers.TankModifier(trajectory).modify(1.6823) # Wheelbase (Front to rear)
+        modifier = pf.modifiers.TankModifier(trajectory).modify(0.5128) # Wheelbase (Front to rear)
 
         robot.drivetrain.enableConversionFactor()
 
@@ -49,26 +49,32 @@ class PathfinderMoveCommand(Command):
 
         robot.drivetrain.resetEncoders()
 
+        self.wait = True
+
     def execute(self):
-        leftOut = self.left.calculate(int(robot.drivetrain.getFrontLeftPosition()))
-        rightOut = self.right.calculate(int(robot.drivetrain.getFrontRightPosition()))
+        if self.wait:
+            leftOut = self.left.calculate(int(robot.drivetrain.getFrontLeftPosition()))
+            rightOut = self.right.calculate(int(robot.drivetrain.getFrontRightPosition()))
 
-        print('heading ' + str(robot.drivetrain.getAngle()))
+            print('heading ' + str(robot.drivetrain.getAngle()))
 
-        gyroHeading = robot.drivetrain.getAngle()
-        desiredHeading = pf.r2d(self.left.getHeading())
+            gyroHeading = robot.drivetrain.getAngle()
+            desiredHeading = pf.r2d(self.left.getHeading())
 
-        angleDifference = pf.boundHalfDegrees(desiredHeading - gyroHeading)
+            angleDifference = pf.boundHalfDegrees(desiredHeading - gyroHeading)
 
-        turn = 5 * (-1.0 / 80.0) * angleDifference
+            turn = 5 * (-1.0 / 80.0) * angleDifference
 
-        robot.drivetrain.setSideSpeeds(leftOut + turn, rightOut - turn)
+            robot.drivetrain.setSideSpeeds(leftOut + turn, rightOut - turn)
 
-        print(str(self.left.isFinished()) + ' statuses of side trajectories ' + str(self.right.isFinished()))
+            print(str(self.left.isFinished()) + ' statuses of side trajectories ' + str(self.right.isFinished()))
+
+        self.wait = not self.wait
 
     def isFinished(self):
         return self.left.isFinished() or self.right.isFinished()
 
     def end(self):
+        robot.drivetrain.disableInverted()
         robot.drivetrain.disableConversionFactor()
         robot.drivetrain.stop()

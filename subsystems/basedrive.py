@@ -394,7 +394,7 @@ class BaseDrive(DebuggableSubsystem):
     def getFrontRightPosition(self):
         return self.encoders[1].getPosition()
 
-    def enableConversionFactor(self, factor=10.7): # 10.7
+    def enableConversionFactor(self, factor=1): # 10.7
         for encoder in self.encoders:
             encoder.setPositionConversionFactor(factor)
 
@@ -408,22 +408,33 @@ class BaseDrive(DebuggableSubsystem):
 
         # REPLACE ZERO BELOW WITH ACTIVE ENCODER POSITIONS IF IT DOES NOT WORK
 
-        left.configureEncoder(int(self.getFrontLeftPosition()), 1, 0.1542) # This is set to 1 because of the enabled conversion factor. Look up!
-        right.configureEncoder(int(self.getFrontRightPosition()), 1, 0.1542)
+        left.configureEncoder(0, 1, 0.1524) # This is set to 1 because of the enabled conversion factor. Look up!
+        right.configureEncoder(0, 1, 0.1524) # weird float is wheel diameter in meters.
         # refer to documentation
 
         # 1.7 is the max velocity
-        left.configurePIDVA(0.8, 0.1, 0.0, (1 / 10), 0.0)
-        right.configurePIDVA(0.8, 0.1, 0.0, (1 / 10), 0.0)
+        left.configurePIDVA(0.0, 0.0, 0.0, (1 / 10), 0.0)
+        right.configurePIDVA(0.0, 0.0, 0.0, (1 / 10), 0.0)
 
         return left, right
 
-    def getTrajectory(self):
-        import os
-        import pickle
+    def disableInverted(self):
+        for motor in self.motors:
+            motor.setInverted(False)
 
-        with open(os.path.join(os.path.dirname(__file__), 'trajectory.pickle'), 'rb') as file_:
-            bytes = pickle.load(file_)
+    def getTrajectory(self):
+        import pickle
+        import wpilib
+
+        for motor in self.motors:
+            motor.setInverted(True)
+
+        if not wpilib.RobotBase.isSimulation():
+            with open('/home/lvuser/py/tests/trajectory.pickle', 'rb') as file_: # Runs robot version
+                bytes = pickle.load(file_)
+        else:
+            with open('trajectory.pickle', 'rb') as file_: # Runs computer version
+                bytes = pickle.load(file_)
 
         return list(bytes) # Returns decoded string.
 
