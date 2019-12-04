@@ -48,7 +48,7 @@ class TankDrive(VelocityProducer):
             motors[ports.DrivetrainPorts.BackRightMotor].follow(motors[ports.DrivetrainPorts.FrontRightMotor])
     
         return self.activeMotors
-    
+
     def getSimpleTankSpeed(self, x, y, rotate):
         return [y + rotate, -y + rotate]
     
