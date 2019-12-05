@@ -14,13 +14,16 @@ class RobotDrive:
               WPI_TalonSRX
               ]
 
+    activeMotors = motors[0:2]
+
     def __init__(self):
+        self.enabled = True
+
+    def prepareToDrive(self):
         for motor in self.motors:
             motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
-
-        self.activeMotors = self.motors[0:2]
 
         self.declareJoysticks()
 
@@ -40,5 +43,10 @@ class RobotDrive:
                                         rotate=logicalaxes.driveRotate.get()
                                         )
 
+        print(str(speeds))
+        print(str(self.activeMotors))
         for speed, motor in zip(speeds, self.activeMotors):
-            motor.set(ControlMode.PercentOutput, speed)
+            motor.set(2, 0.5)
+
+    def execute(self):
+        self.move()

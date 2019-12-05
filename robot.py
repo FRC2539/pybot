@@ -31,11 +31,14 @@ class CleanRobot(magicbot.MagicRobot):
 
         self.layout = BuildLayout(0)
 
+        self.activeMotors = self.motors[0:2]
+
     def teleopInit(self):
+        self.robotdrive.prepareToDrive()
         ''' Starts at the beginning of teleop (initialize) '''
 
     def teleopPeriodic(self):
-        self.driverobotmachine.beginDrive()
+        self.robotdrive.move()
         ''' Starts on each iteration of the control loop (execute) '''
 
 
