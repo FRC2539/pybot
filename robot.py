@@ -16,7 +16,7 @@ from ctre import WPI_TalonSRX
 import shutil, sys
 
 class CleanRobot(magicbot.MagicRobot):
-    driverobotmachine = DriveRobotMachine
+    #driverobotmachine = DriveRobotMachine
 
     robotdrive = RobotDrive
 
@@ -38,8 +38,8 @@ class CleanRobot(magicbot.MagicRobot):
         ''' Starts at the beginning of teleop (initialize) '''
 
     def teleopPeriodic(self):
-        self.robotdrive.move()
-        ''' Starts on each iteration of the control loop (execute) '''
+        pass
+        ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
 
     

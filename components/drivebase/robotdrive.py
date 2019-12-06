@@ -8,10 +8,10 @@ from ctre import WPI_TalonSRX, ControlMode, NeutralMode, FeedbackDevice
 class RobotDrive:
 
     motors = [
-              WPI_TalonSRX,
-              WPI_TalonSRX,
-              WPI_TalonSRX,
-              WPI_TalonSRX
+              WPI_TalonSRX(0),
+              WPI_TalonSRX(1),
+              WPI_TalonSRX(2),
+              WPI_TalonSRX(3)
               ]
 
     activeMotors = motors[0:2]
@@ -20,6 +20,7 @@ class RobotDrive:
         self.enabled = True
 
     def prepareToDrive(self):
+        print(str(self.motors))
         for motor in self.motors:
             motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)

@@ -15,8 +15,10 @@ class DriveRobotMachine(StateMachine):
 
     @state(first=True)
     def startMachine(self):
-        self.robotdrive.prepareToDrive()
+        pass
+        #self.robotdrive.prepareToDrive()
 
     @default_state
     def drive(self):
-        self.robotdrive.move()
+        pass
+        #self.robotdrive.move()
