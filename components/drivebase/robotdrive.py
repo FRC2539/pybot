@@ -7,24 +7,16 @@ from ctre import WPI_TalonSRX, ControlMode, NeutralMode, FeedbackDevice
 
 class RobotDrive:
 
-    motors = [
-              WPI_TalonSRX(0),
-              WPI_TalonSRX(1),
-              WPI_TalonSRX(2),
-              WPI_TalonSRX(3)
-              ]
-
-    activeMotors = motors[0:2]
-
-    def __init__(self):
-        self.enabled = True
+    motors = list
 
     def prepareToDrive(self):
         print(str(self.motors))
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Brake)
+            motor.setNeutralMode(2)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+
+        self.activeMotors = self.motors[0:2]
 
         self.declareJoysticks()
 
@@ -45,9 +37,8 @@ class RobotDrive:
                                         )
 
         print(str(speeds))
-        print(str(self.activeMotors))
-        for speed, motor in zip(speeds, self.activeMotors):
-            motor.set(2, 0.5)
+        for speed, motor in zip(speeds, self.motors):
+            motor.set(0, float(0.5))
 
     def execute(self):
         self.move()

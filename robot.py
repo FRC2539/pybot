@@ -13,6 +13,8 @@ from controller.buildlayout import BuildLayout
 
 from ctre import WPI_TalonSRX
 
+from collections import namedtuple
+
 import shutil, sys
 
 class CleanRobot(magicbot.MagicRobot):
@@ -22,7 +24,7 @@ class CleanRobot(magicbot.MagicRobot):
 
     def createObjects(self):
 
-        self.motors = [
+        self.robotdrive_motors = [
                 WPI_TalonSRX(0),
                 WPI_TalonSRX(1),
                 WPI_TalonSRX(2),
@@ -31,8 +33,7 @@ class CleanRobot(magicbot.MagicRobot):
 
         self.layout = BuildLayout(0)
 
-        self.activeMotors = self.motors[0:2]
-
+        self.activeMotors = self.robotdrive_motors[0:2]
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
         ''' Starts at the beginning of teleop (initialize) '''
