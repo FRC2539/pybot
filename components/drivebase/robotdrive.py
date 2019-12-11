@@ -3,11 +3,17 @@ import wpilib
 from controller import logicalaxes
 from controller.buildlayout import BuildLayout
 
+from components.drivebase.drivevelocities import TankDrive
+
 from ctre import WPI_TalonSRX, ControlMode, NeutralMode, FeedbackDevice
 
 class RobotDrive:
 
     motors = list
+
+    activeMotors = list
+
+    velocityCalculator = TankDrive # Establishes drive
 
     def prepareToDrive(self):
         print(str(self.motors))
@@ -31,14 +37,12 @@ class RobotDrive:
         logicalaxes.registerAxis('driveRotate')
 
     def move(self):
-        speeds = self.calculateTankSpeed(
+        speeds = self.velocityCalculator.getSpeedT(
                                         y=logicalaxes.driveY.get(),
                                         rotate=logicalaxes.driveRotate.get()
                                         )
-
-        print(str(speeds))
-        for speed, motor in zip(speeds, self.motors):
-            motor.set(0, float(0.5))
+        for speed, motor in zip(speeds, self.activeMotors):
+            motor.set(ControlMode.PercentOutput, speed)
 
     def execute(self):
         self.move()

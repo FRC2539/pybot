@@ -35,7 +35,7 @@ class TankDrive(VelocityProducer):
         self.getSpeedT = self.getSimpleTankSpeed
         
         if not self.checkSimpleDriving():   # Configures for quick calculations based off of presets
-            self.getSpeed = self.getComplexTankSpeed
+            self.getSpeedT = self.getComplexTankSpeed
         
     def configureFourTank(self, motors):
         # Give list of 4 motors
@@ -49,10 +49,10 @@ class TankDrive(VelocityProducer):
     
         return self.activeMotors
 
-    def getSimpleTankSpeed(self, x, y, rotate):
+    def getSimpleTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
     
-    def getComplexTankSpeed(self, x, y, rotate):
+    def getComplexTankSpeed(self, y, rotate, x=0):
         return [(y + (rotate * self.rotateModifier)) * self.speedMultiplier, (-y + (rotate * self.rotateModifier)) * self.speedMultiplier]
         
 class MecanumDrive(VelocityProducer):
@@ -65,7 +65,7 @@ class MecanumDrive(VelocityProducer):
         self.getSpeedM = self.getSimpleMecanumSpeed
         
         if not self.checkSimpleDriving():
-            self.getSpeed = self.getComplexMecanumSpeed
+            self.getSpeedM = self.getComplexMecanumSpeed
         
     def configureMecanum(self, motors):
         self.activeMotors = motors

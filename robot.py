@@ -7,13 +7,12 @@ import ports
 from statemachines.driverobotmachine import DriveRobotMachine
 
 from components.drivebase.robotdrive import RobotDrive
+from components.drivebase.drivevelocities import TankDrive
 
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
 
 from ctre import WPI_TalonSRX
-
-from collections import namedtuple
 
 import shutil, sys
 
@@ -25,15 +24,18 @@ class CleanRobot(magicbot.MagicRobot):
     def createObjects(self):
 
         self.robotdrive_motors = [
-                WPI_TalonSRX(0),
-                WPI_TalonSRX(1),
-                WPI_TalonSRX(2),
-                WPI_TalonSRX(3)
+                WPI_TalonSRX(ports.DrivetrainPorts.FrontLeftMotor),
+                WPI_TalonSRX(ports.DrivetrainPorts.FrontRightMotor),
+                WPI_TalonSRX(ports.DrivetrainPorts.BackLeftMotor),
+                WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
         self.layout = BuildLayout(0)
 
-        self.activeMotors = self.robotdrive_motors[0:2]
+        self.velocityCalculator = TankDrive(rotateModifier=0.7)
+
+        self.activeMotors = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
+
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
         ''' Starts at the beginning of teleop (initialize) '''
