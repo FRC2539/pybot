@@ -30,18 +30,20 @@ class CleanRobot(magicbot.MagicRobot):
                 WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
-        self.layout = BuildLayout(0)
+        self.driveLayout = {'A' : self.robotdrive.getSpeeds}
 
         self.velocityCalculator = TankDrive(rotateModifier=0.7)
 
         self.activeMotors = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
+
+        self.build = BuildLayout(0, self.driveLayout)
+
 
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
         ''' Starts at the beginning of teleop (initialize) '''
 
     def teleopPeriodic(self):
-        pass
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
 

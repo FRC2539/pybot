@@ -1,7 +1,6 @@
 import wpilib
 
 from controller import logicalaxes
-from controller.buildlayout import BuildLayout
 
 from components.drivebase.drivevelocities import TankDrive
 
@@ -15,6 +14,8 @@ class RobotDrive:
 
     velocityCalculator = TankDrive # Establishes drive
 
+    build = object # This is different from what is above. Fix if necessary.
+
     def prepareToDrive(self):
         print(str(self.motors))
         for motor in self.motors:
@@ -24,22 +25,17 @@ class RobotDrive:
 
         self.activeMotors = self.motors[0:2]
 
-        self.declareJoysticks()
+    def getSpeeds(self):
+        # Temporary...probably
+        return [self.motors[0].get(), self.motors[1].get(), self.motors[2].get(), self.motors[3].get()]
 
     def calculateTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
 
-    def declareJoysticks(self):
-        self.build = BuildLayout(0)
-
-        logicalaxes.registerAxis('driveX')
-        logicalaxes.registerAxis('driveY')
-        logicalaxes.registerAxis('driveRotate')
-
     def move(self):
         speeds = self.velocityCalculator.getSpeedT(
-                                        y=logicalaxes.driveY.get(),
-                                        rotate=logicalaxes.driveRotate.get()
+                                        y=self.build.getY(),
+                                        rotate=self.build.getRotate()
                                         )
         for speed, motor in zip(speeds, self.activeMotors):
             motor.set(ControlMode.PercentOutput, speed)

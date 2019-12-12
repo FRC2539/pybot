@@ -18,6 +18,8 @@ class VelocityProducer:
         
     def checkSimpleDriving(self):
         # Checks for multipliers in order to disable unecessary calculations. NOTE: Should run at the beginning and init. 
+        print(self.speedMultiplier)
+        print(self.rotateModifier)
         if self.speedMultiplier == 1 and self.rotateModifier == 1:
             self.simple = True
         else:
@@ -52,7 +54,7 @@ class TankDrive(VelocityProducer):
     def getSimpleTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
     
-    def getComplexTankSpeed(self, y, rotate, x=0):
+    def getComplexTankSpeed(self, y, rotate, x=0): #NOTE Crashing because of y or rotate.
         return [(y + (rotate * self.rotateModifier)) * self.speedMultiplier, (-y + (rotate * self.rotateModifier)) * self.speedMultiplier]
         
 class MecanumDrive(VelocityProducer):

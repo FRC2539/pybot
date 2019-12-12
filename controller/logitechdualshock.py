@@ -29,3 +29,4 @@ class LogitechDualshock(GenericController):
         }
     
     invertedAxed = ['LeftY', 'RightY', 'DPadY']
+
