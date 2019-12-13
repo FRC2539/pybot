@@ -9,6 +9,8 @@ from statemachines.driverobotmachine import DriveRobotMachine
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
 
+from statemachines.movemachine import MoveStateMachine
+
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
 
@@ -18,10 +20,10 @@ import shutil, sys
 import collections
 
 class CleanRobot(magicbot.MagicRobot):
-    #driverobotmachine = DriveRobotMachine
+    movemachine: MoveStateMachine
 
-    robotdrive = RobotDrive
-    velocity = TankDrive
+    robotdrive: RobotDrive
+    velocity: TankDrive
 
     def createObjects(self):
 
@@ -45,6 +47,8 @@ class CleanRobot(magicbot.MagicRobot):
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
         ''' Starts at the beginning of teleop (initialize) '''
+
+        self.movemachine.moveMachineStart(36)
 
     def teleopPeriodic(self):
         #print('got')

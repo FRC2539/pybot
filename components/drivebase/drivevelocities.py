@@ -52,7 +52,7 @@ class TankDrive(VelocityProducer):
             robotdrive_motors[2].follow(robotdrive_motors[0])
             robotdrive_motors[3].follow(robotdrive_motors[1])
     
-        return robotdrive_motors
+        return [robotdrive_motors[0], robotdrive_motors[1]]
 
     def getSimpleTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
