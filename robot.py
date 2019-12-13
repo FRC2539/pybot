@@ -25,6 +25,8 @@ class CleanRobot(magicbot.MagicRobot):
     robotdrive: RobotDrive
     velocity: TankDrive
 
+    #layout: BuildLayout( # DO NOT USE
+
     def createObjects(self):
 
         self.robotdrive_motors = [
@@ -34,13 +36,15 @@ class CleanRobot(magicbot.MagicRobot):
                 WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
-        self.driveLayout = []#[(self.robotdrive.getSpeeds(), self.build.getA())]
+        self.functions = {'A' : 'getSpeeds'}
 
         self.velocityCalculator = TankDrive()
 
         self.activeMotors = self.robotdrive_motors[0:2]
 
-        self.build = BuildLayout(0, self.driveLayout)
+        self.tolerance = 20
+
+        self.build = BuildLayout(0, 1, self.functions) # USE
 
         self.useActives = []
 
@@ -52,11 +56,10 @@ class CleanRobot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         #print('got')
-        try:
-            buttonPressed = self.build.check()
-        except(IndexError):
-            print('damn.')
-            pass
+        res = self.build.checkDriver()
+        if type(res) is str:
+            getattr(eval('RobotDrive'), res)
+
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
 

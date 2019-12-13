@@ -5,6 +5,8 @@ from components.drivebase.robotdrive import RobotDrive
 class MoveStateMachine(StateMachine):
     robotdrive: RobotDrive
 
+    tolerance: int
+
     def moveMachineStart(self, distance):
         # Call from the teleop to begin machine.
         self.distance = distance
@@ -13,7 +15,7 @@ class MoveStateMachine(StateMachine):
 
         self.engage()
 
-    @state(first=True, must_finish=True)
+    @state(first=True)
     def prepareToMove(self):
         difference = self.robotdrive.inchesToTicks(self.distance)
         self.targetPositions = []
@@ -30,8 +32,13 @@ class MoveStateMachine(StateMachine):
 
         self.robotdrive.setPositions(self.targetPositions)
 
+        self.next_state(self.wait) # may want this to be next_state_now...
+
+    @state
     def wait(self): #This will wait to end the state machine until the position has been set.
-        pass
-        #if self.robotdrive.getPosition
+        if self.robotdrive.getAveragePosition(self.targetPositions) <= abs(self.tolerance):
+            self.robotdrive.stop()
+            self.done()
+
 
     print('moved')

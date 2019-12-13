@@ -45,6 +45,10 @@ class RobotDrive:
     def calculateTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
 
+    def stop(self):
+        for motor in self.useActives:
+            motor.stopMotor()
+
     def move(self):
         y = self.build.getY() * -1
         if abs(y) < 0.01:
@@ -78,6 +82,8 @@ class RobotDrive:
         error = 0
         for motor, target in zip(self.useActives, targets):
             error += abs(target - motor.getSelectedSensorPosition())
+
+        return error
 
     def inchesToTicks(self, distance): #distance -> inches!
         # First does the wheel rotations necessary by dividing the distance by wheel the circumference. Takes this and multiplies by required ticks for one rotation (250)
