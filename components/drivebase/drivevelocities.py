@@ -27,6 +27,9 @@ class VelocityProducer:
 
         return self.simple
 
+    def execute(self):
+        pass
+
 class TankDrive(VelocityProducer):
     def __init__(self, speedMultiplier=1, rotateModifier=1):
         super().__init__(speedMultiplier, rotateModifier)
@@ -38,24 +41,24 @@ class TankDrive(VelocityProducer):
         
         if not self.checkSimpleDriving():   # Configures for quick calculations based off of presets
             self.getSpeedT = self.getComplexTankSpeed
-        
-    def configureFourTank(self, motors):
+
+    def configureFourTank(self, robotdrive_motors):
         # Give list of 4 motors
-        self.activeMotors = motors[0:2]
+        #self.activeMotors = self.robotdrive_motors[0:2]
         
-        if len(motors) != 4:
+        if len(robotdrive_motors) != 4:
             raise 'Could not configure for four motor tank because there were not four given motors!' 
         else:
-            motors[ports.DrivetrainPorts.BackLeftMotor].follow(motors[ports.DrivetrainPorts.FrontLeftMotor])
-            motors[ports.DrivetrainPorts.BackRightMotor].follow(motors[ports.DrivetrainPorts.FrontRightMotor])
+            robotdrive_motors[2].follow(robotdrive_motors[0])
+            robotdrive_motors[3].follow(robotdrive_motors[1])
     
-        return self.activeMotors
+        return robotdrive_motors
 
     def getSimpleTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
     
     def getComplexTankSpeed(self, y, rotate, x=0): #NOTE Crashing because of y or rotate.
-        return [(y + (rotate * self.rotateModifier)) * self.speedMultiplier, (-y + (rotate * self.rotateModifier)) * self.speedMultiplier]
+        return [(float(y) + (float(rotate) * self.rotateModifier)) * self.speedMultiplier, (float(-y) + (float(rotate) * self.rotateModifier)) * self.speedMultiplier]
         
 class MecanumDrive(VelocityProducer):
     def __init__(self, speedMultiplier=1, rotateModifier=1):

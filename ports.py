@@ -5,7 +5,7 @@ class PortsList:
 
 DrivetrainPorts = PortsList()
 
-DrivetrainPorts.FrontLeftMotor = 0
-DrivetrainPorts.FrontRightMotor = 1
+DrivetrainPorts.FrontLeftMotor = 1
+DrivetrainPorts.FrontRightMotor = 3
 DrivetrainPorts.BackLeftMotor = 2
-DrivetrainPorts.BackRightMotor = 3
+DrivetrainPorts.BackRightMotor = 4

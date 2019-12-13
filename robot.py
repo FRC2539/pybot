@@ -15,11 +15,13 @@ from controller.buildlayout import BuildLayout
 from ctre import WPI_TalonSRX
 
 import shutil, sys
+import collections
 
 class CleanRobot(magicbot.MagicRobot):
     #driverobotmachine = DriveRobotMachine
 
     robotdrive = RobotDrive
+    velocity = TankDrive
 
     def createObjects(self):
 
@@ -30,20 +32,27 @@ class CleanRobot(magicbot.MagicRobot):
                 WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
-        self.driveLayout = {'A' : self.robotdrive.getSpeeds}
+        self.driveLayout = []#[(self.robotdrive.getSpeeds(), self.build.getA())]
 
-        self.velocityCalculator = TankDrive(rotateModifier=0.7)
+        self.velocityCalculator = TankDrive()
 
-        self.activeMotors = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
+        self.activeMotors = self.robotdrive_motors[0:2]
 
         self.build = BuildLayout(0, self.driveLayout)
 
+        self.useActives = []
 
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
         ''' Starts at the beginning of teleop (initialize) '''
 
     def teleopPeriodic(self):
+        #print('got')
+        try:
+            buttonPressed = self.build.check()
+        except(IndexError):
+            print('damn.')
+            pass
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
 
