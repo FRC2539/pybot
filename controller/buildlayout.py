@@ -29,7 +29,9 @@ class BuildLayout:
                                     'LeftBumper' : self.controllerUno.getBumperPressed(0),
                                     'RightBumper' : self.controllerUno.getBumperPressed(1),
                                     'LeftStick' : self.controllerUno.getStickButtonPressed(0),
-                                    'RightStick' : self.controllerUno.getStickButtonPressed(1)
+                                    'RightStick' : self.controllerUno.getStickButtonPressed(1),
+                                    'DPadLeft' : self.getDPadLeftDriver,
+                                    'DPadRight' : self.getDPadRightDriver
                                     }
 
         self.buttonsToXboxOp = {
@@ -44,7 +46,9 @@ class BuildLayout:
                                 'LeftBumper' : self.controllerDos.getBumperPressed(0),
                                 'RightBumper' : self.controllerDos.getBumperPressed(1),
                                 'LeftStick' : self.controllerDos.getStickButtonPressed(0),
-                                'RightStick' : self.controllerDos.getStickButtonPressed(1)
+                                'RightStick' : self.controllerDos.getStickButtonPressed(1),
+                                'DPadLeft' : self.getDPadLeftOp,
+                                'DPadRight' : self.getDPadRightOp
                                 }
 
         # TODO incorporate the dpad.
@@ -87,6 +91,47 @@ class BuildLayout:
     def getLeftTriggerAxisOp(self):
         return self.controllerDos.getTriggerAxis(0)
 
+    ''' Following is for DPad horizontal (only horizontal has an axis), both scaling and bools. '''
+
+    def getDPadHorizontalAxisDriver(self): # Curse these long method names.
+        return self.controllerUno.getRawAxis(6) # NOTE: Accesses genericHID parent class. EXPERIMENT WITH THIS TO LEARN HOW TO ASSIGN BOOLS
+
+    def getDPadHorizontalAxisOp(self): # Curse these long method names.
+        return self.controllerDos.getRawAxis(6)
+
+    def getDPadLeftDriver(self):
+        if self.controllerUno.getRawAxis(6) <= -0.9:
+            return True
+        else:
+            return False
+
+    def getDPadRightDriver(self):
+        if self.controllerUno.getRawAxis(6) >= 0.9:
+            return True
+        else:
+            return False
+
+    def getDPadLeftOp(self):
+        if self.controllerDos.getRawAxis(6) <= -0.9:
+            return True
+        else:
+            return False
+
+    def getDPadRightOp(self):
+        if self.controllerDos.getRawAxis(6) >= 0.9:
+            return True
+        else:
+            return False
+
+
+
+    def setDualRumble(self):
+        self.controllerUno.setRumble(0, 1.0) # Sets rumble to full and left side
+        self.controllerUno.setRumble(1, 1.0) # Sets rumble to full and right side
+
+    def disableRumble(self):
+        self.controllerUno.setRumble(0, 0.0)
+        self.controllerUno.setRumble(1, 0.0)
 
     def getX(self):
         return self.controllerUno.getX(0)

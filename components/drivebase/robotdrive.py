@@ -19,6 +19,9 @@ class RobotDrive:
 
     useActives: list
 
+    def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci"
+        self.rumble = False
+
     def prepareToDrive(self):
         print(str(self.velocityCalculator))
         for motor in self.robotdrive_motors:
@@ -31,6 +34,8 @@ class RobotDrive:
             motor.configMotionCruiseVelocity(500) # Dummy value
 
         self.resetPID()
+
+        self.rumble = False
 
         self.useActives = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
 
@@ -57,9 +62,12 @@ class RobotDrive:
                                         y=float(y),
                                         rotate=float(self.build.getRotate())
                                             )
-
-        #speeds.append(speeds[0])
-        #speeds.append(speeds[1]) # Temporary until I configure them correctly.
+        if abs(speeds[0]) == 1.0 and abs(speeds[1]) == 1.0: # Probably only temporary, as this will slow the process down.
+            self.build.setDualRumble()
+            self.rumble = True
+        elif (abs(speeds[0]) < 0.95 or abs(speeds[1]) < 0.95) and self.rumble: # Runs if they're less than almost full and if rumble is engaged.
+            self.build.disableRumble()
+            self.rumble = False
 
         for speed, motor in zip(speeds, self.useActives):
             motor.set(ControlMode.PercentOutput, speed)
