@@ -25,8 +25,6 @@ class CleanRobot(magicbot.MagicRobot):
     robotdrive: RobotDrive
     velocity: TankDrive
 
-    #layout: BuildLayout( # DO NOT USE
-
     def createObjects(self):
 
         self.robotdrive_motors = [
@@ -36,7 +34,8 @@ class CleanRobot(magicbot.MagicRobot):
                 WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
-        self.functions = {'A' : 'getSpeeds'}
+        self.functionsD = [('A', 'getSpeeds', 'RobotDrive')]
+        self.functionsO = []
 
         self.velocityCalculator = TankDrive()
 
@@ -44,7 +43,9 @@ class CleanRobot(magicbot.MagicRobot):
 
         self.tolerance = 20
 
-        self.build = BuildLayout(0, 1, self.functions) # USE
+        self.build = BuildLayout(0, 1, self.functionsD, self.functionsO) # USE
+
+        self.build.checkEarly()
 
         self.useActives = []
 
@@ -55,10 +56,9 @@ class CleanRobot(magicbot.MagicRobot):
         self.movemachine.moveMachineStart(36)
 
     def teleopPeriodic(self):
-        #print('got')
-        res = self.build.checkDriver()
+        res, _class = self.build.checkDriver()
         if type(res) is str:
-            getattr(eval('RobotDrive'), res)
+            getattr(eval(_class), res) # Really sketchy. Freaky sketchy. And I wrote this lol.
 
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
