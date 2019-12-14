@@ -9,12 +9,15 @@ from statemachines.driverobotmachine import DriveRobotMachine
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
 
+from components.arm.arm import Arm
+
 from statemachines.movemachine import MoveStateMachine
 
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
 
 from ctre import WPI_TalonSRX
+from rev import CANSparkMax, MotorType
 
 import shutil, sys
 import collections
@@ -25,6 +28,8 @@ class CleanRobot(magicbot.MagicRobot):
     robotdrive: RobotDrive
     velocity: TankDrive
 
+    arm: Arm
+
     def createObjects(self):
 
         self.robotdrive_motors = [
@@ -34,8 +39,16 @@ class CleanRobot(magicbot.MagicRobot):
                 WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
+        self.robotdrive_rumble = False
+
+        self.arm_motor = CANSparkMax(ports.Arm.ArmMotorID, MotorType.kBrushless)
+        self.arm_lowerLimit = wpilib.DigitalInput(ports.Arm.lowerLimit)
+
         self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive')]
-        self.functionsO = []
+        self.functionsO = [
+                           ('RightBumper', 'armUp()', 'self.arm'),
+                           ('RightTrigger', 'armDown()', 'self.arm')
+                          ]
 
         self.velocityCalculator = TankDrive()
 
@@ -51,6 +64,7 @@ class CleanRobot(magicbot.MagicRobot):
 
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
+        self.arm.prepareArm()
         ''' Starts at the beginning of teleop (initialize) '''
 
         self.movemachine.moveMachineStart(36)

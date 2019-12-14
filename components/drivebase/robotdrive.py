@@ -19,9 +19,10 @@ class RobotDrive:
 
     useActives: list
 
-    def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci"
-        self.rumble = False
+    rumble: bool
 
+    def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
+        pass
     def prepareToDrive(self):
         print(str(self.velocityCalculator))
         for motor in self.robotdrive_motors:
