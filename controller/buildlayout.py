@@ -18,40 +18,47 @@ class BuildLayout:
         self.commandOp = None
 
         self.buttonsToXboxDriver = {
-                                    'A' : self.controllerUno.getAButtonPressed,
-                                    'X' : self.controllerUno.getXButtonPressed,
-                                    'Y' : self.controllerUno.getYButtonPressed,
-                                    'B' : self.controllerUno.getBButtonPressed,
-                                    'Back' : self.controllerUno.getBackButtonPressed,
-                                    'Start' : self.controllerUno.getStartButtonPressed,
-                                    'LeftTrigger' : self.getLeftTriggerDriver,              # Use this for a shoot or something. Use axis elsewhere.
-                                    'RightTrigger' : self.getRightTriggerDriver,            # Same as above.
-                                    'LeftBumper' : self.controllerUno.getBumperPressed(0),
-                                    'RightBumper' : self.controllerUno.getBumperPressed(1),
-                                    'LeftStick' : self.controllerUno.getStickButtonPressed(0),
-                                    'RightStick' : self.controllerUno.getStickButtonPressed(1),
-                                    'DPadLeft' : self.getDPadLeftDriver,
-                                    'DPadRight' : self.getDPadRightDriver
+                                    'A' : 'getAButtonPressed()',
+                                    'X' : 'getXButtonPressed()',
+                                    'Y' : 'getYButtonPressed()',
+                                    'B' : 'getBButtonPressed()',
+                                    'Back' : 'getBackButtonPressed()',
+                                    'Start' : 'getStartButtonPressed()',
+                                    'LeftTrigger' : 'getLeftTriggerDriver()',              # Use this for a shoot or something. Use axis elsewhere.
+                                    'RightTrigger' : 'self.getRightTriggerDriver()',            # Same as above.
+                                    'LeftBumper' : 'getBumperPressed(0)',
+                                    'RightBumper' : 'getBumperPressed(1)',
+                                    'LeftStick' : 'getStickButtonPressed(0)',
+                                    'RightStick' : 'getStickButtonPressed(1)',
+                                    'DPadLeft' : 'getDPadLeftDriver()',
+                                    'DPadRight' : 'getDPadRightDriver()'
                                     }
 
         self.buttonsToXboxOp = {
-                                'A' : self.controllerDos.getAButtonPressed,
-                                'X' : self.controllerDos.getXButtonPressed,
-                                'Y' : self.controllerDos.getYButtonPressed,
-                                'B' : self.controllerDos.getBButtonPressed,
-                                'Back' : self.controllerDos.getBackButtonPressed,
-                                'Start' : self.controllerDos.getStartButtonPressed,
-                                'LeftTrigger' : self.getLeftTriggerOp,              # Use this for a shoot or something. Use axis elsewhere.
-                                'RightTrigger' : self.getRightTriggerOp,            # Same as above.
-                                'LeftBumper' : self.controllerDos.getBumperPressed(0),
-                                'RightBumper' : self.controllerDos.getBumperPressed(1),
-                                'LeftStick' : self.controllerDos.getStickButtonPressed(0),
-                                'RightStick' : self.controllerDos.getStickButtonPressed(1),
-                                'DPadLeft' : self.getDPadLeftOp,
-                                'DPadRight' : self.getDPadRightOp
+                                'A' : 'getAButtonPressed()',
+                                'X' : 'getXButtonPressed()',
+                                'Y' : 'getYButtonPressed()',
+                                'B' : 'getBButtonPressed()',
+                                'Back' : 'getBackButtonPressed()',
+                                'Start' : 'getStartButtonPressed()',
+                                'LeftTrigger' : 'getLeftTriggerOp()',              # Use this for a shoot or something. Use axis elsewhere.
+                                'RightTrigger' : 'self.getRightTriggerOp()',            # Same as above.
+                                'LeftBumper' : 'getBumperPressed(0)',
+                                'RightBumper' : 'getBumperPressed(1)',
+                                'LeftStick' : 'getStickButtonPressed(0)',
+                                'RightStick' : 'getStickButtonPressed(1)',
+                                'DPadLeft' : 'getDPadLeftOp()',
+                                'DPadRight' : 'getDPadRightOp()'
                                 }
 
         # TODO incorporate the dpad.
+
+    def printClicked(self):
+        if self.buttonsToXboxDriver['A'] == 0:
+            print(self.controllerUno.getAButtonPressed())
+        #for button, func in self.buttonsToXboxDriver.items():
+            #if not func:
+                #print(func)
 
     ''' The following are for trigger bool statements '''
     def getRightTriggerDriver(self):
@@ -126,8 +133,8 @@ class BuildLayout:
 
 
     def setDualRumble(self):
-        self.controllerUno.setRumble(0, 1.0) # Sets rumble to full and left side
-        self.controllerUno.setRumble(1, 1.0) # Sets rumble to full and right side
+        self.controllerUno.setRumble(0, 0.9) # Sets rumble to full and left side
+        self.controllerUno.setRumble(1, 0.9) # Sets rumble to full and right side
 
     def disableRumble(self):
         self.controllerUno.setRumble(0, 0.0)
@@ -156,15 +163,25 @@ class BuildLayout:
     def checkDriver(self):
         ''' Checks for driver action '''
         for func in self.functionsD: # Takes given functions, takes command from buttonsToXbox, and watches it.
-            self.commandDr = self.buttonsToXboxDriver[func[0]]
-            if self.commandDr(): # Checks to see if returns true. This will NOT work with scaling triggers!
+            try:
+                self.commandDr = eval('self.controllerUno.' + str(self.buttonsToXboxDriver[func[0]]))
+            except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
+                self.commandDr = eval('self.' + str(self.buttonsToXboxDriver[func[0]]))
+
+            if self.commandDr == True: # Checks to see if returns true. This will NOT work with scaling triggers!
+                print('Got input')
                 return func[1], func[2]
         return False, False
 
     def checkOperator(self):
         ''' Checks for operator action '''
         for func in self.functionsO: # Takes given functions, takes command from buttonsToXbox, and watches it.
-            self.commandOp = self.buttonsToXboxOp[func[0]]
-            if self.commandOp(): # Checks to see if returns true. This will NOT work with scaling triggers!
+            try:
+                self.commandOp = eval('self.controllerUno.' + str(self.buttonsToXboxOp[func[0]]))
+            except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
+                self.commandOp = eval('self.' + str(self.buttonsToXboxOp[func[0]]))
+
+            if self.commandOp == True: # Checks to see if returns true. This will NOT work with scaling triggers!
+                print('Got input')
                 return func[1], func[2]
         return False, False

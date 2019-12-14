@@ -34,7 +34,7 @@ class CleanRobot(magicbot.MagicRobot):
                 WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
                 ]
 
-        self.functionsD = [('A', 'getSpeeds', 'RobotDrive')]
+        self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive')]
         self.functionsO = []
 
         self.velocityCalculator = TankDrive()
@@ -58,7 +58,7 @@ class CleanRobot(magicbot.MagicRobot):
     def teleopPeriodic(self):
         res, _class = self.build.checkDriver()
         if type(res) is str:
-            getattr(eval(_class), res) # Really sketchy. Freaky sketchy. And I wrote this lol.
+            eval(str(_class) + '.' + str(res)) # Really sketchy. Freaky sketchy. And I wrote this lol.
 
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 

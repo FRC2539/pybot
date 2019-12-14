@@ -39,13 +39,13 @@ class RobotDrive:
 
         self.useActives = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
 
-    def getSpeeds(self):
+    def getPositions(self):
         # Temporary...probably
-        return [self.useActives[0].get(),
-                self.useActives[1].get(),
-                self.useActives[2].get(),
-                self.useActives[3].get()
+        pos = [
+                float(self.useActives[0].getQuadraturePosition()),
+                float(self.useActives[1].getQuadraturePosition()),
                 ]
+        print(pos)
 
     def calculateTankSpeed(self, y, rotate, x=0):
         return [y + rotate, -y + rotate]
@@ -62,10 +62,13 @@ class RobotDrive:
                                         y=float(y),
                                         rotate=float(self.build.getRotate())
                                             )
-        if abs(speeds[0]) == 1.0 and abs(speeds[1]) == 1.0: # Probably only temporary, as this will slow the process down.
+        #print(str(y))
+        if (abs(speeds[0]) > 0.95 and abs(speeds[1])) and not self.rumble > 0.95: # Probably only temporary, as this will slow the process down.
+            #print('set rumble')
             self.build.setDualRumble()
             self.rumble = True
         elif (abs(speeds[0]) < 0.95 or abs(speeds[1]) < 0.95) and self.rumble: # Runs if they're less than almost full and if rumble is engaged.
+            #print('disabled rumble')
             self.build.disableRumble()
             self.rumble = False
 
