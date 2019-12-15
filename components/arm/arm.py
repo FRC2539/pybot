@@ -3,10 +3,11 @@ class Arm:
 
     lowerLimit: object
 
-    def prepareArm(self):
-        self.encoder = self.arm_motor.getEncoder()
-        self.PIDcont = self.arm_motor.getPIDController()
+    arm_encoder: object
 
+    arm_pidcontroller: object
+
+    def prepareArm(self):
         self.arm_motor.setClosedLoopRampRate(1)
 
         self.arm_motor.setInverted(True)
@@ -14,13 +15,16 @@ class Arm:
         self.upperLimit = 70.0
         self.startPos = 105.0
 
-        self.encoder.setPosition(self.startPos)
+        self.arm_encoder.setPosition(self.startPos)
 
         self.finalPos = self.getPosition()
 
+    def resetEncoder(self):
+        self.arm_encoder.setPosition(0.0)
+        self.arm_motor.setEncPosition(0.0)
 
     def getPosition(self):
-        return self.encoder.getPosition()
+        return self.arm_encoder.getPosition()
 
     def atBottom(self):
         return (not self.lowerLimit.get()) or (self.getPosition() <= 0)

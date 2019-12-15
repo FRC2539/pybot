@@ -47,6 +47,8 @@ class CleanRobot(magicbot.MagicRobot):
 
         self.arm_motor = CANSparkMax(ports.Arm.ArmMotorID, MotorType.kBrushless)
         self.arm_lowerLimit = wpilib.DigitalInput(ports.Arm.lowerLimit)
+        self.arm_encoder = self.arm_motor.getEncoder()
+        self.arm_pidcontroller = self.arm_motor.getPIDController()
 
         self.elevator_motor = CANSparkMax(ports.Elevator.ElevatorMotorID, MotorType.kBrushless)
         self.elevator_lowerlimit = wpilib.DigitalInput(ports.Elevator.lowerLimit)
