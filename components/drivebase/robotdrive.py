@@ -15,7 +15,7 @@ class RobotDrive:
 
     velocityCalculator: object # Establishes drive
 
-    build: object # This is different from what is above. Fix if necessary.
+    build: object
 
     useActives: list
 
@@ -37,6 +37,8 @@ class RobotDrive:
         self.resetPID()
 
         self.rumble = False
+
+        self.build.setDualRumble() # TEMPORARY!!!
 
         self.useActives = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
 
@@ -63,15 +65,17 @@ class RobotDrive:
                                         y=float(y),
                                         rotate=float(self.build.getRotate())
                                             )
-        #print(str(y))
-        if (abs(speeds[0]) > 0.95 and abs(speeds[1])) and not self.rumble > 0.95: # Probably only temporary, as this will slow the process down.
-            #print('set rumble')
-            self.build.setDualRumble()
-            self.rumble = True
-        elif (abs(speeds[0]) < 0.95 or abs(speeds[1]) < 0.95) and self.rumble: # Runs if they're less than almost full and if rumble is engaged.
-            #print('disabled rumble')
-            self.build.disableRumble()
-            self.rumble = False
+
+
+        ##print(str(y))
+        #if (abs(speeds[0]) > 0.95 and abs(speeds[1])) and not self.rumble > 0.95: # Probably only temporary, as this will slow the process down.
+            ##print('set rumble')
+            #self.build.setDualRumble()
+            #self.rumble = True
+        #elif (abs(speeds[0]) < 0.95 or abs(speeds[1]) < 0.95) and self.rumble: # Runs if they're less than almost full and if rumble is engaged.
+            ##print('disabled rumble')
+            #self.build.disableRumble()
+            #self.rumble = False
 
         for speed, motor in zip(speeds, self.useActives):
             motor.set(ControlMode.PercentOutput, speed)

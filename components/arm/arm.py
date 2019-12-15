@@ -1,7 +1,3 @@
-from wpilib import DigitalInput
-
-
-
 class Arm:
     arm_motor: object
 
@@ -10,6 +6,7 @@ class Arm:
     def prepareArm(self):
         self.encoder = self.arm_motor.getEncoder()
         self.PIDcont = self.arm_motor.getPIDController()
+
         self.arm_motor.setClosedLoopRampRate(1)
 
         self.arm_motor.setInverted(True)

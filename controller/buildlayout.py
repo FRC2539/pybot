@@ -133,12 +133,12 @@ class BuildLayout:
 
 
     def setDualRumble(self):
-        self.controllerUno.setRumble(0, 0.9) # Sets rumble to full and left side
-        self.controllerUno.setRumble(1, 0.9) # Sets rumble to full and right side
+        self.controllerUno.setRumble(GenericHID.RumbleType.kLeftRumble, 1) # Sets rumble to full and left side
+        self.controllerUno.setRumble(GenericHID.RumbleType.kRightRumble, 1) # Sets rumble to full and right side
 
     def disableRumble(self):
-        self.controllerUno.setRumble(0, 0.0)
-        self.controllerUno.setRumble(1, 0.0)
+        self.controllerUno.setRumble(GenericHID.RumbleType.kLeftRumble, 0)
+        self.controllerUno.setRumble(GenericHID.RumbleType.kRightRumble, 0)
 
     def getX(self):
         return self.controllerUno.getX(0)

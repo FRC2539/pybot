@@ -14,3 +14,8 @@ Arm = PortsList()
 
 Arm.ArmMotorID = 6
 Arm.lowerLimit = 2 # DI/O
+
+Elevator = PortsList()
+
+Elevator.ElevatorMotorID = 5
+Elevator.lowerLimit = 1 # DI/O

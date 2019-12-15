@@ -11,6 +11,8 @@ from components.drivebase.drivevelocities import TankDrive
 
 from components.arm.arm import Arm
 
+from components.elevator.elevator import Elevator
+
 from statemachines.movemachine import MoveStateMachine
 
 from controller.logitechdualshock import LogitechDualshock
@@ -30,6 +32,8 @@ class CleanRobot(magicbot.MagicRobot):
 
     arm: Arm
 
+    elevator: Elevator
+
     def createObjects(self):
 
         self.robotdrive_motors = [
@@ -44,10 +48,17 @@ class CleanRobot(magicbot.MagicRobot):
         self.arm_motor = CANSparkMax(ports.Arm.ArmMotorID, MotorType.kBrushless)
         self.arm_lowerLimit = wpilib.DigitalInput(ports.Arm.lowerLimit)
 
+        self.elevator_motor = CANSparkMax(ports.Elevator.ElevatorMotorID, MotorType.kBrushless)
+        self.elevator_lowerlimit = wpilib.DigitalInput(ports.Elevator.lowerLimit)
+        self.elevator_encoder = self.elevator_motor.getEncoder()
+        self.elevator_pidcontroller = self.elevator_motor.getPIDController()
+
         self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive')]
         self.functionsO = [
                            ('RightBumper', 'armUp()', 'self.arm'),
-                           ('RightTrigger', 'armDown()', 'self.arm')
+                           ('RightTrigger', 'armDown()', 'self.arm'),
+                           ('Y', 'elevatorUp()', 'self.elevator'),
+                           ('X', 'elevatorDown()', 'self.elevator')
                           ]
 
         self.velocityCalculator = TankDrive()
@@ -65,6 +76,7 @@ class CleanRobot(magicbot.MagicRobot):
     def teleopInit(self):
         self.robotdrive.prepareToDrive()
         self.arm.prepareArm()
+        self.elevator.prepareElevator()
         ''' Starts at the beginning of teleop (initialize) '''
 
         self.movemachine.moveMachineStart(36)
