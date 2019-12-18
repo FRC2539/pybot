@@ -34,21 +34,38 @@ class BuildLayout:
                                     'DPadRight' : 'getDPadRightDriver()'
                                     }
 
-        self.buttonsToXboxOp = {
-                                'A' : 'getAButtonPressed()',
-                                'X' : 'getXButtonPressed()',
-                                'Y' : 'getYButtonPressed()',
-                                'B' : 'getBButtonPressed()',
-                                'Back' : 'getBackButtonPressed()',
-                                'Start' : 'getStartButtonPressed()',
-                                'LeftTrigger' : 'getLeftTriggerOp()',              # Use this for a shoot or something. Use axis elsewhere.
-                                'RightTrigger' : 'self.getRightTriggerOp()',            # Same as above.
-                                'LeftBumper' : 'getBumperPressed(0)',
-                                'RightBumper' : 'getBumperPressed(1)',
-                                'LeftStick' : 'getStickButtonPressed(0)',
-                                'RightStick' : 'getStickButtonPressed(1)',
-                                'DPadLeft' : 'getDPadLeftOp()',
-                                'DPadRight' : 'getDPadRightOp()'
+        self.buttonHoldStatusD = {
+                                    'A' : False,
+                                    'X' : False,
+                                    'Y' : False,
+                                    'B' : False,
+                                    'Back' : False,
+                                    'Start' : False,
+                                    'LeftTrigger' : False,              # Use this for a shoot or something. Use axis elsewhere.
+                                    'RightTrigger' : False,            # Same as above.
+                                    'LeftBumper' : False,
+                                    'RightBumper' : False,
+                                    'LeftStick' : False,
+                                    'RightStick' : False,
+                                    'DPadLeft' : False,
+                                    'DPadRight' : False
+                                }
+
+        self.buttonHoldStatusO = {
+                                    'A' : False,
+                                    'X' : False,
+                                    'Y' : False,
+                                    'B' : False,
+                                    'Back' : False,
+                                    'Start' : False,
+                                    'LeftTrigger' : False,              # Use this for a shoot or something. Use axis elsewhere.
+                                    'RightTrigger' : False,            # Same as above.
+                                    'LeftBumper' : False,
+                                    'RightBumper' : False,
+                                    'LeftStick' : False,
+                                    'RightStick' : False,
+                                    'DPadLeft' : False,
+                                    'DPadRight' : False
                                 }
 
         # TODO incorporate the dpad.
@@ -168,9 +185,16 @@ class BuildLayout:
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
                 self.commandDr = eval('self.' + str(self.buttonsToXboxDriver[func[0]]))
 
-            if self.commandDr == True: # Checks to see if returns true. This will NOT work with scaling triggers!
+            if self.commandDr and not self.buttonHoldStatusD[func[0]]:
+                # Checks to see if returns true. This will NOT work with scaling triggers!
                 print('Got input')
+                self.buttonHoldStatusD[func[0]] = True
                 return func[1], func[2]
+
+            elif not self.commandDr:
+                self.buttonHoldStatusD[func[0]] = False
+                continue
+
         return False, False
 
     def checkOperator(self):
@@ -181,7 +205,13 @@ class BuildLayout:
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
                 self.commandOp = eval('self.' + str(self.buttonsToXboxOp[func[0]]))
 
-            if self.commandOp == True: # Checks to see if returns true. This will NOT work with scaling triggers!
+            if self.commandOp and not self.buttonHoldStatusO[func[0]]: # Checks to see if returns true. This will NOT work with scaling triggers!
                 print('Got input')
+                self.buttonHoldStatusO[func[0]] = True
                 return func[1], func[2]
+
+            elif not self.commandOp:
+                self.buttonHoldStatusO[func[0]] = False
+                continue
+
         return False, False
