@@ -35,4 +35,4 @@ class Elevator:
             self.stop()
 
     def execute(self):
-        self.hold() # Hopefully this will maintain a strong position when not at zero.
+        self.hold() # Hopefully this will maintain a strong position when not at zero. Otherwise it will stop it.

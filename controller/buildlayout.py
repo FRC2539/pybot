@@ -192,6 +192,7 @@ class BuildLayout:
                 return func[1], func[2]
 
             elif not self.commandDr:
+                print('set status to false (released?)')
                 self.buttonHoldStatusD[func[0]] = False
                 continue
 
@@ -211,6 +212,7 @@ class BuildLayout:
                 return func[1], func[2]
 
             elif not self.commandOp:
+                print('set status to false (released?)')
                 self.buttonHoldStatusO[func[0]] = False
                 continue
 

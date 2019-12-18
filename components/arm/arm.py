@@ -53,4 +53,4 @@ class Arm:
         self.arm_motor.stopMotor()
 
     def execute(self):
-        pass
+        self.stop()
