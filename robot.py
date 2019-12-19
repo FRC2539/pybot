@@ -4,7 +4,7 @@ import magicbot
 import controller.logicalaxes
 import ports
 
-from statemachines.driverobotmachine import DriveRobotMachine
+from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
@@ -13,7 +13,12 @@ from components.arm.arm import Arm
 
 from components.elevator.elevator import Elevator
 
-from statemachines.movemachine import MoveStateMachine
+from components.intakes.cargo import Cargo
+
+from statemachines.drivetrain.movemachine import MoveStateMachine
+
+from statemachines.intakes.smartintake import SmartIntake
+from statemachines.intakes.cargooutake import CargoOutake
 
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
@@ -27,12 +32,16 @@ import collections
 class CleanRobot(magicbot.MagicRobot):
     movemachine: MoveStateMachine
 
+    smartcargointake: SmartIntake
+    cargooutake: CargoOutake
+
     robotdrive: RobotDrive
     velocity: TankDrive
 
     arm: Arm
-
     elevator: Elevator
+
+    cargo: Cargo
 
     def createObjects(self):
 
@@ -55,12 +64,21 @@ class CleanRobot(magicbot.MagicRobot):
         self.elevator_encoder = self.elevator_motor.getEncoder()
         self.elevator_pidcontroller = self.elevator_motor.getPIDController()
 
-        self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive')]
+        self.cargo_motor = WPI_TalonSRX(ports.CargoIntake.CargoMotorID)
+        self.shot = True
+        self.isRunning = False
+
+        self.hatch_motor = WPI_TalonSRX(0)
+
+        self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive'),
+                           ('RightTrigger', 'runOutake()', 'self.cargooutake')
+                          ]
         self.functionsO = [
                            ('RightBumper', 'armUp()', 'self.arm'),
                            ('RightTrigger', 'armDown()', 'self.arm'),
                            ('Y', 'elevatorUp()', 'self.elevator'),
-                           ('X', 'elevatorDown()', 'self.elevator')
+                           ('X', 'elevatorDown()', 'self.elevator'),
+                           ('A', 'runSmartIntake()', 'self.smartcargointake')
                           ]
 
         self.velocityCalculator = TankDrive()
@@ -79,6 +97,7 @@ class CleanRobot(magicbot.MagicRobot):
         self.robotdrive.prepareToDrive()
         self.arm.prepareArm()
         self.elevator.prepareElevator()
+        self.cargo.prepareCargoIntake()
         ''' Starts at the beginning of teleop (initialize) '''
 
         self.movemachine.moveMachineStart(36)

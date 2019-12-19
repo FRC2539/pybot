@@ -19,3 +19,13 @@ Elevator = PortsList()
 
 Elevator.ElevatorMotorID = 5
 Elevator.lowerLimit = 1 # DI/O
+
+CargoIntake = PortsList()
+
+CargoIntake.CargoMotorID = 10
+
+HatchIntake = PortsList()
+
+HatchIntake.HatchMotorID = 12
+HatchIntake.rightLimitSwitch = 0 # DI/O
+HatchIntake.leftLimitSwitch = 6 # DI/O

@@ -24,7 +24,7 @@ class BuildLayout:
                                     'B' : 'getBButtonPressed()',
                                     'Back' : 'getBackButtonPressed()',
                                     'Start' : 'getStartButtonPressed()',
-                                    'LeftTrigger' : 'getLeftTriggerDriver()',              # Use this for a shoot or something. Use axis elsewhere.
+                                    'LeftTrigger' : 'self.getLeftTriggerDriver()',              # Use this for a shoot or something. Use axis elsewhere.
                                     'RightTrigger' : 'self.getRightTriggerDriver()',            # Same as above.
                                     'LeftBumper' : 'getBumperPressed(0)',
                                     'RightBumper' : 'getBumperPressed(1)',
@@ -33,6 +33,23 @@ class BuildLayout:
                                     'DPadLeft' : 'getDPadLeftDriver()',
                                     'DPadRight' : 'getDPadRightDriver()'
                                     }
+
+        self.buttonsToXboxOp = {
+                                'A' : 'getAButtonPressed()',
+                                'X' : 'getXButtonPressed()',
+                                'Y' : 'getYButtonPressed()',
+                                'B' : 'getBButtonPressed()',
+                                'Back' : 'getBackButtonPressed()',
+                                'Start' : 'getStartButtonPressed()',
+                                'LeftTrigger' : 'self.getLeftTriggerOp()',              # Use this for a shoot or something. Use axis elsewhere.
+                                'RightTrigger' : 'self.getRightTriggerOp()',            # Same as above.
+                                'LeftBumper' : 'getBumperPressed(0)',
+                                'RightBumper' : 'getBumperPressed(1)',
+                                'LeftStick' : 'getStickButtonPressed(0)',
+                                'RightStick' : 'getStickButtonPressed(1)',
+                                'DPadLeft' : 'getDPadLeftOp()',
+                                'DPadRight' : 'getDPadRightOp()'
+                                }
 
         self.buttonHoldStatusD = {
                                     'A' : False,
@@ -69,13 +86,6 @@ class BuildLayout:
                                 }
 
         # TODO incorporate the dpad.
-
-    def printClicked(self):
-        if self.buttonsToXboxDriver['A'] == 0:
-            print(self.controllerUno.getAButtonPressed())
-        #for button, func in self.buttonsToXboxDriver.items():
-            #if not func:
-                #print(func)
 
     ''' The following are for trigger bool statements '''
     def getRightTriggerDriver(self):
@@ -183,7 +193,8 @@ class BuildLayout:
             try:
                 self.commandDr = eval('self.controllerUno.' + str(self.buttonsToXboxDriver[func[0]]))
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
-                self.commandDr = eval('self.' + str(self.buttonsToXboxDriver[func[0]]))
+                print('ran this')
+                self.commandDr = eval(str(self.buttonsToXboxDriver[func[0]])) # If this does not work, make a seperate controller file with the methods from above, import it, instantiate an object, and then call these functions on that sucker.
 
             if self.commandDr and not self.buttonHoldStatusD[func[0]]:
                 # Checks to see if returns true. This will NOT work with scaling triggers!
@@ -204,7 +215,7 @@ class BuildLayout:
             try:
                 self.commandOp = eval('self.controllerUno.' + str(self.buttonsToXboxOp[func[0]]))
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
-                self.commandOp = eval('self.' + str(self.buttonsToXboxOp[func[0]]))
+                self.commandOp = eval(str(self.buttonsToXboxOp[func[0]]))
 
             if self.commandOp and not self.buttonHoldStatusO[func[0]]: # Checks to see if returns true. This will NOT work with scaling triggers!
                 print('Got input')
