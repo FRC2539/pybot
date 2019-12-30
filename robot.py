@@ -12,7 +12,8 @@ import shutil, sys
 from wpilib.command.subsystem import Subsystem
 
 from subsystems.monitor import Monitor as monitor
-from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.potentiometer import PotentiometerInterface as potentiometer
+from subsystems.motors import Motors as motors
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
@@ -33,20 +34,14 @@ class KryptonBot(CommandBasedRobot):
 
     def autonomousInit(self):
         '''This function is called each time autonomous mode starts.'''
-
+        pass
         # Send field data to the dashboard
-        driverhud.showField()
-
         # Schedule the autonomous command
-        auton = driverhud.getAutonomousProgram()
-        auton.start()
-        driverhud.showInfo("Starting %s" % auton)
 
 
     def handleCrash(self, error):
         super().handleCrash()
-        driverhud.showAlert('Fatal Error: %s' % error)
-
+        pass
 
     @classmethod
     def subsystems(cls):
