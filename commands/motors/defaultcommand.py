@@ -11,3 +11,6 @@ class DefaultCommand(Command):
 
     def initialize(self):
         robot.motors.setMotors()
+
+    def execute(self):
+        robot.motors.setMotors()

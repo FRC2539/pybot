@@ -28,7 +28,7 @@ class Motors(DebuggableSubsystem):
     def calcPercents(self):
         # MODIFY THIS AS NEEDED
         print('Reading: ' + str(robot.potentiometer.getReading()))
-        return float((robot.potentiometer.getReading()) / 5.00) # Assuming five is the max val and zero is the default for the potentiometer.
+        return float(robot.potentiometer.getReading()) # Assuming five is the max val and zero is the default for the potentiometer.
 
     def initDefaultCommand(self):
         from commands.motors.defaultcommand import DefaultCommand
