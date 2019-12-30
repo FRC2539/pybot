@@ -10,7 +10,10 @@ class CargoOutake(StateMachine):
     def runOutake(self):
         self.engage()
 
-    @timed_state(first=True, duration=2.0, must_finish=True)
+    @timed_state(first=True, duration=1.0)
     def run(self):
         self.cargo.outakeBall()
         self.shot = True
+
+    def default(self):
+        pass

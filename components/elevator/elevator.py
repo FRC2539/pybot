@@ -27,6 +27,12 @@ class Elevator:
             self.stop()
             self.elevator_encoder.setPosition(self.upperLimit)
 
+    def elevatorDown(self):
+        if (not self.lowerlimit.get()) or self.getPosition() <= 0.0:
+            self.stop()
+            self.elevator_encoder.setPosition(0.0)
+        else:
+            self.elevator_motor.set(-1.0)
 
     def hold(self):
         if not (not self.lowerlimit.get()) or (self.getPosition() <= 0.0): # Checks to see if position is at zero.
@@ -34,5 +40,10 @@ class Elevator:
         else:
             self.stop()
 
+    def default(self):
+        # ADD THIS TO EVERYONE
+        self.stop()
+
     def execute(self):
-        self.hold() # Hopefully this will maintain a strong position when not at zero. Otherwise it will stop it.
+        pass
+        #self.hold() # Hopefully this will maintain a strong position when not at zero. Otherwise it will stop it.

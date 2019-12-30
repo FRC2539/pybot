@@ -103,9 +103,20 @@ class CleanRobot(magicbot.MagicRobot):
         self.movemachine.moveMachineStart(36)
 
     def teleopPeriodic(self):
-        res, _class = self.build.checkDriver()
-        if type(res) is str:
+        res, _class, release = self.build.checkDriver()
+        if type(res) is str and release != 'released':
             eval(str(_class) + '.' + str(res)) # Really sketchy. Freaky sketchy. And I wrote this lol.
+        elif type(res) is str:
+            eval(str(_class) + '.' + 'default()')
+
+        resO, _classO, releaseO = self.build.checkOperator()
+        if type(resO) is str and releaseO != 'released':
+            print('not released')
+            eval(str(_classO) + '.' + str(resO))
+
+        elif type(resO) is str and releaseO == 'released':
+            print('released')
+            eval(str(_classO) + '.' + 'default()')
 
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 

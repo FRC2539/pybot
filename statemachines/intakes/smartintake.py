@@ -31,3 +31,6 @@ class SmartIntake(StateMachine):
             self.cargo.holdCargo() # Used if an op forgets to slow intake or for an auto hold.
         else:
             self.cargo.stop()
+
+    def default(self):
+        pass

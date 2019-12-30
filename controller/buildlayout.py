@@ -1,6 +1,8 @@
 from .logitechdualshock import LogitechDualshock
 from . import logicalaxes
 
+from controller.custombuild import CustomBuild
+
 from wpilib import XboxController
 from wpilib.interfaces import GenericHID
 
@@ -8,6 +10,8 @@ class BuildLayout:
     def __init__(self, driver, operator, funcsD, funcsO):
         self.controllerUno = XboxController(driver) # LogitechDualshock(_id) Make sure the controller is in Xinput mode. Also, 0 is left, and 1 is right
         self.controllerDos = XboxController(operator)
+
+        self.customButtons = CustomBuild(self.controllerUno, self.controllerDos)
 
         self.buttonID = LogitechDualshock
 
@@ -24,8 +28,8 @@ class BuildLayout:
                                     'B' : 'getBButtonPressed()',
                                     'Back' : 'getBackButtonPressed()',
                                     'Start' : 'getStartButtonPressed()',
-                                    'LeftTrigger' : 'self.getLeftTriggerDriver()',              # Use this for a shoot or something. Use axis elsewhere.
-                                    'RightTrigger' : 'self.getRightTriggerDriver()',            # Same as above.
+                                    'LeftTrigger' : 'getLeftTriggerDriver()',              # Use this for a shoot or something. Use axis elsewhere.
+                                    'RightTrigger' : 'getRightTriggerDriver()',            # Same as above.
                                     'LeftBumper' : 'getBumperPressed(0)',
                                     'RightBumper' : 'getBumperPressed(1)',
                                     'LeftStick' : 'getStickButtonPressed(0)',
@@ -41,8 +45,8 @@ class BuildLayout:
                                 'B' : 'getBButtonPressed()',
                                 'Back' : 'getBackButtonPressed()',
                                 'Start' : 'getStartButtonPressed()',
-                                'LeftTrigger' : 'self.getLeftTriggerOp()',              # Use this for a shoot or something. Use axis elsewhere.
-                                'RightTrigger' : 'self.getRightTriggerOp()',            # Same as above.
+                                'LeftTrigger' : 'getLeftTriggerOp()',              # Use this for a shoot or something. Use axis elsewhere.
+                                'RightTrigger' : 'getRightTriggerOp()',            # Same as above.
                                 'LeftBumper' : 'getBumperPressed(0)',
                                 'RightBumper' : 'getBumperPressed(1)',
                                 'LeftStick' : 'getStickButtonPressed(0)',
@@ -87,28 +91,28 @@ class BuildLayout:
 
         # TODO incorporate the dpad.
 
-    ''' The following are for trigger bool statements '''
-    def getRightTriggerDriver(self):
-        if self.controllerUno.getTriggerAxis(1) > 0.05:
-            return True
-        else:
-            return False
+    #''' The following are for trigger bool statements '''
+    #def getRightTriggerDriver(self):
+        #if self.controllerUno.getTriggerAxis(1) > 0.05:
+            #return True
+        #else:
+            #return False
 
-    def getLeftTriggerDriver(self):
-        if self.controllerUno.getTriggerAxis(0) > 0.05:
-            return True
-        else:
-            return False
-    def getRightTriggerOp(self):
-        if self.controllerDos.getTriggerAxis(1) > 0.05:
-            return True
-        else:
-            return False
-    def getLeftTriggerOp(self):
-        if self.controllerDos.getTriggerAxis(0) > 0.05:
-            return True
-        else:
-            return False
+    #def getLeftTriggerDriver(self):
+        #if self.controllerUno.getTriggerAxis(0) > 0.05:
+            #return True
+        #else:
+            #return False
+    #def getRightTriggerOp(self):
+        #if self.controllerDos.getTriggerAxis(1) > 0.05:
+            #return True
+        #else:
+            #return False
+    #def getLeftTriggerOp(self):
+        #if self.controllerDos.getTriggerAxis(0) > 0.05:
+            #return True
+        #else:
+            #return False
 
 
     ''' The following are for trigger scaling statements. '''
@@ -191,40 +195,44 @@ class BuildLayout:
         ''' Checks for driver action '''
         for func in self.functionsD: # Takes given functions, takes command from buttonsToXbox, and watches it.
             try:
+                #print('running')
                 self.commandDr = eval('self.controllerUno.' + str(self.buttonsToXboxDriver[func[0]]))
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
-                print('ran this')
-                self.commandDr = eval(str(self.buttonsToXboxDriver[func[0]])) # If this does not work, make a seperate controller file with the methods from above, import it, instantiate an object, and then call these functions on that sucker.
+                #print('ran this')
+                self.commandDr = eval('self.customButtons.' + str(self.buttonsToXboxDriver[func[0]])) # If this does not work, make a seperate controller file with the methods from above, import it, instantiate an object, and then call these functions on that sucker.
 
-            if self.commandDr and not self.buttonHoldStatusD[func[0]]:
+            if self.commandDr: #and not self.buttonHoldStatusD[func[0]]:
                 # Checks to see if returns true. This will NOT work with scaling triggers!
-                print('Got input')
                 self.buttonHoldStatusD[func[0]] = True
-                return func[1], func[2]
+                return func[1], func[2], '0'
 
             elif not self.commandDr:
-                print('set status to false (released?)')
-                self.buttonHoldStatusD[func[0]] = False
+                if self.buttonHoldStatusD[func[0]]:
+                    self.buttonHoldStatusD[func[0]] = False
+                    return func[1], func[2], 'released'
+                #print('set status to false (released?)')
                 continue
 
-        return False, False
+        return False, False, '0'
 
     def checkOperator(self):
         ''' Checks for operator action '''
         for func in self.functionsO: # Takes given functions, takes command from buttonsToXbox, and watches it.
             try:
-                self.commandOp = eval('self.controllerUno.' + str(self.buttonsToXboxOp[func[0]]))
+                self.commandOp = eval('self.controllerDos.' + str(self.buttonsToXboxOp[func[0]]))
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
-                self.commandOp = eval(str(self.buttonsToXboxOp[func[0]]))
+                self.commanOp = eval('self.customButtons.' + str(self.buttonsToXboxOp[func[0]]))
 
-            if self.commandOp and not self.buttonHoldStatusO[func[0]]: # Checks to see if returns true. This will NOT work with scaling triggers!
-                print('Got input')
+            if self.commandOp: #and not self.buttonHoldStatusO[func[0]]: # Checks to see if returns true. This will NOT work with scaling triggers!
                 self.buttonHoldStatusO[func[0]] = True
-                return func[1], func[2]
+                print('Got input')
+                return func[1], func[2], '0'
 
             elif not self.commandOp:
-                print('set status to false (released?)')
-                self.buttonHoldStatusO[func[0]] = False
+                if self.buttonHoldStatusO[func[0]]:
+                    self.buttonHoldStatusO[func[0]] = False
+                    return func[1], func[2], 'released'
+                #print('set status to false (released?)')
                 continue
 
-        return False, False
+        return False, False, '0'

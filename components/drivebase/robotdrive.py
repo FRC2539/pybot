@@ -118,3 +118,6 @@ class RobotDrive:
     def execute(self):
         # Functions as a default for a low level (kinda)
         self.move()
+
+    def default(self):
+        pass
