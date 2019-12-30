@@ -25,10 +25,6 @@ def init():
 
     # Import here to avoid circular import
     from commands.autonomouscommandgroup import AutonomousCommandGroup
-    from commands.drivetrain.resettiltcommand import ResetTiltCommand
-    from commands.tools.configurepidcommandgroup import ConfigurePIDCommandGroup
-    from wpilib import SendableChooser
-
 
     '''
     Add commands to the autonChooser to make them available for selection by the
@@ -36,15 +32,11 @@ def init():
     at the wrong time as the default command.
     '''
     autonChooser = SendableChooser()
-    autonChooser.addDefault('Autonomous', AutonomousCommandGroup())
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
     '''Display all currently running commands.'''
     SmartDashboard.putData('Active Commands', Scheduler.getInstance())
-
-    showCommand(ResetTiltCommand())
-    showCommand(ConfigurePIDCommandGroup())
 
 
 def getAutonomousProgram():

@@ -3,7 +3,6 @@ from . import logicalaxes
 
 from custom.config import Config
 
-from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 
 
@@ -26,7 +25,6 @@ def init():
     logicalaxes.driveRotate = driveController.RightX
 
     driveController.Back.whenPressed(ResetCommand())
-    driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
 
 
     # The controller for non-driving subsystems of the robot
