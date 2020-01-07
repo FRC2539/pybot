@@ -16,38 +16,51 @@ class Motors(DebuggableSubsystem):
         self.talon = WPI_TalonSRX(2)
         self.spark = CANSparkMax(1, MotorType.kBrushless)
 
-        self.talonReverseSwitch = DigitalInput(0)
-        self.sparkReverseSwitch = DigitalInput(1)
+        self.talonSwitchForward = DigitalInput(0)
+        self.talonSwitchReverse = DigitalInput(1)
 
-        self.talonEnabled = DigitalInput(2)
-        self.sparkEnabled = DigitalInput(3)
+        self.sparkSwitchForward = DigitalInput(2)
+        self.sparkSwitchReverse = DigitalInput(3)
 
         self.talon.setNeutralMode(NeutralMode.Coast)
         self.talon.setSafetyEnabled(False)
 
     def setMotors(self):
-        percents = self.calcPercents()
+        percentsT = self.calcPercentsTal()
+        percentsS = self.calcPercentsSpark()
 
-        print('Setting Percent Output: ' + str(percents) + '.')
-        if not self.talonEnabled.get():
-            if self.talonReverseSwitch.get():
-                self.talon.set(ControlMode.PercentOutput, float(percents * -1))
-            else:
-                self.talon.set(ControlMode.PercentOutput, percents)
+        print('spark potent: ' + str(percentsS))
+
+        print('Talon Forward: ' + str(self.talonSwitchForward.get()))
+        print('Talon Reverse: ' + str(self.talonSwitchReverse.get()))
+        print('Spark Forward: ' + str(self.sparkSwitchForward.get()))
+        print('spark reverse: ' + str(self.sparkSwitchReverse.get()))
+
+        print('Setting Percent Output Talon: ' + str(percentsT) + '.')
+        if self.talonSwitchForward.get() and self.talonSwitchReverse.get():
+            self.talon.stopMotor()
+        elif not self.talonSwitchReverse.get():
+            self.talon.set(ControlMode.PercentOutput, float(percentsT * -1))
+        else:
+            self.talon.set(ControlMode.PercentOutput, percentsT)
+
+        if self.sparkSwitchForward.get() and self.sparkSwitchReverse.get():
+            self.spark.stopMotor()
+        elif not self.sparkSwitchReverse.get():
+            self.spark.set(percentsS * -1)
+        else:
+            self.spark.set(percentsS)
 
 
-        if not self.sparkEnabled.get():
-            if self.sparkReverseSwitch.get():
-                self.spark.set(percents * -1)
-            else:
-                self.spark.set(percents)
-
-        print('NO MOTORS ENABLED!')
-
-    def calcPercents(self):
+    def calcPercentsTal(self):
         # MODIFY THIS AS NEEDED
-        print('Reading: ' + str(robot.potentiometer.getReading()))
-        return float(robot.potentiometer.getReading()) # Assuming five is the max val and zero is the default for the potentiometer.
+        print('Reading: ' + str(robot.potentiometer.getReadingTalon()))
+        return float(robot.potentiometer.getReadingTalon()) # Assuming five is the max val and zero is the default for the potentiometer.
+
+    def calcPercentsSpark(self):
+        # MODIFY THIS AS NEEDED
+        print('Reading: ' + str(robot.potentiometer.getReadingSpark()))
+        return float(robot.potentiometer.getReadingSpark()) # Assuming five is the max val and zero is the default for the potentiometer.
 
     def initDefaultCommand(self):
         from commands.motors.defaultcommand import DefaultCommand
