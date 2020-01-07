@@ -10,6 +10,10 @@ class PotentiometerInterface(DebuggableSubsystem):
     def __init__(self):
         super().__init__('PotentiometerInterface')
         self.potentiometer = AnalogPotentiometer(0)
+        self.potentiometerSpark = AnalogPotentiometer(1)
 
-    def getReading(self):
+    def getReadingTalon(self):
         return self.potentiometer.get()
+
+    def getReadingSpark(self):
+        return self.potentiometerSpark.get()
