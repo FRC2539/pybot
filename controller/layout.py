@@ -13,6 +13,8 @@ from commands.turret.quicklowercommand import QuickLowerCommand
 from commands.turret.quickraisecommand import QuickRaiseCommand
 from commands.turret.slowlowercommand import SlowLowerCommand
 from commands.turret.slowraisecommand import SlowRaiseCommand
+from commands.turret.readsensorcommand import ReadSensorCommand
+
 from commands.relay.shootcommand import ShootCommand
 
 
@@ -42,6 +44,7 @@ def init():
     driveController.RightBumper.whileHeld(QuickRaiseCommand())
     driveController.RightTrigger.whileHeld(QuickLowerCommand())
 
+    driveController.Y.whileHeld(ReadSensorCommand())
 
 
     # The controller for non-driving subsystems of the robot
