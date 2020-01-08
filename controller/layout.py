@@ -65,6 +65,7 @@ from commands.lights.orangelightscommand import OrangeLightsCommand
 from commands.lights.seizurelightscommand import SeizureLightsCommand
 from commands.lights.lightsoffcommand import LightsOffCommand
 from commands.lights.visionbasedlightscommand import VisionBasedLightsCommand
+from commands.lights.screeecommand import ScreeeCommand
 
 from commands.togglelayoutcommand import ToggleLayoutCommand
 
@@ -199,5 +200,6 @@ class Layout(DebuggableSubsystem):
 
             self.controllerTwo.A.toggleWhenPressed(IntakeCommand())
             self.controllerTwo.B.toggleWhenPressed(HatchIntakeCommand())
+            self.controllerTwo.Y.toggleWhenPressed(ScreeeCommand())
 
             self.controllerTwo.Y.whileHeld(GetPositionCommand())
