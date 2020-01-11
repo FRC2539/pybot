@@ -13,11 +13,11 @@ class GoToTapeCommand(Command):
         self.requires(robot.drivetrain)
 
         self.nt = NetworkTables.getTable('limelight')
-        self.yDiff = NetworkTables.getTable('DriveTrain')
+        self.drive = NetworkTables.getTable('DriveTrain')
 
         self.tape = Config('limelight/tv', 5)
         self.strafe = Config('limelight/tx', 0)
-        self.distance = Config('limelight/ty', 0)
+        self.yDiff = Config('limelight/ty', 0)
 
         self.tapeoffset = Config('DriveTrain/tapeoffset', 0)
 
@@ -53,7 +53,7 @@ class GoToTapeCommand(Command):
             y = self.yDiff.getValue() + 29
             h = 68
 
-            distance = h / math.tan(y)
+            distance = h / math.tan(math.radians(y))
 
             print(str(distance))
 

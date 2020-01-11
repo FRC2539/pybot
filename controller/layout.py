@@ -154,7 +154,7 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveY = self.controllerOne.RightX
             logicalaxes.driveRotate = self.controllerOne.LeftY
 
-            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
+            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommand())
             self.controllerOne.LeftBumper.whileHeld(GoPastTapeCommand())
 
             self.controllerOne.B.whenPressed(EjectCommand())
