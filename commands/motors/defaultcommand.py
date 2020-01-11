@@ -14,3 +14,4 @@ class DefaultCommand(Command):
 
     def execute(self):
         robot.motors.setMotors()
+        robot.motors.printSparkRPM()

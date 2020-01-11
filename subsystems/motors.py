@@ -4,6 +4,8 @@ from wpilib import DigitalInput
 
 import ports
 import robot
+import csv
+import time
 
 from ctre import WPI_TalonSRX, ControlMode, NeutralMode
 from rev import CANSparkMax, MotorType
@@ -16,6 +18,8 @@ class Motors(DebuggableSubsystem):
         self.talon = WPI_TalonSRX(2)
         self.spark = CANSparkMax(1, MotorType.kBrushless)
 
+        self.sparkEncoder = self.spark.getEncoder()
+
         self.talonSwitchForward = DigitalInput(0)
         self.talonSwitchReverse = DigitalInput(1)
 
@@ -25,18 +29,21 @@ class Motors(DebuggableSubsystem):
         self.talon.setNeutralMode(NeutralMode.Coast)
         self.talon.setSafetyEnabled(False)
 
+        #self.log = open('log.csv', 'w')
+        #self.logWriter = csv.writer(self.log, delimiter=',', quotechar = '"', quoting=csv.QUOTE_MINIMAL)
+
     def setMotors(self):
         percentsT = self.calcPercentsTal()
         percentsS = self.calcPercentsSpark()
 
-        print('spark potent: ' + str(percentsS))
+        #print('spark speed: ' + str(percentsS))
+        #print('talon speed: ' + str(percentsT))
+        #print('Talon Forward: ' + str(self.talonSwitchForward.get()))
+        #print('Talon Reverse: ' + str(self.talonSwitchReverse.get()))
+        #print('Spark Forward: ' + str(self.sparkSwitchForward.get()))
+        #print('spark reverse: ' + str(self.sparkSwitchReverse.get()))
 
-        print('Talon Forward: ' + str(self.talonSwitchForward.get()))
-        print('Talon Reverse: ' + str(self.talonSwitchReverse.get()))
-        print('Spark Forward: ' + str(self.sparkSwitchForward.get()))
-        print('spark reverse: ' + str(self.sparkSwitchReverse.get()))
-
-        print('Setting Percent Output Talon: ' + str(percentsT) + '.')
+        #print('Setting Percent Output Talon: ' + str(percentsT) + '.')
         if self.talonSwitchForward.get() and self.talonSwitchReverse.get():
             self.talon.stopMotor()
         elif not self.talonSwitchReverse.get():
@@ -54,13 +61,21 @@ class Motors(DebuggableSubsystem):
 
     def calcPercentsTal(self):
         # MODIFY THIS AS NEEDED
-        print('Reading: ' + str(robot.potentiometer.getReadingTalon()))
+        #print('Reading: ' + str(robot.potentiometer.getReadingTalon()))
         return float(robot.potentiometer.getReadingTalon()) # Assuming five is the max val and zero is the default for the potentiometer.
+
 
     def calcPercentsSpark(self):
         # MODIFY THIS AS NEEDED
-        print('Reading: ' + str(robot.potentiometer.getReadingSpark()))
+        #print('Reading: ' + str(robot.potentiometer.getReadingSpark()))
         return float(robot.potentiometer.getReadingSpark()) # Assuming five is the max val and zero is the default for the potentiometer.
+
+
+    def printSparkRPM(self):
+        rpm = str(round(self.sparkEncoder.getVelocity()))
+        print('Spark RPM: ' + rpm)
+        #self.logWriter.writerow([time.time(), rpm])
+
 
     def initDefaultCommand(self):
         from commands.motors.defaultcommand import DefaultCommand
