@@ -13,7 +13,7 @@ class GoToTapeCommand(Command):
         self.requires(robot.drivetrain)
 
         self.nt = NetworkTables.getTable('limelight')
-        self.drive = NetworkTables.getTable('DriveTrain')
+        self.yDiff = NetworkTables.getTable('DriveTrain')
 
         self.tape = Config('limelight/tv', 5)
         self.strafe = Config('limelight/tx', 0)
@@ -43,53 +43,69 @@ class GoToTapeCommand(Command):
         self.count = 0
 
     def execute(self):
-        print(self.tape.getValue())
+
+        # h; High goal height -  limelight height (height difference)
+        # y; Gets theta in degrees (29* is there as an already set, calculated value based off of config and setup (bumpers in front of initiation line (towards generator)
+        #
+
+
         if self.tape.getValue() == 1:
-            oX = self.strafe.getValue() - self.tapeoffset # 2.5
-            oY = self.distance.getValue()
-            theta = math.radians(oY+79.9)
+            y = self.yDiff.getValue() + 29
+            h = 68
 
-            oD = 2.5 * math.tan(theta)
-            oD = oD - 14
-            #oD = abs(oD)
+            distance = h / math.tan(y)
 
-            if self.count < 4:
-                self.count += 1
-            else:
-                self.count = 0
-                self.nt.putNumber('snapshot', 1)
+            print(str(distance))
 
-            if abs(oX) > 10 :
-                self.rotate = math.copysign(.30,oX)
-            elif abs(oX) > 5 :
-                self.rotate = math.copysign(.25, oX)
-            elif abs(oX) > 3 :
-                self.rotate = math.copysign(.20, oX)
-            elif abs(oX) > 1 :
-                self.rotate = math.copysign(.15, oX)
-            else:
-                self.rotate = 0
+            self._finished = False
 
+        #print(self.tape.getValue())
+        #if self.tape.getValue() == 1:
+            #oX = self.strafe.getValue() - self.tapeoffset # 2.5
+            #oY = self.distance.getValue()
+            #theta = math.radians(oY+79.9)
 
-            self.y = oD * self.speedBoost * .01
-            if self.y < .175:
-                self.y = .175
-            if self.y > .35:
-                self.y = .35
+            #oD = 2.5 * math.tan(theta)
+            #oD = oD - 14
+            ##oD = abs(oD)
 
+            #if self.count < 4:
+                #self.count += 1
+            #else:
+                #self.count = 0
+                #self.nt.putNumber('snapshot', 1)
 
-            robot.drivetrain.move(self.x, self.y, self.rotate)
-
-            print('oy = ' + str(oY) + " od = "+ str(oD))
-            if not self._finished:
-                #self._finished = oD <= 0.390
-                self._finished = oY <= self.fY
+            #if abs(oX) > 10 :
+                #self.rotate = math.copysign(.30,oX)
+            #elif abs(oX) > 5 :
+                #self.rotate = math.copysign(.25, oX)
+            #elif abs(oX) > 3 :
+                #self.rotate = math.copysign(.20, oX)
+            #elif abs(oX) > 1 :
+                #self.rotate = math.copysign(.15, oX)
+            #else:
+                #self.rotate = 0
 
 
-        else:
-            #robot.lights.solidRed()
-            print('No vision target found!')
-            robot.drivetrain.move(0, 0, 0)
+            #self.y = oD * self.speedBoost * .01
+            #if self.y < .175:
+                #self.y = .175
+            #if self.y > .35:
+                #self.y = .35
+
+
+            #robot.drivetrain.move(self.x, self.y, self.rotate)
+
+            #print('oy = ' + str(oY) + " od = "+ str(oD))
+            #if not self._finished:
+                ##self._finished = oD <= 0.390
+                #self._finished = oY <= self.fY
+
+
+        #else:
+            ##robot.lights.solidRed()
+            #print('No vision target found!')
+            #robot.drivetrain.move(0, 0, 0)
 
 
     def isFinished(self):
