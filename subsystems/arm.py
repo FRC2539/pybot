@@ -113,6 +113,9 @@ class Arm(DebuggableSubsystem):
     def forceDown(self):
         print('Force Down ' + str(self.getPosition()))
 
+    def shoot(self, speed):
+        self.motor.setReference(speed, ControlType.kVelocity, 0, 0)
+
 
     def downNoZero(self, speed=-1.0):
         #speed = self.motor.speed * -1
