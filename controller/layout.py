@@ -61,6 +61,7 @@ from commands.arm.downstagecommand import DownStageCommand
 from commands.arm.setarmcommandgroup import SetArmCommandGroup
 from commands.arm.zeroarmcommandgroup import ZeroArmCommandGroup
 from commands.arm.armpidcommand import ArmPidCommand
+from commands.arm.shootcommand import ShootCommand
 
 from commands.superstructure.superstructuregotolevelcommand import SuperStructureGoToLevelCommand
 from commands.superstructure.upcommand import UpCommand
@@ -184,43 +185,43 @@ class Layout(DebuggableSubsystem):
             logicalaxes.driveY = self.controllerOne.LeftY
             logicalaxes.driveRotate = self.controllerOne.RightX
 
-            self.controllerOne.LeftTrigger.whileHeld(GoToTapeCommandGroup())
-            self.controllerOne.X.whileHeld(SuperPidLevel3Command())
+            self.controllerOne.LeftTrigger.whileHeld(ShootCommand())
+            #self.controllerOne.X.whileHeld(SuperPidLevel3Command())
 
             #self.controllerOne.Y.whenPressed(SuperPidCommand(56,50))
             #self.controllerOne.A.whenPressed(ToggleFieldOrientationCommand())
-            self.controllerOne.RightTrigger.whenPressed(EjectCommand())
-            self.controllerOne.B.whenPressed(HatchEjectCommand())
+            #self.controllerOne.RightTrigger.whenPressed(EjectCommand())
+            #self.controllerOne.B.whenPressed(HatchEjectCommand())
 
-            self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
-            self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())
+            #self.controllerOne.Start.whenPressed(L3ClimbCommandGroup())
+            #self.controllerOne.Back.whenPressed(L2ClimbCommandGroup())
 
-            self.controllerOne.RightJoystick.whenPressed(ToggleLayoutCommand())
+            #self.controllerOne.RightJoystick.whenPressed(ToggleLayoutCommand())
 
-            self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
-            self.controllerOne.A.whileHeld(SuperPidLevel2Command())
+            #self.controllerOne.DPadDown.whileHeld(RearRetractCommand())
+            #self.controllerOne.A.whileHeld(SuperPidLevel2Command())
 
 
             # The self.controllerTwo for non-driving subsystems of the robot
             self.controllerTwo = LogitechDualShock(1)
 
-            self.controllerTwo.Back.whenPressed(ResetCommand())
-            self.controllerTwo.B.whenPressed(ZeroArmCommandGroup())
+            #self.controllerTwo.Back.whenPressed(ResetCommand())
+            #self.controllerTwo.B.whenPressed(ZeroArmCommandGroup())
             #self.controllerTwo.A.whileHeld(TestGoToTapeCommandGroup())
 
-            self.controllerTwo.LeftTrigger.whileHeld(LowerNoZeroCommand()) # Arm command
-            self.controllerTwo.LeftBumper.whileHeld(RaiseCommand()) # Arm command
+            #self.controllerTwo.LeftTrigger.whileHeld(LowerNoZeroCommand()) # Arm command
+            #self.controllerTwo.LeftBumper.whileHeld(RaiseCommand()) # Arm command
 
-            self.controllerTwo.RightBumper.whileHeld(UpCommand()) # Superstructure command
-            self.controllerTwo.RightTrigger.whileHeld(DownCommand()) # Superstructure command
+            #self.controllerTwo.RightBumper.whileHeld(UpCommand()) # Superstructure command
+            #self.controllerTwo.RightTrigger.whileHeld(DownCommand()) # Superstructure command
 
-            self.controllerTwo.X.whileHeld(DeelevateCommand())
-            self.controllerTwo.Y.whileHeld(ElevateCommand())
+            #self.controllerTwo.X.whileHeld(DeelevateCommand())
+            #self.controllerTwo.Y.whileHeld(ElevateCommand())
 
-            self.controllerTwo.DPadUp.whenPressed(SuperPidLevel3Command())
-            self.controllerTwo.DPadRight.whenPressed((SuperPidLevel2Command()))
-            self.controllerTwo.DPadDown.whenPressed(SuperBallPidLevel1Command())
-            self.controllerTwo.Start.whileHeld(SuperBallPidLevel2Command())
+            #self.controllerTwo.DPadUp.whenPressed(SuperPidLevel3Command())
+            #self.controllerTwo.DPadRight.whenPressed((SuperPidLevel2Command()))
+            #self.controllerTwo.DPadDown.whenPressed(SuperBallPidLevel1Command())
+            #self.controllerTwo.Start.whileHeld(SuperBallPidLevel2Command())
 
-            self.controllerTwo.RightJoystick.toggleWhenPressed(IntakeCommand())
-            self.controllerTwo.LeftJoystick.toggleWhenPressed(HatchIntakeCommand())
+            #self.controllerTwo.RightJoystick.toggleWhenPressed(IntakeCommand())
+            #self.controllerTwo.LeftJoystick.toggleWhenPressed(HatchIntakeCommand())
