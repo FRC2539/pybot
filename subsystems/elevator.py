@@ -1,5 +1,5 @@
 from .debuggablesubsystem import DebuggableSubsystem
-from rev import CANSparkMax, MotorType, ControlType, ConfigParameter
+from rev import CANSparkMax, MotorType, ControlType
 from wpilib import DigitalInput
 
 from custom.config import Config

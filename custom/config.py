@@ -1,6 +1,8 @@
 from networktables import NetworkTables
 from networktables.entry import NetworkTableEntry
 
+from networktables import NetworkTablesInstance
+
 class MissingConfigError(KeyError):
     pass
 
@@ -14,7 +16,7 @@ class Config:
 
     _values = {}
     _nt = None
-    _sep = NetworkTables.PATH_SEPARATOR
+    _sep = '/' #NetworkTablesInstance.PATH_SEPARATOR
 
     def __init__(self, key, default=None):
         '''The key is the name that will be used in NetworkTables.'''

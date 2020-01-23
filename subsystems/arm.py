@@ -25,10 +25,10 @@ class Arm(DebuggableSubsystem):
         self.Dk = Config('/Arm/Dk', 1)
         self.IZk = Config('/Arm/IZk', 0)
 
-        self.PIDController.setFF(0, 0)
-        self.PIDController.setP(.0005, 0)
-        self.PIDController.setI(.00000025, 0)
-        self.PIDController.setD(0, 0)
+        self.PIDController.setFF(0.00019, 0)
+        self.PIDController.setP(0.0001, 0)
+        self.PIDController.setI(0, 0)
+        self.PIDController.setD(0.001, 0)
         self.PIDController.setIZone(0, 0)
 
         self.motor.setOpenLoopRampRate(0.25)
@@ -114,8 +114,8 @@ class Arm(DebuggableSubsystem):
         print('Force Down ' + str(self.getPosition()))
 
     def shoot(self, speed):
-        self.motor.set(-0.82)
-        #self.PIDController.setReference(float(speed), ControlType.kVelocity, 0, 0)
+        #self.motor.set(-0.82)
+        self.PIDController.setReference(float(speed), ControlType.kVelocity, 0, 0)
         #self.set(-.8)
 
 
