@@ -2,7 +2,6 @@
 The DriveHUD displays useful information on the driver dashboard, and can read
 information from the dashboard and provide it to the program.
 '''
-
 from wpilib import SmartDashboard, DriverStation# SendableChooser
 from wpilib.command import Scheduler
 from wpilib import DriverStation
@@ -27,6 +26,8 @@ def init():
     from commands.autonomouscommandgroup import AutonomousCommandGroup
     from commands.drivetrain.resettiltcommand import ResetTiltCommand
     from commands.tools.configurepidcommandgroup import ConfigurePIDCommandGroup
+
+    from wpilib import SendableChooser
 
 
     '''

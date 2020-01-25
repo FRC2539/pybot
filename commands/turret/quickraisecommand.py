@@ -1,4 +1,4 @@
-from wpilib.command.command import Command
+from wpilib.command import Command
 
 import robot
 
