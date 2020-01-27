@@ -3,7 +3,7 @@ from .debuggablesubsystem import DebuggableSubsystem
 import math
 
 from networktables import NetworkTables
-from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
+from ctre import ControlMode, NeutralMode, TalonFX, FeedbackDevice
 from navx import AHRS
 
 from custom.config import Config
@@ -26,22 +26,21 @@ class BaseDrive(DebuggableSubsystem):
         '''
         try:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
+                TalonFX(ports.drivetrain.frontLeftMotorID),
+                TalonFX(ports.drivetrain.frontRightMotorID),
+                TalonFX(ports.drivetrain.backLeftMotorID),
+                TalonFX(ports.drivetrain.backRightMotorID),
             ]
 
         except AttributeError:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.leftMotorID),
-                WPI_TalonSRX(ports.drivetrain.rightMotorID),
+                TalonFX(ports.drivetrain.leftMotorID),
+                TalonFX(ports.drivetrain.rightMotorID),
             ]
 
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Coast)
-            motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+            motor.setNeutralMode(NeutralMode.Brake)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
