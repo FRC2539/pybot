@@ -8,9 +8,12 @@ class DebuggableSubsystem(Subsystem):
     sensors.
     '''
 
-    def debugSensor(self, label, sensor):
-        sensor.setName(self.getName(), label)
+    # WARNING: TEMPORARY 'pass' STATEMENTS BELOW.
 
+    def debugSensor(self, label, sensor):
+        #sensor.setName(self.getName(), label)
+        pass
 
     def debugMotor(self, label, motor):
-        motor.setName(self.getName(), label)
+        #motor.setName(self.getName(), label)
+        pass
