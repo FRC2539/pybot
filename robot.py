@@ -52,11 +52,11 @@ class KryptonBot(CommandBasedRobot):
     @classmethod
     def subsystems(cls):
         vars = globals()
-        print('vars: ' + str(vars.items()))
         module = sys.modules['robot']
 
         for key, var in vars.items():
             try:
+                print(str(key) + ' + ' + str(var) + ' & ' + str(issubclass(var, Subsystem) and var is not Subsystem))
                 if issubclass(var, Subsystem) and var is not Subsystem:
                     setattr(module, key, var())
             except TypeError:
