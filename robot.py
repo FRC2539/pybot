@@ -4,7 +4,7 @@ import magicbot
 import controller.logicalaxes
 import ports
 
-from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
+#from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
@@ -32,12 +32,10 @@ import shutil, sys
 import collections
 
 class CleanRobot(magicbot.MagicRobot):
- #   movemachine: MoveStateMachine
-
-  #  smartcargointake: SmartIntake
+    #smartcargointake: SmartIntake
 #cargooutake: CargoOutake
 
-    robotdrive: RobotDrive
+    #robotdrive: RobotDrive
     velocity: TankDrive
 
     falcon: FalconTest
