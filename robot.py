@@ -13,30 +13,34 @@ from components.arm.arm import Arm
 
 from components.elevator.elevator import Elevator
 
+from components.falcon.falconcomponent import FalconTest
+
 from components.intakes.cargo import Cargo
 
-from statemachines.drivetrain.movemachine import MoveStateMachine
+#from statemachines.drivetrain.movemachine import MoveStateMachine
 
-from statemachines.intakes.smartintake import SmartIntake
-from statemachines.intakes.cargooutake import CargoOutake
+#from statemachines.intakes.smartintake import SmartIntake
+#from statemachines.intakes.cargooutake import CargoOutake
 
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
 
-from ctre import WPI_TalonSRX
+from ctre import WPI_TalonSRX, TalonFX, TalonFXFeedbackDevice
 from rev import CANSparkMax, MotorType
 
 import shutil, sys
 import collections
 
 class CleanRobot(magicbot.MagicRobot):
-    movemachine: MoveStateMachine
+ #   movemachine: MoveStateMachine
 
-    smartcargointake: SmartIntake
-    cargooutake: CargoOutake
+  #  smartcargointake: SmartIntake
+#cargooutake: CargoOutake
 
     robotdrive: RobotDrive
     velocity: TankDrive
+
+    falcon: FalconTest
 
     arm: Arm
     elevator: Elevator
@@ -81,6 +85,9 @@ class CleanRobot(magicbot.MagicRobot):
                            ('A', 'runSmartIntake()', 'self.smartcargointake')
                           ]
 
+        self.falconTest = TalonFX(ports.FalconTest.motorID)
+        self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
+
         self.velocityCalculator = TankDrive()
 
         self.activeMotors = self.robotdrive_motors[0:2]
@@ -98,9 +105,10 @@ class CleanRobot(magicbot.MagicRobot):
         self.arm.prepareArm()
         self.elevator.prepareElevator()
         self.cargo.prepareCargoIntake()
+        self.falcon.run()
         ''' Starts at the beginning of teleop (initialize) '''
 
-        self.movemachine.moveMachineStart(36)
+        #self.movemachine.moveMachineStart(36)
 
     def teleopPeriodic(self):
         res, _class, release = self.build.checkDriver()
@@ -127,5 +135,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':
         shutil.rmtree('opkg_cache', ignore_errors=True)
         shutil.rmtree('pip_cache', ignore_errors=True)        
-        
+
     wpilib.run(CleanRobot)

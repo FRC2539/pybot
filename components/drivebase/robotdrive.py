@@ -26,7 +26,7 @@ class RobotDrive:
     def prepareToDrive(self):
         print(str(self.velocityCalculator))
         for motor in self.robotdrive_motors:
-            motor.setNeutralMode(2)
+            motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 

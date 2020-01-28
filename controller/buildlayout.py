@@ -3,6 +3,8 @@ from . import logicalaxes
 
 from controller.custombuild import CustomBuild
 
+import wpilib
+
 from wpilib import XboxController
 from wpilib.interfaces import GenericHID
 
@@ -30,10 +32,10 @@ class BuildLayout:
                                     'Start' : 'getStartButtonPressed()',
                                     'LeftTrigger' : 'getLeftTriggerDriver()',              # Use this for a shoot or something. Use axis elsewhere.
                                     'RightTrigger' : 'getRightTriggerDriver()',            # Same as above.
-                                    'LeftBumper' : 'getBumperPressed(0)',
-                                    'RightBumper' : 'getBumperPressed(1)',
-                                    'LeftStick' : 'getStickButtonPressed(0)',
-                                    'RightStick' : 'getStickButtonPressed(1)',
+                                    'LeftBumper' : 'getBumperPressed(wpilib.interfaces.GenericHID.Hand.kLeftHand)',
+                                    'RightBumper' : 'getBumperPressed(wpilib.interfaces.GenericHID.Hand.kRightHand)',
+                                    'LeftStick' : 'getStickButtonPressed(wpilib.interfaces.GenericHID.Hand.kLeftHand)',
+                                    'RightStick' : 'getStickButtonPressed(wpilib.interfaces.GenericHID.Hand.kRightHand)',
                                     'DPadLeft' : 'getDPadLeftDriver()',
                                     'DPadRight' : 'getDPadRightDriver()'
                                     }
@@ -47,10 +49,10 @@ class BuildLayout:
                                 'Start' : 'getStartButtonPressed()',
                                 'LeftTrigger' : 'getLeftTriggerOp()',              # Use this for a shoot or something. Use axis elsewhere.
                                 'RightTrigger' : 'getRightTriggerOp()',            # Same as above.
-                                'LeftBumper' : 'getBumperPressed(0)',
-                                'RightBumper' : 'getBumperPressed(1)',
-                                'LeftStick' : 'getStickButtonPressed(0)',
-                                'RightStick' : 'getStickButtonPressed(1)',
+                                'LeftBumper' : 'getBumperPressed(wpilib.interfaces.GenericHID.Hand.kRightHand)',
+                                'RightBumper' : 'getBumperPressed(wpilib.interfaces.GenericHID.Hand.kRightHand)',
+                                'LeftStick' : 'getStickButtonPressed(wpilib.interfaces.GenericHID.Hand.kRightHand)',
+                                'RightStick' : 'getStickButtonPressed(wpilib.interfaces.GenericHID.Hand.kRightHand)',
                                 'DPadLeft' : 'getDPadLeftOp()',
                                 'DPadRight' : 'getDPadRightOp()'
                                 }
@@ -164,21 +166,21 @@ class BuildLayout:
 
 
     def setDualRumble(self):
-        self.controllerUno.setRumble(GenericHID.RumbleType.kLeftRumble, 1) # Sets rumble to full and left side
-        self.controllerUno.setRumble(GenericHID.RumbleType.kRightRumble, 1) # Sets rumble to full and right side
+        self.controllerUno.setRumble(GenericHID.RumbleType.kLeftRumble, wpilib.interfaces.GenericHID.Hand.kLeftHand) # Sets rumble to full and left side
+        self.controllerUno.setRumble(GenericHID.RumbleType.kRightRumble, wpilib.interfaces.GenericHID.Hand.kRightHand) # Sets rumble to full and right side
 
     def disableRumble(self):
-        self.controllerUno.setRumble(GenericHID.RumbleType.kLeftRumble, 0)
-        self.controllerUno.setRumble(GenericHID.RumbleType.kRightRumble, 0)
+        self.controllerUno.setRumble(GenericHID.RumbleType.kLeftRumble, wpilib.interfaces.GenericHID.Hand.kLeftHand)
+        self.controllerUno.setRumble(GenericHID.RumbleType.kRightRumble, wpilib.interfaces.GenericHID.Hand.kRightHand)
 
     def getX(self):
-        return self.controllerUno.getX(0)
+        return self.controllerUno.getX(wpilib.interfaces.GenericHID.Hand.kLeftHand)
 
     def getY(self):
-        return self.controllerUno.getY(0)
+        return self.controllerUno.getY(wpilib.interfaces.GenericHID.Hand.kRightHand)
 
     def getRotate(self):
-        return self.controllerUno.getX(1)
+        return self.controllerUno.getX(wpilib.interfaces.GenericHID.Hand.kRightHand)
 
     def checkEarly(self):
         ''' Checks for valid inputs '''

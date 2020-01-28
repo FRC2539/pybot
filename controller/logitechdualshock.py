@@ -1,6 +1,4 @@
-from .genericcontroller import GenericController
-
-class LogitechDualshock(GenericController):
+class LogitechDualshock():
     namedButtons = {
         'A':2,
         'B':3,

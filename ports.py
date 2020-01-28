@@ -6,7 +6,7 @@ class PortsList:
 DrivetrainPorts = PortsList()
 
 DrivetrainPorts.FrontLeftMotor = 1
-DrivetrainPorts.FrontRightMotor = 3
+DrivetrainPorts.FrontRightMotor = 19
 DrivetrainPorts.BackLeftMotor = 2
 DrivetrainPorts.BackRightMotor = 4
 
@@ -29,3 +29,7 @@ HatchIntake = PortsList()
 HatchIntake.HatchMotorID = 12
 HatchIntake.rightLimitSwitch = 0 # DI/O
 HatchIntake.leftLimitSwitch = 6 # DI/O
+
+FalconTest = PortsList()
+
+FalconTest.motorID =3
