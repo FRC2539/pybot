@@ -38,6 +38,59 @@ class CleanRobot(magicbot.MagicRobot):
 
         self.compBot = True # Make this tunable or nt value
 
+        self.notSoFunCustomDrivebaseStuff()
+
+        self.robotdrive_rumble = False
+
+        self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive'),
+                           ('RightTrigger', 'runOutake()', 'self.cargooutake')
+                          ]
+        self.functionsO = [
+                           ('RightBumper', 'armUp()', 'self.arm'),
+                           ('RightTrigger', 'armDown()', 'self.arm'),
+                           ('Y', 'elevatorUp()', 'self.elevator'),
+                           ('X', 'elevatorDown()', 'self.elevator'),
+                           ('A', 'runSmartIntake()', 'self.smartcargointake')
+                          ]
+
+        self.falconTest = TalonFX(ports.FalconTest.motorID)
+        self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
+
+        self.velocityCalculator = TankDrive()
+
+        self.tolerance = 20
+
+        self.build = BuildLayout(0, 1, self.functionsD, self.functionsO) # USE
+
+        self.build.checkEarly()
+
+        self.useActives = []
+
+    def teleopInit(self):
+        self.robotdrive.prepareToDrive(self.compBot)
+
+        self.falcon.run()
+        ''' Starts at the beginning of teleop (initialize) '''
+
+        #self.movemachine.moveMachineStart(36)
+
+    def teleopPeriodic(self):
+        res, _class, release = self.build.checkDriver()
+        if type(res) is str and release != 'released':
+            eval(str(_class) + '.' + str(res)) # Really sketchy. Freaky sketchy. And I wrote this lol.
+        elif type(res) is str:
+            eval(str(_class) + '.' + 'default()')
+
+        resO, _classO, releaseO = self.build.checkOperator()
+        if type(resO) is str and releaseO != 'released':
+            eval(str(_classO) + '.' + str(resO))
+
+        elif type(resO) is str and releaseO == 'released':
+            eval(str(_classO) + '.' + 'default()')
+
+        ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
+
+    def notSoFunCustomDrivebaseStuff(self):
         if self.compBot:
             try:
 
@@ -81,60 +134,6 @@ class CleanRobot(magicbot.MagicRobot):
 
                 motor.setEncPosition(0.0)
                 motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
-
-
-        self.robotdrive_rumble = False
-
-        self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive'),
-                           ('RightTrigger', 'runOutake()', 'self.cargooutake')
-                          ]
-        self.functionsO = [
-                           ('RightBumper', 'armUp()', 'self.arm'),
-                           ('RightTrigger', 'armDown()', 'self.arm'),
-                           ('Y', 'elevatorUp()', 'self.elevator'),
-                           ('X', 'elevatorDown()', 'self.elevator'),
-                           ('A', 'runSmartIntake()', 'self.smartcargointake')
-                          ]
-
-        self.falconTest = TalonFX(ports.FalconTest.motorID)
-        self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
-
-        self.velocityCalculator = TankDrive()
-
-        self.activeMotors = self.robotdrive_motors[0:2]
-
-        self.tolerance = 20
-
-        self.build = BuildLayout(0, 1, self.functionsD, self.functionsO) # USE
-
-        self.build.checkEarly()
-
-        self.useActives = []
-
-    def teleopInit(self):
-        self.robotdrive.prepareToDrive(self.compBot)
-
-        self.falcon.run()
-        ''' Starts at the beginning of teleop (initialize) '''
-
-        #self.movemachine.moveMachineStart(36)
-
-    def teleopPeriodic(self):
-        res, _class, release = self.build.checkDriver()
-        if type(res) is str and release != 'released':
-            eval(str(_class) + '.' + str(res)) # Really sketchy. Freaky sketchy. And I wrote this lol.
-        elif type(res) is str:
-            eval(str(_class) + '.' + 'default()')
-
-        resO, _classO, releaseO = self.build.checkOperator()
-        if type(resO) is str and releaseO != 'released':
-            eval(str(_classO) + '.' + str(resO))
-
-        elif type(resO) is str and releaseO == 'released':
-            eval(str(_classO) + '.' + 'default()')
-
-        ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
-
 
     
     

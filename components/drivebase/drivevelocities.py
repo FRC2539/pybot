@@ -47,9 +47,9 @@ class TankDrive(VelocityProducer):
         #self.activeMotors = self.robotdrive_motors[0:2]
         
         if len(robotdrive_motors) != 4:
-            raise 'Could not configure for four motor tank because there were not four given motors!' 
+            raise 'Could not configure for four motor tank because there were not four given motors!'
         else:
-            robotdrive_motors[2].follow(robotdrive_motors[0])
+            robotdrive_motors[2].follow(robotdrive_motors[0]) # Thank God, these methods are the same in rev and ctre
             robotdrive_motors[3].follow(robotdrive_motors[1])
     
         return [robotdrive_motors[0], robotdrive_motors[1]]
