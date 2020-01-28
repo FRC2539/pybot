@@ -93,7 +93,7 @@ class BuildLayout:
 
         # TODO incorporate the dpad.
 
-    #''' The following are for trigger bool statements '''
+    #''' The following are for trigger bool statements NOTE: Now in the custom build '''
     #def getRightTriggerDriver(self):
         #if self.controllerUno.getTriggerAxis(1) > 0.05:
             #return True
@@ -182,7 +182,7 @@ class BuildLayout:
     def getRotate(self):
         return self.controllerUno.getX(wpilib.interfaces.GenericHID.Hand.kRightHand)
 
-    def checkEarly(self):
+    def checkEarly(self): # Ya know, I actually wanted to die while writing this.
         ''' Checks for valid inputs '''
         for func in self.functionsD:
             for var in func:

@@ -4,6 +4,8 @@ import magicbot
 import controller.logicalaxes
 import ports
 
+from custom.config import Config
+
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from components.drivebase.robotdrive import RobotDrive
@@ -11,10 +13,7 @@ from components.drivebase.drivevelocities import TankDrive
 
 from components.falcon.falconcomponent import FalconTest
 
-#from statemachines.drivetrain.movemachine import MoveStateMachine
-
-#from statemachines.intakes.smartintake import SmartIntake
-#from statemachines.intakes.cargooutake import CargoOutake
+from statemachines.drivetrain.movemachine import MoveStateMachine
 
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
@@ -25,7 +24,7 @@ from rev import CANSparkMax, MotorType
 import shutil, sys
 import collections
 
-class CleanRobot(magicbot.MagicRobot):
+class KryptonBot(magicbot.MagicRobot):
     #smartcargointake: SmartIntake
 #cargooutake: CargoOutake
 
@@ -34,13 +33,18 @@ class CleanRobot(magicbot.MagicRobot):
 
     falcon: FalconTest
 
+    movemachine: MoveStateMachine
+
     def createObjects(self):
 
-        self.compBot = True # Make this tunable or nt value
+        self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
 
         self.notSoFunCustomDrivebaseStuff()
 
         self.robotdrive_rumble = False
+
+        '''
+        Example:
 
         self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive'),
                            ('RightTrigger', 'runOutake()', 'self.cargooutake')
@@ -52,6 +56,9 @@ class CleanRobot(magicbot.MagicRobot):
                            ('X', 'elevatorDown()', 'self.elevator'),
                            ('A', 'runSmartIntake()', 'self.smartcargointake')
                           ]
+        '''
+        self.functionsD = []
+        self.functionsO = []
 
         self.falconTest = TalonFX(ports.FalconTest.motorID)
         self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
@@ -68,6 +75,8 @@ class CleanRobot(magicbot.MagicRobot):
 
     def teleopInit(self):
         self.robotdrive.prepareToDrive(self.compBot)
+
+        self.movemachine.moveMachineStart(12)
 
         self.falcon.run()
         ''' Starts at the beginning of teleop (initialize) '''
@@ -132,7 +141,7 @@ class CleanRobot(magicbot.MagicRobot):
                 self.neo_controllers.append(motor.getPIDController())
                 self.neo_encoders.append(motor.getEncoder())
 
-                motor.setEncPosition(0.0)
+                motor.getEncoder().setPosition(0.0)
                 motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
 
     
@@ -142,4 +151,4 @@ if __name__ == "__main__":
         shutil.rmtree('opkg_cache', ignore_errors=True)
         shutil.rmtree('pip_cache', ignore_errors=True)        
 
-    wpilib.run(CleanRobot)
+    wpilib.run(KryptonBot)

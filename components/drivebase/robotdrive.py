@@ -21,7 +21,7 @@ class RobotDrive:
     rumble: bool
 
     def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
-        pass
+        self.assignFuncs(False)
 
     def assignFuncs(self, bot):
 
@@ -30,13 +30,13 @@ class RobotDrive:
         if bot:
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
-            self.getPosition = self.falconGetPosition
+            self.getPositions = self.falconGetPosition
             self.setPositions = self.falconSetPositions
 
         else:
             self.move = self.neoMove
             self.resetPID = self.neoResetPID
-            self.getPosition = self.neoGetPosition
+            self.getPositions = self.neoGetPosition
             self.setPositions = self.neoSetPositions
 
     def prepareToDrive(self, bot):
@@ -44,44 +44,51 @@ class RobotDrive:
 
         self.resetPID()
 
+        self.lastInputs = None
+
         self.rumble = False
 
         self.build.setDualRumble() # TEMPORARY!!!
 
         self.useActives = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
 
-    def calculateTankSpeed(self, y, rotate, x=0):
-        return [y + rotate, -y + rotate]
-
-    def stop(self):
+    def stop(self): # Compatible for both drivebases
         for motor in self.useActives:
             motor.stopMotor()
 
     def neoMove(self):
-        y = self.build.getY() * -1
-        if abs(y) < 0.01:
-            y = 0.0 # added for stupid sensitivity issue.
+        y = self.build.getY() * -1 # invert the y-axis
+        rotate = self.build.getRotate()
+
+        if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
+            return
+
         speeds = self.velocityCalculator.getSpeedT(
                                         y=float(y),
-                                        rotate=float(self.build.getRotate())
+                                        rotate=float(rotate)
                                             )
 
-
-        ##print(str(y))
-        #if (abs(speeds[0]) > 0.95 and abs(speeds[1])) and not self.rumble > 0.95: # Probably only temporary, as this will slow the process down.
-            ##print('set rumble')
-            #self.build.setDualRumble()
-            #self.rumble = True
-        #elif (abs(speeds[0]) < 0.95 or abs(speeds[1]) < 0.95) and self.rumble: # Runs if they're less than almost full and if rumble is engaged.
-            ##print('disabled rumble')
-            #self.build.disableRumble()
-            #self.rumble = False
-
         for speed, motor in zip(speeds, self.useActives):
-            motor.set(ControlMode.PercentOutput, speed)
+            motor.set(ControlType.PercentOutput, speed)
+
+        self.lastInputs = [y, rotate]
 
     def falconMove(self):
-        pass
+        y = self.build.getY() * -1
+        rotate = self.build.getRotate()
+
+        if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
+            return
+
+        speeds = self.velocityCalculator.getSpeedT(
+                                        y=float(y),
+                                        rotate=float(rotate)
+                                            )
+
+        for speed, motor in zip(speeds, self.useActives):
+            motor.set(TalonFXControlMode.PercentOutput, speed)
+
+        self.lastInputs = [y, rotate]
 
     def falconGetPosition(self):
         positions = []
