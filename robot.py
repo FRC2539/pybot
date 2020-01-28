@@ -9,13 +9,7 @@ import ports
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
 
-from components.arm.arm import Arm
-
-from components.elevator.elevator import Elevator
-
 from components.falcon.falconcomponent import FalconTest
-
-from components.intakes.cargo import Cargo
 
 #from statemachines.drivetrain.movemachine import MoveStateMachine
 
@@ -25,7 +19,7 @@ from components.intakes.cargo import Cargo
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
 
-from ctre import WPI_TalonSRX, TalonFX, TalonFXFeedbackDevice
+from ctre import TalonFX, TalonFXFeedbackDevice, NeutralMode, WPI_TalonSRX
 from rev import CANSparkMax, MotorType
 
 import shutil, sys
@@ -35,42 +29,61 @@ class CleanRobot(magicbot.MagicRobot):
     #smartcargointake: SmartIntake
 #cargooutake: CargoOutake
 
-    #robotdrive: RobotDrive
+    robotdrive: RobotDrive
     velocity: TankDrive
 
     falcon: FalconTest
 
-    arm: Arm
-    elevator: Elevator
-
-    cargo: Cargo
-
     def createObjects(self):
 
-        self.robotdrive_motors = [
-                WPI_TalonSRX(ports.DrivetrainPorts.FrontLeftMotor),
-                WPI_TalonSRX(ports.DrivetrainPorts.FrontRightMotor),
-                WPI_TalonSRX(ports.DrivetrainPorts.BackLeftMotor),
-                WPI_TalonSRX(ports.DrivetrainPorts.BackRightMotor)
-                ]
+        self.compBot = True # Make this tunable or nt value
+
+        if self.compBot:
+            try:
+
+                self.robotdrive_motors = [
+                        TalonFX(ports.DrivetrainPorts.FrontLeftMotor),
+                        TalonFX(ports.DrivetrainPorts.FrontRightMotor),
+                        TalonFX(ports.DrivetrainPorts.BackLeftMotor),
+                        TalonFX(ports.DrivetrainPorts.BackRightMotor)
+                        ]
+
+            except(AttributeError):
+                self.robotdrive_motors = [
+                        TalonFX(ports.DrivetrainPorts.LeftMotor),
+                        TalonFX(ports.DrivetrainPorts.RightMotor)
+                        ]
+
+            for motor in self.robotdrive_motors:
+                motor.setNeutralMode(NeutralMode.Brake)
+                motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
+        else:
+            self.neo_encoders = []
+            self.neo_controllers = []
+
+            try:
+                self.robotdrive_motors = [
+                        CANSparkMax(ports.DrivetrainPorts.FrontLeftMotor, MotorType.kBrushless),
+                        CANSparkMax(ports.DrivetrainPorts.FrontRightMotor, MotorType.kBrushless),
+                        CANSparkMax(ports.DrivetrainPorts.BackLeftMotor, MotorType.kBrushless),
+                        CANSparkMax(ports.DrivetrainPorts.BackRightMotor, MotorType.kBrushless)
+                        ]
+
+            except(AttributeError):
+                self.robotdrive_motors = [
+                        CANSparkMax(ports.DrivetrainPorts.FrontLeftMotor, MotorType.kBrushless),
+                        CANSparkMax(ports.DrivetrainPorts.FrontRightMotor, MotorType.kBrushless)
+                        ]
+
+            for motor in self.robotdrive_motors:
+                self.neo_controllers.append(motor.getPIDController())
+                self.neo_encoders.append(motor.getEncoder())
+
+                motor.setEncPosition(0.0)
+                motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
+
 
         self.robotdrive_rumble = False
-
-        self.arm_motor = CANSparkMax(ports.Arm.ArmMotorID, MotorType.kBrushless)
-        self.arm_lowerLimit = wpilib.DigitalInput(ports.Arm.lowerLimit)
-        self.arm_encoder = self.arm_motor.getEncoder()
-        self.arm_pidcontroller = self.arm_motor.getPIDController()
-
-        self.elevator_motor = CANSparkMax(ports.Elevator.ElevatorMotorID, MotorType.kBrushless)
-        self.elevator_lowerlimit = wpilib.DigitalInput(ports.Elevator.lowerLimit)
-        self.elevator_encoder = self.elevator_motor.getEncoder()
-        self.elevator_pidcontroller = self.elevator_motor.getPIDController()
-
-        self.cargo_motor = WPI_TalonSRX(ports.CargoIntake.CargoMotorID)
-        self.shot = True
-        self.isRunning = False
-
-        self.hatch_motor = WPI_TalonSRX(0)
 
         self.functionsD = [('LeftTrigger', 'getPositions()', 'self.robotdrive'),
                            ('RightTrigger', 'runOutake()', 'self.cargooutake')
@@ -99,10 +112,8 @@ class CleanRobot(magicbot.MagicRobot):
         self.useActives = []
 
     def teleopInit(self):
-        self.robotdrive.prepareToDrive()
-        self.arm.prepareArm()
-        self.elevator.prepareElevator()
-        self.cargo.prepareCargoIntake()
+        self.robotdrive.prepareToDrive(self.compBot)
+
         self.falcon.run()
         ''' Starts at the beginning of teleop (initialize) '''
 
@@ -117,11 +128,9 @@ class CleanRobot(magicbot.MagicRobot):
 
         resO, _classO, releaseO = self.build.checkOperator()
         if type(resO) is str and releaseO != 'released':
-            print('not released')
             eval(str(_classO) + '.' + str(resO))
 
         elif type(resO) is str and releaseO == 'released':
-            print('released')
             eval(str(_classO) + '.' + 'default()')
 
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''

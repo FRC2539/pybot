@@ -23,7 +23,20 @@ class RobotDrive:
 
     def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
         pass
-    def prepareToDrive(self):
+
+    def assignFuncs(self, bot):
+
+        # Assigns functions that are motor controller specific
+
+        if bot:
+            self.move = self.falconMove
+
+        else:
+            self.move = self.neoMove
+
+    def prepareToDrive(self, bot):
+        self.assignFuncs(bot)
+
         print(str(self.velocityCalculator))
         for motor in self.robotdrive_motors:
             motor.setNeutralMode(NeutralMode.Brake)
@@ -57,7 +70,7 @@ class RobotDrive:
         for motor in self.useActives:
             motor.stopMotor()
 
-    def move(self):
+    def neoMove(self):
         y = self.build.getY() * -1
         if abs(y) < 0.01:
             y = 0.0 # added for stupid sensitivity issue.
@@ -79,6 +92,10 @@ class RobotDrive:
 
         for speed, motor in zip(speeds, self.useActives):
             motor.set(ControlMode.PercentOutput, speed)
+
+    def falconMove(self):
+        pass
+
     def getPosition(self):
         positions = []
         for motor in self.useActives:
