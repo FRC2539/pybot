@@ -17,7 +17,7 @@ class Turret(DebuggableSubsystem):
         self.motor = WPI_VictorSPX(ports.turret.motorID)
         self.motor.setSafetyEnabled(False)
 
-        #self.colorSensor.write(0x00, b'000000011')
+        self.colorSensor = colorSensorV3(wpilib.I2C.Port.kOnboard)
 
     def readSensor(self):
         return self.colorSensor.getColor()
