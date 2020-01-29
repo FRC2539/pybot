@@ -29,6 +29,9 @@ class Config:
         if key in Config._values:
             return
 
+        Config._values[key] = default or 0
+        return
+
         if Config._nt is None:
             Config._nt = NetworkTables.getGlobalTable()
 
@@ -51,6 +54,7 @@ class Config:
 
 
     def getValue(self):
+        return Config._values[self.key]
         if Config._values[self.key] is None:
             try:
                 value = Config._nt.getValue(self.key)

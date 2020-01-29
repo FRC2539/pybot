@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+# Monkey-patching out NetworkTables methods
+import wpilib
+wpilib.SmartDashboard.putData = lambda x, y: None
+class MockSendableChooser:
+    def addDefault(self, x, y):
+        self.choice = y
+    def getSelected(self):
+        return self.choice
+wpilib.SendableChooser = MockSendableChooser
+import networktables
+def mockAddTableListener(x, y, localNotify=None):
+    pass
+networktables.NetworkTable.addTableListener = mockAddTableListener
 import wpilib.command
 wpilib.command.Command.isFinished = lambda x: False
 
@@ -31,7 +44,7 @@ class KryptonBot(CommandBasedRobot):
         driverhud.init()
 
         from commands.startupcommandgroup import StartUpCommandGroup
-        StartUpCommandGroup().start()
+        #StartUpCommandGroup().start()
 
 
     def autonomousInit(self):
