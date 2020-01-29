@@ -12,7 +12,6 @@ class Relay(DebuggableSubsystem):
         super().__init__('Relay')
         self.relay = WPIRelay(ports.relay.relayDIO)
         self.relay.stopMotor()
-        self.stop()
 
     def setForward(self):
         self.relay.set(WPIRelay.Value.kOn)

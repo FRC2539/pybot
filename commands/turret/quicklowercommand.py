@@ -1,5 +1,4 @@
 from wpilib.command import Command
-
 import robot
 
 class QuickLowerCommand(Command):
