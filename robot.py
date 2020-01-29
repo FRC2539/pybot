@@ -19,7 +19,9 @@ from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
 
 from ctre import TalonFX, TalonFXFeedbackDevice, NeutralMode, WPI_TalonSRX
+
 from rev import CANSparkMax, MotorType
+from rev.color import ColorSensorV3
 
 import shutil, sys
 import collections
@@ -63,6 +65,11 @@ class KryptonBot(magicbot.MagicRobot):
 
         self.falconTest = TalonFX(ports.FalconTest.motorID)
         self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
+
+        self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
+        self.colorwheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
+        self.colorWheelEncoder = self.colorwheelMotor.getEncoder()
+        self.colorWheelController = self.colorWheelMotor.getPIDController()
 
         self.velocityCalculator = TankDrive()
 
