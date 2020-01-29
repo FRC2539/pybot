@@ -69,7 +69,7 @@ class RobotDrive:
                                             )
 
         for speed, motor in zip(speeds, self.useActives):
-            motor.set(ControlType.PercentOutput, speed)
+            motor.set(speed)
 
         self.lastInputs = [y, rotate]
 

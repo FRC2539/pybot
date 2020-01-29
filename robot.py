@@ -13,7 +13,7 @@ from components.drivebase.drivevelocities import TankDrive
 
 from components.falcon.falconcomponent import FalconTest
 
-from statemachines.drivetrain.movemachine import MoveStateMachine
+#from statemachines.drivetrain.movemachine import MoveStateMachine
 
 from controller.logitechdualshock import LogitechDualshock
 from controller.buildlayout import BuildLayout
@@ -33,11 +33,12 @@ class KryptonBot(magicbot.MagicRobot):
 
     falcon: FalconTest
 
-    movemachine: MoveStateMachine
+    #movemachine: MoveStateMachine
 
     def createObjects(self):
 
-        self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
+        #self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
+        self.compBot = False
 
         self.notSoFunCustomDrivebaseStuff()
 
@@ -76,7 +77,7 @@ class KryptonBot(magicbot.MagicRobot):
     def teleopInit(self):
         self.robotdrive.prepareToDrive(self.compBot)
 
-        self.movemachine.moveMachineStart(12)
+        #self.movemachine.moveMachineStart(12)
 
         self.falcon.run()
         ''' Starts at the beginning of teleop (initialize) '''
