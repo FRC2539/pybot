@@ -15,6 +15,8 @@ from components.drivebase.drivevelocities import TankDrive
 
 from components.falcon.falconcomponent import FalconTest
 
+from components.colorsensor.colorwheel import ColorWheel
+
 #from statemachines.drivetrain.movemachine import MoveStateMachine
 
 from controller.logitechdualshock import LogitechDualshock
@@ -29,9 +31,6 @@ import shutil, sys
 import collections
 
 class KryptonBot(magicbot.MagicRobot):
-    #smartcargointake: SmartIntake
-#cargooutake: CargoOutake
-
     robotdrive: RobotDrive
     velocity: TankDrive
 
@@ -39,8 +38,16 @@ class KryptonBot(magicbot.MagicRobot):
 
     potent: Potentiometer
 
+    wheelactions: ColorWheel
+
     #movemachine: MoveStateMachine
 
+    @classmethod
+    def createGenerators(cls):
+        try:
+            sys.modules['robot'].ColorWheel = ColorWheel()
+        except KeyError:
+            pass
     def createObjects(self):
 
         #self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
@@ -71,9 +78,9 @@ class KryptonBot(magicbot.MagicRobot):
         self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
-        self.colorwheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
-        self.colorWheelEncoder = self.colorwheelMotor.getEncoder()
-        self.colorWheelController = self.colorwheelMotor.getPIDController()
+        self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
+        self.colorWheelEncoder = self.colorWheelMotor.getEncoder()
+        self.colorWheelController = self.colorWheelMotor.getPIDController()
 
         self.velocityCalculator = TankDrive()
 
@@ -90,6 +97,9 @@ class KryptonBot(magicbot.MagicRobot):
         self.build.checkEarly()
 
         self.useActives = []
+
+        self.createGenerators()
+
 
     def teleopInit(self):
         self.robotdrive.prepareToDrive(self.compBot)

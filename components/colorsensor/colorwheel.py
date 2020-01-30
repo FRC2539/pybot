@@ -20,21 +20,25 @@ class ColorWheel:
 
         self.colorWheelMotor.setInverted(False) # might need to change
 
-        self.colorWheelMotor.setP(0.01, 0) # Dummy values from the falcon tester
-        self.colorWheelMotor.setI(0, 0)
-        self.colorWheelMotor.setD(0.1, 0)
-        self.colorWheelMotor.setIZone(1, 0)
-        self.colorWheelMotor.setFF(0.1, 0)
+        self.colorWheelController.setP(0.01, 0) # Dummy values from the falcon tester
+        self.colorWheelController.setI(0, 0)
+        self.colorWheelController.setD(0.1, 0)
+        self.colorWheelController.setIZone(1, 0)
+        self.colorWheelController.setFF(0.1, 0)
 
     def getColor(self):
         return self.colorSensor.getColor()
 
-    def spinFour(self):
+    def autoSpinWheel(self):
+        ''' Should be about 3.25 rotations of the wheel '''
         #self.colorWheelMotor.set(ControlMode.Position, (self.colorWheelMotor.getSelectedSensorPosition() + )
-        self.colorWheelController.setReference(50, ControlType.kPosition, 0, 0)
+        self.colorWheelController.setReference(9630, ControlType.kPosition, 0, 0) # Look at photos for calc, Ben.
 
     def spinClockwise(self):
         self.colorWheelMotor.set(0.9)
 
     def spinCClockwise(self):
         self.colorWheelMotor.set(-0.9)
+
+    def execute(self):
+        pass

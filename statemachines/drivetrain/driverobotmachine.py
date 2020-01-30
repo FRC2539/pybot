@@ -7,7 +7,7 @@ from components.drivebase.robotdrive import RobotDrive
 from magicbot import StateMachine, state, timed_state, default_state
 
 class DriveRobotMachine(StateMachine):
-    robotdrive = RobotDrive
+    robotdrive: RobotDrive
 
     def beginDrive(self):
         self.engage()
