@@ -17,3 +17,6 @@ FalconTest.motorID = 3 # dummy
 ColorWheelPorts = PortsList()
 
 ColorWheelPorts.motorID = 6 # dummy
+
+IntakePorts = PortsList()
+IntakePorts.motorID = 7

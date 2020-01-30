@@ -203,17 +203,18 @@ class BuildLayout:
                 #print('ran this')
                 self.commandDr = eval('self.customButtons.' + str(self.buttonsToXboxDriver[func[0]])) # If this does not work, make a seperate controller file with the methods from above, import it, instantiate an object, and then call these functions on that sucker.
 
-            if self.commandDr: #and not self.buttonHoldStatusD[func[0]]:
+            if self.commandDr and not self.buttonHoldStatusD[func[0]]: #and not self.buttonHoldStatusD[func[0]]:
                 # Checks to see if returns true. This will NOT work with scaling triggers!
                 self.buttonHoldStatusD[func[0]] = True
                 return func[1], func[2], '0'
 
-            elif not self.commandDr:
-                if self.buttonHoldStatusD[func[0]]:
-                    self.buttonHoldStatusD[func[0]] = False
-                    return func[1], func[2], 'released'
+            elif self.commandDr and self.buttonHoldStatusD[func[0]]:
+                return func[1], func[2], 'held'
                 #print('set status to false (released?)')
-                continue
+
+            self.buttonHoldStatusD[func[0]] = False
+            continue # self.commandDr must be False, and therefore no longer held.
+
 
         return False, False, '0'
 
@@ -225,16 +226,17 @@ class BuildLayout:
             except(AttributeError): # if it is not an XboxController class (like a trigger bool), the following runs.
                 self.commanOp = eval('self.customButtons.' + str(self.buttonsToXboxOp[func[0]]))
 
-            if self.commandOp: #and not self.buttonHoldStatusO[func[0]]: # Checks to see if returns true. This will NOT work with scaling triggers!
+            if self.commandOp and not self.buttonHoldStatusO[func[0]]: #and not self.buttonHoldStatusD[func[0]]:
+                # Checks to see if returns true. This will NOT work with scaling triggers!
                 self.buttonHoldStatusO[func[0]] = True
-                print('Got input')
                 return func[1], func[2], '0'
 
-            elif not self.commandOp:
-                if self.buttonHoldStatusO[func[0]]:
-                    self.buttonHoldStatusO[func[0]] = False
-                    return func[1], func[2], 'released'
+            elif self.commandOp and self.buttonHoldStatusO[func[0]]:
+                return func[1], func[2], 'held'
                 #print('set status to false (released?)')
-                continue
+
+            self.buttonHoldStatusO[func[0]] = False
+            continue # self.commandDr must be False, and therefore no longer held.
+
 
         return False, False, '0'

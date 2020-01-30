@@ -29,10 +29,15 @@ class ColorWheel:
     def getColor(self):
         return self.colorSensor.getColor()
 
-    def autoSpinWheel(self):
-        ''' Should be about 3.25 rotations of the wheel '''
+    def reset(self):
+        self.colorWheelMotor.setEncPosition(0.0)
+        self.colorWheelEncoder.setPosition(0.0)
+
+    def autoSpinWheel(self, val=9630): # This val is for the number of rotations; pass an argument for the set
+        ''' Should be about 3.25 rotations of the color wheel '''
         #self.colorWheelMotor.set(ControlMode.Position, (self.colorWheelMotor.getSelectedSensorPosition() + )
-        self.colorWheelController.setReference(9630, ControlType.kPosition, 0, 0) # Look at photos for calc, Ben.
+        self.reset()
+        self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # Look at photos for calc, Ben.
 
     def spinClockwise(self):
         self.colorWheelMotor.set(0.9)

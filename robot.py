@@ -8,12 +8,16 @@ from custom.config import Config
 
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
+from statemachines.intake.intakeballs import IntakeBallsCommand
+
 from components.potentiometer import Potentiometer
 
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
 
 from components.falcon.falconcomponent import FalconTest
+
+from components.intake.intake import Intake
 
 from components.colorsensor.colorwheel import ColorWheel
 
@@ -34,11 +38,15 @@ class KryptonBot(magicbot.MagicRobot):
     robotdrive: RobotDrive
     velocity: TankDrive
 
+    intakecommand: IntakeBallsCommand
+
     falcon: FalconTest
 
     potent: Potentiometer
 
     wheelactions: ColorWheel
+
+    intake: Intake
 
     #movemachine: MoveStateMachine
 
@@ -51,7 +59,7 @@ class KryptonBot(magicbot.MagicRobot):
 
     def createObjects(self):
 
-        #self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
+        self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
         self.compBot = False
 
         self.notSoFunCustomDrivebaseStuff()
@@ -72,11 +80,14 @@ class KryptonBot(magicbot.MagicRobot):
                            ('A', 'runSmartIntake()', 'self.smartcargointake')
                           ]
         '''
-        self.functionsD = []
+        self.functionsD = [('A', 'intakeCommand()', 'self.intakecommand')]
         self.functionsO = []
 
         self.falconTest = TalonFX(ports.FalconTest.motorID)
         self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
+
+        self.intakeMotor = CANSparkMax(ports.IntakePorts.motorID, MotorType.kBrushed)
+        self.intakeRunning = False
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
         self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
@@ -115,17 +126,17 @@ class KryptonBot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         res, _class, release = self.build.checkDriver()
-        if type(res) is str and release != 'released':
+        if type(res) is str and release != 'held':
             eval(str(_class) + '.' + str(res)) # Really sketchy. Freaky sketchy. And I wrote this lol.
-        elif type(res) is str:
-            eval(str(_class) + '.' + 'default()')
+        #elif type(res) is str:
+            #eval(str(_class) + '.' + 'default()')
 
         resO, _classO, releaseO = self.build.checkOperator()
-        if type(resO) is str and releaseO != 'released':
+        if type(resO) is str and releaseO != 'held':
             eval(str(_classO) + '.' + str(resO))
 
-        elif type(resO) is str and releaseO == 'released':
-            eval(str(_classO) + '.' + 'default()')
+        #elif type(resO) is str:
+            #eval(str(_classO) + '.' + 'default()')
 
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
@@ -174,11 +185,11 @@ class KryptonBot(magicbot.MagicRobot):
                 motor.getEncoder().setPosition(0.0)
                 motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
 
-    
-    
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':
         shutil.rmtree('opkg_cache', ignore_errors=True)
-        shutil.rmtree('pip_cache', ignore_errors=True)        
+        shutil.rmtree('pip_cache', ignore_errors=True)
 
     wpilib.run(KryptonBot)
