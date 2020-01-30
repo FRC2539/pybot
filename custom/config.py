@@ -1,7 +1,5 @@
-from networktables import NetworkTables
-
-from networktables import NetworkTablesInstance, NetworkTableEntry, NetworkTable
-
+from networktables import NetworkTables, NetworkTable
+from networktables.entry import NetworkTableEntry
 
 class MissingConfigError(KeyError):
     pass
@@ -31,31 +29,35 @@ class Config:
         if key in Config._values:
             return
 
+        Config._values[key] = default or 0
+        return
+
         if Config._nt is None:
             Config._nt = NetworkTables.getGlobalTable()
 
         try:
-            value = Config._nt.getValue(self.key) # Removed done, doesn't take default values any more (check C++ again if needed)
+            value = Config._nt.getValue(self.key)
         except AttributeError:
             value = None
 
         if value is None and default is None:
             Config._values[self.key] = None
         else:
-            Config._values[self.key] = Config._nt.getEntry(
+            Config._values[self.key] = Config._nt.getEntry( # was get getAutoUpdateValue
                 self.key)
-               # value if value is not None else default,
+                #value if value is not None else default,
                 #False
-
+           # )
 
             '''Make entry persistent so it is saved to the roboRIO.'''
             Config._nt.setPersistent(self.key)
 
 
     def getValue(self):
+        return Config._values[self.key]
         if Config._values[self.key] is None:
             try:
-                value = Config._nt.getValue(self.key, None)
+                value = Config._nt.getValue(self.key)
             except AttributeError as exc:
                 raise MissingConfigError('No key named %s' % self.key) from exc
 
@@ -105,7 +107,8 @@ class Config:
         '''If we're requesting a string for a number, show its key.'''
 
         try:
-            return str(self.getValue())
+            float(self.getValue())
+            return self.key
         except MissingConfigError:
             return self.key
         except (TypeError, ValueError):

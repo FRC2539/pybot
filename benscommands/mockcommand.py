@@ -9,4 +9,5 @@ class AutoSpinWheel(Generator):
         super(AutoSpinWheel, self).__init__()
 
     def initialize(self):
-        robot.mockcommand.getColor()
+        robot.ColorWheel.getColor()
+        print('wow')

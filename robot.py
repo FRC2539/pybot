@@ -48,6 +48,7 @@ class KryptonBot(magicbot.MagicRobot):
             sys.modules['robot'].ColorWheel = ColorWheel()
         except KeyError:
             pass
+
     def createObjects(self):
 
         #self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
@@ -102,6 +103,7 @@ class KryptonBot(magicbot.MagicRobot):
 
 
     def teleopInit(self):
+
         self.robotdrive.prepareToDrive(self.compBot)
 
         #self.movemachine.moveMachineStart(12)

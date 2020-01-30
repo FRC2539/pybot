@@ -7,6 +7,8 @@ class Generator:
             yield
         self.end()
 
+        self.__del__()
+
     def initialize(self):
         print('No i ran')
         pass
