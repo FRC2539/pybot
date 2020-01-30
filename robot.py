@@ -8,6 +8,8 @@ from custom.config import Config
 
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
+from components.potentiometer import Potentiometer
+
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
 
@@ -34,6 +36,8 @@ class KryptonBot(magicbot.MagicRobot):
     velocity: TankDrive
 
     falcon: FalconTest
+
+    potent: Potentiometer
 
     #movemachine: MoveStateMachine
 
@@ -69,9 +73,15 @@ class KryptonBot(magicbot.MagicRobot):
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
         self.colorwheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
         self.colorWheelEncoder = self.colorwheelMotor.getEncoder()
-        self.colorWheelController = self.colorWheelMotor.getPIDController()
+        self.colorWheelController = self.colorwheelMotor.getPIDController()
 
         self.velocityCalculator = TankDrive()
+
+        self.potentiometer = wpilib.AnalogPotentiometer(0)
+        self.potentiometerTalon = WPI_TalonSRX(2)
+
+        self.potentiometerForward = wpilib.DigitalInput(0)
+        self.potentiometerReverse = wpilib.DigitalInput(1)
 
         self.tolerance = 20
 
@@ -86,7 +96,7 @@ class KryptonBot(magicbot.MagicRobot):
 
         #self.movemachine.moveMachineStart(12)
 
-        self.falcon.run()
+        #self.falcon.run()
         ''' Starts at the beginning of teleop (initialize) '''
 
         #self.movemachine.moveMachineStart(36)
