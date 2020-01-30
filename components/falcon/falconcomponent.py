@@ -22,4 +22,5 @@ class FalconTest:
         print('RPM?: '+ str((self.falconTest.getSelectedSensorVelocity(0) * 600) / 2048))
 
     def execute(self):
-        self.run()
+        #self.run()
+        pass
