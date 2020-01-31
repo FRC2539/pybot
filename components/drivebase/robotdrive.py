@@ -2,6 +2,7 @@ import wpilib
 import math
 
 import csv
+import os
 
 from controller import logicalaxes
 
@@ -25,7 +26,7 @@ class RobotDrive:
     def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
         self.assignFuncs(False)
 
-        self.csvFile = 'data.csv'
+        self.folder = '/home/lvuser/py/components/drivebase'
 
     def assignFuncs(self, bot):
 
@@ -56,32 +57,52 @@ class RobotDrive:
 
         self.useActives = self.velocityCalculator.configureFourTank(self.robotdrive_motors)
 
+        self.timer = wpilib.Timer()
+        self.timer.start()
+
     def stop(self): # Compatible for both drivebases
+
         for motor in self.useActives:
             motor.stopMotor()
 
+    def recordDataToCSV(self):
+        #for index, motor in enumerate(self.robotdrive_motors):
+                #self.recordData[0].append(index)
+                #self.recordData[1].append(motor.getEncoder().getVelocity())
+                #self.recordData[2].append(motor.getOutputCurrent())
+                #self.recordData[3].append(motor.getBusVoltage())
+                #self.recordData[4].append(self.timer.get())
+        #print(self.recordData)
+
+        with open(self.folder +'/' + 'data.csv', 'a', newline='') as file:
+            print('writing')
+            self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
+
+            for index, motor in enumerate(self.robotdrive_motors):
+                self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
+
+            #for id_, vel, cur, volt, time in zip(self.recordData[0], self.recordData[1], self.recordData[2], self.recordData[3], self.recordData[4]):
+                #self.writer.writerow(['Motor: ' + str(id_)] + ['RPM: ' + str(vel)] + ['Amps: ' + str(cur)] + ['Bus Volts: ' + str(volt)] + ['Time (s): ' + str(time)])
+
+
     def neoMove(self):
-        with open(self.csvFile, 'w', newline='') as file:
-            writer = csv.writer(file, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        print('running')
+        y = self.build.getY() * -1 # invert the y-axis
+        rotate = self.build.getRotate()
+        if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
+            return
 
-            y = self.build.getY() * -1 # invert the y-axis
-            rotate = self.build.getRotate()
+        speeds = self.velocityCalculator.getSpeedT(
+                                        y=float(y),
+                                        rotate=float(rotate)
+                                            )
 
+        for speed, motor in zip(speeds, self.useActives):
+            motor.set(speed)
 
-            if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
-                return
+        self.recordDataToCSV()
 
-            speeds = self.velocityCalculator.getSpeedT(
-                                            y=float(y),
-                                            rotate=float(rotate)
-                                                )
-
-            for speed, motor in zip(speeds, self.useActives):
-                motor.set(speed)
-            for motor in self.robotdrive_motors:
-                writer.writerow(['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Volts?: ' + motor.getVoltageCompensationNominalVolatage()])
-
-            self.lastInputs = [y, rotate]
+        self.lastInputs = [y, rotate]
 
     def falconMove(self):
         y = self.build.getY() * -1
@@ -164,5 +185,3 @@ class RobotDrive:
         # Functions as a default for a low level (kinda)
         self.move()
 
-    def default(self):
-        pass
