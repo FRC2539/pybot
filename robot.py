@@ -59,7 +59,7 @@ class KryptonBot(magicbot.MagicRobot):
 
     def createObjects(self):
 
-        self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
+        #self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
         self.compBot = False
 
         self.notSoFunCustomDrivebaseStuff()
