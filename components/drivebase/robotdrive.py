@@ -1,6 +1,8 @@
 import wpilib
 import math
 
+import csv
+
 from controller import logicalaxes
 
 from components.drivebase.drivevelocities import TankDrive
@@ -22,6 +24,8 @@ class RobotDrive:
 
     def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
         self.assignFuncs(False)
+
+        self.csvFile = 'data.csv'
 
     def assignFuncs(self, bot):
 
@@ -57,21 +61,27 @@ class RobotDrive:
             motor.stopMotor()
 
     def neoMove(self):
-        y = self.build.getY() * -1 # invert the y-axis
-        rotate = self.build.getRotate()
+        with open(self.csvFile, 'w', newline='') as file:
+            writer = csv.writer(file, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
-        if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
-            return
+            y = self.build.getY() * -1 # invert the y-axis
+            rotate = self.build.getRotate()
 
-        speeds = self.velocityCalculator.getSpeedT(
-                                        y=float(y),
-                                        rotate=float(rotate)
-                                            )
 
-        for speed, motor in zip(speeds, self.useActives):
-            motor.set(speed)
+            if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
+                return
 
-        self.lastInputs = [y, rotate]
+            speeds = self.velocityCalculator.getSpeedT(
+                                            y=float(y),
+                                            rotate=float(rotate)
+                                                )
+
+            for speed, motor in zip(speeds, self.useActives):
+                motor.set(speed)
+            for motor in self.robotdrive_motors:
+                writer.writerow(['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Volts?: ' + motor.getVoltageCompensationNominalVolatage()])
+
+            self.lastInputs = [y, rotate]
 
     def falconMove(self):
         y = self.build.getY() * -1
