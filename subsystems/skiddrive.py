@@ -23,5 +23,6 @@ class SkidDrive(BaseDrive):
         for motor in self.activeMotors:
             motor.setSensorPhase(True)
 
+
     def _calculateSpeeds(self, x, y, rotate):
         return [y + rotate, -y + rotate]
