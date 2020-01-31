@@ -1,5 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
+from wpilib import Timer
+
 import math
 import csv
 
@@ -141,13 +143,22 @@ class BaseDrive(DebuggableSubsystem):
 
         self.resetPID()
 
+
         try:
             self.debugMotor('Back Left Motor', self.motors[2])
             self.debugMotor('Back Right Motor', self.motors[3])
         except IndexError:
             pass
 
-    def recordDriveData(self):
+    def setupRecordData(self):
+        self.firstSave = True
+        self.folder = '/home/lvuser/py/subsystems'
+
+        self.timer = Timer()
+
+        self.timer.start()
+
+    def neoRecordDriveData(self):
         #for index, motor in enumerate(self.robotdrive_motors):
         #self.recordData[0].append(index)
         #self.recordData[1].append(motor.getEncoder().getVelocity())
@@ -159,7 +170,7 @@ class BaseDrive(DebuggableSubsystem):
             with open(self.folder +'/' + 'data.csv', 'w', newline='') as firstfile:
                 print('first write')
                 self.writer = csv.writer(firstfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
-                for index, motor in enumerate(self.robotdrive_motors):
+                for index, motor in enumerate(self.motors):
                     self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
                 self.firstSave = False
         else:
@@ -226,6 +237,8 @@ class BaseDrive(DebuggableSubsystem):
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
+
+        self.neoRecordDriveData()
 
 
     def falconMove(self, x, y, rotate):
