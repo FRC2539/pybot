@@ -60,6 +60,8 @@ class RobotDrive:
         self.timer = wpilib.Timer()
         self.timer.start()
 
+        self.firstSave = True
+
     def stop(self): # Compatible for both drivebases
 
         for motor in self.useActives:
@@ -73,13 +75,20 @@ class RobotDrive:
                 #self.recordData[3].append(motor.getBusVoltage())
                 #self.recordData[4].append(self.timer.get())
         #print(self.recordData)
+        if self.firstSave:
+            with open(self.folder +'/' + 'data.csv', 'w', newline='') as firstfile:
+                print('first write')
+                self.writer = csv.writer(firstfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
+                for index, motor in enumerate(self.robotdrive_motors):
+                    self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
+                self.firstSave = False
+        else:
+            with open(self.folder +'/' + 'data.csv', 'a', newline='') as file:
+                print('writing')
+                self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
 
-        with open(self.folder +'/' + 'data.csv', 'a', newline='') as file:
-            print('writing')
-            self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
-
-            for index, motor in enumerate(self.robotdrive_motors):
-                self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
+                for index, motor in enumerate(self.robotdrive_motors):
+                    self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
 
             #for id_, vel, cur, volt, time in zip(self.recordData[0], self.recordData[1], self.recordData[2], self.recordData[3], self.recordData[4]):
                 #self.writer.writerow(['Motor: ' + str(id_)] + ['RPM: ' + str(vel)] + ['Amps: ' + str(cur)] + ['Bus Volts: ' + str(volt)] + ['Time (s): ' + str(time)])
