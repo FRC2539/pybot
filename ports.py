@@ -20,3 +20,7 @@ drivetrain.backRightMotorID = 4
 ColorWheelPorts = PortsList()
 
 ColorWheelPorts.motorID = 5
+
+IntakePorts = PortsList()
+
+IntakePorts.motorID = 6

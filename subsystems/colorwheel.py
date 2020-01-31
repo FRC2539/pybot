@@ -10,7 +10,7 @@ from rev.color import ColorSensorV3, ColorMatch
 class ColorWheel(DebuggableSubsystem):
 
     def __init__(self):
-        super().__init__('ColorWheel')
+        super().__init__('Color Wheel')
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
         self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)

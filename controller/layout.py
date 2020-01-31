@@ -6,6 +6,8 @@ from custom.config import Config
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.outtakecommand import OutakeCommand
 
 def init():
     '''
@@ -28,8 +30,12 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
 
+    driveController.A.toggleWhenPressed(IntakeCommand())
+    driveController.B.whenPressed(OutakeCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
+
+    driveController.A.toggleWhenPressed(IntakeCommand())
 
     componentController.Back.whenPressed(ResetCommand())

@@ -6,6 +6,8 @@ class AutoSetWheelCommand(Command):
     def __init__(self):
         super().__init__('Auto Set Wheel')
 
+        self.requires(robot.colorwheel)
+
         self.colors = ['y', 'r', 'g', 'b']
 
         self.direction = 1 # Clockwise
