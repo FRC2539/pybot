@@ -1,6 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 import math
+import csv
 
 from networktables import NetworkTables
 
@@ -20,7 +21,7 @@ class BaseDrive(DebuggableSubsystem):
     without knowing what type of drive system we have should be implemented here.
     '''
 
-    def setDriveTrain(self, compBot):
+    def setDriveTrain(self, compBot=True):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
@@ -49,6 +50,8 @@ class BaseDrive(DebuggableSubsystem):
                 motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
             self.move = self.falconMove
+            self.resetPID = self.falconResetPID
+            self.setPositions = self.falconSetPositions
 
         else:
 
@@ -88,7 +91,8 @@ class BaseDrive(DebuggableSubsystem):
             # Make general method names based off of methods that require controller-specific methods.
 
             self.move = self.neoMove
-
+            self.resetPID = self.neoResetPID
+            self.setPositions = self.falconSetPositions
 
     def __init__(self, name):
         super().__init__(name)
@@ -135,11 +139,40 @@ class BaseDrive(DebuggableSubsystem):
         self.debugMotor('Front Left Motor', self.motors[0])
         self.debugMotor('Front Right Motor', self.motors[1])
 
+        self.resetPID()
+
         try:
             self.debugMotor('Back Left Motor', self.motors[2])
             self.debugMotor('Back Right Motor', self.motors[3])
         except IndexError:
             pass
+
+    def recordDriveData(self):
+        #for index, motor in enumerate(self.robotdrive_motors):
+        #self.recordData[0].append(index)
+        #self.recordData[1].append(motor.getEncoder().getVelocity())
+        #self.recordData[2].append(motor.getOutputCurrent())
+        #self.recordData[3].append(motor.getBusVoltage())
+        #self.recordData[4].append(self.timer.get())
+        #print(self.recordData)
+        if self.firstSave:
+            with open(self.folder +'/' + 'data.csv', 'w', newline='') as firstfile:
+                print('first write')
+                self.writer = csv.writer(firstfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
+                for index, motor in enumerate(self.robotdrive_motors):
+                    self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
+                self.firstSave = False
+        else:
+            with open(self.folder +'/' + 'data.csv', 'a', newline='') as file:
+                print('writing')
+                self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
+
+                for index, motor in enumerate(self.robotdrive_motors):
+                    self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
+
+            #for id_, vel, cur, volt, time in zip(self.recordData[0], self.recordData[1], self.recordData[2], self.recordData[3], self.recordData[4]):
+            #self.writer.writerow(['Motor: ' + str(id_)] + ['RPM: ' + str(vel)] + ['Amps: ' + str(cur)] + ['Bus Volts: ' + str(volt)] + ['Time (s): ' + str(time)])
+
 
 
     def initDefaultCommand(self):
@@ -242,7 +275,7 @@ class BaseDrive(DebuggableSubsystem):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
 
-    def setPositions(self, positions):
+    def falconSetPositions(self, positions):
         '''
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
@@ -257,6 +290,9 @@ class BaseDrive(DebuggableSubsystem):
             motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
+
+    def neoSetPositions(self, positions):
+        pass
 
 
     def averageError(self):
