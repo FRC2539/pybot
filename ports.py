@@ -17,6 +17,6 @@ drivetrain.frontRightMotorID = 3
 drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
 
-hood = PortsList()
+ColorWheelPorts = PortsList()
 
-hood.hoodMotorID = 5
+ColorWheelPorts.motorID = 5

@@ -30,6 +30,7 @@ from wpilib.command import Subsystem
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.hood import Hood as hood
+from subsystems.colorwheel import  ColorWheel as colorwheel
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
