@@ -6,7 +6,6 @@ import ports
 class SkidDrive(BaseDrive):
     '''A drive base where all wheels on each side move together.'''
 
-
     def _configureMotors(self):
 
         '''Only the front motors are active in a skid system.'''
@@ -23,7 +22,6 @@ class SkidDrive(BaseDrive):
         '''Invert encoders'''
         for motor in self.activeMotors:
             motor.setSensorPhase(True)
-
 
     def _calculateSpeeds(self, x, y, rotate):
         return [y + rotate, -y + rotate]

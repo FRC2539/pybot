@@ -71,6 +71,7 @@ class KryptonBot(CommandBasedRobot):
         module = sys.modules['robot']
         for key, var in vars.items():
             try:
+                print(str(key) + ' + ' + str(var) + ' & ' + str(issubclass(var, Subsystem) and var is not Subsystem))
                 if issubclass(var, Subsystem) and var is not Subsystem:
                     try:
                         setattr(module, key, var())

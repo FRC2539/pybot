@@ -14,5 +14,6 @@ class ResetCommand(InstantCommand):
         super().__init__('Reset')
 
         '''Require all subsystems to reset.'''
+
         self.requires(robot.drivetrain)
         self.requires(robot.hood)

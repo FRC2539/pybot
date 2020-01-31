@@ -3,7 +3,10 @@ from .debuggablesubsystem import DebuggableSubsystem
 import math
 
 from networktables import NetworkTables
+
 from ctre import ControlMode, NeutralMode, TalonFX, FeedbackDevice
+from rev import CANSparkMax, MotorType, ControlType
+
 from navx import AHRS
 
 from custom.config import Config
@@ -17,6 +20,76 @@ class BaseDrive(DebuggableSubsystem):
     without knowing what type of drive system we have should be implemented here.
     '''
 
+    def setDriveTrain(self, compBot):
+        if compBot:
+            # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
+
+            self.falconP = Config('DriveTrain\FalconP', 0)
+            self.falconI = Config('DriveTrain\FalconI', 0)
+            self.falconD = Config('DriveTrain\FalconD', 0)
+            self.falconF = Config('DriveTrain\FalconF', 0)
+            self.falconIZone = Config('DriveTrain\FalconIZone', 0)
+
+            try:
+                self.motors = [
+                    TalonFX(ports.drivetrain.frontLeftMotorID),
+                    TalonFX(ports.drivetrain.frontRightMotorID),
+                    TalonFX(ports.drivetrain.backLeftMotorID),
+                    TalonFX(ports.drivetrain.backRightMotorID),
+                ]
+
+            except AttributeError:
+                self.motors = [
+                    TalonFX(ports.drivetrain.leftMotorID),
+                    TalonFX(ports.drivetrain.rightMotorID),
+                ]
+
+            for motor in self.motors:
+                motor.setNeutralMode(NeutralMode.Brake)
+                motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+
+            self.move = self.falconMove
+
+        else:
+
+            # For practice bot with NEO's
+
+            self.NEOencoders = []
+            self.NEOcontrollers = []
+
+            self.neoP = Config('DriveTrain\SparkP', 0.05)
+            self.neoI = Config('DriveTrain\SparkI', 0)
+            self.neoD = Config('DriveTrain\SparkD', 0.1)
+            self.neoFF = Config('DriveTrain\SparkFF', 0)
+            self.neoIZone = Config('DriveTrain\SparkIZone', 0)
+
+            try:
+                self.motors = [
+                    CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
+                    CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
+                    CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
+                    CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
+                ]
+
+            except AttributeError:
+                self.motors = [
+                    CANSparkMax(ports.drivetrain.leftMotorID, MotorType.kBrushless),
+                    CANSparkMax(ports.drivetrain.rightMotorID, MotorType.kBrushless),
+                ]
+
+            for motor in self.motors:
+                self.NEOcontrollers.append(motor.getPIDController())
+                self.NEOencoders.append(motor.getEncoder())
+
+                motor._setEncPosition(0.0)
+                motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
+
+
+            # Make general method names based off of methods that require controller-specific methods.
+
+            self.move = self.neoMove
+
+
     def __init__(self, name):
         super().__init__(name)
 
@@ -24,29 +97,18 @@ class BaseDrive(DebuggableSubsystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-        try:
-            self.motors = [
-                TalonFX(ports.drivetrain.frontLeftMotorID),
-                TalonFX(ports.drivetrain.frontRightMotorID),
-                TalonFX(ports.drivetrain.backLeftMotorID),
-                TalonFX(ports.drivetrain.backRightMotorID),
-            ]
-
-        except AttributeError:
-            self.motors = [
-                TalonFX(ports.drivetrain.leftMotorID),
-                TalonFX(ports.drivetrain.rightMotorID),
-            ]
-
-        for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Brake)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
+
         '''
+
+        self.compBot = False#Config('DriveTrain/Robot', True) # Commented to test for NEO temporarily.
+
+        self.setDriveTrain(self.compBot)
+
         self.activeMotors = []
-        self._configureMotors()
+        self._configureMotors(self.compBot)
 
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
@@ -91,7 +153,49 @@ class BaseDrive(DebuggableSubsystem):
         self.setDefaultCommand(DriveCommand(self.speedLimit))
 
 
-    def move(self, x, y, rotate):
+    def neoMove(self, x, y, rotate):
+
+        if [x, y, rotate] == self.lastInputs:
+            return
+
+        self.lastInputs = [x, y, rotate]
+
+        '''Prevent drift caused by small input values'''
+        if self.useEncoders:
+            x = math.copysign(max(abs(x) - self.deadband, 0), x)
+            y = math.copysign(max(abs(y) - self.deadband, 0), y)
+            rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
+
+        speeds = self._calculateSpeeds(x, y, rotate)
+
+        '''Prevent speeds > 1'''
+        maxSpeed = 0
+        for speed in speeds:
+            maxSpeed = max(abs(speed), maxSpeed)
+
+        if maxSpeed > 1:
+            speeds = [x / maxSpeed for x in speeds]
+
+        '''Use speeds to feed motor output.'''
+        if self.useEncoders:
+            if not any(speeds):
+                '''
+                When we are trying to stop, clearing the I accumulator can
+                reduce overshooting, thereby shortening the time required to
+                come to a stop.
+                '''
+                for motor in self.activeMotors:
+                    motor.setIAccum(0)
+
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(speed)
+
+        else:
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(speed)
+
+
+    def falconMove(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
 
         '''
@@ -185,7 +289,7 @@ class BaseDrive(DebuggableSubsystem):
             motor.selectProfileSlot(profile, 0)
 
 
-    def resetPID(self):
+    def falconResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
             motor.configClosedLoopRamp(0, 0)
@@ -196,6 +300,19 @@ class BaseDrive(DebuggableSubsystem):
                 motor.config_kF(profile, 0, 0)
                 motor.config_IntegralZone(profile, 0, 0)
 
+    def neoResetPID(self):
+        '''Set all PID values to 0 for profiles 0 and 1.'''
+        for motor in self.activeMotors:
+            motor.setClosedLoopRampRate(0.15) # Adjust as needed
+            controller = motor.getPIDController()
+
+            for profile in range(2):
+                controller.setP(self.neoP, profile)
+                controller.setI(self.neoI, profile)
+                controller.setD(self.neoD, profile)
+                controller.setFF(self.neoFF, profile)
+                controller.setIZone(self.neoIZone, profile)
+                controller.setOutputRange(-1, 1, profile)
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
