@@ -171,7 +171,7 @@ class RobotDrive:
 
     def falconResetPID(self): # Finalize both PID sets and set it up for nt values, separate for each bot
         for motor in self.useActives:
-            motor.configClosedLoopRamp(0, 0)
+            motor.configClosedloopRamp(0, 0)
             for profile in range(2):
                 motor.config_kP(profile, 1, 0)
                 motor.config_kI(profile, 0.001, 0)
