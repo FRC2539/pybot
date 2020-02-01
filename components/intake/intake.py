@@ -19,5 +19,8 @@ class Intake:
     def stop(self):
         self.intakeMotor.stopMotor()
 
+    def monitorBalls(self):
+        print('current amps: ' + self.intakeMotor.getOutputCurrent())
+
     def execute(self):
         pass # might make the maintainBalls method

@@ -177,7 +177,7 @@ class BuildLayout:
         return self.controllerUno.getX(wpilib.interfaces.GenericHID.Hand.kLeftHand)
 
     def getY(self):
-        return self.controllerUno.getY(wpilib.interfaces.GenericHID.Hand.kRightHand)
+        return self.controllerUno.getY(wpilib.interfaces.GenericHID.Hand.kLeftHand)
 
     def getRotate(self):
         return self.controllerUno.getX(wpilib.interfaces.GenericHID.Hand.kRightHand)

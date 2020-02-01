@@ -1,4 +1,4 @@
-from ctre import ControlMode
+from ctre import ControlMode, FeedbackDevice
 
 class Potentiometer:
 
@@ -8,13 +8,14 @@ class Potentiometer:
     potentiometerForward: object
     potentiometerReverse: object
 
-    def __init__(self):
-        self.speed = None
+    def setup(self):
+        self.potentiometerTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0)
 
     def getReading(self):
         return self.potentiometer.get()
 
     def execute(self):
+        print(str(self.potentiometerTalon.getSelectedSensorPosition()))
         if self.potentiometerForward.get() and self.potentiometerReverse.get():
             self.potentiometerTalon.stopMotor()
         elif not self.potentiometerReverse.get():

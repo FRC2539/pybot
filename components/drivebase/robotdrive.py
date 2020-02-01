@@ -62,6 +62,8 @@ class RobotDrive:
 
         self.firstSave = True
 
+        print('also done')
+
     def stop(self): # Compatible for both drivebases
 
         for motor in self.useActives:
@@ -97,9 +99,9 @@ class RobotDrive:
     def neoMove(self):
         print('running')
         y = self.build.getY() * -1 # invert the y-axis
-        rotate = self.build.getRotate()
-        if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
-            return
+        rotate = self.build.getRotate() * 0.85
+        #if [y, rotate] == self.lastInputs: # I hope this doesn't stop the entire drive lol
+            #return
 
         speeds = self.velocityCalculator.getSpeedT(
                                         y=float(y),
@@ -109,9 +111,9 @@ class RobotDrive:
         for speed, motor in zip(speeds, self.useActives):
             motor.set(speed)
 
-        self.recordDataToCSV()
+        #self.recordDataToCSV()
 
-        self.lastInputs = [y, rotate]
+        #self.lastInputs = [y, rotate]
 
     def falconMove(self):
         y = self.build.getY() * -1
