@@ -133,6 +133,11 @@ class KryptonBot(magicbot.MagicRobot):
         self.potentiometerForward = wpilib.DigitalInput(0)
         self.potentiometerReverse = wpilib.DigitalInput(1)
 
+        self.potentiometerOne = wpilib.DigitalInput(6)
+        self.potentiometerTwo = wpilib.DigitalInput(7)
+        self.potentiometerThree = wpilib.DigitalInput(8)
+        self.potentiometerFour = wpilib.DigitalInput(9)
+
         self.tolerance = 20
 
         self.build = BuildLayout(0, 1, self.functionsD, self.functionsO) # USE
