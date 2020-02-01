@@ -8,7 +8,21 @@ class Hood:
     hoodMotor: object
 
     def setup(self):
-        pass
+        self.encoder = self.hoodMotor.getEncoder()
+        self.PIDController = self.hoodMotor.getPIDController()
+
+        self.PIDController.setFF(0.0001 ,0)
+        self.PIDController.setP(0.0001 ,0)
+        self.PIDController.setI(0 ,0)
+        self.PIDController.setD(0.0001 ,0)
+        self.PIDController.setIZone(0 ,0)
+
+        self.encoder.setPositionConversionFactor(1)
+
+
+    def setAngle(self, angle):
+        self.target = angle
+        self.PIDController.setReference(float(self.target), ControlType.kPosition, 0, 0)
 
     def execute(self):
         pass
