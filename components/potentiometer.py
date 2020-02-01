@@ -9,16 +9,17 @@ class Potentiometer:
     potentiometerReverse: object
 
     def setup(self):
-        self.potentiometerTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0)
+        #self.potentiometerTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0)
+        self.enc = self.potentiometerTalon.getEncoder()
 
     def getReading(self):
         return self.potentiometer.get()
 
     def execute(self):
-        print(str(self.potentiometerTalon.getSelectedSensorPosition()))
+        print('position ' + str(self.enc.getPosition()))
         if self.potentiometerForward.get() and self.potentiometerReverse.get():
             self.potentiometerTalon.stopMotor()
         elif not self.potentiometerReverse.get():
-            self.potentiometerTalon.set(ControlMode.PercentOutput, float(self.getReading()))
+            self.potentiometerTalon.set(float(self.getReading()))
         else:
-            self.potentiometerTalon.set(ControlMode.PercentOutput, float(self.getReading()) * -1)
+            self.potentiometerTalon.set(float(self.getReading()) * -1)

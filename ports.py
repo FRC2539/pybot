@@ -32,3 +32,7 @@ HoodPorts.motorID = 9
 ShooterPorts = PortsList()
 
 ShooterPorts.motorID = 10
+
+LoadSystemPorts = PortsList()
+
+LoadSystemPorts.motorID = 11
