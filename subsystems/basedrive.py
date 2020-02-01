@@ -54,6 +54,7 @@ class BaseDrive(DebuggableSubsystem):
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
             self.setPositions = self.falconSetPositions
+            self.setProfile = self.falconSetProfile
 
         else:
 
@@ -94,7 +95,9 @@ class BaseDrive(DebuggableSubsystem):
 
             self.move = self.neoMove
             self.resetPID = self.neoResetPID
-            self.setPositions = self.falconSetPositions
+            self.setPositions = self.neoSetPositions
+            self.setProfile = self.neoSetProfile
+            print('set methods')
 
     def __init__(self, name):
         super().__init__(name)
@@ -109,9 +112,10 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = False#Config('DriveTrain/Robot', True) # Commented to test for NEO temporarily.
+        self.compBot = Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
+        self.setupRecordData()
 
         self.activeMotors = []
         self._configureMotors(self.compBot)
@@ -178,7 +182,7 @@ class BaseDrive(DebuggableSubsystem):
                 print('writing')
                 self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
 
-                for index, motor in enumerate(self.robotdrive_motors):
+                for index, motor in enumerate(self.motors):
                     self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
 
             #for id_, vel, cur, volt, time in zip(self.recordData[0], self.recordData[1], self.recordData[2], self.recordData[3], self.recordData[4]):
@@ -331,8 +335,11 @@ class BaseDrive(DebuggableSubsystem):
 
         self.lastInputs = None
 
+    def neoSetProfile(self, profile):
+        pass # can't do this..
 
-    def setProfile(self, profile):
+
+    def falconSetProfile(self, profile):
         '''Select which PID profile to use.'''
         for motor in self.activeMotors:
             motor.selectProfileSlot(profile, 0)

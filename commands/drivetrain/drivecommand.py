@@ -20,6 +20,7 @@ class DriveCommand(Command):
 
     def initialize(self):
         robot.drivetrain.stop()
+        print(str(dir(robot.drivetrain)))
         robot.drivetrain.setProfile(0)
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)

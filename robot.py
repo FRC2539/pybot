@@ -60,7 +60,6 @@ class KryptonBot(CommandBasedRobot):
         auton.start()
         driverhud.showInfo("Starting %s" % auton)
 
-
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)
