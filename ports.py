@@ -20,15 +20,15 @@ ColorWheelPorts = PortsList()
 
 ColorWheelPorts.motorID = 5
 
-IntakePorts = PortsList()
-
-IntakePorts.motorID = 6
-
 limelight = PortsList()
 
 hood = PortsList()
 
-hood.motorID = 7
+hood.motorID = 6
+
+IntakePorts = PortsList()
+
+IntakePorts.motorID = 7
 
 turret = PortsList()
 

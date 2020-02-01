@@ -11,8 +11,5 @@ class IntakeCommand(Command):
     def initialize(self):
         robot.intake.intake()
 
-    def execute(self):
-        robot.intake.monitorIntake()
-
     def end(self):
         robot.intake.maintainBalls() # Or maybe just stop it...
