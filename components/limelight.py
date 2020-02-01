@@ -29,6 +29,16 @@ class Limelight:
         return self.tv.getValue()
 
     def calcDistance(self):
+        Limelight.setPipline(1)
+        self.ht = 106.75
+        self.hl = 20
+        self.height = self.ht - self.hl
+        #for the initial value that the y is added to, do arctan of self.height/(calibration distance)
+        #calibraiton distacne should be 10 feet or 120 because this is in inches
+        self.angle = 35.6519 + Limelight.getY()
+        self.angle = math.radians(self.angle)
+        self.distance = (self.height)/(math.tan(self.angle))
+        Limelight().setPipline(0)
 
         return self.distance
 
