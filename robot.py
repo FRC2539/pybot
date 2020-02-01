@@ -21,6 +21,8 @@ from components.intake.intake import Intake
 
 from components.colorsensor.colorwheel import ColorWheel
 
+from components.limelight import Limelight
+
 #from statemachines.drivetrain.movemachine import MoveStateMachine
 
 from controller.logitechdualshock import LogitechDualshock
@@ -47,6 +49,8 @@ class KryptonBot(magicbot.MagicRobot):
     wheelactions: ColorWheel
 
     intake: Intake
+
+    limelight: Limelight
 
     #movemachine: MoveStateMachine
 
@@ -96,6 +100,12 @@ class KryptonBot(magicbot.MagicRobot):
 
         self.velocityCalculator = TankDrive()
 
+        self.shooterMotor = CANSparkMax(ports.ShooterPorts.motorID, MotorType.kBrushless)
+
+        self.hoodMotor = CANSparkMax(ports.HoodPorts.motorID, MotorType.kBrushless)
+
+        self.turretMotor = WPI_TalonSRX(ports.TurretPorts.motorID)
+
         self.potentiometer = wpilib.AnalogPotentiometer(0)
         self.potentiometerTalon = WPI_TalonSRX(2)
 
@@ -116,6 +126,12 @@ class KryptonBot(magicbot.MagicRobot):
     def teleopInit(self):
 
         self.robotdrive.prepareToDrive(self.compBot)
+
+        self.limelight.setup()
+
+        self.shooter.setup()
+
+        self.hood.setup()
 
         #self.movemachine.moveMachineStart(12)
 
@@ -184,6 +200,7 @@ class KryptonBot(magicbot.MagicRobot):
 
                 motor.getEncoder().setPosition(0.0)
                 motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
+
 
 
 
