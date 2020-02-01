@@ -28,5 +28,9 @@ class Limelight:
     def getTape(self):
         return self.tv.getValue()
 
+    def calcDistance(self):
+
+        return self.distance
+
     def execute(self):
         pass
