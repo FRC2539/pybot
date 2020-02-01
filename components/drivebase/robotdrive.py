@@ -4,6 +4,8 @@ import math
 import csv
 import os
 
+from magicbot import tunable
+
 from controller import logicalaxes
 
 from components.drivebase.drivevelocities import TankDrive
@@ -23,16 +25,14 @@ class RobotDrive:
 
     rumble: bool
 
-    def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
-        self.assignFuncs(False)
+    bot: object
 
-        self.folder = '/home/lvuser/py/components/drivebase'
+    #def __init__(self):     # NOTE: Be careful with this new init, as I added it after running it on a robot. It passes tests though, so we should be "gucci". Also note that you cannot access VI stuff in __init__.
 
-    def assignFuncs(self, bot):
-
+    def assignFuncs(self):
         # Assigns functions that are motor controller specific
 
-        if bot:
+        if self.bot:
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
             self.getPositions = self.falconGetPosition
@@ -44,8 +44,8 @@ class RobotDrive:
             self.getPositions = self.neoGetPosition
             self.setPositions = self.neoSetPositions
 
-    def prepareToDrive(self, bot):
-        self.assignFuncs(bot)
+    def prepareToDrive(self):
+        self.assignFuncs()
 
         self.resetPID()
 
@@ -62,7 +62,7 @@ class RobotDrive:
 
         self.firstSave = True
 
-        print('also done')
+        self.folder = '/home/lvuser/py/components/drivebase'
 
     def stop(self): # Compatible for both drivebases
 

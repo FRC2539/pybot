@@ -1,6 +1,8 @@
 import wpilib
 import magicbot
 
+from magicbot.magic_tunable import tunable, setup_tunables
+
 import controller.logicalaxes
 import ports
 
@@ -77,8 +79,8 @@ class KryptonBot(magicbot.MagicRobot):
 
     def createObjects(self):
 
-        #self.compBot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
-        self.compBot = False
+        #self.bot =  Config('DriveTrain/Robot', True) # Make this tunable or nt value
+        self.bot = tunable(False)
 
         self.notSoFunCustomDrivebaseStuff()
 
@@ -108,6 +110,8 @@ class KryptonBot(magicbot.MagicRobot):
         self.intakeMotor = CANSparkMax(ports.IntakePorts.motorID, MotorType.kBrushed)
         self.intakeRunning = False
 
+        self.loadSystemMotor = CANSparkMax(ports.LoadSystemPorts.motorID, MotorType.kBrushed)
+
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
         self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
         self.colorWheelEncoder = self.colorWheelMotor.getEncoder()
@@ -122,7 +126,7 @@ class KryptonBot(magicbot.MagicRobot):
         self.turretMotor = WPI_TalonSRX(ports.TurretPorts.motorID)
 
         self.potentiometer = wpilib.AnalogPotentiometer(0)
-        self.potentiometerTalon = WPI_TalonSRX(2)
+        self.potentiometerTalon = CANSparkMax(2, MotorType.kBrushed)
 
         self.potentiometerForward = wpilib.DigitalInput(0)
         self.potentiometerReverse = wpilib.DigitalInput(1)
@@ -142,7 +146,8 @@ class KryptonBot(magicbot.MagicRobot):
     def teleopInit(self):
         self.potent.setup()
 
-        self.robotdrive.prepareToDrive(self.compBot)
+        self.robotdrive.prepareToDrive()
+        self.robotdrive.assignFuncs()
 
         self.limelight.setup()
 
@@ -174,7 +179,7 @@ class KryptonBot(magicbot.MagicRobot):
         ''' Starts on each iteration of the control loop (execute) (I think I only put high levels here.) '''
 
     def notSoFunCustomDrivebaseStuff(self):
-        if self.compBot:
+        if self.bot:
             try:
 
                 self.robotdrive_motors = [

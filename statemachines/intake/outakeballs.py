@@ -9,7 +9,6 @@ class OutakeBallsCommand(StateMachine): # Made in a state machine because it's e
     intake: Intake
     intakeRunning: bool
 
-
     def outakeCommand(self):
         self.engage()
 
