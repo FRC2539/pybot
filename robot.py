@@ -9,6 +9,7 @@ from custom.config import Config
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from statemachines.intake.intakeballs import IntakeBallsCommand
+from statemachines.intake.outakeballs import OutakeBallsCommand
 
 from components.potentiometer import Potentiometer
 
@@ -39,6 +40,7 @@ class KryptonBot(magicbot.MagicRobot):
     velocity: TankDrive
 
     intakecommand: IntakeBallsCommand
+    outtakecommand: OutakeBallsCommand
 
     falcon: FalconTest
 
@@ -80,8 +82,10 @@ class KryptonBot(magicbot.MagicRobot):
                            ('A', 'runSmartIntake()', 'self.smartcargointake')
                           ]
         '''
-        self.functionsD = [('A', 'intakeCommand()', 'self.intakecommand')]
-        self.functionsO = []
+        self.functionsD = [('A', 'intakeCommand()', 'self.intakecommand'),
+                           ('B', 'outtakeCommand()', 'self.outtakecommand')]
+
+        self.functionsO = [('A', 'intakeCommand()', 'self.intakecommand')]
 
         self.falconTest = TalonFX(ports.FalconTest.motorID)
         self.falconTest.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
@@ -110,12 +114,15 @@ class KryptonBot(magicbot.MagicRobot):
 
         self.useActives = []
 
-        self.createGenerators()
+        #self.createGenerators()
 
+        print('complete')
 
     def teleopInit(self):
-
+        self.potent.setup()
         self.robotdrive.prepareToDrive(self.compBot)
+
+        print('done')
 
         #self.movemachine.moveMachineStart(12)
 

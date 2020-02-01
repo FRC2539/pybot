@@ -6,13 +6,13 @@ class PortsList:
 DrivetrainPorts = PortsList()
 
 DrivetrainPorts.FrontLeftMotor = 1
-DrivetrainPorts.FrontRightMotor = 5 # dummy
+DrivetrainPorts.FrontRightMotor = 3 # dummy
 DrivetrainPorts.BackLeftMotor = 2
 DrivetrainPorts.BackRightMotor = 4
 
 FalconTest = PortsList()
 
-FalconTest.motorID = 3 # dummy
+FalconTest.motorID = 5 # dummy
 
 ColorWheelPorts = PortsList()
 
