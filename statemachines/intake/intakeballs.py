@@ -1,6 +1,6 @@
 import wpilib
 
-from components.intake.intake import Intake
+from components.intake import Intake
 
 from magicbot import StateMachine, state, timed_state, default_state
 

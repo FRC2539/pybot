@@ -9,18 +9,24 @@ from custom.config import Config
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from statemachines.intake.intakeballs import IntakeBallsCommand
-from statemachines.intake.outakeballs import OutakeBallsCommand
+#from statemachines.intake.outakeballs import OutakeBallsCommand
 
 from components.potentiometer import Potentiometer
 
 from components.drivebase.robotdrive import RobotDrive
 from components.drivebase.drivevelocities import TankDrive
 
+from components.turret import Turret
+
+from components.hood import Hood
+
+from components.shooter import Shooter
+
 from components.falcon.falconcomponent import FalconTest
 
-from components.intake.intake import Intake
+from components.intake import Intake
 
-from components.colorsensor.colorwheel import ColorWheel
+from components.colorwheel import ColorWheel
 
 from components.limelight import Limelight
 
@@ -42,11 +48,17 @@ class KryptonBot(magicbot.MagicRobot):
     velocity: TankDrive
 
     intakecommand: IntakeBallsCommand
-    outtakecommand: OutakeBallsCommand
+    #outtakecommand: OutakeBallsCommand
 
     falcon: FalconTest
 
     potent: Potentiometer
+
+    shooter: Shooter
+
+    hood: Hood
+
+    turret: Turret
 
     wheelactions: ColorWheel
 
@@ -86,8 +98,7 @@ class KryptonBot(magicbot.MagicRobot):
                            ('A', 'runSmartIntake()', 'self.smartcargointake')
                           ]
         '''
-        self.functionsD = [('A', 'intakeCommand()', 'self.intakecommand'),
-                           ('B', 'outtakeCommand()', 'self.outtakecommand')]
+        self.functionsD = [('A', 'intakeCommand()', 'self.intakecommand')]
 
         self.functionsO = [('A', 'intakeCommand()', 'self.intakecommand')]
 

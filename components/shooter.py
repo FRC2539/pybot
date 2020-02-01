@@ -6,6 +6,7 @@ from custom.config import Config
 class Shooter:
 
     shooterMotor: object
+    intakeRunning: bool
 
     def setup(self):
         self.encoder = self.shooterMotor.getEncoder()
@@ -21,12 +22,10 @@ class Shooter:
 
 
     def runPercent(self, percent: int):
-        self.target =  percent
-        self.shooterMotor.set(self.target)
+        self.shooterMotor.set(percent)
 
     def runRPM(self, rpm: int):
-        self.target = rpm
-        self.PIDController.setReference(float(self.target), ControlType.kVelocity, 0, 0)
+        self.PIDController.setReference(float(rpm), ControlType.kVelocity, 0, 0)
 
     def getRPM(self):
         return self.encoder.getVelocity()

@@ -1,6 +1,6 @@
 from magicbot import StateMachine, state
 
-from components.colorsensor.colorwheel import ColorWheel
+from components.colorwheel import ColorWheel
 
 # WARNING: This is actually gonna set the color to your position. Needs to go to the 'sensor' location.
 
