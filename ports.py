@@ -1,4 +1,8 @@
 
+
+
+
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -24,3 +28,17 @@ ColorWheelPorts.motorID = 5
 IntakePorts = PortsList()
 
 IntakePorts.motorID = 6
+
+limelight = PortsList()
+
+hood = PortsList()
+
+HoodPorts.motorID = 7
+
+turret = PortsList()
+
+TurretPorts.motorID = 8
+
+shooter = PortsList()
+
+ShooterPorts.motorID = 9
