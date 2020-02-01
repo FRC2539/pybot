@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import wpilib
 import magicbot
 
@@ -11,7 +13,7 @@ from custom.config import Config
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from statemachines.intake.intakeballs import IntakeBallsCommand
-#from statemachines.intake.outakeballs import OutakeBallsCommand
+from statemachines.intake.outakeballs import OutakeBallsCommand
 
 from components.potentiometer import Potentiometer
 
