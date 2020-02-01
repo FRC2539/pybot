@@ -1,8 +1,3 @@
-
-
-
-
-
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -33,12 +28,12 @@ limelight = PortsList()
 
 hood = PortsList()
 
-HoodPorts.motorID = 7
+hood.motorID = 7
 
 turret = PortsList()
 
-TurretPorts.motorID = 8
+turret.motorID = 8
 
 shooter = PortsList()
 
-ShooterPorts.motorID = 9
+shooter.motorID = 9
