@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, TalonFX, FeedbackDevice
+from ctre import ControlMode, NeutralMode, TalonFX, FeedbackDevice, WPI_TalonSRX
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -27,7 +27,7 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = Config('DriveTrain\FalconP', 0.1)
+            self.falconP = Config('DriveTrain\FalconP', 1)
             self.falconI = Config('DriveTrain\FalconI', 0)
             self.falconD = Config('DriveTrain\FalconD', 0)
             self.falconF = Config('DriveTrain\FalconF', 0)
@@ -35,10 +35,10 @@ class BaseDrive(DebuggableSubsystem):
 
             try:
                 self.motors = [
-                    TalonFX(ports.drivetrain.frontLeftMotorID),
-                    TalonFX(ports.drivetrain.frontRightMotorID),
-                    TalonFX(ports.drivetrain.backLeftMotorID),
-                    TalonFX(ports.drivetrain.backRightMotorID),
+                    WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
+                    WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
+                    WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
+                    WPI_TalonSRX(ports.drivetrain.backRightMotorID),
                 ]
 
             except AttributeError:
@@ -56,6 +56,9 @@ class BaseDrive(DebuggableSubsystem):
             self.setPositions = self.falconSetPositions
             self.setProfile = self.falconSetProfile
             self.stop = self.falconStop
+            self.inchesToUnits = self.inchesToTicks
+            self.getPositions = self.falconGetPositions
+            self.averageError = self.falconAverageError
 
         else:
 
@@ -64,7 +67,7 @@ class BaseDrive(DebuggableSubsystem):
             self.NEOencoders = []
             self.NEOcontrollers = []
 
-            self.neoP = Config('DriveTrain\SparkP', 0.1)
+            self.neoP = Config('DriveTrain\SparkP', 0.5)
             self.neoI = Config('DriveTrain\SparkI', 0)
             self.neoD = Config('DriveTrain\SparkD', 0.1)
             self.neoFF = Config('DriveTrain\SparkFF', 0)
@@ -100,6 +103,9 @@ class BaseDrive(DebuggableSubsystem):
             self.setPositions = self.neoSetPositions
             self.setProfile = self.neoSetProfile
             self.stop = self.neoStop
+            self.inchesToUnits = self.inchesToRotations
+            self.getPositions = self.neoGetPositions
+            self.averageError = self.neoAverageError
 
             print('set methods')
 
@@ -345,10 +351,17 @@ class BaseDrive(DebuggableSubsystem):
             motor.set(ControlMode.MotionMagic, position)
 
     def neoSetPositions(self, positions):
-        pass
+        if not self.useEncoders:
+            raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        self.stop()
+        for motor, position in zip(self.activeMotors, positions):
+            #(motor.getPIDController()).setSmartMotionMaxVelocity(770.0, 0)
+            #(motor.getPIDController()).setSmartMotionMaxAccel(80.0, 0)
+            (motor.getPIDController()).setReference(position, ControlType.kPosition, 0, 0)
 
 
-    def averageError(self):
+    def falconAverageError(self, positions):
         '''Find the average distance between setpoint and current position.'''
         error = 0
         for motor in self.activeMotors:
@@ -356,12 +369,19 @@ class BaseDrive(DebuggableSubsystem):
 
         return error / len(self.activeMotors)
 
+    def neoAverageError(self, positions):
+        '''Find the average distance between setpoint and current position.'''
+        error = 0
+        for motor, pos in zip(self.activeMotors, positions):
+            error += abs(pos - (motor.getEncoder()).getPosition())
 
-    def atPosition(self, tolerance=10):
+        return error / len(self.activeMotors)
+
+    def atPosition(self, positions, tolerance=10):
         '''
         Check setpoint error to see if it is below the given tolerance.
         '''
-        return self.averageError() <= tolerance
+        return self.averageError(positions) <= tolerance
 
     def neoStop(self):
         '''Disable all motors until set() is called again.'''
@@ -444,10 +464,16 @@ class BaseDrive(DebuggableSubsystem):
 
         return degrees
 
+    def inchesToRotations(self, distance):
+        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
+
+        print('ROTATIONS : ' + str(rotations * 8.45))#Config('DriveTrain/ticksPerRotation', 8.45)))
+
+        return float(rotations * 8.45)#Config('DriveTrain/GearRatio', 8.45))
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter'))
+        rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter', 6))
 
         return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
 
@@ -476,7 +502,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def neoGetPositions(self):
         '''Returns the position of each active motor.'''
-        return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+        return [(x.getEncoder()).getPosition() for x in self.activeMotors]
 
 
     def getFrontClearance(self):
