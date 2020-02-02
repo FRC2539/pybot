@@ -29,9 +29,6 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    print(driveController.B)
-    print(IntakeCommand())
-
     driveController.A.toggleWhenPressed(IntakeCommand())
     driveController.B.whenPressed(OutakeCommand())
 
