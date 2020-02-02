@@ -31,6 +31,10 @@ from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.colorwheel import  ColorWheel as colorwheel
 from subsystems.intake import Intake as intake
+from subsystems.limelight import Limelight as limelight
+from subsystems.hood import Hood as hood
+from subsystems.turret import Turret as turret
+from subsystems.shooter import Shooter as shooter
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
