@@ -13,7 +13,7 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kI(0, 0, 0)
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
-        self.motor.config_kIntegralZone(0, 0, 0)
+        self.motor.config_IntegralZone(0, 0, 0)
 
     def move(self, speed):
         self.motor.set(ControlMode.PercentOutput, speed)

@@ -13,18 +13,18 @@ class Limelight(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Limelight')
         self.tv = Config('limelight/tv', 0)
-        self.tx = config('limelight/tx', 0)
+        self.tx = Config('limelight/tx', 0)
         self.ty = Config('limelight/ty', 0)
-        self.ta = config('limelight/ta', 0)
+        self.ta = Config('limelight/ta', 0)
 
         self.LimelightHeight = 19.55
         self.TargetHeight = 106.75
-        self.calcDistance = 120
+        self.calDistance = 120
 
-        self.nt = NetworkTables.getTable.getTable('limelight')
+        self.nt = NetworkTables.getTable('limelight')
 
         self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
-        print(String(self.calAngle))
+        print(str(self.calAngle))
 
     def setPipeline(self, pipeline: int):
         self.nt.putNumber('pipeline', pipeline)
