@@ -26,9 +26,7 @@ IntakePorts.motorID = 7
 
 limelight = PortsList()
 
-hood = PortsList()
-
-hood.motorID = 6
+hood = PortsList
 
 turret = PortsList()
 
