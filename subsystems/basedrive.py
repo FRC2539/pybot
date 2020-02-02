@@ -67,7 +67,7 @@ class BaseDrive(DebuggableSubsystem):
             self.NEOencoders = []
             self.NEOcontrollers = []
 
-            self.neoP = Config('DriveTrain\SparkP', 0.5)
+            self.neoP = Config('DriveTrain\SparkP', 0.1)
             self.neoI = Config('DriveTrain\SparkI', 0)
             self.neoD = Config('DriveTrain\SparkD', 0.1)
             self.neoFF = Config('DriveTrain\SparkFF', 0)
