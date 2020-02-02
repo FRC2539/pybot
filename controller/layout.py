@@ -9,6 +9,8 @@ from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OutakeCommand
 
+from commands.intake.intakeballscommand import IntakeBallsCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -30,7 +32,7 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
 
-    driveController.A.toggleWhenPressed(IntakeCommand())
+    driveController.A.toggleWhenPressed(IntakeBallsCommand())
     driveController.B.whenPressed(OutakeCommand())
 
     # The controller for non-driving subsystems of the robot

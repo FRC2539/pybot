@@ -1,10 +1,10 @@
-from wpilib.command import Command
+from wpilib.command import TimedCommand
 
 import robot
 
-class OutakeCommand(Command):
+class OutakeCommand(TimedCommand):
     def __init__(self):
-        super().__init__('Outake', 1.5)
+        super().__init__('Outake', 2)
 
         self.requires(robot.intake)
 
@@ -12,4 +12,4 @@ class OutakeCommand(Command):
         robot.intake.outake()
 
     def end(self):
-        robot.intake.stop() # Or maybe just stop it...
+        robot.intake.stop()

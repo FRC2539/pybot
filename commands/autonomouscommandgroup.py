@@ -4,10 +4,11 @@ from custom.config import Config
 
 from commands.network.alertcommand import AlertCommand
 
+from commands.drivetrain.movecommand import MoveCommand
 
 class AutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('Autonomous')
 
-        AlertCommand(Config('cameraInfo/cargoX'), 'Info')
+        self.addSequential(MoveCommand(36))

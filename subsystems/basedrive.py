@@ -27,7 +27,7 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = Config('DriveTrain\FalconP', 0)
+            self.falconP = Config('DriveTrain\FalconP', 0.1)
             self.falconI = Config('DriveTrain\FalconI', 0)
             self.falconD = Config('DriveTrain\FalconD', 0)
             self.falconF = Config('DriveTrain\FalconF', 0)
@@ -55,6 +55,7 @@ class BaseDrive(DebuggableSubsystem):
             self.resetPID = self.falconResetPID
             self.setPositions = self.falconSetPositions
             self.setProfile = self.falconSetProfile
+            self.stop = self.falconStop
 
         else:
 
@@ -63,13 +64,14 @@ class BaseDrive(DebuggableSubsystem):
             self.NEOencoders = []
             self.NEOcontrollers = []
 
-            self.neoP = Config('DriveTrain\SparkP', 0.05)
+            self.neoP = Config('DriveTrain\SparkP', 0.1)
             self.neoI = Config('DriveTrain\SparkI', 0)
             self.neoD = Config('DriveTrain\SparkD', 0.1)
             self.neoFF = Config('DriveTrain\SparkFF', 0)
             self.neoIZone = Config('DriveTrain\SparkIZone', 0)
 
             try:
+                print('configured motors')
                 self.motors = [
                     CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
                     CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
@@ -97,6 +99,8 @@ class BaseDrive(DebuggableSubsystem):
             self.resetPID = self.neoResetPID
             self.setPositions = self.neoSetPositions
             self.setProfile = self.neoSetProfile
+            self.stop = self.neoStop
+
             print('set methods')
 
     def __init__(self, name):
@@ -112,7 +116,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
+        self.compBot = False#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
         self.setupRecordData()
@@ -205,6 +209,11 @@ class BaseDrive(DebuggableSubsystem):
 
         if [x, y, rotate] == self.lastInputs:
             return
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
+        #print(str(x) + ' ' + str(y) + ' ' + str(rotate))
 
         self.lastInputs = [x, y, rotate]
 
@@ -216,6 +225,7 @@ class BaseDrive(DebuggableSubsystem):
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
+        #print('Speeds one: ' + str(speeds))
         '''Prevent speeds > 1'''
         maxSpeed = 0
         for speed in speeds:
@@ -223,6 +233,7 @@ class BaseDrive(DebuggableSubsystem):
 
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
+
 
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
@@ -232,8 +243,26 @@ class BaseDrive(DebuggableSubsystem):
                 reduce overshooting, thereby shortening the time required to
                 come to a stop.
                 '''
-                for motor in self.activeMotors:
-                    motor.setIAccum(0)
+                for motor in self.motors:
+                    (motor.getPIDController()).setIAccum(0)
+
+            #print("moving")
+            #print(speeds)
+            #print("boost: "+ str(self.boost))
+
+
+            else:
+                for motor, speed in zip(self.motors, speeds):
+                    tmaxspeed = (self.maxSpeed / 100)
+                    speed = (speed * 1)
+
+                    if speed > 0.0 and speed > tmaxspeed:
+                        speed = tmaxspeed
+
+                    if speed < 0.0 and speed < (tmaxspeed * -1):
+                       speed = (tmaxspeed * -1)
+
+                print(speeds)
 
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
@@ -242,7 +271,14 @@ class BaseDrive(DebuggableSubsystem):
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
 
-        self.neoRecordDriveData()
+        if [x, y, rotate] == self.lastInputs:
+            return
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
+
+        #self.neoRecordDriveData()
 
 
     def falconMove(self, x, y, rotate):
@@ -327,11 +363,17 @@ class BaseDrive(DebuggableSubsystem):
         '''
         return self.averageError() <= tolerance
 
-
-    def stop(self):
+    def neoStop(self):
         '''Disable all motors until set() is called again.'''
         for motor in self.activeMotors:
             motor.stopMotor()
+
+        self.lastInputs = None
+
+    def falconStop(self):
+        '''Disable all motors until set() is called again.'''
+        for motor in self.activeMotors:
+            motor.set(ControlMode.PercentOutput, 0.0)
 
         self.lastInputs = None
 
@@ -348,7 +390,7 @@ class BaseDrive(DebuggableSubsystem):
     def falconResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            motor.configClosedLoopRamp(0, 0)
+            motor.configClosedloopRamp(0, 0)
             for profile in range(2):
                 motor.config_kP(profile, 0, 0)
                 motor.config_kI(profile, 0, 0)
@@ -428,7 +470,11 @@ class BaseDrive(DebuggableSubsystem):
         return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
 
-    def getPositions(self):
+    def falconGetPositions(self):
+        '''Returns the position of each active motor.'''
+        return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+
+    def neoGetPositions(self):
         '''Returns the position of each active motor.'''
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
 

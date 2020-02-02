@@ -20,3 +20,5 @@ class ResetCommand(InstantCommand):
         self.requires(robot.hood)
         self.requires(robot.turret)
         self.requires(robot.shooter)
+        self.requires(robot.colorwheel)
+        self.requires(robot.intake)

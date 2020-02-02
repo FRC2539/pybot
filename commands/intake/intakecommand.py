@@ -12,4 +12,4 @@ class IntakeCommand(Command):
         robot.intake.intake()
 
     def end(self):
-        robot.intake.maintainBalls() # Or maybe just stop it...
+        robot.intake.outake()
