@@ -35,10 +35,10 @@ class BaseDrive(DebuggableSubsystem):
 
             try:
                 self.motors = [
-                    WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-                    WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-                    WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-                    WPI_TalonSRX(ports.drivetrain.backRightMotorID),
+                    TalonFX(ports.drivetrain.frontLeftMotorID),
+                    TalonFX(ports.drivetrain.frontRightMotorID),
+                    TalonFX(ports.drivetrain.backLeftMotorID),
+                    TalonFX(ports.drivetrain.backRightMotorID),
                 ]
 
             except AttributeError:
@@ -122,7 +122,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = False#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
+        self.compBot = True#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
         self.setupRecordData()
@@ -140,7 +140,7 @@ class BaseDrive(DebuggableSubsystem):
 
         self.setUseEncoders()
         self.maxSpeed = Config('DriveTrain/maxSpeed')
-        self.speedLimit = Config('DriveTrain/normalSpeed')
+        self.speedLimit = 1#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
 
@@ -297,6 +297,10 @@ class BaseDrive(DebuggableSubsystem):
         if [x, y, rotate] == self.lastInputs:
             return
 
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
         self.lastInputs = [x, y, rotate]
 
         '''Prevent drift caused by small input values'''
@@ -326,12 +330,20 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
+            print(speeds)
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
+                motor.set(ControlMode.PercentOutput, speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+
+        if [x, y, rotate] == self.lastInputs:
+            return
+
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
 
 
     def falconSetPositions(self, positions):

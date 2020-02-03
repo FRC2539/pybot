@@ -40,6 +40,9 @@ class DriveCommand(Command):
             self.lastY -= math.copysign(cooldown, self.lastY)
 
             # If the sign has changed, don't move
+            if self.lastY * y < 0:
+                y = 0
+
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
@@ -47,6 +50,6 @@ class DriveCommand(Command):
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
             y,
-            logicalaxes.driveRotate.get() * 0.8
+            logicalaxes.driveRotate.get() * 0.7
         )
 
