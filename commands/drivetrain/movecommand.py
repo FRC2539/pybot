@@ -44,6 +44,7 @@ class MoveCommand(Command):
         robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
+        print(robot.drivetrain.getPositions())
         if self.avoidCollisions:
             try:
                 if self.distance < 0:
