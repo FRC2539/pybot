@@ -12,16 +12,17 @@ class Limelight(DebuggableSubsystem):
 
     def __init__(self):
         super().__init__('Limelight')
+        self.nt = NetworkTables.getTable('limelight')
         self.tv = Config('limelight/tv', 0)
-        self.tx = Config('limelight/tx', 0)
+        self.tx = Config('limelight/tx', 1)
         self.ty = Config('limelight/ty', 0)
         self.ta = Config('limelight/ta', 0)
 
-        self.LimelightHeight = 19.55
+        self.LimelightHeight = 15.55
         self.TargetHeight = 106.75
         self.calDistance = 120
 
-        self.nt = NetworkTables.getTable('limelight')
+
 
         self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         print(str(self.calAngle))
@@ -30,19 +31,20 @@ class Limelight(DebuggableSubsystem):
         self.nt.putNumber('pipeline', pipeline)
 
     def getX(self):
-        return self.tx.getValue()
+        return self.nt.getEntry('tx').getDouble(0)
+
 
     def getY(self):
-        return self.ty.getValue()
+        return self.nt.getEntry('ty').getDouble(0)
 
     def getA(self):
-        return self.ta.getValue()
+        return self.nt.getEntry('ta').getDouble(0)
 
     def getTape(self):
-        return self.tv.getValue()
+        return self.nt.getEntry('tv').getDouble(0)
 
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight
-        self.angle = self.calAngle  + math.radians(Limelight.getY())
+        self.angle = self.calAngle  + math.radians(Limelight.getY(self))
         self.distance = self.height/math.tan(self.angle)
         return self.distance
