@@ -14,6 +14,7 @@ class TurnCommand(MoveCommand):
             name = 'Turn %f degrees' % degrees
 
         super().__init__(degrees, False, name)
+        self.degrees = degrees
 
 
     def initialize(self):
@@ -26,6 +27,15 @@ class TurnCommand(MoveCommand):
 
         robot.drivetrain.setPositions(targetPositions)
 
+    def isFinished(self):
+        ''' Get the current angle to the desired position, and stop it if it's nearby. '''
+        if abs(robot.drivetrain.getAngleTo(self.degrees)) < 5:
+            robot.drivetrain.stop()
+            print('done')
+            return True
+
+        return False
+
 
     def _calculateDisplacement(self):
         '''
@@ -33,8 +43,8 @@ class TurnCommand(MoveCommand):
         based on the width of the robot base.
         '''
 
-        inchesPerDegree = math.pi * Config('DriveTrain/width') / 360
+        inchesPerDegree = math.pi * 25.75 / 360#Config('DriveTrain/width') / 360
         totalDistanceInInches = self.distance * inchesPerDegree
-        ticks = robot.drivetrain.inchesToTicks(totalDistanceInInches)
+        units = robot.drivetrain.inchesToUnits(totalDistanceInInches)
 
-        return ticks * Config('DriveTrain/slip', 1.2)
+        return units #* Config('DriveTrain/slip', 1.2)

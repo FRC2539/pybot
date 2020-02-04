@@ -9,6 +9,8 @@ from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OutakeCommand
 
+from commands.colorwheel.getcolorcommand import GetColorCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -29,10 +31,8 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    print(driveController.B)
-    print(IntakeCommand())
-
     driveController.A.toggleWhenPressed(IntakeCommand())
+    driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
 
     # The controller for non-driving subsystems of the robot

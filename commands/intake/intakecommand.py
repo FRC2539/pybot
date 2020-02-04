@@ -5,7 +5,7 @@ import robot
 class IntakeCommand(Command):
 
     def __init__(self):
-        super().__init__('Intake Balls')
+        super().__init__('Intake')
 
         self.requires(robot.intake)
 
