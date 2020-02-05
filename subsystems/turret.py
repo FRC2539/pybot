@@ -1,8 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 import ports
-import wpilib
-
 from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX
 
 class Turret(DebuggableSubsystem):
@@ -16,28 +14,26 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
         self.motor.config_IntegralZone(0, 0, 0)
-
-        self.motor.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition)
-        #self.encoder = wpilib.DutyCycleEncoder(1)
+        self.max = 110
+        self.min = -110
 
     def move(self, speed):
-        self.motor.set(ControlMode.PercentOutput, speed)
+
+        if(self.motor.getSelectSensorPosition(0)>self.max and self.motor.getSelectSensorPosition(0)<self.min):
+            self.motor.set(ControlMode.PercentOutput, speed)
+        else:
+            print('hit turret limit')
+            self.motor.stopMotor()
 
     def stop(self):
         self.motor.stopMotor()
 
-    def getAbsoluteReading(self):
-        print('\n reading: ' + str(self.motor.getSelectedSensorPosition()) + '\n\n')
-
-    def setAbsoluteReading(self, val):
-        print('\n\n' + str(self.motor.setSelectedSensorPosition(val, 0, 0)) + '\n\n')
-
+    def returnZero(self):
+        self.motor.set(ControlMode.Position, 0)
 
     def setPosition(self, position):
-        self.motor.set(ControlMode.Position, position)
-
-
-    def initDefaultCommand(self):
-        from commands.turret.defaultcommand import DefaultCommand
-
-        self.setDefaultCommand(DefaultCommand())
+        if (position > self.min and position < self.max):
+            self.motor.set(ControlMode.Position, position)
+        else:
+            print('param past turret max')
+            self.motor.stopMotor()

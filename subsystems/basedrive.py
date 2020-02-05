@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, TalonFX, FeedbackDevice, WPI_TalonSRX
+from ctre import ControlMode, NeutralMode, TalonFX, TalonFXFeedbackDevice, WPI_TalonSRX
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -27,8 +27,8 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = Config('DriveTrain\FalconP', 1)
-            self.falconI = Config('DriveTrain\FalconI', 0)
+            self.falconP = Config('DriveTrain\FalconP', 0.03)
+            self.falconI = Config('DriveTrain\FalconI', 0.00001)
             self.falconD = Config('DriveTrain\FalconD', 0)
             self.falconF = Config('DriveTrain\FalconF', 0)
             self.falconIZone = Config('DriveTrain\FalconIZone', 0)
@@ -49,7 +49,7 @@ class BaseDrive(DebuggableSubsystem):
 
             for motor in self.motors:
                 motor.setNeutralMode(NeutralMode.Brake)
-                motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+                motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
 
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
@@ -294,6 +294,9 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
+        rotate *= 0.6
+
         if [x, y, rotate] == self.lastInputs:
             return
 
@@ -357,10 +360,10 @@ class BaseDrive(DebuggableSubsystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
+            #motor.selectProfileSlot(1, 0)
+            #motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            #motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.Position, position)
 
     def neoSetPositions(self, positions):
         if not self.useEncoders:
@@ -424,11 +427,11 @@ class BaseDrive(DebuggableSubsystem):
         for motor in self.activeMotors:
             motor.configClosedloopRamp(0, 0)
             for profile in range(2):
-                motor.config_kP(profile, 0, 0)
-                motor.config_kI(profile, 0, 0)
-                motor.config_kD(profile, 0, 0)
-                motor.config_kF(profile, 0, 0)
-                motor.config_IntegralZone(profile, 0, 0)
+                motor.config_kP(profile, self.falconP, 0)
+                motor.config_kI(profile, self.falconI, 0)
+                motor.config_kD(profile, self.falconD, 0)
+                motor.config_kF(profile, self.falconF, 0)
+                motor.config_IntegralZone(profile, self.falconIZone, 0)
 
     def neoResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
@@ -485,9 +488,9 @@ class BaseDrive(DebuggableSubsystem):
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
 
-        return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
+        return int(rotations * 8.45) * 2048#Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):
