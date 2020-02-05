@@ -17,3 +17,5 @@ class PotentiometerInterface(DebuggableSubsystem):
 
     def getReadingSpark(self):
         return self.potentiometerSpark.get()
+
+        return abs(1 - self.potentiometerSpark.get())

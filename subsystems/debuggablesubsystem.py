@@ -1,5 +1,4 @@
 from wpilib.command import Subsystem
-#from wpilib.livewindow import LiveWindow
 
 class DebuggableSubsystem(Subsystem):
     '''
