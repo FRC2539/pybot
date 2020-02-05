@@ -7,6 +7,7 @@ import robot
 
 from ctre import WPI_TalonSRX, ControlMode, NeutralMode
 from rev import CANSparkMax, MotorType
+import wpilib
 
 class Motors(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -24,6 +25,8 @@ class Motors(DebuggableSubsystem):
 
         self.talon.setNeutralMode(NeutralMode.Coast)
         self.talon.setSafetyEnabled(False)
+
+        self.encoder = wpilib.DutyCycleEncoder(9)
 
     def setMotors(self):
         percentsT = self.calcPercentsTal()

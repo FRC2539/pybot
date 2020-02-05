@@ -1,7 +1,7 @@
 from .logitechdualshock import LogitechDualShock
 from . import logicalaxes
 
-from custom.config import Config
+#from custom.config import Config
 
 from commands.resetcommand import ResetCommand
 
