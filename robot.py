@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import wpilib
 import magicbot
 
@@ -11,7 +13,7 @@ from custom.config import Config
 #from statemachines.drivetrain.driverobotmachine import DriveRobotMachine
 
 from statemachines.intake.intakeballs import IntakeBallsCommand
-#from statemachines.intake.outakeballs import OutakeBallsCommand
+from statemachines.intake.outakeballs import OutakeBallsCommand
 
 from components.potentiometer import Potentiometer
 
@@ -126,10 +128,17 @@ class KryptonBot(magicbot.MagicRobot):
         self.turretMotor = WPI_TalonSRX(ports.TurretPorts.motorID)
 
         self.potentiometer = wpilib.AnalogPotentiometer(0)
-        self.potentiometerTalon = CANSparkMax(2, MotorType.kBrushed)
+        self.potentiometerTalon = CANSparkMax(2, MotorType.kBrushless)
 
         self.potentiometerForward = wpilib.DigitalInput(0)
         self.potentiometerReverse = wpilib.DigitalInput(1)
+
+        self.potentiometerOne = wpilib.DigitalInput(6)
+        self.potentiometerTwo = wpilib.DigitalInput(7)
+        self.potentiometerThree = wpilib.DigitalInput(8)
+        self.potentiometerFour = wpilib.DigitalInput(9)
+
+        self.tbEncoder = wpilib.Encoder(6, 7, False, wpilib.Encoder.EncodingType.k1X)
 
         self.tolerance = 20
 
