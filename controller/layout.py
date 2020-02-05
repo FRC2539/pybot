@@ -11,6 +11,8 @@ from commands.intake.outtakecommand import OutakeCommand
 
 from commands.colorwheel.getcolorcommand import GetColorCommand
 
+from commands.turret.turretmovecommand import turretMoveCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -34,10 +36,12 @@ def init():
     driveController.A.toggleWhenPressed(IntakeCommand())
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
+    driveController.Y.toggleWhenPressed(turretMoveCommand(-1))
+
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 
-    driveController.A.toggleWhenPressed(IntakeCommand())
+    componentController.A.toggleWhenPressed(IntakeCommand())
 
     componentController.Back.whenPressed(ResetCommand())

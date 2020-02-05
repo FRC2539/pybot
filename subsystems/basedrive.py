@@ -268,7 +268,6 @@ class BaseDrive(DebuggableSubsystem):
                     if speed < 0.0 and speed < (tmaxspeed * -1):
                        speed = (tmaxspeed * -1)
 
-                print(speeds)
 
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
@@ -295,7 +294,7 @@ class BaseDrive(DebuggableSubsystem):
         coordinates have not changed.
         '''
 
-        rotate *= 0.6
+        rotate *= 0.7
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -333,7 +332,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-            print(speeds)
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.speedLimit)
 

@@ -11,4 +11,4 @@ class AutonomousCommandGroup(CommandGroup):
 
     def __init__(self):
         super().__init__('Autonomous')
-        self.addSequential(MoveCommand(96))
+        self.addSequential(TurnCommand(90))
