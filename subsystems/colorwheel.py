@@ -14,7 +14,7 @@ class ColorWheel(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Color Wheel')
 
-        driverStation = nt.getTable("SmartDashboard")
+        driverStation = wpilib.DriverStation.getInstance()
         self.data = driverStation.getGameSpecificMessage()
 
         self.colorMatcher = ColorMatch()

@@ -24,12 +24,17 @@ class Hood(DebuggableSubsystem):
         self.controller.setIZone(0 , 0)
 
         source_ = wpilib.DigitalInput(9)
-
         self.tbEnc = wpilib.DutyCycle(source_)
 
     def getEnc(self):
-        print('enc ' + str(self.tbEnc.getOutput()))
+        print('enc degrees ' + str(self.tbEnc.getOutput() * 360))
 
 
     def setAngle(self, angle):
         self.controller.setReference(float(angle), ControlType.kPosition, 0 , 0)
+
+
+    def initDefaultCommand(self):
+        from commands.hood.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())

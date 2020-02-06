@@ -36,12 +36,12 @@ def init():
     driveController.A.toggleWhenPressed(IntakeCommand())
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
-    driveController.Y.toggleWhenPressed(turretMoveCommand(-1))
-
 
     # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(1)
+    operatorController = LogitechDualShock(1)
 
-    componentController.A.toggleWhenPressed(IntakeCommand())
+    logicalaxes.operatorX = operatorController.RightX
 
-    componentController.Back.whenPressed(ResetCommand())
+    operatorController.A.toggleWhenPressed(IntakeCommand())
+
+    operatorController.Back.whenPressed(ResetCommand())

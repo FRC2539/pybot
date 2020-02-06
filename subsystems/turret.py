@@ -1,9 +1,12 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 import wpilib
+from controller import logicalaxes
 
 import ports
 from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX
+
+logicalaxes.registerAxis('operatorX')
 
 class Turret(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -21,14 +24,14 @@ class Turret(DebuggableSubsystem):
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition)
 
-    def move(self, speed):
+    def move(self):
         #print(str(self.motor.getSelectedSensorPosition(0)))
         #if(self.motor.getSelectedSensorPosition(0)>self.max and self.motor.getSelectedSensorPosition(0)<self.min):
             #self.motor.set(ControlMode.PercentOutput, speed)
         #else:
             #print('hit turret limit')
             #self.motor.stopMotor()
-        self.motor.set(ControlMode.PercentOutput, speed)
+        self.motor.set(ControlMode.PercentOutput, logicalaxes.operatorX.get())
 
     def stop(self):
         self.motor.stopMotor()
