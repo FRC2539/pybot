@@ -15,6 +15,7 @@ class ColorWheel(DebuggableSubsystem):
         super().__init__('Color Wheel')
 
         driverStation = nt.getTable("SmartDashboard")
+        self.data = driverStation.getGameSpecificMessage()
 
         self.colorMatcher = ColorMatch()
 
