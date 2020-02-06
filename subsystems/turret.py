@@ -1,7 +1,9 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
+import wpilib
+
 import ports
-from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX
+from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX, NeutralMode
 
 class Turret(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -17,13 +19,18 @@ class Turret(DebuggableSubsystem):
         self.max = 110
         self.min = -110
 
-    def move(self, speed):
+        self.motor.setNeutralMode(NeutralMode.Brake)
 
-        if(self.motor.getSelectSensorPosition(0)>self.max and self.motor.getSelectSensorPosition(0)<self.min):
-            self.motor.set(ControlMode.PercentOutput, speed)
-        else:
-            print('hit turret limit')
-            self.motor.stopMotor()
+        self.motor.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition)
+
+    def move(self, val):
+        #print(str(self.motor.getSelectedSensorPosition(0)))
+        #if(self.motor.getSelectedSensorPosition(0)>self.max and self.motor.getSelectedSensorPosition(0)<self.min):
+            #self.motor.set(ControlMode.PercentOutput, speed)
+        #else:
+            #print('hit turret limit')
+            #self.motor.stopMotor()
+        self.motor.set(ControlMode.PercentOutput, val)
 
     def stop(self):
         self.motor.stopMotor()
@@ -37,3 +44,15 @@ class Turret(DebuggableSubsystem):
         else:
             print('param past turret max')
             self.motor.stopMotor()
+
+    def initDefaultCommand(self):
+        '''
+        By default, unless another command is running that requires this
+        subsystem, we will drive via joystick using the max speed stored in
+        Config.
+        '''
+        from commands.turret.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())
+
+

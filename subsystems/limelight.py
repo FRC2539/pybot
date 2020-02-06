@@ -22,8 +22,6 @@ class Limelight(DebuggableSubsystem):
         self.TargetHeight = 106.75
         self.calDistance = 120
 
-
-
         self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         print(str(self.calAngle))
 

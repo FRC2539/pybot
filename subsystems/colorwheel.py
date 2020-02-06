@@ -7,10 +7,17 @@ from rev import ControlType, CANSparkMax, MotorType
 
 from rev.color import ColorSensorV3, ColorMatch
 
+from networktables import NetworkTables as nt
+
 class ColorWheel(DebuggableSubsystem):
 
     def __init__(self):
         super().__init__('Color Wheel')
+
+        driverStation = wpilib.DriverStation.getInstance()
+        self.data = driverStation.getGameSpecificMessage()
+        print('\n\n\n\n DATA: ' + str(self.data) + '\n\n\n\n')
+        self.colorMatcher = ColorMatch()
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
         self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
@@ -31,7 +38,26 @@ class ColorWheel(DebuggableSubsystem):
         self.colorWheelController.setFF(0.1, 0)
 
     def getColor(self):
-        return self.colorSensor.getColor()
+        self.color = self.colorSensor.getColor()
+
+        #print(self.color.red / self.color.green)
+
+        #print('r ' + str(self.color.red))
+        #print('b ' + str(self.color.blue))
+        #print('g ' + str(self.color.green))
+
+        if self.color.blue > self.color.green and self.color.blue > self.color.red:
+            return 'b'
+        elif self.color.red > self.color.green and self.color.red > self.color.blue:
+            return 'r'
+        elif self.color.red / self.color.green > 0.52:
+            return 'y'
+        else: #self.color.green > self.color.red and self.color.green > self.color.blue:
+            return 'g'
+        #self.firstStrength = max(self.colorCheck.keys())
+        #self.secondStrength = max(self.colorCheck.remove(self.firstStrength))
+
+
 
     def reset(self):
         self.colorWheelMotor.setEncPosition(0.0)
@@ -46,7 +72,7 @@ class ColorWheel(DebuggableSubsystem):
     def stop(self):
         self.colorWheelMotor.stopMotor()
 
-    def spinToSensor(self):
+    def spinToSensor(self, val):
         # only use if already on that color.
         self.reset()
         self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # DUMMY VALUE

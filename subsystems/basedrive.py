@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, TalonFX, TalonFXFeedbackDevice, WPI_TalonSRX
+from ctre import ControlMode, NeutralMode, TalonFX, TalonFXFeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -30,7 +30,7 @@ class BaseDrive(DebuggableSubsystem):
             self.falconP = Config('DriveTrain\FalconP', 0.03)
             self.falconI = Config('DriveTrain\FalconI', 0.00001)
             self.falconD = Config('DriveTrain\FalconD', 0)
-            self.falconF = Config('DriveTrain\FalconF', 0)
+            self.falconF = Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = Config('DriveTrain\FalconIZone', 0)
 
             try:
@@ -268,7 +268,6 @@ class BaseDrive(DebuggableSubsystem):
                     if speed < 0.0 and speed < (tmaxspeed * -1):
                        speed = (tmaxspeed * -1)
 
-                print(speeds)
 
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
@@ -295,7 +294,7 @@ class BaseDrive(DebuggableSubsystem):
         coordinates have not changed.
         '''
 
-        rotate *= 0.6
+        rotate *= 0.7
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -333,7 +332,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-            print(speeds)
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.speedLimit)
 

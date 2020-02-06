@@ -25,11 +25,13 @@ class TurnCommand(MoveCommand):
         for position in robot.drivetrain.getPositions():
             targetPositions.append(position + offset)
 
+        print('pos ' + str(targetPositions))
         robot.drivetrain.setPositions(targetPositions)
 
     def isFinished(self):
         ''' Get the current angle to the desired position, and stop it if it's nearby. '''
-        if abs(robot.drivetrain.getAngleTo(self.degrees)) < 5:
+        print(robot.drivetrain.getAngle())
+        if abs(robot.drivetrain.getAngleTo(self.degrees)) < 3:
             robot.drivetrain.stop()
             print('done')
             return True
