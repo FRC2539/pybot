@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, TalonFX, TalonFXFeedbackDevice, WPI_TalonSRX
+from ctre import ControlMode, NeutralMode, TalonFX, TalonFXFeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -30,7 +30,7 @@ class BaseDrive(DebuggableSubsystem):
             self.falconP = Config('DriveTrain\FalconP', 0.03)
             self.falconI = Config('DriveTrain\FalconI', 0.00001)
             self.falconD = Config('DriveTrain\FalconD', 0)
-            self.falconF = Config('DriveTrain\FalconF', 0)
+            self.falconF = Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = Config('DriveTrain\FalconIZone', 0)
 
             try:

@@ -1,6 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 import ports
+import wpilib
 
 from rev import CANSparkMax, MotorType, ControlType
 from custom.config import Config
@@ -21,6 +22,14 @@ class Hood(DebuggableSubsystem):
         self.controller.setI(0 , 0)
         self.controller.setD(0.001 , 0)
         self.controller.setIZone(0 , 0)
+
+        source_ = wpilib.DigitalInput(9)
+
+        self.tbEnc = wpilib.DutyCycle(source_)
+
+    def getEnc(self):
+        print('enc ' + str(self.tbEnc.getOutput()))
+
 
     def setAngle(self, angle):
         self.controller.setReference(float(angle), ControlType.kPosition, 0 , 0)

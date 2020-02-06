@@ -7,10 +7,14 @@ from rev import ControlType, CANSparkMax, MotorType
 
 from rev.color import ColorSensorV3, ColorMatch
 
+from networktables import NetworkTables as nt
+
 class ColorWheel(DebuggableSubsystem):
 
     def __init__(self):
         super().__init__('Color Wheel')
+
+        driverStation = nt.getTable("SmartDashboard")
 
         self.colorMatcher = ColorMatch()
 
@@ -67,7 +71,7 @@ class ColorWheel(DebuggableSubsystem):
     def stop(self):
         self.colorWheelMotor.stopMotor()
 
-    def spinToSensor(self):
+    def spinToSensor(self, val):
         # only use if already on that color.
         self.reset()
         self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # DUMMY VALUE
