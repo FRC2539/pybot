@@ -22,6 +22,7 @@ class Turret(DebuggableSubsystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition)
+        self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
     def move(self, val):
         #print(str(self.motor.getSelectedSensorPosition(0)))
@@ -31,6 +32,7 @@ class Turret(DebuggableSubsystem):
             #print('hit turret limit')
             #self.motor.stopMotor()
         self.motor.set(ControlMode.PercentOutput, val)
+        print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
     def stop(self):
         self.motor.stopMotor()

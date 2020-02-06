@@ -37,3 +37,9 @@ turret.motorID = 8
 shooter = PortsList()
 
 shooter.motorID = 9
+
+ballSystem = PortsList()
+
+ballSystem.indexWheel = 10
+ballSystem.lowerConveyor = 11
+ballSystem.verticalConveyor = 12
