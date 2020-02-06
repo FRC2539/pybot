@@ -17,7 +17,7 @@ class AutoSetWheelCommand(Command):
 
     def initialize(self):
         self.myColor = 'y'#robot.colorwheel.getColor() # Make sure this provides the correct value, not an assumption
-        self.desiredColor = 'r' # Make this come from FMS later. NOTE: If not a string, simply use a dictionary instead.
+        self.desiredColor = (robot.colorwheel.data).lower() # Make this come from FMS later. NOTE: If not a string, simply use a dictionary instead.
 
         self.distance = abs(self.colors.index(self.myColor) - self.colors.index(self.desiredColor))
 

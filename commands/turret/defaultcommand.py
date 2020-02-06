@@ -1,6 +1,9 @@
 from wpilib.command import Command
+from controller import logicalaxes
 
 import robot
+
+logicalaxes.registerAxis('operatorX')
 
 class DefaultCommand(Command):
 
@@ -10,5 +13,5 @@ class DefaultCommand(Command):
         self.requires(robot.turret)
 
     def execute(self):
-        #robot.turret.pencoder()
-        pass
+        robot.turret.move(logicalaxes.operatorX.get() * 0.8)
+

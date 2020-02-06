@@ -16,7 +16,7 @@ class ColorWheel(DebuggableSubsystem):
 
         driverStation = wpilib.DriverStation.getInstance()
         self.data = driverStation.getGameSpecificMessage()
-
+        print('\n\n\n\n DATA: ' + str(self.data) + '\n\n\n\n')
         self.colorMatcher = ColorMatch()
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
