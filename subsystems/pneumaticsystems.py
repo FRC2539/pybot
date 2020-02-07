@@ -9,7 +9,9 @@ class PneumaticSystems(DebuggableSubsystem):
 
     def __init__(self):
         super().__init__('PneumaticSystems')
-        self.compressor = wpilib.Compressor(ports.pneumaticSystem.compressorPort) # Not much to implement.
+        self.compressor = wpilib.Compressor(ports.pneumaticSystem.pcmID) # Not much to implement.
+
+        self.climberSolenoid = wpilib.Solenoid(ports.pneumaticSystem.pcmID, ports.pneumaticSystem.climberSolenoid)
 
     def enableCompressor(self):
         self.compressor.setClosedLoopControl(True) # Runs the compressor, use in pits.

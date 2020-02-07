@@ -47,4 +47,5 @@ ballsystem.verticalConveyor = 12
 
 pneumaticSystem = PortsList()
 
-pneumaticSystem.compressorPort = 13
+pneumaticSystem.pcmID = 13
+pneumaticSystem.climberSolenoid = 0 # On PCM
