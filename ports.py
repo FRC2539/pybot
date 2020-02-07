@@ -49,3 +49,4 @@ pneumaticSystem = PortsList()
 
 pneumaticSystem.pcmID = 13
 pneumaticSystem.climberSolenoid = 0 # On PCM
+pneumaticSystem.colorWheelSolenoid = 1 # On PCM
