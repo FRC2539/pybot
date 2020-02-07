@@ -21,13 +21,13 @@ class BallSystem(DebuggableSubsystem):
         self.indexWheelMotor.setInverted(True)
 
     def runIndex(self):
-        self.indexWheelMotor.set(ControlMode.PercentOutput, 1)
+        self.indexWheelMotor.set(ControlMode.PercentOutput, 0.8)
 
     def runLowerConveyor(self):
-        self.lowerConveyorMotor.set(ControlMode.PercentOutput, 1)
+        self.lowerConveyorMotor.set(ControlMode.PercentOutput, 0.8)
 
     def runVerticalConveyor(self):
-        self.verticalConveyorMotor.set(ControlMode.PercentOutput, 1)
+        self.verticalConveyorMotor.set(ControlMode.PercentOutput, 0.8)
 
     def reverseIndex(self):
         self.indexWheelMotor.set(ControlMode.PercentOutput, -0.5)

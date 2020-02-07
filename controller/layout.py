@@ -46,7 +46,7 @@ def init():
 
     logicalaxes.operatorX = operatorController.RightX
 
-    operatorController.A.whileHeld(IntakeCommand())
+    operatorController.A.whileHeld(IntakeCommand(0.5))# variable speed, 100% is default
 
     operatorController.X.toggleWhenPressed(RunAllCommand())
     operatorController.Y.toggleWhenPressed(RunIndexWithVerticalCommand())

@@ -14,9 +14,8 @@ class Intake(DebuggableSubsystem):
 
         self.ballCount = 0
 
-    def intake(self):
-        print(self.intakeMotor.getDeviceId())
-        self.intakeMotor.set(1)
+    def intake(self, val=1):
+        self.intakeMotor.set(val)
 
     def outake(self):
         self.intakeMotor.set(-1.0)
