@@ -45,3 +45,6 @@ ballsystem.indexWheel = 10
 ballsystem.lowerConveyor = 11
 ballsystem.verticalConveyor = 12
 
+pneumaticSystem = PortsList()
+
+pneumaticSystem.compressorPort = 13

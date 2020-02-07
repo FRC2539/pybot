@@ -17,6 +17,8 @@ from commands.ballsystem.runallcommand import RunAllCommand
 from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
 from commands.ballsystem.runlowercommand import RunLowerCommand
 
+from commands.pneumaticsystems.runcompressor import RunCompressorCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -40,6 +42,8 @@ def init():
     driveController.A.toggleWhenPressed(IntakeCommand())
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
+
+    driveController.Start.toggleWhenPressed(RunCompressorCommand())
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)

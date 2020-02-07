@@ -36,6 +36,7 @@ from subsystems.hood import Hood as hood
 from subsystems.turret import Turret as turret
 from subsystems.shooter import Shooter as shooter
 from subsystems.ballsystem import BallSystem as ballsystem
+from subsystems.pneumaticsystems import PneumaticSystems as pneumaticsystems
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
