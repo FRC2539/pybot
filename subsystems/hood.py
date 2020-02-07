@@ -27,8 +27,8 @@ class Hood(DebuggableSubsystem):
         self.tbEnc = wpilib.DutyCycle(source_)
 
     def getEnc(self):
-        print('enc degrees ' + str(self.tbEnc.getOutput() * 360))
-
+        #print('enc degrees ' + str(self.tbEnc.getOutput() * 360))
+        pass
 
     def setAngle(self, angle):
         self.controller.setReference(float(angle), ControlType.kPosition, 0 , 0)

@@ -122,7 +122,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = True#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
+        self.compBot = False#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
         self.setupRecordData()

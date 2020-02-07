@@ -13,6 +13,10 @@ from commands.colorwheel.getcolorcommand import GetColorCommand
 
 from commands.turret.turretmovecommand import turretMoveCommand
 
+from commands.ballsystem.runallcommand import RunAllCommand
+from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
+from commands.ballsystem.runlowercommand import RunLowerCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -42,6 +46,10 @@ def init():
 
     logicalaxes.operatorX = operatorController.RightX
 
-    operatorController.A.toggleWhenPressed(IntakeCommand())
+    operatorController.A.whileHeld(IntakeCommand())
+
+    operatorController.X.toggleWhenPressed(RunAllCommand())
+    operatorController.Y.toggleWhenPressed(RunIndexWithVerticalCommand())
+    operatorController.B.toggleWhenPressed(RunLowerCommand())
 
     operatorController.Back.whenPressed(ResetCommand())
