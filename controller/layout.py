@@ -13,6 +13,8 @@ from commands.colorwheel.getcolorcommand import GetColorCommand
 
 from commands.turret.turretmovecommand import turretMoveCommand
 
+from commands.pneumaticsystems.runcompressor import RunCompressorCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -36,6 +38,8 @@ def init():
     driveController.A.toggleWhenPressed(IntakeCommand())
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
+
+    driveController.Start.toggleWhenPressed(RunCompressorCommand())
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
