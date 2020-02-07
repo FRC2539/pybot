@@ -5,7 +5,7 @@ import ports
 import wpilib
 
 class PneumaticSystems(DebuggableSubsystem):
-    '''Describe what this subsystem does.'''
+    ''' Controls the pneumatic functions of the robot, including the color wheel and climber. '''
 
     def __init__(self):
         super().__init__('PneumaticSystems')
