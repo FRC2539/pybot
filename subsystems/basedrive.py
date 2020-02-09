@@ -219,8 +219,8 @@ class BaseDrive(DebuggableSubsystem):
             self.stop()
             return
 
-        rotate *= 0.6
-        y *= 0.7
+        rotate *= 0.4
+        y *= 0.5
 
         #print(str(x) + ' ' + str(y) + ' ' + str(rotate))
 

@@ -27,7 +27,7 @@ class BallSystem(DebuggableSubsystem):
         self.lowerConveyorMotor.set(ControlMode.PercentOutput, 0.8)
 
     def runVerticalConveyor(self):
-        self.verticalConveyorMotor.set(ControlMode.PercentOutput, 0.8)
+        self.verticalConveyorMotor.set(ControlMode.PercentOutput, 1)
 
     def reverseIndex(self):
         self.indexWheelMotor.set(ControlMode.PercentOutput, -0.5)

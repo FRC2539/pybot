@@ -13,6 +13,7 @@ class RunCompressorCommand(Command):
         robot.pneumaticsystems.enableCompressor()
 
     def isFinished(self):
+        print(robot.pneumaticsystems.isFull())
         return robot.pneumaticsystems.isFull()
 
     def end(self):

@@ -38,6 +38,7 @@ turret.motorID = 8
 shooter = PortsList()
 
 shooter.motorID = 9
+shooter.motorTwoID = 14
 
 ballsystem = PortsList()
 
@@ -48,5 +49,9 @@ ballsystem.verticalConveyor = 12
 pneumaticSystem = PortsList()
 
 pneumaticSystem.pcmID = 13
-pneumaticSystem.climberSolenoid = 0 # On PCM
-pneumaticSystem.colorWheelSolenoid = 1 # On PCM
+
+pneumaticSystem.climberSolenoidForward = 0 # On PCM
+pneumaticSystem.climberSolenoidReverse = 1 # On PCM
+
+pneumaticSystem.colorWheelSolenoidForward = 2 # On PCM
+pneumaticSystem.colorWheelSolenoidReverse = 3 # On PCM

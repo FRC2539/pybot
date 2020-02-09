@@ -10,6 +10,11 @@ class DefaultCommand(Command):
         self.requires(robot.hood)
 
 
-    def execute(self):
-        robot.hood.getEnc()
+    def initialize(self):
+        pass#print('pos  ' + str(robot.hood.getPosition()))
 
+    def execute(self):
+        pass#print('pos  ' + str(robot.hood.getPosition()))
+
+    def end(self):
+        pass

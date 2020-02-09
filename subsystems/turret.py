@@ -32,7 +32,7 @@ class Turret(DebuggableSubsystem):
         #else:
             #print('hit turret limit')
             #self.motor.stopMotor()
-        self.motor.set(ControlMode.PercentOutput, val)
+        #self.motor.set(ControlMode.PercentOutput, val)<--
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
     def stop(self):

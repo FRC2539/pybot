@@ -11,38 +11,46 @@ class PneumaticSystems(DebuggableSubsystem):
         super().__init__('PneumaticSystems')
         self.compressor = wpilib.Compressor(ports.pneumaticSystem.pcmID) # Not much to implement.
 
-        self.climberSolenoid = wpilib.Solenoid(ports.pneumaticSystem.pcmID, ports.pneumaticSystem.climberSolenoid)
-        self.colorWheelSolenoid = wpilib.Solenoid(ports.pneumaticSystem.pcmID, ports.pneumaticSystem.colorWheelSolenoid)
+        self.climberSolenoid = wpilib.DoubleSolenoid(ports.pneumaticSystem.pcmID, ports.pneumaticSystem.climberSolenoidForward, ports.pneumaticSystem.climberSolenoidReverse)
+        self.colorWheelSolenoid = wpilib.DoubleSolenoid(ports.pneumaticSystem.pcmID, ports.pneumaticSystem.colorWheelSolenoidForward, ports.pneumaticSystem.colorWheelSolenoidReverse)
+
+        self.disableCompressor()
 
     def enableCompressor(self):
         self.compressor.setClosedLoopControl(True) # Runs the compressor, use in pits.
+        self.compressor.start()
 
     def isFull(self):
-        return not self.compressor.getPressureSwitchValve() # Returns true when full, false when low.
+        return self.compressor.getPressureSwitchValue() # Returns true when full, false when low.
 
     def disableCompressor(self):
         self.compressor.setClosedLoopControl(False)
 
     def extendClimberPiston(self):
-        self.climberSolenoid.set(True)
+        self.climberSolenoid.set(wpilib.DoubleSolenoid.Value.kForward)
 
     def extendColorWheelPiston(self):
-        self.colorWheelSolenoid.set(True)
+        self.colorWheelSolenoid.set(wpilib.DoubleSolenoid.Value.kForward)
 
     def retractClimberPiston(self):
-        self.climberSolenoid.set(False)
+        self.climberSolenoid.set(wpilib.DoubleSolenoid.Value.kReverse)
 
     def retractColorWheelPiston(self):
-        self.colorWheelSolenoid.set(False)
+        self.colorWheelSolenoid.set(wpilib.DoubleSolenoid.Value.kReverse)
 
-    def toggleClimberPiston(self):
-        if self.climberSolenoid.get():
-            self.climberSolenoid.set(False)
-        else:
-            self.climberSolenoid.set(True)
+    def stopClimberPiston(self):
+        self.climberSolenoid.set(wpilib.DoubleSolenoid.Value.kOff)
 
-    def toggleColorWheelPiston(self):
-        if self.colorWheelSolenoid.get():
-            self.colorWheelSolenoid.set(False)
-        else:
-            self.colorWheelSolenoid.set(True)
+    def stopColorWheelPiston(self):
+        self.colorWheelSolenoid.set(wpilib.DoubleSolenoid.Value.kOff)
+    #def toggleClimberPiston(self):
+        #if self.climberSolenoid.get():
+            #self.climberSolenoid.set(False)
+        #else:
+            #self.climberSolenoid.set(True)
+
+    #def toggleColorWheelPiston(self):
+        #if self.colorWheelSolenoid.get():
+            #self.colorWheelSolenoid.set(False)
+        #else:
+            #self.colorWheelSolenoid.set(True)

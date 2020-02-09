@@ -17,7 +17,17 @@ from commands.ballsystem.runallcommand import RunAllCommand
 from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
 from commands.ballsystem.runlowercommand import RunLowerCommand
 
+from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
+
 from commands.pneumaticsystems.runcompressor import RunCompressorCommand
+
+from commands.hood.raisehoodcommand import RaiseHoodCommand
+from commands.hood.lowerhoodcommand import LowerHoodCommand
+
+from commands.shooter.shootcommand import ShootCommand
+from commands.shooter.controlledshootcommand import ControlledShootCommand
+
+from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 
 def init():
     '''
@@ -43,6 +53,11 @@ def init():
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
 
+    driveController.Y.toggleWhenPressed(ExtendClimberPistonCommand())
+
+    driveController.RightBumper.whileHeld(RaiseHoodCommand())
+    driveController.RightTrigger.whileHeld(LowerHoodCommand())
+
     driveController.Start.toggleWhenPressed(RunCompressorCommand())
 
     # The controller for non-driving subsystems of the robot
@@ -50,10 +65,16 @@ def init():
 
     logicalaxes.operatorX = operatorController.RightX
 
-    operatorController.A.whileHeld(IntakeCommand(0.5))# variable speed, 100% is default
+    operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())# variable speed, 100% is default
 
     operatorController.X.toggleWhenPressed(RunAllCommand())
     operatorController.Y.toggleWhenPressed(RunIndexWithVerticalCommand())
     operatorController.B.toggleWhenPressed(RunLowerCommand())
+
+    operatorController.RightBumper.whileHeld(RaiseHoodCommand())
+    operatorController.RightTrigger.whileHeld(LowerHoodCommand())
+
+    operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
+    operatorController.LeftBumper.toggleWhenPressed(ControlledShootCommand(2850))
 
     operatorController.Back.whenPressed(ResetCommand())
