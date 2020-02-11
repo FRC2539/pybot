@@ -14,8 +14,9 @@ class ControlledShootCommand(Command):
         self.rpm = rpm
 
     def initialize(self):
-        robot.shooter.setGoalNetworkTables(self.rpm)
         robot.shooter.setRPM(self.rpm)
+        robot.shooter.setGoalNetworkTables(self.rpm)
+        robot.shooter.updateCheck()
 
     def execute(self):
         print('rpom ' + str(robot.shooter.getRPM()))
@@ -25,6 +26,7 @@ class ControlledShootCommand(Command):
         else:
             robot.ballsystem.stopAll()
 
+        robot.shooter.monitorBalls()
         robot.shooter.updateNetworkTables()
 
     def end(self):

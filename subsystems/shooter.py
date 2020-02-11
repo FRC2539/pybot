@@ -1,5 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
+from wpilib import DigitalInput
+
 import ports
 
 from rev import CANSparkMax, ControlType, MotorType
@@ -19,6 +21,9 @@ class Shooter(DebuggableSubsystem):
         self.secondMotor = CANSparkMax(ports.shooter.motorTwoID, MotorType.kBrushless)
         self.secondEncoder = self.motor.getEncoder()
         self.secondController = self.motor.getPIDController()
+
+        self.shooterSensor = DigitalInput(ports.shooter.shooterSensor)
+        self.lastCheck = False
 
         self.table = nt.getTable('Shooter')
 
@@ -55,12 +60,17 @@ class Shooter(DebuggableSubsystem):
         self.motor.stopMotor()
         #self.secondMotor.stopMotor()
 
-    def monitorBalls(self):
-        current = self.motor.getOutputCurrent()
-        print(current)
-        if current * 1000 > 1800:
-            self.ballCount -= 1
+    def updateCheck(self):
+        self.lastCheck = self.shooterSensor.get()
 
+    def monitorBalls(self):
+        if self.shooterSensor.get() and not self.lastCheck: # is there something there that was not there last time?
+            if self.ballCount != 0:
+                self.ballCount -= 1
+                self.table.putNumber('BallCount', self.ballCount)
+            self.lastCheck = True
+        elif not self.shooterSensor.get(): # no ball present
+            self.lastCheck = False # nothing there
     def updateNetworkTables(self):
         avgVel = round(((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2), 2)
         self.table.putNumber('ShooterRPM', avgVel)

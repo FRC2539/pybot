@@ -40,13 +40,15 @@ shooter = PortsList()
 shooter.motorID = 9
 shooter.motorTwoID = 14
 
+shooter.shooterSensor = 2 # on DIO; 3 for power
+
 ballsystem = PortsList()
 
 ballsystem.indexWheel = 10
 ballsystem.lowerConveyor = 11
 ballsystem.verticalConveyor = 12
 
-ballsystem.horizontalConveyorSensor = 0 # On DIO
+ballsystem.horizontalConveyorSensor = 0 # On DIO; 1 for power
 
 pneumaticSystem = PortsList()
 
