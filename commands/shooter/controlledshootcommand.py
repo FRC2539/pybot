@@ -14,6 +14,7 @@ class ControlledShootCommand(Command):
         self.rpm = rpm
 
     def initialize(self):
+        robot.shooter.setGoalNetworkTables(self.rpm)
         robot.shooter.setRPM(self.rpm)
 
     def execute(self):

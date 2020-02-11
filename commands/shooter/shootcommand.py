@@ -11,10 +11,10 @@ class ShootCommand(Command):
 
     def initialize(self):
         robot.shooter.setRPM()
+        robot.shooter.setGoalNetworkTables()
 
     def execute(self):
         robot.shooter.updateNetworkTables()
-        print('RPM: ' + str(robot.shooter.getRPM()))
 
     def end(self):
         robot.shooter.stop()

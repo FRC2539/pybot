@@ -23,6 +23,7 @@ from commands.pneumaticsystems.runcompressor import RunCompressorCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
+from commands.hood.sethoodcommand import SetHoodCommand
 
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
@@ -59,6 +60,8 @@ def init():
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
 
     driveController.Start.toggleWhenPressed(RunCompressorCommand())
+
+    driveController.LeftBumper.toggleWhenPressed(SetHoodCommand(140))
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)

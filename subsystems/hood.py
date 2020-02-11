@@ -6,6 +6,7 @@ import wpilib
 from rev import CANSparkMax, MotorType, ControlType
 from custom.config import Config
 
+from networktables import NetworkTables as nt
 
 class Hood(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -17,40 +18,42 @@ class Hood(DebuggableSubsystem):
         self.encoder = self.motor.getEncoder()
         self.controller = self.motor.getPIDController()
 
-        self.controller.setFF(0.00019 , 0)
-        self.controller.setP(0.0001 , 0)
-        self.controller.setI(0 , 0)
-        self.controller.setD(0.001 , 0)
-        self.controller.setIZone(0 , 0)
+        self.table = nt.getTable('Hood')
+
+        #self.controller.setFF(0.00019, 0)
+        #self.controller.setP(0.0001, 0)
+        #self.controller.setI(0, 0)
+        #self.controller.setD(0.001, 0)
+        #self.controller.setIZone(0, 0)
 
         source_ = wpilib.DigitalInput(9)
         self.tbEnc = wpilib.DutyCycle(source_)
 
-        self.angleMax = 155 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
-        self.angleMin = 85
+        self.angleMax = 155.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
+        self.angleMin = 85.00
+
+        self.zeroNetworkTables()
 
     def getPosition(self):
         return self.tbEnc.getOutput() * 360
 
-    def setAngle(self, angle):
-        self.controller.setReference(float(angle), ControlType.kPosition, 0 , 0)
-
     def stopHood(self):
         self.motor.stopMotor()
+
+    def setPercent(self, speed):
+        self.motor.set(speed)
 
     def raiseHood(self):
         if self.getPosition() < self.angleMax:
             self.motor.set(0.4)
         else:
             self.motor.stopMotor()
-            print('\n\n\nMAXED OUT\n\n\n')
 
     def lowerHood(self):
         if self.getPosition() > self.angleMin:
             self.motor.set(-0.4)
         else:
             self.motor.stopMotor()
-            print('\n\n\nMIN REACHED\n\n\n')
 
     def atHighest(self):
         if self.getPosition() >= self.angleMax:
@@ -66,7 +69,10 @@ class Hood(DebuggableSubsystem):
         else:
             return False
 
-    def initDefaultCommand(self):
-        from commands.hood.defaultcommand import DefaultCommand
+    def updateNetworkTables(self, angle=85.00):
+        self.table.putNumber('HoodAngle', round(self.getPosition(), 2))
+        self.table.putNumber('DesiredHoodAngle', round(angle, 2))
 
-        self.setDefaultCommand(DefaultCommand())
+    def zeroNetworkTables(self):
+        self.table.putNumber('HoodAngle', self.angleMin)
+        self.table.putNumber('DesiredHoodAngle', self.angleMin)

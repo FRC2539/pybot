@@ -46,6 +46,8 @@ ballsystem.indexWheel = 10
 ballsystem.lowerConveyor = 11
 ballsystem.verticalConveyor = 12
 
+ballsystem.horizontalConveyorSensor = 0 # On DIO
+
 pneumaticSystem = PortsList()
 
 pneumaticSystem.pcmID = 13

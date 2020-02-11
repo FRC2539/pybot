@@ -11,4 +11,4 @@ class RunBallFlowCommandGroup(CommandGroup):
 
         # Add commands here with self.addSequential() and self.addParallel()
         self.addParallel(RunAllCommand())
-        self.addParallel(IntakeCommand(0.4))
+        self.addParallel(IntakeCommand(0.2))
