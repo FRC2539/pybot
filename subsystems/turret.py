@@ -43,9 +43,10 @@ class Turret(DebuggableSubsystem):
 
     def setPosition(self, degrees):
         degrees = degrees % 360
+        ticks = (degrees / 360) * 4960 # returns the set tick positions
 
         if degrees > self.min and degrees < self.max:
-            self.motor.set(ControlMode.Position, degrees)
+            self.motor.set(ControlMode.Position, ticks)
         else:
             self.motor.stopMotor()
 
