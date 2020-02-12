@@ -45,3 +45,5 @@ class Intake(DebuggableSubsystem):
             self.fumbleForward()
 
         self.forward = not self.forward
+
+        # lol rip intake motor

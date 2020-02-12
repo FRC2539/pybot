@@ -1,3 +1,5 @@
+from threading import Timer # Well. This is fun.
+
 from wpilib.command import Command
 from wpilib import Timer
 
@@ -9,16 +11,13 @@ class ClearJamTwoCommand(Command):
         super().__init__('Clear Jam Two')
 
         self.requires(robot.intake)
-        self.timer = Timer()
+
+        self.timer = Timer(2.5, robot.intake.changeFumble())
 
     def initialize(self):
         robot.intake.fumbleForward()
-        self.timer.start()
-
-    def execute(self):
-        if self.timer.get() % 3 <= 1: # here's an operator I don't normally use lol.
-            robot.intake.changeFumble()
+        self.timer.start() # Switch directions every two seconds
 
     def end(self):
         robot.intake.stop()
-        self.timer.stop()
+        self.timer.cancel()

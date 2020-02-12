@@ -5,6 +5,8 @@ import wpilib
 import ports
 from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX, NeutralMode
 
+import robot
+
 class Turret(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
@@ -16,8 +18,10 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
         self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 110
-        self.min = -110
+        self.max = 110 # Dummy values
+        self.min = -110 # Dummy values
+
+        self.fieldAngle = 0
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
@@ -41,9 +45,20 @@ class Turret(DebuggableSubsystem):
     def returnZero(self):
         self.motor.set(ControlMode.Position, 0)
 
+    def captureOrientation(self):
+        self.fieldAngle = robot.drivetrain.getAngle()
+
+    def turretFieldOriented(self): # Use for when traveling 'round the field.
+        degrees = self.fieldAngle - robot.drivetrain.getAngle()
+        ticks = (degrees / 360) * 4096 # 4096 ticks per rotation?
+        if (ticks + self.getPosition()) < self.max and (ticks + self.getPosition()) > self.min:
+            self.motor.set(ControlMode.Position, (ticks + self.getPosition()))
+        else:
+            self.stop()
+
     def setPosition(self, degrees):
-        degrees = degrees % 360
-        ticks = (degrees / 360) * 4960 # returns the set tick positions
+        #degrees = degrees % 360
+        ticks = ((degrees % 360) / 360) * 4096 # returns the set tick positions, keeping input under 360 (puts to ticks)
 
         if degrees > self.min and degrees < self.max:
             self.motor.set(ControlMode.Position, ticks)

@@ -65,7 +65,7 @@ def init():
 
     driveController.Start.toggleWhenPressed(RunCompressorCommand())
 
-    driveController.LeftBumper.toggleWhenPressed(SetHoodCommand(140))
+    driveController.LeftBumper.toggleWhenPressed(SetHoodCommand(10))
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
