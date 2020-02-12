@@ -41,12 +41,24 @@ class Turret(DebuggableSubsystem):
     def returnZero(self):
         self.motor.set(ControlMode.Position, 0)
 
-    def setPosition(self, position):
-        if (position > self.min and position < self.max):
-            self.motor.set(ControlMode.Position, position)
+    def setPosition(self, degrees):
+        degrees = degrees % 360
+
+        if degrees > self.min and degrees < self.max:
+            self.motor.set(ControlMode.Position, degrees)
         else:
-            print('param past turret max')
             self.motor.stopMotor()
+
+    def getPosition(self):
+        return (self.motor.getSelectedSensorPosition(0) % 360)
+
+    #def setZero(self):
+        #self.zero = self.getPosition() % 360 # keeps below 360 degrees
+        #if self.zero > 180:
+            #self.zero = (self.zero - 180) * -1 # sets a zero between -180 and 180. IT WORKS.
+
+    def setZero(self):
+        self.motor.setSelectedSensorPosition(0, 0, 0)
 
     def initDefaultCommand(self):
         '''

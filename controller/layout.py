@@ -8,6 +8,7 @@ from commands.resetcommand import ResetCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OutakeCommand
+from commands.intake.clearjamtwocommand import ClearJamTwoCommand
 
 from commands.colorwheel.getcolorcommand import GetColorCommand
 
@@ -16,6 +17,9 @@ from commands.turret.turretmovecommand import turretMoveCommand
 from commands.ballsystem.runallcommand import RunAllCommand
 from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
 from commands.ballsystem.runlowercommand import RunLowerCommand
+
+from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalCommand
+from commands.ballsystem.clearjamcommand import ClearJamCommand
 
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
@@ -70,9 +74,9 @@ def init():
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())# variable speed, 100% is default
 
-    operatorController.X.toggleWhenPressed(RunAllCommand())
-    operatorController.Y.toggleWhenPressed(RunIndexWithVerticalCommand())
-    operatorController.B.toggleWhenPressed(RunLowerCommand())
+    operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
+    operatorController.Y.toggleWhenPressed(ReverseHorizontalCommand())
+    operatorController.B.toggleWhenPressed(ClearJamCommand())
 
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
