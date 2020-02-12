@@ -8,8 +8,11 @@ class SetHoodCommand(Command):
         super().__init__('Set Hood')
 
         self.requires(robot.hood)
-        self.angle = angle
-        self.oldAngle = angle
+
+        realAngle = robot.hood.angleMin + (2 * angle)
+
+        self.angle = realAngle
+        self.oldAngle = realAngle
 
         self.dir = 'u'
 
