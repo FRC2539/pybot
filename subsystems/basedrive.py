@@ -151,9 +151,10 @@ class BaseDrive(DebuggableSubsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
         try:
-            self.bensGloriousOrchestra.loadMusic('song.ch-rp')
+            self.folder = '/home/lvuser/py/subsystems'
+            self.bensGloriousOrchestra.loadMusic(self.folder + '/' + "song.chrp")
         except:
-            print('failed to load orchestra')
+            print('\n\nfailed to load orchestra')
 
         self.setUseEncoders()
         self.maxSpeed = Config('DriveTrain/maxSpeed')
