@@ -18,7 +18,7 @@ class Limelight(DebuggableSubsystem):
         self.ty = Config('limelight/ty', 0)
         self.ta = Config('limelight/ta', 0)
 
-        self.LimelightHeight = 15.55
+        self.LimelightHeight = 20
         self.TargetHeight = 106.75
         self.calDistance = 120
 
@@ -43,6 +43,7 @@ class Limelight(DebuggableSubsystem):
 
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight
-        self.angle = self.calAngle  + math.radians(Limelight.getY(self))
+        #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
+        self.angle = math.radians(36.098 + self.getY())
         self.distance = self.height/math.tan(self.angle)
         return self.distance

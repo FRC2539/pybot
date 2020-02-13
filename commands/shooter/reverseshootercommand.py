@@ -1,4 +1,4 @@
-from wpilib.command.command import Command
+from wpilib.command import Command
 
 import robot
 
@@ -8,15 +8,12 @@ class ReverseShooterCommand(Command):
         super().__init__('Reverse Shooter')
 
         self.requires(robot.shooter)
-
+        self.requires(robot.ballsystem)
 
     def initialize(self):
-        pass
-
-
-    def execute(self):
-        pass
-
+        robot.ballsystem.reverseAll()
+        robot.shooter.reverse()
 
     def end(self):
-        pass
+        robot.ballsystem.stopAll()
+        robot.shooter.stop()

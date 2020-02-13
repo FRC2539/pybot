@@ -29,8 +29,13 @@ class Turret(DebuggableSubsystem):
         self.motor.setSelectedSensorPosition(0, 0, 0)
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
-    def move(self, val):
-        print(self.motor.getSelectedSensorPosition(0))
+    def rotateClockwise(self, val):
+        if self.getPosition() < self.max and self.getPosition() > self.min:
+            self.motor.set(val)
+            return False
+        else:
+            self.stop()
+
         #if(self.motor.getSelectedSensorPosition(0)>self.max and self.motor.getSelectedSensorPosition(0)<self.min):
             #self.motor.set(ControlMode.PercentOutput, speed)
         #else:
@@ -38,6 +43,9 @@ class Turret(DebuggableSubsystem):
             #self.motor.stopMotor()
         #self.motor.set(ControlMode.PercentOutput, val)<--
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
+
+    def move(self, val):
+        self.motor.set(ControlMode.PercentOutput, val)
 
     def stop(self):
         self.motor.stopMotor()

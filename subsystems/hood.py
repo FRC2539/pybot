@@ -49,12 +49,14 @@ class Hood(DebuggableSubsystem):
     def raiseHood(self):
         if self.getPosition() < self.angleMax:
             self.motor.set(0.4)
+            print(str(self.getPosition()))
         else:
             self.motor.stopMotor()
 
     def lowerHood(self):
         if self.getPosition() > self.angleMin:
             self.motor.set(-0.4)
+            print(str(self.getPosition()))
         else:
             self.motor.stopMotor()
 
@@ -124,3 +126,22 @@ class Hood(DebuggableSubsystem):
             self.setPercent(self.rotate)
         else:
             self.stopHood()
+
+    def setShootAngle(self, angle):
+        self.targetpos = 155 - 2 * (angle - 8.84)
+        #self.targetpos = 155 - angle
+        self.error = -1* (self.getPosition() - self.targetpos)
+        if (self.angleMin < self.getPosition() < self.angleMax):
+            if (abs(self.error) < .4):
+                self.stopHood()
+                print('there')
+            else:
+                self.setPercent(self.error * .05)
+                print(str(self.error))
+                print('target = ' + str(self.targetpos))
+                print(str(self.getPosition()))
+
+
+    def pEncoder(self):
+        print(str(self.getPosition()))
+
