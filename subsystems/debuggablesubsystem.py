@@ -10,9 +10,9 @@ class DebuggableSubsystem(Subsystem):
 
     def debugSensor(self, label, sensor):
         return
-        sensor.setName(self.getName(), label)
+        sensor.SetName(self.getName(), label)
 
     def debugMotor(self, label, motor):
         return
-        motor.setName(self.getName(), label)
+        motor.SetName(self.getName(), label)
 

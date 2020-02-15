@@ -5,7 +5,7 @@ import robot
 
 class MoveCommand(Command):
 
-    def __init__(self, distance, avoidCollisions=True, name=None):
+    def __init__(self, distance, avoidCollisions=False, name=None):
         '''
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -24,22 +24,24 @@ class MoveCommand(Command):
 
     def _initialize(self):
         super()._initialize()
-        self.precision = robot.drivetrain.inchesToTicks(1)
+        self.precision = robot.drivetrain.inchesToUnits(1)
 
 
     def initialize(self):
+        print('began Move command \n\n')
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
-        offset = robot.drivetrain.inchesToTicks(self.distance)
+        offset = robot.drivetrain.inchesToUnits(self.distance)
         sign = 1
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset * sign)
             sign *= -1
 
-        robot.drivetrain.setPositions(self.targetPositions)
+        print('target: ' + str(self.targetPositions))
 
+        robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
         if self.avoidCollisions:
@@ -81,7 +83,7 @@ class MoveCommand(Command):
         if self.blocked:
             return False
 
-        if self.isTimedOut() and robot.drivetrain.atPosition(self.precision):
+        if self.isTimedOut() and robot.drivetrain.atPosition(self.targetPositions, self.precision):
             self.onTarget += 1
         else:
             self.onTarget = 0

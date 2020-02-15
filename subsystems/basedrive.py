@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, TalonFX, FeedbackDevice
+from ctre import ControlMode, NeutralMode, WPI_TalonFX, TalonFXFeedbackDevice, Orchestra, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -21,54 +21,72 @@ class BaseDrive(DebuggableSubsystem):
     A general case drive train system. It abstracts away shared functionality of
     the various drive types that we can employ. Anything that can be done
     without knowing what type of drive system we have should be implemented here.
+    This code definitley doesn't play music.
     '''
 
     def setDriveTrain(self, compBot=True):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = Config('DriveTrain\FalconP', 0)
-            self.falconI = Config('DriveTrain\FalconI', 0)
+            self.falconP = Config('DriveTrain\FalconP', 0.03)
+            self.falconI = Config('DriveTrain\FalconI', 0.00001)
             self.falconD = Config('DriveTrain\FalconD', 0)
-            self.falconF = Config('DriveTrain\FalconF', 0)
+            self.falconF = Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = Config('DriveTrain\FalconIZone', 0)
+
+            #self.bensGloriousOrchestra = Orchestra()
+            self.bensGloriousOrchestra = None
 
             try:
                 self.motors = [
-                    TalonFX(ports.drivetrain.frontLeftMotorID),
-                    TalonFX(ports.drivetrain.frontRightMotorID),
-                    TalonFX(ports.drivetrain.backLeftMotorID),
-                    TalonFX(ports.drivetrain.backRightMotorID),
+                    WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
+                    WPI_TalonFX(ports.drivetrain.frontRightMotorID),
+                    WPI_TalonFX(ports.drivetrain.backLeftMotorID),
+                    WPI_TalonFX(ports.drivetrain.backRightMotorID),
                 ]
 
             except AttributeError:
                 self.motors = [
-                    TalonFX(ports.drivetrain.leftMotorID),
-                    TalonFX(ports.drivetrain.rightMotorID),
+                    WPI_TalonFX(ports.drivetrain.leftMotorID),
+                    WPI_TalonFX(ports.drivetrain.rightMotorID),
                 ]
 
             for motor in self.motors:
                 motor.setNeutralMode(NeutralMode.Brake)
-                motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+                motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+                #self.bensGloriousOrchestra.addInstrument(motor)
 
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
             self.setPositions = self.falconSetPositions
+            self.setProfile = self.falconSetProfile
+            self.stop = self.falconStop
+            self.inchesToUnits = self.inchesToTicks
+            self.getPositions = self.falconGetPositions
+            self.averageError = self.falconAverageError
+            self.neverPlayMusic = self.definitleyNotPlayMusic
+            self.nopeNotPauseMusic = self.notPauseMusic
+            self.noStopMusicHere = self.certainlyNotStopMusic
 
         else:
 
             # For practice bot with NEO's
 
+            print('in neos!!!\n\n\n')
+
             self.NEOencoders = []
             self.NEOcontrollers = []
 
-            self.neoP = Config('DriveTrain\SparkP', 0.05)
+            self.neoP = Config('DriveTrain\SparkP', 0.1)
             self.neoI = Config('DriveTrain\SparkI', 0)
             self.neoD = Config('DriveTrain\SparkD', 0.1)
             self.neoFF = Config('DriveTrain\SparkFF', 0)
             self.neoIZone = Config('DriveTrain\SparkIZone', 0)
 
+            self.bensGloriousOrchestra = None # this makes me sad lol
+
             try:
+                print('configured motors')
                 self.motors = [
                     CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
                     CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
@@ -90,11 +108,22 @@ class BaseDrive(DebuggableSubsystem):
                 motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
 
 
+
             # Make general method names based off of methods that require controller-specific methods.
 
             self.move = self.neoMove
             self.resetPID = self.neoResetPID
-            self.setPositions = self.falconSetPositions
+            self.setPositions = self.neoSetPositions
+            self.setProfile = self.neoSetProfile
+            self.stop = self.neoStop
+            self.inchesToUnits = self.inchesToRotations
+            self.getPositions = self.neoGetPositions
+            self.averageError = self.neoAverageError
+            self.neverPlayMusic = self.null
+            self.nopeNotPauseMusic = self.null
+            self.noStopMusicHere = self.null
+
+            print('set methods')
 
     def __init__(self, name):
         super().__init__(name)
@@ -109,9 +138,10 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = False#Config('DriveTrain/Robot', True) # Commented to test for NEO temporarily.
+        self.compBot = True#Config('DriveTrain/Robot', True) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
+        self.setupRecordData()
 
         self.activeMotors = []
         self._configureMotors(self.compBot)
@@ -123,10 +153,16 @@ class BaseDrive(DebuggableSubsystem):
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
+        #try:
+            #self.folderSong = '/home/lvuser/py/subsystems'
+            #print('loaded' + str(self.bensGloriousOrchestra.loadMusic(self.folderSong + '/' + 'song.chrp')))
+        #except:
+            #print('failed to load orchestra')
+
 
         self.setUseEncoders()
         self.maxSpeed = Config('DriveTrain/maxSpeed')
-        self.speedLimit = Config('DriveTrain/normalSpeed')
+        self.speedLimit = 1#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
 
@@ -178,7 +214,7 @@ class BaseDrive(DebuggableSubsystem):
                 print('writing')
                 self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
 
-                for index, motor in enumerate(self.robotdrive_motors):
+                for index, motor in enumerate(self.motors):
                     self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
 
             #for id_, vel, cur, volt, time in zip(self.recordData[0], self.recordData[1], self.recordData[2], self.recordData[3], self.recordData[4]):
@@ -201,6 +237,14 @@ class BaseDrive(DebuggableSubsystem):
 
         if [x, y, rotate] == self.lastInputs:
             return
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
+        rotate *= 0.4
+        y *= 0.5
+
+        #print(str(x) + ' ' + str(y) + ' ' + str(rotate))
 
         self.lastInputs = [x, y, rotate]
 
@@ -212,6 +256,7 @@ class BaseDrive(DebuggableSubsystem):
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
+        #print('Speeds one: ' + str(speeds))
         '''Prevent speeds > 1'''
         maxSpeed = 0
         for speed in speeds:
@@ -219,6 +264,7 @@ class BaseDrive(DebuggableSubsystem):
 
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
+
 
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
@@ -228,17 +274,40 @@ class BaseDrive(DebuggableSubsystem):
                 reduce overshooting, thereby shortening the time required to
                 come to a stop.
                 '''
-                for motor in self.activeMotors:
-                    motor.setIAccum(0)
+                for motor in self.motors:
+                    (motor.getPIDController()).setIAccum(0)
+
+            #print("moving")
+            #print(speeds)
+            #print("boost: "+ str(self.boost))
+
+
+            else:
+                for motor, speed in zip(self.motors, speeds):
+                    tmaxspeed = (self.maxSpeed / 100)
+                    speed = (speed * 1)
+
+                    if speed > 0.0 and speed > tmaxspeed:
+                        speed = tmaxspeed
+
+                    if speed < 0.0 and speed < (tmaxspeed * -1):
+                       speed = (tmaxspeed * -1)
+
 
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
-
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
 
-        self.neoRecordDriveData()
+        if [x, y, rotate] == self.lastInputs:
+            return
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
+
+        #self.neoRecordDriveData()
 
 
     def falconMove(self, x, y, rotate):
@@ -248,7 +317,14 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
+        rotate *= 0.7
+
         if [x, y, rotate] == self.lastInputs:
+            return
+
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
             return
 
         self.lastInputs = [x, y, rotate]
@@ -281,11 +357,18 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
+                motor.set(ControlMode.PercentOutput, speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+
+        if [x, y, rotate] == self.lastInputs:
+            return
+
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
 
 
     def falconSetPositions(self, positions):
@@ -299,16 +382,23 @@ class BaseDrive(DebuggableSubsystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
+            #motor.selectProfileSlot(1, 0)
+            #motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            #motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.Position, position)
 
     def neoSetPositions(self, positions):
-        pass
+        if not self.useEncoders:
+            raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        self.stop()
+        for motor, position in zip(self.activeMotors, positions):
+            #(motor.getPIDController()).setSmartMotionMaxVelocity(770.0, 0)
+            #(motor.getPIDController()).setSmartMotionMaxAccel(80.0, 0)
+            (motor.getPIDController()).setReference(position, ControlType.kPosition, 0, 0)
 
 
-    def averageError(self):
+    def falconAverageError(self, positions):
         '''Find the average distance between setpoint and current position.'''
         error = 0
         for motor in self.activeMotors:
@@ -316,23 +406,39 @@ class BaseDrive(DebuggableSubsystem):
 
         return error / len(self.activeMotors)
 
+    def neoAverageError(self, positions):
+        '''Find the average distance between setpoint and current position.'''
+        error = 0
+        for motor, pos in zip(self.activeMotors, positions):
+            error += abs(pos - (motor.getEncoder()).getPosition())
 
-    def atPosition(self, tolerance=10):
+        return error / len(self.activeMotors)
+
+    def atPosition(self, positions, tolerance=10):
         '''
         Check setpoint error to see if it is below the given tolerance.
         '''
-        return self.averageError() <= tolerance
+        return self.averageError(positions) <= tolerance
 
-
-    def stop(self):
+    def neoStop(self):
         '''Disable all motors until set() is called again.'''
         for motor in self.activeMotors:
             motor.stopMotor()
 
         self.lastInputs = None
 
+    def falconStop(self):
+        '''Disable all motors until set() is called again.'''
+        for motor in self.activeMotors:
+            motor.set(ControlMode.PercentOutput, 0.0)
 
-    def setProfile(self, profile):
+        self.lastInputs = None
+
+    def neoSetProfile(self, profile):
+        pass # can't do this..
+
+
+    def falconSetProfile(self, profile):
         '''Select which PID profile to use.'''
         for motor in self.activeMotors:
             motor.selectProfileSlot(profile, 0)
@@ -341,13 +447,13 @@ class BaseDrive(DebuggableSubsystem):
     def falconResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            motor.configClosedLoopRamp(0, 0)
+            motor.configClosedloopRamp(0, 0)
             for profile in range(2):
-                motor.config_kP(profile, 0, 0)
-                motor.config_kI(profile, 0, 0)
-                motor.config_kD(profile, 0, 0)
-                motor.config_kF(profile, 0, 0)
-                motor.config_IntegralZone(profile, 0, 0)
+                motor.config_kP(profile, self.falconP, 0)
+                motor.config_kI(profile, self.falconI, 0)
+                motor.config_kD(profile, self.falconD, 0)
+                motor.config_kF(profile, self.falconF, 0)
+                motor.config_IntegralZone(profile, self.falconIZone, 0)
 
     def neoResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
@@ -395,12 +501,18 @@ class BaseDrive(DebuggableSubsystem):
 
         return degrees
 
+    def inchesToRotations(self, distance):
+        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
+
+        print('ROTATIONS : ' + str(rotations * 8.45))#Config('DriveTrain/ticksPerRotation', 8.45)))
+
+        return float(rotations * 8.45)#Config('DriveTrain/GearRatio', 8.45))
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter'))
+        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
 
-        return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
+        return int(rotations * 8.45) * 2048#Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):
@@ -421,9 +533,13 @@ class BaseDrive(DebuggableSubsystem):
         return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
 
-    def getPositions(self):
+    def falconGetPositions(self):
         '''Returns the position of each active motor.'''
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+
+    def neoGetPositions(self):
+        '''Returns the position of each active motor.'''
+        return [(x.getEncoder()).getPosition() for x in self.activeMotors]
 
 
     def getFrontClearance(self):
@@ -533,3 +649,16 @@ class BaseDrive(DebuggableSubsystem):
         '''Return a speed for each active motor.'''
 
         raise NotImplementedError()
+
+    def definitleyNotPlayMusic(self):
+        #self.bensGloriousOrchestra.play()
+        print('PLAY MUSIC\n\n\n')
+
+    def notPauseMusic(self):
+        #self.bensGloriousOrchestra.pause()
+        pass
+    def certainlyNotStopMusic(self):
+        #self.bensGloriousOrchestra.stop()
+        pass
+    def null(self):
+        pass

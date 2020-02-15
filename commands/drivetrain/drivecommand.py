@@ -20,17 +20,15 @@ class DriveCommand(Command):
 
     def initialize(self):
         robot.drivetrain.stop()
-        robot.drivetrain.setProfile(0)
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
         except (ValueError, MissingConfigError):
             print('Could not set speed to %s' % self.speedLimit)
             driverhud.showAlert('Drive Train is not configured')
-            robot.drivetrain.enableSimpleDriving()
+            #robot.drivetrain.enableSimpleDriving()
 
         self.lastY = None
         self.slowed = False
-
 
     def execute(self):
         # Avoid quick changes in direction
@@ -48,13 +46,10 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        tilt = robot.drivetrain.getTilt()
-        correction = tilt / 20
-        if abs(correction) < 0.2:
-            correction = 0
-
+        #print(str('X ' + str(logicalaxes.driveX.get()) + '\nY ' + str(y) + '\nRotate ' + str(logicalaxes.driveRotate.get())))
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
-            y - correction,
-            logicalaxes.driveRotate.get()
+            y,
+            logicalaxes.driveRotate.get() * 0.7
         )
+
