@@ -15,7 +15,7 @@ class ShootCommand(Command):
         robot.shooter.setGoalNetworkTables()
 
     def execute(self):
-        robot.shooter.monitorBalls()
+        robot.shooter.sensorCount()
         robot.shooter.updateNetworkTables()
 
     def end(self):

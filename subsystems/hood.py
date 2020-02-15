@@ -45,20 +45,23 @@ class Hood(DebuggableSubsystem):
 
     def setPercent(self, speed):
         self.motor.set(speed)
+        self.updateNetworkTables(self.getPosition())
 
     def raiseHood(self):
         if self.getPosition() < self.angleMax:
-            self.motor.set(0.4)
+            self.motor.set(0.1)
             print(str(self.getPosition()))
         else:
             self.motor.stopMotor()
+        self.updateNetworkTables(self.getPosition())
 
     def lowerHood(self):
         if self.getPosition() > self.angleMin:
-            self.motor.set(-0.4)
+            self.motor.set(-0.1)
             print(str(self.getPosition()))
         else:
             self.motor.stopMotor()
+        self.updateNetworkTables(self.getPosition())
 
     def atHighest(self):
         if self.getPosition() >= self.angleMax:
@@ -77,10 +80,12 @@ class Hood(DebuggableSubsystem):
     def updateNetworkTables(self, angle=85.00):
         self.table.putNumber('HoodAngle', round(self.getPosition(), 2))
         self.table.putNumber('DesiredHoodAngle', round(angle, 2))
+        self.table.putNumber('LaunchAngle', (((155 - self.getPosition()) / 2) + 8.84))
 
     def zeroNetworkTables(self):
         self.table.putNumber('HoodAngle', self.angleMin)
         self.table.putNumber('DesiredHoodAngle', self.angleMin)
+        self.table.putNumber('LaunchAngle', self.angleMin)
 
     def initializeSetPosition(self, angle):
         self.angle = angle
@@ -94,7 +99,6 @@ class Hood(DebuggableSubsystem):
             self.dir = 'u'
             self.angle -= 5
 
-        print(self.dir)
         if abs(self.getPosition() - self.angle) < 1:
             self.stopHood()
 
@@ -127,21 +131,26 @@ class Hood(DebuggableSubsystem):
         else:
             self.stopHood()
 
+        self.updateNetworkTables(self.getPosition())
+
     def setShootAngle(self, angle):
         self.targetpos = 155 - 2 * (angle - 8.84)
         #self.targetpos = 155 - angle
         self.error = -1* (self.getPosition() - self.targetpos)
-        if (self.angleMin < self.getPosition() < self.angleMax):
+        if (self.angleMin < self.targetpos < self.angleMax):
             if (abs(self.error) < .4):
                 self.stopHood()
-                print('there')
+                #print('there')
             else:
-                self.setPercent(self.error * .05)
-                print(str(self.error))
-                print('target = ' + str(self.targetpos))
-                print(str(self.getPosition()))
+                self.speed = self.error * .01
+                if (self.speed > .2 ):
+                    self.speed = .2
+                self.setPercent(self.speed)
+                #print(str(self.error))
+                #print('target = ' + str(self.targetpos))
+                #print(str(self.getPosition()))
 
 
     def pEncoder(self):
-        print(str(self.getPosition()))
-
+        #print(str(self.getPosition()))
+        pass

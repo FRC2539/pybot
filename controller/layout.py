@@ -20,6 +20,8 @@ from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVertical
 from commands.ballsystem.runlowercommand import RunLowerCommand
 from commands.ballsystem.clearjamcommand import ClearJamCommand
 
+from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
+
 from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalCommand
 
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
@@ -30,6 +32,10 @@ from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 from commands.hood.sethoodcommand import SetHoodCommand
 from commands.hood.hoodtestcommand import hoodTestCommand
+from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTablesCommand
+from commands.hood.hoodlimelightcommand import HoodLimelightCommand
+
+from commands.limelight.lltestcommand import llTestCommand
 
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
@@ -57,13 +63,13 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(IntakeCommand())
+    driveController.A.toggleWhenPressed(IntakeCommand(0.6))
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
 
 
     #driveController.Y.toggleWhenPressed(ExtendClimberPistonCommand())
-    driveController.Y.whileHeld(hoodTestCommand())
+    driveController.Y.whenPressed(HoodLimelightCommand())
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())

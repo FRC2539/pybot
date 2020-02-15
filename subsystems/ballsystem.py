@@ -1,5 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
+from networktables import NetworkTables
+
 from wpilib import DigitalInput
 
 from ctre import ControlMode, WPI_TalonSRX, NeutralMode
@@ -22,10 +24,12 @@ class BallSystem(DebuggableSubsystem):
 
         self.indexWheelMotor.setInverted(True)
 
+        self.table = NetworkTables.getTable('BallSystem')
+
         self.horizontalBeltSensor = DigitalInput(ports.ballsystem.horizontalConveyorSensor)
 
     def runIndex(self):
-        self.indexWheelMotor.set(ControlMode.PercentOutput, 0.8)
+        self.indexWheelMotor.set(ControlMode.PercentOutput, 1)
 
     def runLowerConveyor(self):
         self.lowerConveyorMotor.set(ControlMode.PercentOutput, 0.8)
@@ -93,5 +97,9 @@ class BallSystem(DebuggableSubsystem):
     #def disableSensor(self):
         #self.horizontalBeltSensor.setEnabled(False)
 
+    def updateNetworktables(self):
+        self.table.putNumber('BallInChamber', (not self.horizontalBeltSensor.get()))
+
     def isBallPrimed(self):
-        return self.horizontalBeltSensor.get() # may need to invert
+        self.updateNetworktables()
+        return not self.horizontalBeltSensor.get() # may need to invert

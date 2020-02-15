@@ -34,7 +34,8 @@ class BaseDrive(DebuggableSubsystem):
             self.falconF = Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = Config('DriveTrain\FalconIZone', 0)
 
-            self.bensGloriousOrchestra = Orchestra()
+            #self.bensGloriousOrchestra = Orchestra()
+            self.bensGloriousOrchestra = None
 
             try:
                 self.motors = [
@@ -53,7 +54,7 @@ class BaseDrive(DebuggableSubsystem):
             for motor in self.motors:
                 motor.setNeutralMode(NeutralMode.Brake)
                 motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
-                self.bensGloriousOrchestra.addInstrument(motor)
+                #self.bensGloriousOrchestra.addInstrument(motor)
 
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
@@ -70,6 +71,8 @@ class BaseDrive(DebuggableSubsystem):
         else:
 
             # For practice bot with NEO's
+
+            print('in neos!!!\n\n\n')
 
             self.NEOencoders = []
             self.NEOcontrollers = []
@@ -135,7 +138,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = True#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
+        self.compBot = True#Config('DriveTrain/Robot', True) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
         self.setupRecordData()
@@ -150,10 +153,11 @@ class BaseDrive(DebuggableSubsystem):
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
-        try:
-            self.bensGloriousOrchestra.loadMusic('song.ch-rp')
-        except:
-            print('failed to load orchestra')
+        #try:
+            #self.folderSong = '/home/lvuser/py/subsystems'
+            #print('loaded' + str(self.bensGloriousOrchestra.loadMusic(self.folderSong + '/' + 'song.chrp')))
+        #except:
+            #print('failed to load orchestra')
 
         self.setUseEncoders()
         self.maxSpeed = Config('DriveTrain/maxSpeed')
@@ -291,7 +295,6 @@ class BaseDrive(DebuggableSubsystem):
 
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
-
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed)
@@ -647,13 +650,14 @@ class BaseDrive(DebuggableSubsystem):
         raise NotImplementedError()
 
     def definitleyNotPlayMusic(self):
-        self.bensGloriousOrchestra.play()
+        #self.bensGloriousOrchestra.play()
+        print('PLAY MUSIC\n\n\n')
 
     def notPauseMusic(self):
-        self.bensGloriousOrchestra.pause()
-
+        #self.bensGloriousOrchestra.pause()
+        pass
     def certainlyNotStopMusic(self):
-        self.bensGloriousOrchestra.stop()
-
+        #self.bensGloriousOrchestra.stop()
+        pass
     def null(self):
         pass
