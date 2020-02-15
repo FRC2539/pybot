@@ -5,6 +5,8 @@ import wpilib
 import ports
 from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX, NeutralMode
 
+import robot
+
 class Turret(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
@@ -16,8 +18,10 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
         self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 110
-        self.min = -110
+        self.max = 110 # Dummy values
+        self.min = -110 # Dummy values
+
+        self.fieldAngle = 0
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
@@ -25,8 +29,13 @@ class Turret(DebuggableSubsystem):
         self.motor.setSelectedSensorPosition(0, 0, 0)
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
-    def move(self, val):
-        print(self.motor.getSelectedSensorPosition(0))
+    def rotateClockwise(self, val):
+        if self.getPosition() < self.max and self.getPosition() > self.min:
+            self.motor.set(val)
+            return False
+        else:
+            self.stop()
+
         #if(self.motor.getSelectedSensorPosition(0)>self.max and self.motor.getSelectedSensorPosition(0)<self.min):
             #self.motor.set(ControlMode.PercentOutput, speed)
         #else:
@@ -35,18 +44,45 @@ class Turret(DebuggableSubsystem):
         #self.motor.set(ControlMode.PercentOutput, val)<--
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
+    def move(self, val):
+        self.motor.set(ControlMode.PercentOutput, val)
+
     def stop(self):
         self.motor.stopMotor()
 
     def returnZero(self):
         self.motor.set(ControlMode.Position, 0)
 
-    def setPosition(self, position):
-        if (position > self.min and position < self.max):
-            self.motor.set(ControlMode.Position, position)
+    def captureOrientation(self):
+        self.fieldAngle = robot.drivetrain.getAngle()
+
+    def turretFieldOriented(self): # Use for when traveling 'round the field.
+        degrees = self.fieldAngle - robot.drivetrain.getAngle()
+        ticks = (degrees / 360) * 4096 # 4096 ticks per rotation?
+        if (ticks + self.getPosition()) < self.max and (ticks + self.getPosition()) > self.min:
+            self.motor.set(ControlMode.Position, (ticks + self.getPosition()))
         else:
-            print('param past turret max')
+            self.stop()
+
+    def setPosition(self, degrees):
+        #degrees = degrees % 360
+        ticks = ((degrees % 360) / 360) * 4096 # returns the set tick positions, keeping input under 360 (puts to ticks)
+
+        if degrees > self.min and degrees < self.max:
+            self.motor.set(ControlMode.Position, ticks)
+        else:
             self.motor.stopMotor()
+
+    def getPosition(self):
+        return (self.motor.getSelectedSensorPosition(0) % 360)
+
+    #def setZero(self):
+        #self.zero = self.getPosition() % 360 # keeps below 360 degrees
+        #if self.zero > 180:
+            #self.zero = (self.zero - 180) * -1 # sets a zero between -180 and 180. IT WORKS.
+
+    def setZero(self):
+        self.motor.setSelectedSensorPosition(0, 0, 0)
 
     def initDefaultCommand(self):
         '''

@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, TalonFX, TalonFXFeedbackDevice
+from ctre import ControlMode, NeutralMode, WPI_TalonFX, TalonFXFeedbackDevice, Orchestra, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -21,6 +21,7 @@ class BaseDrive(DebuggableSubsystem):
     A general case drive train system. It abstracts away shared functionality of
     the various drive types that we can employ. Anything that can be done
     without knowing what type of drive system we have should be implemented here.
+    This code definitley doesn't play music.
     '''
 
     def setDriveTrain(self, compBot=True):
@@ -33,23 +34,26 @@ class BaseDrive(DebuggableSubsystem):
             self.falconF = Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = Config('DriveTrain\FalconIZone', 0)
 
+            self.bensGloriousOrchestra = Orchestra()
+
             try:
                 self.motors = [
-                    TalonFX(ports.drivetrain.frontLeftMotorID),
-                    TalonFX(ports.drivetrain.frontRightMotorID),
-                    TalonFX(ports.drivetrain.backLeftMotorID),
-                    TalonFX(ports.drivetrain.backRightMotorID),
+                    WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
+                    WPI_TalonFX(ports.drivetrain.frontRightMotorID),
+                    WPI_TalonFX(ports.drivetrain.backLeftMotorID),
+                    WPI_TalonFX(ports.drivetrain.backRightMotorID),
                 ]
 
             except AttributeError:
                 self.motors = [
-                    TalonFX(ports.drivetrain.leftMotorID),
-                    TalonFX(ports.drivetrain.rightMotorID),
+                    WPI_TalonFX(ports.drivetrain.leftMotorID),
+                    WPI_TalonFX(ports.drivetrain.rightMotorID),
                 ]
 
             for motor in self.motors:
                 motor.setNeutralMode(NeutralMode.Brake)
-                motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0)
+                motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+                self.bensGloriousOrchestra.addInstrument(motor)
 
             self.move = self.falconMove
             self.resetPID = self.falconResetPID
@@ -59,6 +63,9 @@ class BaseDrive(DebuggableSubsystem):
             self.inchesToUnits = self.inchesToTicks
             self.getPositions = self.falconGetPositions
             self.averageError = self.falconAverageError
+            self.neverPlayMusic = self.definitleyNotPlayMusic
+            self.nopeNotPauseMusic = self.notPauseMusic
+            self.noStopMusicHere = self.certainlyNotStopMusic
 
         else:
 
@@ -72,6 +79,8 @@ class BaseDrive(DebuggableSubsystem):
             self.neoD = Config('DriveTrain\SparkD', 0.1)
             self.neoFF = Config('DriveTrain\SparkFF', 0)
             self.neoIZone = Config('DriveTrain\SparkIZone', 0)
+
+            self.bensGloriousOrchestra = None # this makes me sad lol
 
             try:
                 print('configured motors')
@@ -96,6 +105,7 @@ class BaseDrive(DebuggableSubsystem):
                 motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
 
 
+
             # Make general method names based off of methods that require controller-specific methods.
 
             self.move = self.neoMove
@@ -106,6 +116,9 @@ class BaseDrive(DebuggableSubsystem):
             self.inchesToUnits = self.inchesToRotations
             self.getPositions = self.neoGetPositions
             self.averageError = self.neoAverageError
+            self.neverPlayMusic = self.null
+            self.nopeNotPauseMusic = self.null
+            self.noStopMusicHere = self.null
 
             print('set methods')
 
@@ -122,7 +135,7 @@ class BaseDrive(DebuggableSubsystem):
 
         '''
 
-        self.compBot = False#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
+        self.compBot = True#Config('DriveTrain/Robot', False) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
         self.setupRecordData()
@@ -137,6 +150,11 @@ class BaseDrive(DebuggableSubsystem):
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
+        try:
+            self.folder = '/home/lvuser/py/subsystems'
+            self.bensGloriousOrchestra.loadMusic(self.folder + '/' + "song.chrp")
+        except:
+            print('\n\nfailed to load orchestra')
 
         self.setUseEncoders()
         self.maxSpeed = Config('DriveTrain/maxSpeed')
@@ -628,3 +646,15 @@ class BaseDrive(DebuggableSubsystem):
         '''Return a speed for each active motor.'''
 
         raise NotImplementedError()
+
+    def definitleyNotPlayMusic(self):
+        self.bensGloriousOrchestra.play()
+
+    def notPauseMusic(self):
+        self.bensGloriousOrchestra.pause()
+
+    def certainlyNotStopMusic(self):
+        self.bensGloriousOrchestra.stop()
+
+    def null(self):
+        pass

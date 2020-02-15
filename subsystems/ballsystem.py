@@ -37,13 +37,13 @@ class BallSystem(DebuggableSubsystem):
         self.verticalConveyorMotor.set(ControlMode.PercentOutput, 1)
 
     def reverseIndex(self):
-        self.indexWheelMotor.set(ControlMode.PercentOutput, -0.5)
+        self.indexWheelMotor.set(ControlMode.PercentOutput, -1)
 
     def reverseLowerConveyor(self):
-        self.lowerConveyorMotor.set(ControlMode.PercentOutput, -0.5)
+        self.lowerConveyorMotor.set(ControlMode.PercentOutput, -1)
 
     def reverseVerticalConveyor(self):
-        self.verticalConveyorMotor.set(ControlMode.PercentOutput, -0.5)
+        self.verticalConveyorMotor.set(ControlMode.PercentOutput, -1)
 
     def stopIndex(self):
         self.indexWheelMotor.stopMotor()
@@ -80,6 +80,12 @@ class BallSystem(DebuggableSubsystem):
         self.stopIndex()
         self.stopLowerConveyor()
         self.stopVerticalConveyor()
+
+    def setHorizontalBrake(self):
+        self.lowerConveyorMotor.setNeutralMode(NeutralMode.Brake)
+
+    def setHorizontalCoast(self):
+        self.lowerConveyorMotor.setNeutralMode(NeutralMode.Coast)
 
     #def enableSensor(self):
         #self.horizontalBeltSensor.setEnabled(True)

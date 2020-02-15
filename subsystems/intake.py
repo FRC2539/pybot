@@ -14,6 +14,8 @@ class Intake(DebuggableSubsystem):
 
         self.ballCount = 0
 
+        self.forward = False
+
     def intake(self, val=1):
         self.intakeMotor.set(val)
 
@@ -30,5 +32,18 @@ class Intake(DebuggableSubsystem):
         if current * 1000 > 1800:
             self.ballCount += 1
 
-    def maintainBalls(self):
-        self.intakeMotor.set(0.4)
+    def fumbleForward(self):
+        self.intakeMotor.set(1)
+
+    def fumbleReverse(self):
+        self.intakeMotor.set(-0.3)
+
+    def changeFumble(self):
+        if self.forward:
+            self.fumbleReverse()
+        else:
+            self.fumbleForward()
+
+        self.forward = not self.forward
+
+        # lol rip intake motor

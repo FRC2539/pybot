@@ -48,6 +48,9 @@ class Shooter(DebuggableSubsystem):
 
         self.zeroNetworkTables()
 
+    def reverse(self):
+        self.motor.set(-0.7)
+
     def runAtSpeed(self, percent):
         self.motor.set(percent)
         #self.secondMotor.set(percent)
