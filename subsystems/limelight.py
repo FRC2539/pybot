@@ -18,6 +18,8 @@ class Limelight(DebuggableSubsystem):
         self.ty = Config('limelight/ty', 0)
         self.ta = Config('limelight/ta', 0)
 
+        self.driveTable = NetworkTables.getTable('DriveTrain')
+
         self.LimelightHeight = 20
         self.TargetHeight = 106.75
         self.calDistance = 120
@@ -30,7 +32,6 @@ class Limelight(DebuggableSubsystem):
 
     def getX(self):
         return self.nt.getEntry('tx').getDouble(0)
-
 
     def getY(self):
         return self.nt.getEntry('ty').getDouble(0)
@@ -46,4 +47,14 @@ class Limelight(DebuggableSubsystem):
         #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
         self.angle = math.radians(36.098 + self.getY())
         self.distance = self.height/math.tan(self.angle)
+   #     print(str(self.distance))
         return self.distance
+
+    def updateNetworkTables(self):
+        self.driveTable.putNumber('distance', self.calcDistance())
+
+
+    def initDefaultCommand(self):
+        from commands.limelight.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())

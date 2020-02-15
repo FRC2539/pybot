@@ -1,4 +1,4 @@
-from wpilib.command.command import Command
+from wpilib.command import Command
 
 import robot
 
@@ -16,7 +16,7 @@ class HoodLimelightCommand(Command):
 
     def execute(self):
         if (robot.limelight.calcDistance()<120):
-            robot.hood.setShootAngle(38)
+            robot.hood.setShootAngle(42)
         elif (robot.limelight.calcDistance()<140):
             robot.hood.setShootAngle(35)
         elif (robot.limelight.calcDistance()<160):
@@ -50,7 +50,7 @@ class HoodLimelightCommand(Command):
         elif (robot.limelight.calcDistance()<460):
             robot.hood.setShootAngle(48.2)
         elif (robot.limelight.calcDistance()<480):
-            robot.hood.setShootAngle(48.5)
+            robot.hood.setShootAngle(48)
 
 
 

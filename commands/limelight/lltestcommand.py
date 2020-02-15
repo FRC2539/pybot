@@ -9,7 +9,7 @@ class llTestCommand(Command):
         super().__init__('ll Test')
 
         self.requires(robot.limelight)
-        self.requires(robot.drivetrain)
+        #self.requires(robot.drivetrain)
 
 
 
@@ -20,8 +20,8 @@ class llTestCommand(Command):
 
 
     def execute(self):
-        self.rotate = robot.limelight.getX()*.03
-        robot.drivetrain.move(0,0,self.rotate)
+        #self.rotate = robot.limelight.getX()*.03
+        #robot.drivetrain.move(0,0,self.rotate)
         print(str(robot.limelight.calcDistance()))
 
 

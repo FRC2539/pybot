@@ -26,7 +26,7 @@ class ControlledShootCommand(Command):
         else:
             robot.ballsystem.stopAll()
 
-        robot.shooter.monitorBalls()
+        robot.shooter.sensorCount()
         robot.shooter.updateNetworkTables()
 
     def end(self):

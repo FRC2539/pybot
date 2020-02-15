@@ -19,15 +19,17 @@ drivetrain.backRightMotorID = 4
 
 ColorWheelPorts = PortsList()
 
-ColorWheelPorts.motorID = 5
+ColorWheelPorts.motorID = 15
 
 hood = PortsList
 
-hood.motorID = 6
+hood.motorID = 7
 
 IntakePorts = PortsList()
 
-IntakePorts.motorID = 7
+IntakePorts.motorID = 11
+
+IntakePorts.sensorID = 4 # on DIO; 5 for power
 
 limelight = PortsList()
 
@@ -37,22 +39,22 @@ turret.motorID = 8
 
 shooter = PortsList()
 
-shooter.motorID = 9
-shooter.motorTwoID = 14
+shooter.motorID = 5
+shooter.motorTwoID = 6
 
 shooter.shooterSensor = 2 # on DIO; 3 for power
 
 ballsystem = PortsList()
 
-ballsystem.indexWheel = 10
-ballsystem.lowerConveyor = 11
-ballsystem.verticalConveyor = 12
+ballsystem.indexWheel = 20
+ballsystem.lowerConveyor = 9
+ballsystem.verticalConveyor = 10
 
 ballsystem.horizontalConveyorSensor = 0 # On DIO; 1 for power
 
 pneumaticSystem = PortsList()
 
-pneumaticSystem.pcmID = 13
+pneumaticSystem.pcmID = 17
 
 pneumaticSystem.climberSolenoidForward = 0 # On PCM
 pneumaticSystem.climberSolenoidReverse = 1 # On PCM
