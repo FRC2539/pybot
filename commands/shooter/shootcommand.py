@@ -4,13 +4,14 @@ import robot
 
 class ShootCommand(Command):
 
-    def __init__(self):
+    def __init__(self, rpm=4200):
         super().__init__('Shoot')
-
         self.requires(robot.shooter)
 
+        self.rpm = rpm
+
     def initialize(self):
-        robot.shooter.setRPM()
+        robot.shooter.setRPM(self.rpm)
         robot.shooter.updateCheck()
         robot.shooter.setGoalNetworkTables()
 

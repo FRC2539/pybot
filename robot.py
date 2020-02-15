@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
 
-# Monkey-patching out NetworkTables methods
-import wpilib
-wpilib.SmartDashboard.putData = lambda x, y: None
-class MockSendableChooser:
-    def addDefault(self, x, y):
-        self.choice = y
-    def getSelected(self):
-        return self.choice
-wpilib.SendableChooser = MockSendableChooser
-import networktables
-def mockAddTableListener(x, y, localNotify=None):
-    pass
-networktables.NetworkTable.addTableListener = mockAddTableListener
 import wpilib.command
 wpilib.command.Command.isFinished = lambda x: False
 
@@ -52,7 +39,7 @@ class KryptonBot(CommandBasedRobot):
         driverhud.init()
 
         from commands.startupcommandgroup import StartUpCommandGroup
-        #StartUpCommandGroup().start()
+        StartUpCommandGroup().start()
 
 
     def autonomousInit(self):
@@ -66,17 +53,22 @@ class KryptonBot(CommandBasedRobot):
         auton.start()
         driverhud.showInfo("Starting %s" % auton)
 
+
+    def handleCrash(self, error):
+        super().handleCrash()
+        driverhud.showAlert('Fatal Error: %s' % error)
+
+
     @classmethod
     def subsystems(cls):
         vars = globals()
         module = sys.modules['robot']
         for key, var in vars.items():
             try:
-                print(str(key) + ' + ' + str(var) + ' & ' + str(issubclass(var, Subsystem) and var is not Subsystem))
                 if issubclass(var, Subsystem) and var is not Subsystem:
                     try:
                         setattr(module, key, var())
-                    except Exception as e:
+                    except TypeError as e:
                         raise ValueError(f'Could not instantiate {key}') from e
             except TypeError:
                 pass
