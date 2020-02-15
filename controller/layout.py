@@ -36,6 +36,7 @@ from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTables
 from commands.hood.hoodlimelightcommand import HoodLimelightCommand
 
 from commands.limelight.lltestcommand import llTestCommand
+from commands.limelight.finitereecommand import finiteReeCommand
 
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
@@ -69,7 +70,7 @@ def init():
 
 
     #driveController.Y.toggleWhenPressed(ExtendClimberPistonCommand())
-    driveController.Y.whenPressed(HoodLimelightCommand())
+    driveController.Y.whenPressed(finiteReeCommand())
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
