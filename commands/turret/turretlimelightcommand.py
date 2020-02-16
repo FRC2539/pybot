@@ -8,7 +8,6 @@ class TurretLimelightCommand(Command):
         super().__init__('Turret Limelight')
 
         self.requires(robot.turret)
-        self.requires(robot.limelight)
 
 
     def initialize(self):
@@ -17,8 +16,9 @@ class TurretLimelightCommand(Command):
 
 
     def execute(self):
-        self.rotate = robot.limelight.getX()*.03
+        self.rotate = robot.limelight.getX()*-.035
         robot.turret.move(self.rotate)
+
 
 
     def end(self):

@@ -18,15 +18,16 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
         self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 250 # Dummy values
-        self.min = 44 # Dummy values
+        self.max = 1850 # Dummy values
+        self.min = -400 # Dummy values
 
         self.fieldAngle = 0
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
-        self.motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute)
-        self.motor.setSelectedSensorPosition(0, 0, 0)
+
+        self.motor.configSelectedFeedbackSensor(FeedbackDevice.Analog)
+        #self.motor.setSelectedSensorPosition(0, 0, 0)
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
     def rotateClockwise(self, val):
@@ -47,11 +48,18 @@ class Turret(DebuggableSubsystem):
     def move(self, val):
         if self.getPosition() < self.max and self.getPosition() > self.min:
             self.motor.set(ControlMode.PercentOutput, val)
+        elif self.getPosition() > self.max and val > 0:
+            self.motor.set(ControlMode.PercentOutput, val)
+        elif self.getPosition() < self.min and val < 0:
+            self.motor.set(ControlMode.PercentOutput, val)
         else:
             self.stop()
 
     def stop(self):
         self.motor.stopMotor()
+
+    def givePosition(self):
+        self.motor.setSelectedSensorPosition(1500)
 
     def returnZero(self):
         self.motor.set(ControlMode.Position, 0)
@@ -60,10 +68,9 @@ class Turret(DebuggableSubsystem):
         self.fieldAngle = robot.drivetrain.getAngle()
 
     def turretFieldOriented(self): # Use for when traveling 'round the field.
-        degrees = self.fieldAngle - robot.drivetrain.getAngle()
-        ticks = (degrees / 360) * 4096 # 4096 ticks per rotation?
-        if (ticks + self.getPosition()) < self.max and (ticks + self.getPosition()) > self.min:
-            self.motor.set(ControlMode.Position, (ticks + self.getPosition()))
+        degrees = (self.fieldAngle - robot.drivetrain.getAngle()) * 0.003
+        if self.getPosition() + 2 < self.max and self.getPosition() - 2 > self.min:
+            self.motor.set(ControlMode.PercentOutput, degrees)
         else:
             self.stop()
 
@@ -76,8 +83,12 @@ class Turret(DebuggableSubsystem):
         else:
             self.motor.stopMotor()
 
+    def printPosition(self):
+        print(str(self.motor.getSelectedSensorPosition(0)))
+
     def getPosition(self):
-        return (self.motor.getSelectedSensorPosition(0) % 360)
+        #return (self.motor.getSelectedSensorPosition(0) % 360)
+        return (self.motor.getSelectedSensorPosition(0))
 
     #def setZero(self):
         #self.zero = self.getPosition() % 360 # keeps below 360 degrees

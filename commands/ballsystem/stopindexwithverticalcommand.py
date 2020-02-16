@@ -10,4 +10,4 @@ class StopIndexWithVerticalCommand(Command):
         self.requires(robot.ballsystem)
 
     def initialize(self):
-        robot.ballsystem.stopIndexWithVertical()
+        robot.ballsystem.stopVerticalConveyor()

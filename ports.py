@@ -46,11 +46,18 @@ shooter.shooterSensor = 0 # on DIO; 3 for power
 
 ballsystem = PortsList()
 
-ballsystem.indexWheel = 20
 ballsystem.lowerConveyor = 9
 ballsystem.verticalConveyor = 10
 
 ballsystem.horizontalConveyorSensor = 0 # On DIO; 1 for power
+
+climber = PortsList()
+
+climber.motorID = 14
+
+winch = PortsList()
+
+winch.motorID = 12
 
 pneumaticSystem = PortsList()
 

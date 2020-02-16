@@ -1,6 +1,8 @@
 from wpilib.command import CommandGroup
 from wpilib import DriverStation as _ds
 
+from networktables import NetworkTables
+
 import commandbased.flowcontrol as fc
 from custom.config import Config
 
@@ -20,7 +22,18 @@ class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
         super().__init__('Autonomous')
 
-        @fc.IF(lambda: True) # Put given game data here through network tables.
+        self.table = NetworkTables.getTable('Autonomous')
+
+        self.autoNames = ['Eat Beans', 'Nom Nom']
+        autoString = ''
+
+        for auto in self.autoNames:
+            autoString += str(auto + '$')
+        autoString = autoString[:-1]
+
+        self.table.putString('autoModes', autoString)
+
+        @fc.IF(lambda: Config('Autonomous/autoModeSelect') == 'Eat Beans') # Put given game data here through network tables.
         def simpleAuto(self):
             self.addParallel(ActiveSetHoodCommand(27)) # Sets the hood position
             self.addParallel(ShootCommand(4200)) # spins the shooter up while moving

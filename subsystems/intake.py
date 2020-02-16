@@ -19,6 +19,7 @@ class Intake(DebuggableSubsystem):
         self.intakeSensor = DigitalInput(ports.IntakePorts.sensorID)
 
         self.table = NetworkTables.getTable('Shooter')
+        self.intakeTable = NetworkTables.getTable('Intake')
 
         self.ballCount = 0
         self.table.putNumber('BallCount', self.ballCount)
@@ -29,12 +30,15 @@ class Intake(DebuggableSubsystem):
 
     def intake(self, val=1):
         self.intakeMotor.set(val)
+        self.intakeTable.putString('IntakeStatus', 'Intaking: ' + str(val))
 
     def outake(self):
         self.intakeMotor.set(-1.0)
+        self.intakeTable.putString('IntakeStatus', 'Reversing')
 
     def stop(self):
         self.intakeMotor.stopMotor()
+        self.intakeTable.putString('IntakeStatus', 'Halted')
 
     def monitorIntake(self): # Experimental
         # Gets output current, puts it in milliamperes. The free current (of a bag) at top speed is about 1.8 amps, will spike if more resistance (ball) - see motor chart.
@@ -42,6 +46,9 @@ class Intake(DebuggableSubsystem):
         print(current)
         if current * 1000 > 1800:
             self.ballCount += 1
+
+    def intakeFreakOutNT(self):
+        self.intakeTable.putString('Intakestatus', 'Freaking Out!')
 
     def fumbleForward(self):
         self.intakeMotor.set(1)

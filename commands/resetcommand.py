@@ -23,3 +23,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.colorwheel)
         self.requires(robot.intake)
         self.requires(robot.ballsystem)
+        self.requires(robot.climber)

@@ -14,8 +14,6 @@ class ColorWheel(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Color Wheel')
 
-        driverStation = wpilib.DriverStation.getInstance()
-        self.data = driverStation.getGameSpecificMessage()
         self.colorMatcher = ColorMatch()
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
@@ -39,12 +37,6 @@ class ColorWheel(DebuggableSubsystem):
     def getColor(self):
         self.color = self.colorSensor.getColor()
 
-        #print(self.color.red / self.color.green)
-
-        #print('r ' + str(self.color.red))
-        #print('b ' + str(self.color.blue))
-        #print('g ' + str(self.color.green))
-
         if self.color.blue > self.color.green and self.color.blue > self.color.red:
             return 'b'
         elif self.color.red > self.color.green and self.color.red > self.color.blue:
@@ -53,10 +45,6 @@ class ColorWheel(DebuggableSubsystem):
             return 'y'
         else: #self.color.green > self.color.red and self.color.green > self.color.blue:
             return 'g'
-        #self.firstStrength = max(self.colorCheck.keys())
-        #self.secondStrength = max(self.colorCheck.remove(self.firstStrength))
-
-
 
     def reset(self):
         self.colorWheelMotor.setEncPosition(0.0)

@@ -4,7 +4,7 @@ import robot
 
 class IntakeCommand(Command):
 
-    def __init__(self, speed=1):
+    def __init__(self, speed=0.75):
         super().__init__('Intake')
 
         self.requires(robot.intake)

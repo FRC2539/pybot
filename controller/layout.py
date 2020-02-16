@@ -40,6 +40,8 @@ from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
 from commands.shooter.reverseshootercommand import ReverseShooterCommand
 
+from commands.turret.turretlimelightcommand import TurretLimelightCommand
+
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 
 def init():
@@ -67,7 +69,7 @@ def init():
     driveController.B.whenPressed(OutakeCommand())
 
 
-    #driveController.Y.toggleWhenPressed(ExtendClimberPistonCommand())
+    driveController.Y.toggleWhenPressed(TurretLimelightCommand())
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
