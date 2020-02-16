@@ -69,7 +69,7 @@ def init():
     driveController.B.whenPressed(OutakeCommand())
 
 
-    driveController.Y.toggleWhenPressed(TurretLimelightCommand())
+    #driveController.Y.toggleWhenPressed(TurretLimelightCommand())
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
@@ -92,9 +92,9 @@ def init():
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
 
-    operatorController.Start.toggleWhenPressed(PlayMusicCommand())
+    operatorController.Start.toggleWhenPressed(HoodLimelightCommand())
 
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
-    operatorController.LeftBumper.toggleWhenPressed(ControlledShootCommand(2850))
+    operatorController.LeftBumper.toggleWhenPressed(TurretLimelightCommand())
 
     operatorController.Back.whenPressed(ResetCommand())
