@@ -2,21 +2,20 @@ from wpilib.command import Command
 
 import robot
 
-class turretMoveCommand(Command):
+from controller import logicalaxes
 
-    def __init__(self, speed):
+logicalaxes.registerAxis('turretX')
+
+class TurretMoveCommand(Command):
+
+    def __init__(self):
         super().__init__('turret Move')
 
         self.requires(robot.turret)
-        self.speed = speed
-
-    def initialize(self):
-        pass
-
 
     def execute(self):
-        robot.turret.move(self.speed)
-
+        robot.turret.move(logicalaxes.turretX.get() *  0.2)
+        print(robot.turret.getPosition())
 
     def end(self):
-        pass
+        robot.turret.stop()

@@ -29,7 +29,7 @@ IntakePorts = PortsList()
 
 IntakePorts.motorID = 11
 
-IntakePorts.sensorID = 4 # on DIO; 5 for power
+IntakePorts.sensorID = 0 # on DIO; 5 for power
 
 limelight = PortsList()
 
@@ -42,7 +42,7 @@ shooter = PortsList()
 shooter.motorID = 5
 shooter.motorTwoID = 6
 
-shooter.shooterSensor = 2 # on DIO; 3 for power
+shooter.shooterSensor = 0 # on DIO; 3 for power
 
 ballsystem = PortsList()
 

@@ -32,8 +32,8 @@ class Hood(DebuggableSubsystem):
         self.dir = 'u'
         self.setSpeed = 0.3
 
-        self.angleMax = 155.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
-        self.angleMin = 85.00
+        self.angleMax = 236.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
+        self.angleMin = 166.00
 
         self.zeroNetworkTables()
 
@@ -134,8 +134,7 @@ class Hood(DebuggableSubsystem):
         self.updateNetworkTables(self.getPosition())
 
     def setShootAngle(self, angle):
-        self.targetpos = 155 - 2 * (angle - 8.84)
-        #self.targetpos = 155 - angle
+        self.targetpos = self.angleMax- 2 * (angle - 8.84)
         self.error = -1* (self.getPosition() - self.targetpos)
         if (self.angleMin < self.targetpos < self.angleMax):
             if (abs(self.error) < .4):

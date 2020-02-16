@@ -13,8 +13,6 @@ from commands.intake.clearjamtwocommand import ClearJamTwoCommand
 
 from commands.colorwheel.getcolorcommand import GetColorCommand
 
-from commands.turret.turretmovecommand import turretMoveCommand
-
 from commands.ballsystem.runallcommand import RunAllCommand
 from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
 from commands.ballsystem.runlowercommand import RunLowerCommand
@@ -69,7 +67,7 @@ def init():
 
 
     #driveController.Y.toggleWhenPressed(ExtendClimberPistonCommand())
-    driveController.Y.whenPressed(HoodLimelightCommand())
+    driveController.Y.whenPressed(UpdateHoodNetworkTablesCommand())
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
@@ -81,7 +79,7 @@ def init():
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
 
-    logicalaxes.operatorX = operatorController.RightX
+    logicalaxes.turretX = operatorController.RightX
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())# variable speed, 100% is default
 

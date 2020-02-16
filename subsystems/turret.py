@@ -18,8 +18,8 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
         self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 110 # Dummy values
-        self.min = -110 # Dummy values
+        self.max = 250 # Dummy values
+        self.min = 44 # Dummy values
 
         self.fieldAngle = 0
 
@@ -45,7 +45,10 @@ class Turret(DebuggableSubsystem):
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
     def move(self, val):
-        self.motor.set(ControlMode.PercentOutput, val)
+        if self.getPosition() < self.max and self.getPosition() > self.min:
+            self.motor.set(ControlMode.PercentOutput, val)
+        else:
+            self.stop()
 
     def stop(self):
         self.motor.stopMotor()
@@ -90,8 +93,8 @@ class Turret(DebuggableSubsystem):
         subsystem, we will drive via joystick using the max speed stored in
         Config.
         '''
-        from commands.turret.defaultcommand import DefaultCommand
+        from commands.turret.turretmovecommand import TurretMoveCommand
 
-        self.setDefaultCommand(DefaultCommand())
+        self.setDefaultCommand(TurretMoveCommand())
 
 

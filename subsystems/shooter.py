@@ -31,7 +31,7 @@ class Shooter(DebuggableSubsystem):
         self.ballCount = 5 #Config('
         #self.rpm = 6000 # Make NT value
 
-        self.motor.setInverted(True)
+        self.motor.setInverted(False)
 
         self.controller.setFF(0.000162, 0)
         self.controller.setP(0.0015, 0)
