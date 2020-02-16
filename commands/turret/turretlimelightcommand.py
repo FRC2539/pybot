@@ -18,6 +18,7 @@ class TurretLimelightCommand(Command):
     def execute(self):
         self.rotate = robot.limelight.getX()*-.035
         robot.turret.move(self.rotate)
+        print('self.rotate')
 
 
 

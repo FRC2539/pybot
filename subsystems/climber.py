@@ -1,6 +1,6 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
-from rev import ControlType, MotorType, CANSparkMax
+from rev import ControlType, MotorType, CANSparkMax, IdleMode
 
 import ports
 
@@ -15,6 +15,8 @@ class Climber(DebuggableSubsystem):
         self.winchController = self.winchMotor.getPIDController()
         self.winchEncoder = self.winchMotor.getEncoder()
 
+        self.winchMotor.setIdleMode(IdleMode.kBrake)
+
         self.winchMotor.setInverted(False)
 
     def retract(self): # 'pull' up.
@@ -22,3 +24,6 @@ class Climber(DebuggableSubsystem):
 
     def loosen(self):
         self.winchMotor.set(-0.8)
+
+    def slowRetract(self):
+        self.winchMotor.set(0.4)

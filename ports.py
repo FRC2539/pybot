@@ -1,4 +1,5 @@
 
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -68,3 +69,5 @@ pneumaticSystem.climberSolenoidReverse = 1 # On PCM
 
 pneumaticSystem.colorWheelSolenoidForward = 2 # On PCM
 pneumaticSystem.colorWheelSolenoidReverse = 3 # On PCM
+
+trolley = PortsList()
