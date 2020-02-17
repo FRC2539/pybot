@@ -95,7 +95,7 @@ def init():
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
 
-    operatorController.Start.toggleWhenPressed(SetLaunchAngleCommand(25))
+    operatorController.Start.toggleWhenPressed(SetLaunchAngleCommand(20))
 
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())

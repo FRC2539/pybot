@@ -11,13 +11,15 @@ class RunUntilLoadedCommand(Command):
         self.requires(robot.intake)
 
     def initialize(self):
-        robot.intake.intake()
+        robot.intake.intake(0.7)
         if not robot.ballsystem.isBallPrimed():
             robot.ballsystem.setHorizontalCoast()
             robot.ballsystem.runLowerConveyorSlow()
 
     def execute(self):
         print('hmmm ' + str(robot.ballsystem.isBallPrimed()))
+        print(robot.ballsystem.isBallPrimed())
+
         if robot.ballsystem.isBallPrimed():
             robot.ballsystem.stopLowerConveyor()
         else:

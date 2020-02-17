@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, WPI_TalonFX, TalonFXControlMode, TalonFXPIDSetConfiguration, TalonFXFeedbackDevice, Orchestra, FeedbackDevice
+from ctre import ControlMode, NeutralMode, WPI_TalonFX, TalonFXControlMode, TalonFXSensorCollection, TalonFXPIDSetConfiguration, TalonFXFeedbackDevice, Orchestra, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -28,10 +28,10 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = 10#Config('DriveTrain\FalconP', 0.03)
-            self.falconI = 0.001#Config('DriveTrain\FalconI', 0.00001)
-            self.falconD = 0.1#Config('DriveTrain\FalconD', 0)
-            self.falconF = 0.7 #Config('DriveTrain\FalconF', 0.1)
+            self.falconP = 0#Config('DriveTrain\FalconP', 0.03)
+            self.falconI = 0#Config('DriveTrain\FalconI', 0.00001)
+            self.falconD = 0#Config('DriveTrain\FalconD', 0)
+            self.falconF = 100 #Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = 0#Config('DriveTrain\FalconIZone', 0)
 
             #self.bensGloriousOrchestra = Orchestra()
@@ -52,7 +52,7 @@ class BaseDrive(DebuggableSubsystem):
                 ]
 
             for motor in self.motors:
-                motor.setNeutralMode(NeutralMode.Coast)
+                motor.setNeutralMode(NeutralMode.Brake)
                 motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
                 #self.bensGloriousOrchestra.addInstrument(motor)
 
@@ -149,7 +149,6 @@ class BaseDrive(DebuggableSubsystem):
 
         self.activeMotors = []
         self._configureMotors(self.compBot)
-
 
         for motor in self.activeMotors:
             motor.configClosedloopRamp(0, 0)
@@ -334,8 +333,6 @@ class BaseDrive(DebuggableSubsystem):
         coordinates have not changed.
         '''
 
-        rotate *= 0.7
-
         if [x, y, rotate] == self.lastInputs:
             return
 
@@ -374,9 +371,9 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print('vel ' + str(motor.getPIDConfigs(TalonFXPIDSetConfiguration(FeedbackDevice.IntegratedSensor), 0, 0)))
+                print('vel ' + str((TalonFXSensorCollection(motor).getIntegratedSensorVelocity())))
 
-                motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit)
+                motor.set(TalonFXControlMode.PercentOutput, speed * self.maxPercentVBus) # make this velocity
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
