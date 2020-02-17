@@ -26,7 +26,6 @@ class MoveCommand(Command):
         super()._initialize()
         self.precision = robot.drivetrain.inchesToUnits(1)
 
-
     def initialize(self):
         print('began Move command \n\n')
         self.obstacleCount = 0
@@ -44,6 +43,7 @@ class MoveCommand(Command):
         robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
+        print('pos' + str(robot.drivetrain.getPositions()))
         if self.avoidCollisions:
             try:
                 if self.distance < 0:

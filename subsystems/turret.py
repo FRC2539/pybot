@@ -18,7 +18,7 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
         self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 2300 # Dummy values
+        self.max = 2200# Dummy values
         self.min = 0 # Dummy values
 
         self.fieldAngle = 0
@@ -45,12 +45,13 @@ class Turret(DebuggableSubsystem):
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
     def move(self, val):
+        self.speed = val * 1
         if self.getPosition() < self.max and self.getPosition() > self.min:
-            self.motor.set(ControlMode.PercentOutput, val)
+            self.motor.set(ControlMode.PercentOutput, self.speed)
         elif self.getPosition() > self.max and val > 0:
-            self.motor.set(ControlMode.PercentOutput, val)
+            self.motor.set(ControlMode.PercentOutput, self.speed)
         elif self.getPosition() < self.min and val < 0:
-            self.motor.set(ControlMode.PercentOutput, val)
+            self.motor.set(ControlMode.PercentOutput, self.speed)
         else:
             self.stop()
 

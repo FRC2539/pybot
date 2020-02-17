@@ -28,11 +28,11 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = Config('DriveTrain\FalconP', 0.03)
-            self.falconI = Config('DriveTrain\FalconI', 0.00001)
-            self.falconD = Config('DriveTrain\FalconD', 0)
-            self.falconF = Config('DriveTrain\FalconF', 0.1)
-            self.falconIZone = Config('DriveTrain\FalconIZone', 0)
+            self.falconP = 1#Config('DriveTrain\FalconP', 0.03)
+            self.falconI = 0.00001#Config('DriveTrain\FalconI', 0.00001)
+            self.falconD = 10#Config('DriveTrain\FalconD', 0)
+            self.falconF = 0.1#Config('DriveTrain\FalconF', 0.1)
+            self.falconIZone = 0#Config('DriveTrain\FalconIZone', 0)
 
             #self.bensGloriousOrchestra = Orchestra()
             self.bensGloriousOrchestra = None
@@ -67,6 +67,7 @@ class BaseDrive(DebuggableSubsystem):
             self.neverPlayMusic = self.definitleyNotPlayMusic
             self.nopeNotPauseMusic = self.notPauseMusic
             self.noStopMusicHere = self.certainlyNotStopMusic
+            self.resetEncoders = self.falconResetEncoders
 
         else:
 
@@ -122,6 +123,7 @@ class BaseDrive(DebuggableSubsystem):
             self.neverPlayMusic = self.null
             self.nopeNotPauseMusic = self.null
             self.noStopMusicHere = self.null
+            self.resetEncoders = self.null
 
             print('set methods')
 
@@ -161,7 +163,7 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders()
-        self.maxSpeed = Config('DriveTrain/maxSpeed')
+        self.maxSpeed = Config('DriveTrain/maxSpeed', 1)
         self.speedLimit = 1#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
@@ -178,7 +180,9 @@ class BaseDrive(DebuggableSubsystem):
         self.debugMotor('Front Right Motor', self.motors[1])
 
         self.resetPID()
+        self.resetEncoders()
 
+        self.setProfile(0)
 
         try:
             self.debugMotor('Back Left Motor', self.motors[2])
@@ -357,11 +361,11 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.speedLimit)
+                motor.set(ControlMode.MotionMagic, speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+                motor.set(ControlMode.MotionMagic, speed * self.maxPercentVBus)
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -636,6 +640,9 @@ class BaseDrive(DebuggableSubsystem):
 
         table.addSubTableListener(updatePID, localNotify=True)
 
+    def falconResetEncoders(self):
+        for motor in self.activeMotors:
+            motor.setSelectedSensorPosition(0, 0, 0)
 
     def _configureMotors(self):
         '''

@@ -10,6 +10,7 @@ from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OutakeCommand
 from commands.intake.clearjamtwocommand import ClearJamTwoCommand
+from commands.intake.stopeverythingcommand import StopEverythingCommand
 
 from commands.colorwheel.getcolorcommand import GetColorCommand
 
@@ -43,6 +44,7 @@ from commands.shooter.reverseshootercommand import ReverseShooterCommand
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
+from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 def init():
     '''
@@ -64,7 +66,7 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(IntakeCommand(0.6))
+    driveController.A.toggleWhenPressed(IntakeCommand(0.4))
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
 
@@ -95,6 +97,6 @@ def init():
     operatorController.Start.toggleWhenPressed(HoodLimelightCommand())
 
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
-    operatorController.LeftBumper.toggleWhenPressed(TurretLimelightCommand())
+    operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.Back.whenPressed(ResetCommand())
+    operatorController.Back.whenPressed(StopEverythingCommand())

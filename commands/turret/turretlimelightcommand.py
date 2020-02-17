@@ -1,6 +1,7 @@
 from wpilib.command import Command
 
 import robot
+import math
 
 class TurretLimelightCommand(Command):
 
@@ -16,9 +17,11 @@ class TurretLimelightCommand(Command):
 
 
     def execute(self):
-        self.rotate = robot.limelight.getX()*-.035
+        self.rotate = robot.limelight.getX() * -.035
+        if (abs(self.rotate) > .3):
+            self.rotate = math.copysign(.3, self.rotate)
         robot.turret.move(self.rotate)
-        print('self.rotate')
+        print(str(self.rotate))
 
 
 

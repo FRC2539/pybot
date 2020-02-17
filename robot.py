@@ -7,6 +7,7 @@ from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
 
+from commands import configauto
 from custom import driverhud
 import controller.layout
 import subsystems
@@ -39,6 +40,7 @@ class KryptonBot(CommandBasedRobot):
         self.subsystems()
         controller.layout.init()
         driverhud.init()
+        configauto.init()
 
         from commands.startupcommandgroup import StartUpCommandGroup
         StartUpCommandGroup().start()
