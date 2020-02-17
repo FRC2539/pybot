@@ -66,7 +66,7 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(IntakeCommand(0.4))
+    driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.whenPressed(GetColorCommand())
     driveController.B.whenPressed(OutakeCommand())
 

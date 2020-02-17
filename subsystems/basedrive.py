@@ -7,7 +7,7 @@ import csv
 
 from networktables import NetworkTables
 
-from ctre import ControlMode, NeutralMode, WPI_TalonFX, TalonFXFeedbackDevice, Orchestra, FeedbackDevice
+from ctre import ControlMode, NeutralMode, WPI_TalonFX, TalonFXControlMode, TalonFXPIDSetConfiguration, TalonFXFeedbackDevice, Orchestra, FeedbackDevice
 from rev import CANSparkMax, MotorType, ControlType
 
 from navx import AHRS
@@ -28,10 +28,10 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = 1#Config('DriveTrain\FalconP', 0.03)
-            self.falconI = 0.00001#Config('DriveTrain\FalconI', 0.00001)
-            self.falconD = 10#Config('DriveTrain\FalconD', 0)
-            self.falconF = 0.1#Config('DriveTrain\FalconF', 0.1)
+            self.falconP = 10#Config('DriveTrain\FalconP', 0.03)
+            self.falconI = 0.001#Config('DriveTrain\FalconI', 0.00001)
+            self.falconD = 0.1#Config('DriveTrain\FalconD', 0)
+            self.falconF = 0.7 #Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = 0#Config('DriveTrain\FalconIZone', 0)
 
             #self.bensGloriousOrchestra = Orchestra()
@@ -52,7 +52,7 @@ class BaseDrive(DebuggableSubsystem):
                 ]
 
             for motor in self.motors:
-                motor.setNeutralMode(NeutralMode.Brake)
+                motor.setNeutralMode(NeutralMode.Coast)
                 motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
                 #self.bensGloriousOrchestra.addInstrument(motor)
 
@@ -143,10 +143,22 @@ class BaseDrive(DebuggableSubsystem):
         self.compBot = True#Config('DriveTrain/Robot', True) # Commented to test for NEO temporarily.
 
         self.setDriveTrain(self.compBot)
+
+
         self.setupRecordData()
 
         self.activeMotors = []
         self._configureMotors(self.compBot)
+
+
+        for motor in self.activeMotors:
+            motor.configClosedloopRamp(0, 0)
+            for profile in range(2):
+                motor.config_kP(profile, self.falconP, 0)
+                motor.config_kI(profile, self.falconI, 0)
+                motor.config_kD(profile, self.falconD, 0)
+                motor.config_kF(profile, self.falconF, 0)
+                motor.config_IntegralZone(profile, self.falconIZone, 0)
 
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
@@ -162,11 +174,11 @@ class BaseDrive(DebuggableSubsystem):
             #print('failed to load orchestra')
 
 
-        self.setUseEncoders()
-        self.maxSpeed = Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 1#Config('DriveTrain/normalSpeed')
+        self.setUseEncoders(True)
+        self.maxSpeed = 2500#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 2000#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
-        self.maxPercentVBus = 1
+        self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
@@ -340,7 +352,6 @@ class BaseDrive(DebuggableSubsystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
-
         '''Prevent speeds > 1'''
         maxSpeed = 0
         for speed in speeds:
@@ -348,6 +359,8 @@ class BaseDrive(DebuggableSubsystem):
 
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
+
+        print('two ' + str(speeds))
 
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
@@ -361,11 +374,13 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.MotionMagic, speed * self.speedLimit)
+                print('vel ' + str(motor.getPIDConfigs(TalonFXPIDSetConfiguration(FeedbackDevice.IntegratedSensor), 0, 0)))
+
+                motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit)
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.MotionMagic, speed * self.maxPercentVBus)
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -402,7 +417,7 @@ class BaseDrive(DebuggableSubsystem):
             (motor.getPIDController()).setReference(position, ControlType.kPosition, 0, 0)
 
 
-    def falconAverageError(self, positions):
+    def falconAverageError(self, positions=None):
         '''Find the average distance between setpoint and current position.'''
         error = 0
         for motor in self.activeMotors:
@@ -442,11 +457,10 @@ class BaseDrive(DebuggableSubsystem):
         pass # can't do this..
 
 
-    def falconSetProfile(self, profile):
+    def falconSetProfile(self, profile=0):
         '''Select which PID profile to use.'''
         for motor in self.activeMotors:
             motor.selectProfileSlot(profile, 0)
-
 
     def falconResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
@@ -458,6 +472,17 @@ class BaseDrive(DebuggableSubsystem):
                 motor.config_kD(profile, self.falconD, 0)
                 motor.config_kF(profile, self.falconF, 0)
                 motor.config_IntegralZone(profile, self.falconIZone, 0)
+
+            #motor.configMotionAcceleration(6000, 0)
+            #motor.configMotionCruiseVelocity(15000, 0)
+            #motor.configMotionSCurveStrength(5, 0)
+            #motor.configPeakOutputForward(1, 0)
+            #motor.configPeakOutputReverse(-1, 0)
+
+            #motor.configNominalOutputForward(0, 0)
+            #motor.configNominalOutputReverse(0, 0)
+
+            #motor.configurePID(TalonFXPIDSetConfiguration(FeedbackDevice.IntegratedSensor), 0, 0)
 
     def neoResetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
@@ -472,6 +497,7 @@ class BaseDrive(DebuggableSubsystem):
                 controller.setFF(self.neoFF, profile)
                 controller.setIZone(self.neoIZone, profile)
                 controller.setOutputRange(-1, 1, profile)
+
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
@@ -642,6 +668,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def falconResetEncoders(self):
         for motor in self.activeMotors:
+            motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
             motor.setSelectedSensorPosition(0, 0, 0)
 
     def _configureMotors(self):

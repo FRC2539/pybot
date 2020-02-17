@@ -84,7 +84,8 @@ class Turret(DebuggableSubsystem):
             self.motor.stopMotor()
 
     def printPosition(self):
-        print(str(self.motor.getSelectedSensorPosition(0)))
+        #print(str(self.motor.getSelectedSensorPosition(0)))
+        pass
 
     def getPosition(self):
         #return (self.motor.getSelectedSensorPosition(0) % 360)
