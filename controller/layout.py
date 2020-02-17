@@ -33,6 +33,7 @@ from commands.hood.sethoodcommand import SetHoodCommand
 from commands.hood.hoodtestcommand import hoodTestCommand
 from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTablesCommand
 from commands.hood.hoodlimelightcommand import HoodLimelightCommand
+from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
 
 from commands.limelight.lltestcommand import llTestCommand
 from commands.limelight.finitereecommand import finiteReeCommand
@@ -94,7 +95,7 @@ def init():
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
 
-    operatorController.Start.toggleWhenPressed(HoodLimelightCommand())
+    operatorController.Start.toggleWhenPressed(SetLaunchAngleCommand(25))
 
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())

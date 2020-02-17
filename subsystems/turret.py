@@ -17,8 +17,8 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kI(0, 0, 0)
         self.motor.config_kD(0, .001, 0)
         self.motor.config_kF(0, .00019, 0)
-        self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 2200# Dummy values
+        #self.motor.config_IntegralZone(0, 0, 0)
+        self.max = 2000# Dummy values
         self.min = 0 # Dummy values
 
         self.fieldAngle = 0
