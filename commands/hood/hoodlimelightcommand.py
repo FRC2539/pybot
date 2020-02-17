@@ -16,7 +16,7 @@ class HoodLimelightCommand(Command):
 
     def execute(self):
         robot.limelight.updateNetworkTables()
-        robot.hood.setShootAngle((1/4500)*(robot.limelight.calcDistance()-280)*(robot.limelight.calcDistance()-280) + 14)
+        robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + 15.75)
         #if (robot.limelight.calcDistance()<120):
             #robot.hood.setShootAngle(38)
         #elif (robot.limelight.calcDistance()<140):

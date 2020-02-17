@@ -13,13 +13,15 @@ class Turret(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, .0001, 0)
+        self.motor.config_kP(0, 0.0001, 0)
         self.motor.config_kI(0, 0, 0)
-        self.motor.config_kD(0, .001, 0)
-        self.motor.config_kF(0, .00019, 0)
+        self.motor.config_kD(0, 0.001, 0)
+        self.motor.config_kF(0, 0.00019, 0)
         #self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 2000# Dummy values
+        self.max = 2250# Dummy values
         self.min = 0 # Dummy values
+
+        self.limitSwitch = wpilib.DigitalInput(ports.turret.limitSwitch)
 
         self.fieldAngle = 0
 
@@ -45,15 +47,22 @@ class Turret(DebuggableSubsystem):
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
     def move(self, val):
-        self.speed = val * 1
-        if self.getPosition() < self.max and self.getPosition() > self.min:
-            self.motor.set(ControlMode.PercentOutput, self.speed)
-        elif self.getPosition() > self.max and val > 0:
-            self.motor.set(ControlMode.PercentOutput, self.speed)
-        elif self.getPosition() < self.min and val < 0:
-            self.motor.set(ControlMode.PercentOutput, self.speed)
+        if self.isZeroed() and val > 0:
+            self.stop() # does not let a positive direction proceed if zeroed.
+        elif self.getPosition() >= self.max and val < 0:
+            self.stop() # does not let a negative direction proceed if maxed.
         else:
-            self.stop()
+            self.motor.set(val)
+
+            #self.speed = val * 1
+            #if self.getPosition() < self.max and self.getPosition() > self.min:
+                #self.motor.set(ControlMode.PercentOutput, self.speed)
+            #elif self.getPosition() > self.max and val > 0:
+                #self.motor.set(ControlMode.PercentOutput, self.speed)
+            #elif self.getPosition() < self.min and val < 0:
+                #self.motor.set(ControlMode.PercentOutput, self.speed)
+            #else:
+                #self.stop()
 
     def stop(self):
         self.motor.stopMotor()
@@ -98,6 +107,14 @@ class Turret(DebuggableSubsystem):
 
     def setZero(self):
         self.motor.setSelectedSensorPosition(0, 0, 0)
+
+    def isZeroed(self):
+        if not self.limitSwitch.get():
+            self.stop()
+            self.setZero()
+            return True
+
+        return False
 
     def initDefaultCommand(self):
         '''

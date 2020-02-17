@@ -25,25 +25,27 @@ ColorWheelPorts.motorID = 15
 hood = PortsList
 
 hood.motorID = 7
+hood.absoluteThroughbore = 9 # DI/O
 
 IntakePorts = PortsList()
 
 IntakePorts.motorID = 11
 
-IntakePorts.sensorID = 4 # on DIO; 5 for power
+IntakePorts.sensorID = 4 # on DI/O; 5 for power
 
 limelight = PortsList()
 
 turret = PortsList()
 
 turret.motorID = 8
+turret.limitSwitch = 8 # on DI/O;
 
 shooter = PortsList()
 
 shooter.motorID = 5
 shooter.motorTwoID = 6
 
-shooter.shooterSensor = 2 # on DIO; 3 for power
+shooter.shooterSensor = 2 # on DI/O; 3 for power
 
 ballsystem = PortsList()
 

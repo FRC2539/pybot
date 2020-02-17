@@ -28,10 +28,10 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = 0#Config('DriveTrain\FalconP', 0.03)
-            self.falconI = 0#Config('DriveTrain\FalconI', 0.00001)
-            self.falconD = 0#Config('DriveTrain\FalconD', 0)
-            self.falconF = 100 #Config('DriveTrain\FalconF', 0.1)
+            self.falconP = 0.001#Config('DriveTrain\FalconP', 0.03)
+            self.falconI = 0.00#Config('DriveTrain\FalconI', 0.00001)
+            self.falconD = 15.00#Config('DriveTrain\FalconD', 0)
+            self.falconF = 0.1 #Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = 0#Config('DriveTrain\FalconIZone', 0)
 
             #self.bensGloriousOrchestra = Orchestra()
@@ -150,14 +150,6 @@ class BaseDrive(DebuggableSubsystem):
         self.activeMotors = []
         self._configureMotors(self.compBot)
 
-        for motor in self.activeMotors:
-            motor.configClosedloopRamp(0, 0)
-            for profile in range(2):
-                motor.config_kP(profile, self.falconP, 0)
-                motor.config_kI(profile, self.falconI, 0)
-                motor.config_kD(profile, self.falconD, 0)
-                motor.config_kF(profile, self.falconF, 0)
-                motor.config_IntegralZone(profile, self.falconIZone, 0)
 
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
@@ -174,8 +166,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 2500#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 2000#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 7000#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 7000#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -357,7 +349,6 @@ class BaseDrive(DebuggableSubsystem):
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
 
-        print('two ' + str(speeds))
 
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
@@ -373,7 +364,7 @@ class BaseDrive(DebuggableSubsystem):
             for motor, speed in zip(self.activeMotors, speeds):
                 print('vel ' + str((TalonFXSensorCollection(motor).getIntegratedSensorVelocity())))
 
-                motor.set(TalonFXControlMode.PercentOutput, speed * self.maxPercentVBus) # make this velocity
+                motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):

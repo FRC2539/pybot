@@ -26,7 +26,7 @@ class Hood(DebuggableSubsystem):
         #self.controller.setD(0.001, 0)
         #self.controller.setIZone(0, 0)
 
-        source_ = wpilib.DigitalInput(9)
+        source_ = wpilib.DigitalInput(ports.hood.absoluteThroughbore)
         self.tbEnc = wpilib.DutyCycle(source_)
 
         self.dir = 'u'
