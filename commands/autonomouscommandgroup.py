@@ -28,7 +28,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Eat Beans') # Put given game data here through network tables.
         def simpleAuto(self):
-            self.addSequential(MoveCommand(-36)) # goes back 90 inches.
             self.addParallel(ShootCommand(4200)) # prespin the shooter.
             self.addSequential(SudoCommandGroup(), 1) # sets turret and hood
-            self.addSequential(RunBallFlowCommandGroup(), 6) # runs the ball feed to shoot.
+            self.addSequential(RunBallFlowCommandGroup(), 7) # runs the ball feed to shoot.
+            self.addSequential(MoveCommand(-12)) # goes back 12 inches.
