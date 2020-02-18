@@ -389,10 +389,10 @@ class BaseDrive(DebuggableSubsystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            #motor.selectProfileSlot(1, 0)
-            #motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            #motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.Position, position)
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
 
     def neoSetPositions(self, positions):
         if not self.useEncoders:
