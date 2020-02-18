@@ -32,27 +32,28 @@ class AutonomousCommandGroup(fc.CommandFlow):
             print('I RAN!!!')
             #self.addParallel(ActiveSetHoodCommand(27)) # Sets the hood position
             self.addParallel(ShootCommand(4200)) # spins the shooter up while moving
-            self.addSequential(MoveCommand(-36)) # goes back 90 inches.
+            self.addSequential(MoveCommand(-90)) # goes back 90 inches.
             #self.addSequential(TurnCommand(-10)) # turns ten degrees left
             #self.addSequential(ControlledShootCommand(4200), 8) # only shoots when around 4200, gives 8 seconds
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port')
         def rennaFirstFunction(self):
             print ("I Shoot")
-            self.addParallel(ShootCommand()) #Set hood position
+            self(ShootCommand()) #Set hood position
             self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
-            self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot
+            self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot.addParallel
             self.addSequential(MoveCommand(-36)) # Goes back 90 inches
             self.addSequential(TurnCommand(90)) #Turns 90 degrees right
-            self.addSequential(MoveCommand(26.4)) # Go forward 66 inches
+            self.addSequential(MoveCommand(66)) # Go forward 66 inches
             self.addSequential(TurnCommand(90)) #Turns 90 degrees right (and face trench)
-            self.addSequential(MoveCommand(71.56))#Go forward 178 inches
+            self.addSequential(MoveCommand(114.63))#Go forward 114.63 inches
             self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
 
         @fc.IF (lambda: str(Config('Autonomous/autoModeSelect')) == 'SkSkSkirt off the init line')
         def getOffInitLine (self):
             print("sksksk")
-            self.addSequential(MoveCommand(-36)) #Get off the initiation line
+            self.addSequential(MoveCommand(-36)) #Go back 90 inches Get off the initiation line
+            self.addSequential(
 
 
 

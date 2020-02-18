@@ -166,8 +166,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 5000#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 5000#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 7000#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 7000#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -389,10 +389,10 @@ class BaseDrive(DebuggableSubsystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            #motor.selectProfileSlot(1, 0)
-            #motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            #motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.Position, position)
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
 
     def neoSetPositions(self, positions):
         if not self.useEncoders:

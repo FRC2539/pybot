@@ -26,4 +26,5 @@ class TurretLimelightCommand(Command):
 
 
     def end(self):
+        robot.turret.stop()
         robot.limelight.setPipeline(0)
