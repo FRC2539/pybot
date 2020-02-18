@@ -5,6 +5,8 @@ import wpilib
 import ports
 from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX, NeutralMode
 
+from networktables import NetworkTables as nt
+
 import robot
 
 class Turret(DebuggableSubsystem):
@@ -20,6 +22,8 @@ class Turret(DebuggableSubsystem):
         #self.motor.config_IntegralZone(0, 0, 0)
         self.max = 2250# Dummy values
         self.min = 0 # Dummy values
+
+        self.table = nt.getTable('Turret')
 
         self.limitSwitch = wpilib.DigitalInput(ports.turret.limitSwitch)
 
@@ -47,6 +51,7 @@ class Turret(DebuggableSubsystem):
         #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
 
     def move(self, val):
+        self.updateNetworkTables()
         if self.isZeroed() and val > 0:
             self.stop() # does not let a positive direction proceed if zeroed.
         elif self.getPosition() >= self.max and val < 0:
