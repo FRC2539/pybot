@@ -30,7 +30,7 @@ class BaseDrive(DebuggableSubsystem):
 
             self.falconP = 0.001#Config('DriveTrain\FalconP', 0.03)
             self.falconI = 0.00#Config('DriveTrain\FalconI', 0.00001)
-            self.falconD = 15.00#Config('DriveTrain\FalconD', 0)
+            self.falconD = 5.00#Config('DriveTrain\FalconD', 0)
             self.falconF = 0.1 #Config('DriveTrain\FalconF', 0.1)
             self.falconIZone = 0#Config('DriveTrain\FalconIZone', 0)
 
@@ -166,8 +166,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 7000#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 7000#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 5000#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 5000#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -684,3 +684,4 @@ class BaseDrive(DebuggableSubsystem):
         pass
     def null(self):
         pass
+
