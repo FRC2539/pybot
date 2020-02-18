@@ -96,6 +96,9 @@ class Turret(DebuggableSubsystem):
         #print(str(self.motor.getSelectedSensorPosition(0)))
         pass
 
+    def updateNetworkTables(self, angle=85.00):
+        self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
+
     def getPosition(self):
         #return (self.motor.getSelectedSensorPosition(0) % 360)
         return (self.motor.getSelectedSensorPosition(0))

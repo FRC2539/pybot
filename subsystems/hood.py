@@ -80,7 +80,7 @@ class Hood(DebuggableSubsystem):
     def updateNetworkTables(self, angle=85.00):
         self.table.putNumber('HoodAngle', round(self.getPosition(), 2))
         self.table.putNumber('DesiredHoodAngle', round(angle, 2))
-        self.table.putNumber('LaunchAngle', (((155 - self.getPosition()) / 2) + 8.84))
+        self.table.putNumber('LaunchAngle', (((self.angleMax - self.getPosition()) / 2) + 8.84))
 
     def zeroNetworkTables(self):
         self.table.putNumber('HoodAngle', self.angleMin)
