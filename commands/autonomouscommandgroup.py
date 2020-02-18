@@ -11,12 +11,17 @@ from commands.network.alertcommand import AlertCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 
-from commands.hood.activesethoodcommand import ActiveSetHoodCommand
+from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
 
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
 
 from commands.colorwheel.autosetwheel import AutoSetWheelCommand
+
+from commands.limelight.sudocommandgroup import SudoCommandGroup
+
+from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
+from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
 class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
@@ -30,3 +35,29 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(MoveCommand(-36)) # goes back 90 inches.
             #self.addSequential(TurnCommand(-10)) # turns ten degrees left
             #self.addSequential(ControlledShootCommand(4200), 8) # only shoots when around 4200, gives 8 seconds
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port')
+        def rennaFirstFunction(self):
+            print ("I Shoot")
+            self.addParallel(ShootCommand()) #Set hood position
+            self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
+            self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot
+            self.addSequential(MoveCommand(-36)) # Goes back 90 inches
+            self.addSequential(TurnCommand(90)) #Turns 90 degrees right
+            self.addSequential(MoveCommand(26.4)) # Go forward 66 inches
+            self.addSequential(TurnCommand(90)) #Turns 90 degrees right (and face trench)
+            self.addSequential(MoveCommand(71.56))#Go forward 178 inches
+            self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
+
+        @fc.IF (lambda: str(Config('Autonomous/autoModeSelect')) == 'SkSkSkirt off the init line')
+        def getOffInitLine (self):
+            print("sksksk")
+            self.addSequential(MoveCommand(-36)) #Get off the initiation line
+
+
+
+
+
+
+
+

@@ -3,7 +3,7 @@ from networktables import NetworkTables
 def init():
     table = NetworkTables.getTable('Autonomous')
 
-    autoNames = ['Eat Beans', 'Nom Nom']
+    autoNames = ['Eat Beans', 'Inner Power Port :)', 'SkSkSkirt off the init line']
     autoString = ''
 
     for auto in autoNames:
