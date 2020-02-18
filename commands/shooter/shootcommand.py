@@ -4,7 +4,7 @@ import robot
 
 class ShootCommand(Command):
 
-    def __init__(self, rpm=4200):
+    def __init__(self, rpm):
         super().__init__('Shoot')
         self.requires(robot.shooter)
 

@@ -15,3 +15,6 @@ class StopEverythingCommand(InstantCommand):
         robot.ballsystem.stopAll()
         robot.intake.stop()
         robot.shooter.stop()
+
+    def end(self):
+        pass

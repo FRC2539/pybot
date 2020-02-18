@@ -41,6 +41,7 @@ from commands.limelight.finitereecommand import finiteReeCommand
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
 from commands.shooter.reverseshootercommand import ReverseShooterCommand
+from commands.shooter.farshotcommandgroup import FarShotCommandGroup
 
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
@@ -95,9 +96,9 @@ def init():
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
 
-    operatorController.Start.toggleWhenPressed(SetLaunchAngleCommand(24))
+    operatorController.Start.toggleWhenPressed(FarShotCommandGroup())
 
-    operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
+    operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
     operatorController.Back.whenPressed(StopEverythingCommand())

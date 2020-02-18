@@ -100,6 +100,6 @@ class Shooter(DebuggableSubsystem):
     def getRPM(self):
         return ((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2)
 
-    def setRPM(self, rpm=4200):
+    def setRPM(self, rpm):
         self.controller.setReference(float(rpm), ControlType.kVelocity, 0, 0)
         #self.secondController.setReference(float(rpm), ControlType.kVelocity, 0, 0)
