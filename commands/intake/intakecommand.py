@@ -4,7 +4,7 @@ import robot
 
 class IntakeCommand(Command):
 
-    def __init__(self, speed=1):
+    def __init__(self, speed=0.5):
         super().__init__('Intake')
 
         self.requires(robot.intake)
@@ -12,8 +12,9 @@ class IntakeCommand(Command):
 
     def initialize(self):
         robot.intake.intake(self.speed)
-        print('\n\n\n\n RUNNING INTAKE\n\n\n\n\n')
+
+    def execute(self):
+        robot.intake.sensorCount()
 
     def end(self):
-        print('\n\n\n\n\n\n STOPPING INTAKE \n\n\n\n')
         robot.intake.stop()

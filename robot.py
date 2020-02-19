@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
 
-# Monkey-patching out NetworkTables methods
-import wpilib
-wpilib.SmartDashboard.putData = lambda x, y: None
-class MockSendableChooser:
-    def addDefault(self, x, y):
-        self.choice = y
-    def getSelected(self):
-        return self.choice
-wpilib.SendableChooser = MockSendableChooser
-import networktables
-def mockAddTableListener(x, y, localNotify=None):
-    pass
-networktables.NetworkTable.addTableListener = mockAddTableListener
 import wpilib.command
 wpilib.command.Command.isFinished = lambda x: False
 
@@ -20,6 +7,7 @@ from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
 
+from commands import configauto
 from custom import driverhud
 import controller.layout
 import subsystems
@@ -37,6 +25,8 @@ from subsystems.turret import Turret as turret
 from subsystems.shooter import Shooter as shooter
 from subsystems.ballsystem import BallSystem as ballsystem
 from subsystems.pneumaticsystems import PneumaticSystems as pneumaticsystems
+from subsystems.climber import Climber as climber
+from subsystems.trolley import Trolley as trolley
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
@@ -50,9 +40,10 @@ class KryptonBot(CommandBasedRobot):
         self.subsystems()
         controller.layout.init()
         driverhud.init()
+        configauto.init()
 
         from commands.startupcommandgroup import StartUpCommandGroup
-        #StartUpCommandGroup().start()
+        StartUpCommandGroup().start()
 
 
     def autonomousInit(self):
@@ -66,17 +57,22 @@ class KryptonBot(CommandBasedRobot):
         auton.start()
         driverhud.showInfo("Starting %s" % auton)
 
+
+    def handleCrash(self, error):
+        super().handleCrash()
+        driverhud.showAlert('Fatal Error: %s' % error)
+
+
     @classmethod
     def subsystems(cls):
         vars = globals()
         module = sys.modules['robot']
         for key, var in vars.items():
             try:
-                print(str(key) + ' + ' + str(var) + ' & ' + str(issubclass(var, Subsystem) and var is not Subsystem))
                 if issubclass(var, Subsystem) and var is not Subsystem:
                     try:
                         setattr(module, key, var())
-                    except Exception as e:
+                    except TypeError as e:
                         raise ValueError(f'Could not instantiate {key}') from e
             except TypeError:
                 pass

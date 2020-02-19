@@ -2,6 +2,7 @@ from .debuggablesubsystem import DebuggableSubsystem
 
 from wpilib import DigitalInput
 
+import robot
 import ports
 
 from rev import CANSparkMax, ControlType, MotorType
@@ -30,7 +31,7 @@ class Shooter(DebuggableSubsystem):
         self.ballCount = 5 #Config('
         #self.rpm = 6000 # Make NT value
 
-        self.motor.setInverted(True)
+        self.motor.setInverted(False)
 
         self.controller.setFF(0.000162, 0)
         self.controller.setP(0.0015, 0)
@@ -45,6 +46,8 @@ class Shooter(DebuggableSubsystem):
         self.secondController.setIZone(0, 0)
 
         self.secondMotor.follow(self.motor, True) # inverts it
+
+        self.shooting = False
 
         self.zeroNetworkTables()
 
@@ -74,6 +77,15 @@ class Shooter(DebuggableSubsystem):
             self.lastCheck = True
         elif not self.shooterSensor.get(): # no ball present
             self.lastCheck = False # nothing there
+
+    def sensorCount(self):
+        if not self.shooterSensor.get() and not self.shooting:
+            robot.intake.ballCount -= 1
+            self.shooting = True
+        elif self.shooterSensor.get():
+            self.shooting = False
+        self.table.putNumber('BallCount', robot.intake.ballCount)
+
     def updateNetworkTables(self):
         avgVel = round(((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2), 2)
         self.table.putNumber('ShooterRPM', avgVel)
@@ -88,6 +100,6 @@ class Shooter(DebuggableSubsystem):
     def getRPM(self):
         return ((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2)
 
-    def setRPM(self, rpm=3500):
-        self.controller.setReference(float(3500), ControlType.kVelocity, 0, 0)
+    def setRPM(self, rpm):
+        self.controller.setReference(float(rpm), ControlType.kVelocity, 0, 0)
         #self.secondController.setReference(float(rpm), ControlType.kVelocity, 0, 0)

@@ -17,6 +17,8 @@ class DriveCommand(Command):
         self.requires(robot.drivetrain)
         self.speedLimit = speedLimit
 
+        robot.drivetrain.resetPID()
+
 
     def initialize(self):
         robot.drivetrain.stop()
@@ -47,9 +49,14 @@ class DriveCommand(Command):
                 self.lastY = y
 
         #print(str('X ' + str(logicalaxes.driveX.get()) + '\nY ' + str(y) + '\nRotate ' + str(logicalaxes.driveRotate.get())))
+
+        if not abs(robot.drivetrain.getTilt() / 20) < 0.2: # simple, anti-roll thingy.
+            y -= robot.drivetrain.getTilt() / 20
+
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
-            y,
-            logicalaxes.driveRotate.get() * 0.7
+            y * 0.85,
+            logicalaxes.driveRotate.get() * 0.5
         )
 
+        print('vel ' + str(robot.drivetrain.getVelocity()))

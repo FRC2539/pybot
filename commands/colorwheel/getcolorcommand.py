@@ -9,7 +9,6 @@ class GetColorCommand(InstantCommand):
 
         self.requires(robot.colorwheel)
 
-
     def initialize(self):
         print(str(robot.colorwheel.getColor()))
 

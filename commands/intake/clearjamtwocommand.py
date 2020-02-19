@@ -17,6 +17,7 @@ class ClearJamTwoCommand(Command):
     def initialize(self):
         self.timer.start()
         robot.intake.fumbleForward()
+        robot.intake.intakeFreakOutNT()
 
     def execute(self):
         if robot.intake.forward:

@@ -13,11 +13,8 @@ class PlayMusicCommand(Command):
     def initialize(self):
         robot.drivetrain.neverPlayMusic()
 
-
-
     def execute(self):
-        pass
-
+        print(' playing: ' + str(robot.drivetrain.bensGloriousOrchestra.isPlaying()))
 
     def end(self):
         robot.drivetrain.noStopMusicHere()

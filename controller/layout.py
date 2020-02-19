@@ -10,15 +10,17 @@ from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OutakeCommand
 from commands.intake.clearjamtwocommand import ClearJamTwoCommand
+from commands.intake.stopeverythingcommand import StopEverythingCommand
 
 from commands.colorwheel.getcolorcommand import GetColorCommand
-
-from commands.turret.turretmovecommand import turretMoveCommand
 
 from commands.ballsystem.runallcommand import RunAllCommand
 from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
 from commands.ballsystem.runlowercommand import RunLowerCommand
 from commands.ballsystem.clearjamcommand import ClearJamCommand
+
+from commands.ballsystem.loadballfromhoppercommand import LoadBallFromHopperCommand
+from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
 
 from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalCommand
 
@@ -30,12 +32,22 @@ from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 from commands.hood.sethoodcommand import SetHoodCommand
 from commands.hood.hoodtestcommand import hoodTestCommand
+from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTablesCommand
+from commands.hood.hoodlimelightcommand import HoodLimelightCommand
+from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
+
+from commands.limelight.lltestcommand import llTestCommand
+from commands.limelight.finitereecommand import finiteReeCommand
 
 from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
 from commands.shooter.reverseshootercommand import ReverseShooterCommand
+from commands.shooter.farshotcommandgroup import FarShotCommandGroup
+
+from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
+from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 def init():
     '''
@@ -57,13 +69,12 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(IntakeCommand())
-    driveController.X.whenPressed(GetColorCommand())
+    driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
+    driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     driveController.B.whenPressed(OutakeCommand())
 
 
-    #driveController.Y.toggleWhenPressed(ExtendClimberPistonCommand())
-    driveController.Y.whileHeld(hoodTestCommand())
+    #driveController.Y.toggleWhenPressed(TurretLimelightCommand())
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
@@ -75,7 +86,7 @@ def init():
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
 
-    logicalaxes.operatorX = operatorController.RightX
+    logicalaxes.turretX = operatorController.RightX
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())# variable speed, 100% is default
 
@@ -86,9 +97,9 @@ def init():
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
 
-    operatorController.Start.toggleWhenPressed(PlayMusicCommand())
+    operatorController.Start.toggleWhenPressed(FarShotCommandGroup())
 
-    operatorController.LeftTrigger.toggleWhenPressed(ShootCommand())
-    operatorController.LeftBumper.toggleWhenPressed(ControlledShootCommand(2850))
+    operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
+    operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.Back.whenPressed(ResetCommand())
+    operatorController.Back.whenPressed(StopEverythingCommand())

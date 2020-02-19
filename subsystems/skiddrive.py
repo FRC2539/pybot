@@ -10,6 +10,7 @@ class SkidDrive(BaseDrive):
         if robot:
             '''Only the front motors are active in a skid system.'''
             self.activeMotors = self.motors[0:2]
+            self.followerMotors = self.motors[2:4]
 
             '''Make the back motors follow the front.'''
             if len(self.motors) == 4:
@@ -21,8 +22,10 @@ class SkidDrive(BaseDrive):
             '''Invert encoders'''
             for motor in self.activeMotors:
                 motor.setSensorPhase(True)
+
         else:
             self.activeMotors = self.motors[0:2]
+            self.followerMotors = self.motors[2:4]
 
             '''Make the back motors follow the front.'''
             if len(self.motors) == 4:
