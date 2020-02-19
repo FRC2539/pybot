@@ -19,7 +19,6 @@ class DriveCommand(Command):
 
         robot.drivetrain.resetPID()
 
-
     def initialize(self):
         robot.drivetrain.stop()
         try:
