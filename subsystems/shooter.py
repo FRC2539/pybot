@@ -23,9 +23,6 @@ class Shooter(DebuggableSubsystem):
         self.secondEncoder = self.motor.getEncoder()
         self.secondController = self.motor.getPIDController()
 
-        self.shooterSensor = DigitalInput(ports.shooter.shooterSensor)
-        self.lastCheck = False
-
         self.table = nt.getTable('Shooter')
 
         self.ballCount = 5 #Config('
@@ -47,8 +44,6 @@ class Shooter(DebuggableSubsystem):
 
         self.secondMotor.follow(self.motor, True) # inverts it
 
-        self.shooting = False
-
         self.zeroNetworkTables()
 
     def reverse(self):
@@ -66,25 +61,16 @@ class Shooter(DebuggableSubsystem):
         self.motor.stopMotor()
         #self.secondMotor.stopMotor()
 
-    def updateCheck(self):
-        self.lastCheck = self.shooterSensor.get()
+    #def updateCheck(self):
+        #self.lastCheck = self.shooterSensor.get()
 
-    def monitorBalls(self):
-        if self.shooterSensor.get() and not self.lastCheck: # is there something there that was not there last time?
-            if self.ballCount != 0:
-                self.ballCount -= 1
-                self.table.putNumber('BallCount', self.ballCount)
-            self.lastCheck = True
-        elif not self.shooterSensor.get(): # no ball present
-            self.lastCheck = False # nothing there
-
-    def sensorCount(self):
-        if not self.shooterSensor.get() and not self.shooting:
-            robot.intake.ballCount -= 1
-            self.shooting = True
-        elif self.shooterSensor.get():
-            self.shooting = False
-        self.table.putNumber('BallCount', robot.intake.ballCount)
+    #def sensorCount(self):
+        #if not self.shooterSensor.get() and not self.shooting:
+            #robot.intake.ballCount -= 1
+            #self.shooting = True
+        #elif self.shooterSensor.get():
+            #self.shooting = False
+        #self.table.putNumber('BallCount', robot.intake.ballCount)
 
     def updateNetworkTables(self):
         avgVel = round(((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2), 2)
