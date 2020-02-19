@@ -198,7 +198,7 @@ def generateCommand():
 
         path += '/%s' % requirements[0]
 
-    content = 'from wpilib.command.%s import %s' % (inherits.lower(), inherits)
+    content = 'from wpilib.%s import %s' % (inherits.lower(), inherits)
     content += '\n'
 
     if inherits == 'CommandGroup':
