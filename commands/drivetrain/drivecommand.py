@@ -46,6 +46,8 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
+        robot.drivetrain.printP()
+
         #print(str('X ' + str(logicalaxes.driveX.get()) + '\nY ' + str(y) + '\nRotate ' + str(logicalaxes.driveRotate.get())))
 
         if not abs(robot.drivetrain.getTilt() / 20) < 0.2: # simple, anti-roll thingy.

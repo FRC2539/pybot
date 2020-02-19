@@ -23,6 +23,8 @@ class BaseDrive(DebuggableSubsystem):
     without knowing what type of drive system we have should be implemented here.
     This code definitley doesn't play music.
     '''
+    def printP(self):
+        print(self.falconP)
 
     def setDriveTrain(self, compBot=True):
         if compBot:

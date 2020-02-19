@@ -45,7 +45,7 @@ class Config:
             nf.IMMEDIATE | nf.LOCAL | nf.NEW | nf.UPDATE
         )
 
-        currentValue = Config._nt.getValue(self.key)
+        currentValue = Config._nt.getValue(self.key,  default) # ben added default because it was crashing. Might have fixed it?
         if currentValue is None and default is not None:
             Config._nt.putValue(self.key, default)
             Config._nt.setPersistent(self.key)
