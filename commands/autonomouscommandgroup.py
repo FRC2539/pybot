@@ -39,7 +39,6 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port')
         def rennaFirstFunction(self):
             print ("I Shoot")
-            self(ShootCommand()) #Set hood position
             self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
             self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot.addParallel
             self.addSequential(MoveCommand(-36)) # Goes back 90 inches
@@ -53,12 +52,3 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def getOffInitLine (self):
             print("sksksk")
             self.addSequential(MoveCommand(-36)) #Go back 90 inches Get off the initiation line
-            self.addSequential(
-
-
-
-
-
-
-
-

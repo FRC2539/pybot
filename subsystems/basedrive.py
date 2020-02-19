@@ -28,11 +28,11 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = 0.001#Config('DriveTrain\FalconP', 0.03)
-            self.falconI = 0.00#Config('DriveTrain\FalconI', 0.00001)
-            self.falconD = 5.00#Config('DriveTrain\FalconD', 0)
-            self.falconF = 0.1 #Config('DriveTrain\FalconF', 0.1)
-            self.falconIZone = 0#Config('DriveTrain\FalconIZone', 0)
+            self.falconP = Config('DriveTrain/Speed/P', 0.001) # 0.001
+            self.falconI = Config('DriveTrain/Speed/I', 0.00) # 0.00
+            self.falconD = Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
+            self.falconF = Config('DriveTrain/Speed/F', 0.1) # 0.1
+            self.falconIZone = Config('DriveTrain/Speed/IZone', 0) # 0
 
             #self.bensGloriousOrchestra = Orchestra()
             self.bensGloriousOrchestra = None
@@ -78,11 +78,11 @@ class BaseDrive(DebuggableSubsystem):
             self.NEOencoders = []
             self.NEOcontrollers = []
 
-            self.neoP = Config('DriveTrain\SparkP', 0.1)
-            self.neoI = Config('DriveTrain\SparkI', 0)
-            self.neoD = Config('DriveTrain\SparkD', 0.1)
-            self.neoFF = Config('DriveTrain\SparkFF', 0)
-            self.neoIZone = Config('DriveTrain\SparkIZone', 0)
+            self.neoP = Config('DriveTrain/Speed/P', 0.1)
+            self.neoI = Config('DriveTrain/Speed/I', 0)
+            self.neoD = Config('DriveTrain/Speed/D', 0.1)
+            self.neoFF = Config('DriveTrain/Speed/F', 0)
+            self.neoIZone = Config('DriveTrain/Speed/IZone', 0)
 
             self.bensGloriousOrchestra = None # this makes me sad lol
 
@@ -166,8 +166,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 7000#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 7000#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 7500#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 7500#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 

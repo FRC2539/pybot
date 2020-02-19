@@ -20,7 +20,7 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, 0.001, 0)
         self.motor.config_kF(0, 0.00019, 0)
         #self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 2250# Dummy values
+        self.max = 2000# Dummy values
         self.min = 0 # Dummy values
 
         self.table = nt.getTable('Turret')
@@ -31,7 +31,7 @@ class Turret(DebuggableSubsystem):
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
-        self.motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute)
+        self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
         self.motor.setSelectedSensorPosition(0, 0, 0)
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
@@ -98,8 +98,8 @@ class Turret(DebuggableSubsystem):
             self.motor.stopMotor()
 
     def printPosition(self):
-        #print(str(self.motor.getSelectedSensorPosition(0)))
-        pass
+        print(str(self.motor.getSelectedSensorPosition(0)))
+        #pass
 
     def updateNetworkTables(self, angle=85.00):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))

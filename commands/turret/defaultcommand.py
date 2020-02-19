@@ -14,4 +14,4 @@ class DefaultCommand(Command):
 
     def execute(self):
         robot.turret.move(logicalaxes.operatorX.get() * 0.8)
-
+        robot.turret.printPosition()
