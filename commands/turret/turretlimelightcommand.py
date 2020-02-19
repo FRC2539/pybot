@@ -17,6 +17,7 @@ class TurretLimelightCommand(Command):
 
 
     def execute(self):
+        #print('x ' + str(robot.limelight.getX()))
         self.rotate = robot.limelight.getX() * -.035
         if (abs(self.rotate) > .3):
             self.rotate = math.copysign(.3, self.rotate)

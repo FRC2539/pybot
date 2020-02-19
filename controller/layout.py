@@ -19,6 +19,7 @@ from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVertical
 from commands.ballsystem.runlowercommand import RunLowerCommand
 from commands.ballsystem.clearjamcommand import ClearJamCommand
 
+from commands.ballsystem.loadballfromhoppercommand import LoadBallFromHopperCommand
 from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
 
 from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalCommand
@@ -69,7 +70,7 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
 
     driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
-    driveController.X.whenPressed(GetColorCommand())
+    driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     driveController.B.whenPressed(OutakeCommand())
 
 
