@@ -90,7 +90,7 @@ def init():
     logicalaxes.turretX = operatorController.RightX
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
-    operatorController.DPadUp.toggleWhenPressed(SlowRunBallFlowCommandGroup())
+    operatorController.LeftJoystick.toggleWhenPressed(SlowRunBallFlowCommandGroup())
 
     operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
