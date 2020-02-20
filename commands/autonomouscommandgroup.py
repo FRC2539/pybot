@@ -41,7 +41,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             print ("I Shoot")
             self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
             self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot.addParallel
-            self.addSequential(MoveCommand(-36)) # Goes back 90 inches
+            self.addSequential(MoveCommand(-90)) # Goes back 90 inches
             self.addSequential(TurnCommand(90)) #Turns 90 degrees right
             self.addSequential(MoveCommand(66)) # Go forward 66 inches
             self.addSequential(TurnCommand(90)) #Turns 90 degrees right (and face trench)
@@ -52,3 +52,9 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def getOffInitLine (self):
             print("sksksk")
             self.addSequential(MoveCommand(-36)) #Go back 90 inches Get off the initiation line
+            self.addSequential(MoveCommand(-90)) #Go back 90 inches Get off the initiation line
+            self(ShootCommand()) #Set hood position
+            self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
+            self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot.addParallel
+
+
