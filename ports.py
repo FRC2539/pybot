@@ -45,13 +45,12 @@ shooter = PortsList()
 shooter.motorID = 5
 shooter.motorTwoID = 6
 
-shooter.shooterSensor = 2 # on DI/O; 3 for power
-
 ballsystem = PortsList()
 
 ballsystem.lowerConveyor = 10
 ballsystem.verticalConveyor = 9
 
+ballsystem.shooterSensor = 2 # on DI/O; 3 for power
 ballsystem.horizontalConveyorSensor = 0 # On DIO; 1 for power
 
 climber = PortsList()

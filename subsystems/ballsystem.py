@@ -20,8 +20,11 @@ class BallSystem(DebuggableSubsystem):
         self.lowerConveyorMotor.setNeutralMode(NeutralMode.Brake)
         self.verticalConveyorMotor.setNeutralMode(NeutralMode.Brake)
 
+        self.shooting = False
+
         self.table = NetworkTables.getTable('BallSystem')
 
+        self.shooterSensor = DigitalInput(ports.ballsystem.shooterSensor)
         self.horizontalBeltSensor = DigitalInput(ports.ballsystem.horizontalConveyorSensor)
 
     def runLowerConveyor(self):
@@ -54,6 +57,10 @@ class BallSystem(DebuggableSubsystem):
         self.runLowerConveyor()
         self.runVerticalConveyor()
 
+    def runLowSlowAndVertical(self): # lol that rhymes
+        self.lowerConveyorMotor.set(0.1)
+        self.runVerticalConveyor()
+
     def reverseAll(self):
         self.reverseLowerConveyor()
         self.reverseVerticalConveyor()
@@ -80,3 +87,14 @@ class BallSystem(DebuggableSubsystem):
     def isBallPrimed(self):
         self.updateNetworktables()
         return not self.horizontalBeltSensor.get() # may need to invert
+
+    def monitorBalls(self, startCount):
+        if not self.shooterSensor.get() and not self.shooting: # is there something there that was not there last time?
+            if startCount != 0:
+                startCount -= 1
+                self.table.putNumber('BallCount', self.ballCount)
+            self.shooting = True
+        elif self.shooterSensor.get(): # no ball present
+            self.shooting = False # nothing there, spaced out.
+
+        return startCount

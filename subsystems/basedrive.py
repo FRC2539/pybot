@@ -23,6 +23,8 @@ class BaseDrive(DebuggableSubsystem):
     without knowing what type of drive system we have should be implemented here.
     This code definitley doesn't play music.
     '''
+    def printP(self):
+        print(self.falconP)
 
     def setDriveTrain(self, compBot=True):
         if compBot:
@@ -68,6 +70,7 @@ class BaseDrive(DebuggableSubsystem):
             self.nopeNotPauseMusic = self.notPauseMusic
             self.noStopMusicHere = self.certainlyNotStopMusic
             self.resetEncoders = self.falconResetEncoders
+            self.getVelocity = self.falconGetVelocity
 
         else:
 
@@ -124,6 +127,7 @@ class BaseDrive(DebuggableSubsystem):
             self.nopeNotPauseMusic = self.null
             self.noStopMusicHere = self.null
             self.resetEncoders = self.null
+            self.getVelocity = self.null
 
             print('set methods')
 
@@ -166,8 +170,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 7500#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 7500#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 8500#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 8500#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -182,7 +186,6 @@ class BaseDrive(DebuggableSubsystem):
         self.debugMotor('Front Left Motor', self.motors[0])
         self.debugMotor('Front Right Motor', self.motors[1])
 
-        self.resetPID()
         self.resetEncoders()
 
         self.setProfile(0)
@@ -362,8 +365,6 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print('vel ' + str((TalonFXSensorCollection(motor).getIntegratedSensorVelocity())))
-
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
 
         else:
@@ -679,9 +680,15 @@ class BaseDrive(DebuggableSubsystem):
     def notPauseMusic(self):
         #self.bensGloriousOrchestra.pause()
         pass
+
     def certainlyNotStopMusic(self):
         #self.bensGloriousOrchestra.stop()
         pass
-    def null(self):
+
+    def null(self): # dummy method for something that is in one drivetrain, but not another.
         pass
+
+    def falconGetVelocity(self):
+        return [TalonFXSensorCollection(motor).getIntegratedSensorVelocity() for motor in self.activeMotors]
+
 

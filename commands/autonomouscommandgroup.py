@@ -23,17 +23,20 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
+from commands.ballsystem.rununtilemptycommand import RunUntilEmptyCommand
+
 class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
         super().__init__('Autonomous')
 
+        startingBalls = Config('Autonomous/NumberOfBallsAtStart', 3)
+
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Eat Beans') # Put given game data here through network tables.
         def simpleAuto(self):
-            print('I RAN!!!')
-            #self.addParallel(ActiveSetHoodCommand(27)) # Sets the hood position
+            self.addParallel(SudoCommandGroup(), 1) # Sets the hood & turret position
             self.addParallel(ShootCommand(4200)) # spins the shooter up while moving
-            self.addSequential(MoveCommand(-90)) # goes back 90 inches.
-            #self.addSequential(TurnCommand(-10)) # turns ten degrees left
+            self.addSequential(MoveCommand(-36)) # goes back 90 inches. I recommend using the below commonly to monitor ball shots.
+            self.addSequential(RunUntilEmptyCommand(startingBalls)) # NOTE: WARNING: RENNNA RENNNA RENNA: read pls :) ADD START NUMBER OF BALLS; THIS WILL START SHOOTER IF NOT STARTED (might remove that), BUT STILL START BEFOREHAND
             #self.addSequential(ControlledShootCommand(4200), 8) # only shoots when around 4200, gives 8 seconds
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port')

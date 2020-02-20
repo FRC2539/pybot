@@ -28,6 +28,8 @@ class Intake(DebuggableSubsystem):
 
         self.intaking = False
 
+        self.intakeMotor.burnFlash()
+
     def intake(self, val=1):
         self.intakeMotor.set(val)
         self.intakeTable.putString('IntakeStatus', 'Intaking: ' + str(val))
