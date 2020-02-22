@@ -13,6 +13,7 @@ class TurretLimelightCommand(Command):
 
     def initialize(self):
         robot.limelight.setPipeline(1)
+        self.count = 0
 
 
 
@@ -22,7 +23,11 @@ class TurretLimelightCommand(Command):
         if (abs(self.rotate) > .3):
             self.rotate = math.copysign(.3, self.rotate)
         robot.turret.move(self.rotate)
-        print(str(self.rotate))
+        #print(str(self.rotate))
+        if self.count >=4:
+            robot.limelight.takeSnapShot()
+        else:
+            self.count = self.count + 1
 
 
 

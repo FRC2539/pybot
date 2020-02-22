@@ -8,6 +8,7 @@ from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX, NeutralMode
 from networktables import NetworkTables as nt
 
 import robot
+import math
 
 class Turret(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -32,7 +33,7 @@ class Turret(DebuggableSubsystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
-        self.motor.setSelectedSensorPosition(0, 0, 0)
+        self.motor.setSelectedSensorPosition(1061, 0, 0) #1061 starting position
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
     def rotateClockwise(self, val):
@@ -88,14 +89,22 @@ class Turret(DebuggableSubsystem):
         else:
             self.stop()
 
-    def setPosition(self, degrees):
-        #degrees = degrees % 360
-        ticks = ((degrees % 360) / 360) * 4096 # returns the set tick positions, keeping input under 360 (puts to ticks)
+    def setPosition(self, position):
+        self.error = self.getPosition() - position
+        self.rotate = self.error * 0.01
+        print('self.error = '+ str(self.rotate))
+        if abs(self.rotate) > .3:
+            self.rotate = math.copysign(.3, self.rotate)
+            print('self.rotate = '+ str(self.rotate))
 
-        if degrees > self.min and degrees < self.max:
-            self.motor.set(ControlMode.Position, ticks)
-        else:
-            self.motor.stopMotor()
+        self.move(self.rotate)
+        #if self.error > 1:
+            #self.move(self.rotate)
+            #print('self.rotate = '+ str(self.rotate))
+        #else:
+            #self.stop()
+
+
 
     def printPosition(self):
         print(str(self.motor.getSelectedSensorPosition(0)))

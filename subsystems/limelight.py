@@ -24,8 +24,8 @@ class Limelight(DebuggableSubsystem):
         self.TargetHeight = 106.75
         self.calDistance = 120
 
-        self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
-        print(str(self.calAngle))
+        #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
+        #print(str(self.calAngle))
 
     def setPipeline(self, pipeline: int):
         self.nt.putNumber('pipeline', pipeline)
@@ -41,6 +41,9 @@ class Limelight(DebuggableSubsystem):
 
     def getTape(self):
         return self.nt.getEntry('tv').getDouble(0)
+
+    def takeSnapShot(self):
+        self.nt.putNumber('snapshot', 1)
 
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight

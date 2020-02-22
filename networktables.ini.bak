@@ -1,0 +1,16 @@
+[NetworkTables Storage 3.0]
+boolean "/Config/DriveTrain\\FalconD"=false
+double "/Config/DriveTrain\\FalconF"=0.1
+double "/Config/DriveTrain\\FalconI"=1e-05
+boolean "/Config/DriveTrain\\FalconIZone"=false
+double "/Config/DriveTrain\\FalconP"=0.03
+double "/DriveTrain/deadband"=0.05
+boolean "/DriveTrain/maxSpeed"=true
+boolean "/DriveTrain/normalSpeed"=true
+boolean "/DriveTrain/preciseSpeed"=true
+boolean "/DriveTrain/wheelDiameter"=true
+double "/DriveTrain/width"=29.5
+boolean "/limelight/ta"=false
+boolean "/limelight/tv"=false
+boolean "/limelight/tx"=true
+boolean "/limelight/ty"=false

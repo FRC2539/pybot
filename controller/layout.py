@@ -44,11 +44,15 @@ from commands.shooter.shootcommand import ShootCommand
 from commands.shooter.controlledshootcommand import ControlledShootCommand
 from commands.shooter.reverseshootercommand import ReverseShooterCommand
 from commands.shooter.farshotcommandgroup import FarShotCommandGroup
+from commands.shooter.closeshotcommandgroup import CloseShotCommandGroup
 
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
+from commands.turret.setturretcommand import SetTurretCommand
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
+
+from commands.windshieldwiper.wipefastcommand import WipeFastCommand
 
 def init():
     '''
@@ -74,8 +78,7 @@ def init():
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     driveController.B.whenPressed(OutakeCommand())
 
-
-    #driveController.Y.toggleWhenPressed(TurretLimelightCommand())
+    driveController.Y.toggleWhenPressed(SetTurretCommand(2100))
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
@@ -90,7 +93,8 @@ def init():
     logicalaxes.turretX = operatorController.RightX
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
-    operatorController.LeftJoystick.toggleWhenPressed(SlowRunBallFlowCommandGroup())
+    operatorController.LeftJoystick.toggleWhenPressed(FarShotCommandGroup())
+    operatorController.RightJoystick.toggleWhenPressed(WipeFastCommand())
 
     operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
