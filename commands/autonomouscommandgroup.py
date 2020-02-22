@@ -22,8 +22,9 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
-
 from commands.ballsystem.rununtilemptycommand import RunUntilEmptyCommand
+
+from commands.turret.setturretcommand import SetTurretCommand
 
 from commands.intake.intakecommand import IntakeCommand
 class AutonomousCommandGroup(fc.CommandFlow):
@@ -34,34 +35,35 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Simple Shoot') # Put given game data here through network tables.
         def simpleAuto(self):
+            self.addParallel(SetTurretCommand(2100), 3) # Takes Turret our of starting config
+            self.addSequential(MoveCommand(30)) # goes back 90 inches
             self.addParallel(SudoCommandGroup(), 1) # Sets the hood & turret position
             self.addParallel(ShootCommand(4200), 8) # spins the shooter up while moving
-            self.addSequential(MoveCommand(-36)) # goes back 90 inches
             self.addSequential(RunUntilEmptyCommand(startingBalls)) #Shoots 3 balls
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot, Trench, Collect 5')
         def rennaFirstFunction(self):
             print ("I Shoot")#station 3 shoot balls pick up 5 in trench
-            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(SudoCommandGroup())
             self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(MoveCommand(-90))
+            self.addSequential(MoveCommand(90))
             self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
             self.addParallel(IntakeCommand(), 4)
-            self.addSequential(MoveCommand(-200))
+            self.addSequential(MoveCommand(200))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot, Trench, Collect 3, Shoot')
         def rennaFirstFunctionButMore(self):
             print ("I Shoot BUT-")#station 3, shoot balls, go through trench, picking up 3 balls then shoot
-            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(SetTurretCommand(2100), 3)
+            self.addSequential(MoveCommand(90))
+            self.addParallel(SudoCommandGroup(), 5)
             self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(MoveCommand(-90))
             self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
             self.addParallel(IntakeCommand(), 3)
-            self.addSequential(MoveCommand(-114.63))
-            self.addSequential(TurnCommand(180))
-            self.addParallel(SudoCommandGroup(), 1)
+            self.addSequential(MoveCommand(114.63))
+            self.addParallel(SudoCommandGroup(), 5)
             self.addSequential(ShootCommand(4200), 8)
             self.addSequential(RunUntilEmptyCommand(3))
 

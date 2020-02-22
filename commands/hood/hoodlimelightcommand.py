@@ -11,13 +11,14 @@ class HoodLimelightCommand(Command):
 
     def initialize(self):
         robot.limelight.setPipeline(1)
+        self.val = robot.limelight.getLLHoodTuner()
 
     def execute(self):
         robot.limelight.updateNetworkTables()
         if robot.limelight.calcDistance() > 160:
-            robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + 13) # was 15.75
+            robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + self.val) # was 15.75
         else:
-            robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + 15.5)
+            robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + self.val + 2.5)
 
 
     def end(self):

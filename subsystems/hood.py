@@ -150,6 +150,5 @@ class Hood(DebuggableSubsystem):
                 #print(str(self.getPosition()))
 
 
-    def pEncoder(self):
-        #print(str(self.getPosition()))
-        pass
+    def getLLHoodTuner(self):
+        return 13

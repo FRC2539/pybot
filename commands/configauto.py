@@ -4,7 +4,13 @@ def init():
     table = NetworkTables.getTable('Autonomous')
 
 
-    autoNames = ['Simple Shoot', '', 'Shoot, Trench, Collect 5','Shoot, Trench, Collect 3, Shoot', 'REEEEEEEEEE','shootie trench' ]
+    autoNames = ['Simple Shoot',
+                 '',
+                 'Shoot, Trench, Collect 5',
+                 'Shoot, Trench, Collect 3, Shoot',
+                 'REEEEEEEEEE',
+                 'SkSkSkirt off the init line',
+                 'shootie trench' ]
 
     autoString = ''
 
