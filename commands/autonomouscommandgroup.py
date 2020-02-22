@@ -25,6 +25,7 @@ from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
 from commands.ballsystem.rununtilemptycommand import RunUntilEmptyCommand
 
+from commands.intake.intakecommand import IntakeCommand
 class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
         super().__init__('Autonomous')
@@ -34,30 +35,83 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Eat Beans') # Put given game data here through network tables.
         def simpleAuto(self):
             self.addParallel(SudoCommandGroup(), 1) # Sets the hood & turret position
-            self.addParallel(ShootCommand(4200)) # spins the shooter up while moving
-            self.addSequential(MoveCommand(-36)) # goes back 90 inches. I recommend using the below commonly to monitor ball shots.
-            self.addSequential(RunUntilEmptyCommand(startingBalls)) # NOTE: WARNING: RENNNA RENNNA RENNA: read pls :) ADD START NUMBER OF BALLS; THIS WILL START SHOOTER IF NOT STARTED (might remove that), BUT STILL START BEFOREHAND
-            #self.addSequential(ControlledShootCommand(4200), 8) # only shoots when around 4200, gives 8 seconds
+            self.addParallel(ShootCommand(4200), 8) # spins the shooter up while moving
+            self.addSequential(MoveCommand(-36)) # goes back 90 inches
+            self.addSequential(RunUntilEmptyCommand(startingBalls)) #Shoots 3 balls
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port :)')
         def rennaFirstFunction(self):
-            print ("I Shoot")
-            self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
-            self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot.addParallel
-            self.addSequential(MoveCommand(-90)) # Goes back 90 inches
-            self.addSequential(TurnCommand(90)) #Turns 90 degrees right
-            self.addSequential(MoveCommand(66)) # Go forward 66 inches
-            self.addSequential(TurnCommand(90)) #Turns 90 degrees right (and face trench)
-            self.addSequential(MoveCommand(114.63))#Go forward 114.63 inches
+            print ("I Shoot")#station 3 shoot balls pick up 5 in trench
+            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(ShootCommand(4200), 8)
+            self.addSequential(MoveCommand(-90))
+            self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
+            self.addParallel(IntakeCommand(), 4)
+            self.addSequential(MoveCommand(-200))
 
-        @fc.IF (lambda: str(Config('Autonomous/autoModeSelect')) == 'SkSkSkirt off the init line')
-        def getOffInitLine (self):
-            print("sksksk")
-            self.addSequential(MoveCommand(-36)) #Go back 90 inches Get off the initiation line
-            self.addSequential(MoveCommand(-90)) #Go back 90 inches Get off the initiation line
-            self(ShootCommand()) #Set hood position
-            self.addSequential(SudoCommandGroup(), 1) #Shoots Balls
-            self.addSequential(RunBallFlowCommandGroup(), 7) #Take balls up to shoot.addParallel
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port But More 8D')
+        def rennaFirstFunctionButMore(self):
+            print ("I Shoot BUT-")#station 3, shoot balls, go through trench, picking up 3 balls then shoot
+            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(ShootCommand(4200), 8)
+            self.addSequential(MoveCommand(-90))
+            self.addSequential(RunUntilEmptyCommand(startingBalls))
+            self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
+            self.addParallel(IntakeCommand(), 3)
+            self.addSequential(MoveCommand(-114.63))
+            self.addSequential(TurnCommand(180))
+            self.addParallel(SudoCommandGroup(), 1)
+            self.addSequential(ShootCommand(4200), 8)
+            self.addSequential(RunUntilEmptyCommand(3))
+
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'SkSkSkirt off the init line')
+        def getOffInitLine(self):
+            print("sksksk")#start station 2, shoot balls, run to generator
+            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(ShootCommand(4200), 8)
+            self.addSequential(MoveCommand(-90))
+            self.addSequential(RunUntilEmptyCommand(startingBalls))
+            self.addSequential(TurnCommand(180)) #Turn to face generator
+            self.addSequential(MoveCommand(-90))
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'shootie trench')
+        def shootTrench(self):
+            print("shootieTrench")
+            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(ShootCommand(4200), 8)
+            self.addSequential(MoveCommand(-90))
+            self.addSequential(RunUntilEmptyCommand(startingBalls))
+            #finish
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'REEEEEEEEEE')
+        def donutLife (self):
+            print("dat Donut Life")
+            self.addSequential(TurnCommand(66669.96969696969696969), 15)#Turns unitl 15 are done (we are so mature)
+
+
+
 
 
