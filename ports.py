@@ -61,6 +61,10 @@ winch = PortsList()
 
 winch.motorID = 12
 
+windshieldwiper = PortsList()
+
+windshieldwiper.motorID = 12
+
 pneumaticSystem = PortsList()
 
 pneumaticSystem.pcmID = 17

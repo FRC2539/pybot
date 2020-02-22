@@ -32,14 +32,14 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         startingBalls = Config('Autonomous/NumberOfBallsAtStart', 3)
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Eat Beans') # Put given game data here through network tables.
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Simple Shoot') # Put given game data here through network tables.
         def simpleAuto(self):
             self.addParallel(SudoCommandGroup(), 1) # Sets the hood & turret position
             self.addParallel(ShootCommand(4200), 8) # spins the shooter up while moving
             self.addSequential(MoveCommand(-36)) # goes back 90 inches
             self.addSequential(RunUntilEmptyCommand(startingBalls)) #Shoots 3 balls
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port :)')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot, Trench, Collect 5')
         def rennaFirstFunction(self):
             print ("I Shoot")#station 3 shoot balls pick up 5 in trench
             self.addParallel(SudoCommandGroup(), 1)
@@ -50,7 +50,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addParallel(IntakeCommand(), 4)
             self.addSequential(MoveCommand(-200))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Inner Power Port But More 8D')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot')
         def rennaFirstFunctionButMore(self):
             print ("I Shoot BUT-")#station 3, shoot balls, go through trench, picking up 3 balls then shoot
             self.addParallel(SudoCommandGroup(), 1)
