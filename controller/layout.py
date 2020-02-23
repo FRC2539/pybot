@@ -12,6 +12,7 @@ from commands.intake.outtakecommand import OutakeCommand
 from commands.intake.clearjamtwocommand import ClearJamTwoCommand
 from commands.intake.stopeverythingcommand import StopEverythingCommand
 
+from commands.colorwheel.flipcolorwheelupcommand import FlipColorwheelUpCommand
 from commands.colorwheel.getcolorcommand import GetColorCommand
 
 from commands.ballsystem.runallcommand import RunAllCommand
@@ -94,7 +95,7 @@ def init():
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
     operatorController.LeftJoystick.toggleWhenPressed(FarShotCommandGroup())
-    operatorController.RightJoystick.toggleWhenPressed(WipeFastCommand())
+    operatorController.RightJoystick.whenPressed(FlipColorwheelUpCommand())
 
     operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
@@ -102,6 +103,8 @@ def init():
 
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
     operatorController.RightTrigger.whileHeld(LowerHoodCommand())
+
+    #operatorController.DPadUp.whileHeld(FlipColorwheelUpCommand())
 
     operatorController.Start.toggleWhenPressed(FarShotCommandGroup())
 

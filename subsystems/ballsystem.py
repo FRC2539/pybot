@@ -61,6 +61,10 @@ class BallSystem(DebuggableSubsystem):
         self.lowerConveyorMotor.set(0.1)
         self.runVerticalConveyor()
 
+    def runAllSlow(self):
+        self.lowerConveyorMotor.set(0.4)
+        self.verticalConveyorMotor.set(0.4)
+
     def reverseAll(self):
         self.reverseLowerConveyor()
         self.reverseVerticalConveyor()
@@ -84,9 +88,17 @@ class BallSystem(DebuggableSubsystem):
     def updateNetworktables(self):
         self.table.putNumber('BallInChamber', (not self.horizontalBeltSensor.get()))
 
-    def isBallPrimed(self):
+    def isLowBallPrimed(self):
         self.updateNetworktables()
         return not self.horizontalBeltSensor.get() # may need to invert
+
+    def isUpperBallPrimed(self):
+        self.updateNetworktables()
+        return not self.shooterSensor.get()
+
+    def areTwoBallsPrimed(self):
+        self.updateNetworktables()
+        return (not self.horizontalBeltSensor.get()) and (not self.shooterSensor.get())
 
     def monitorBalls(self, startCount):
         if not self.shooterSensor.get() and not self.shooting: # is there something there that was not there last time?

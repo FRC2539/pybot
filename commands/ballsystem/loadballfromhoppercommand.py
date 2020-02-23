@@ -10,18 +10,20 @@ class LoadBallFromHopperCommand(Command):
         self.requires(robot.ballsystem)
 
     def initialize(self):
-        if not robot.ballsystem.isBallPrimed():
-            robot.ballsystem.setHorizontalCoast()
-            robot.ballsystem.runLowerConveyorSlow()
+        if not robot.ballsystem.areTwoBallsPrimed():
+            if not robot.ballsystem.isLowBallPrimed() and robot.ballsystem.isUpperBallPrimed():
+                robot.ballsystem.runLowerConveyorSlow()
+            else:
+                robot.ballsystem.runAllSlow()
 
     def execute(self):
-        print(robot.ballsystem.isBallPrimed())
-
-        if robot.ballsystem.isBallPrimed():
+        print('low ' + str(robot.ballsystem.isLowBallPrimed()))
+        print('up ' + str(robot.ballsystem.isUpperBallPrimed()))
+        if robot.ballsystem.isLowBallPrimed() and robot.ballsystem.isUpperBallPrimed():
             robot.ballsystem.stopLowerConveyor()
-        else:
-            robot.ballsystem.runLowerConveyorSlow()
+
+        elif robot.ballsystem.isUpperBallPrimed():
+            robot.ballsystem.stopVerticalConveyor()
 
     def end(self):
-        robot.ballsystem.stopLowerConveyor()
-        robot.ballsystem.setHorizontalBrake()
+        robot.ballsystem.stopAll()

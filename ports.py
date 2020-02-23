@@ -21,6 +21,7 @@ drivetrain.backRightMotorID = 4
 ColorWheelPorts = PortsList()
 
 ColorWheelPorts.motorID = 15
+ColorWheelPorts.flipperServoPort = 0 # PWM
 
 hood = PortsList
 
@@ -29,7 +30,7 @@ hood.absoluteThroughbore = 9 # DI/O
 
 IntakePorts = PortsList()
 
-IntakePorts.motorID = 11
+IntakePorts.motorID = 13
 
 IntakePorts.sensorID = 4 # on DI/O; 5 for power
 

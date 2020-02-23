@@ -11,7 +11,7 @@ class HoodLimelightCommand(Command):
 
     def initialize(self):
         robot.limelight.setPipeline(1)
-        self.val = robot.limelight.getLLHoodTuner()
+        self.val = robot.hood.getLLHoodTuner()
 
     def execute(self):
         robot.limelight.updateNetworkTables()

@@ -9,23 +9,31 @@ class RunUntilLoadedCommand(Command):
 
         self.requires(robot.ballsystem)
         self.requires(robot.intake)
+       # self.timerRunning = False
 
     def initialize(self):
         robot.intake.intake(0.6)
-        if not robot.ballsystem.isBallPrimed():
-            robot.ballsystem.setHorizontalCoast()
-            robot.ballsystem.runLowerConveyorSlow()
+        if not robot.ballsystem.areTwoBallsPrimed():
+            if not robot.ballsystem.isLowBallPrimed() and robot.ballsystem.isUpperBallPrimed():
+                robot.ballsystem.runLowerConveyorSlow()
+            else:
+                robot.ballsystem.runAllSlow()
 
     def execute(self):
-        print('hmmm ' + str(robot.ballsystem.isBallPrimed()))
-        print(robot.ballsystem.isBallPrimed())
-
-        if robot.ballsystem.isBallPrimed():
+        if robot.ballsystem.isLowBallPrimed() and robot.ballsystem.isUpperBallPrimed():
             robot.ballsystem.stopLowerConveyor()
-        else:
-            robot.ballsystem.runLowerConveyorSlow()
+
+        elif robot.ballsystem.isUpperBallPrimed():
+            #if not self.timerRunning:
+                #self.timerRunning = True
+                #self.timer.start()
+
+            #if self.timer.get() >= 0.25 and self.timerRunning:
+            robot.ballsystem.stopVerticalConveyor()
 
     def end(self):
         robot.intake.stop()
-        robot.ballsystem.stopLowerConveyor()
-        robot.ballsystem.setHorizontalBrake()
+        robot.ballsystem.stopAll()
+        #self.timer.stop()
+        #self.timer.reset()
+        #self.timerRunning = False

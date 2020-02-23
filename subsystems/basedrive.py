@@ -23,8 +23,6 @@ class BaseDrive(DebuggableSubsystem):
     without knowing what type of drive system we have should be implemented here.
     This code definitley doesn't play music.
     '''
-    def printP(self):
-        print(self.falconP)
 
     def setDriveTrain(self, compBot=True):
         if compBot:
@@ -170,8 +168,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 8500#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 8500#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 9500#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 9500#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
