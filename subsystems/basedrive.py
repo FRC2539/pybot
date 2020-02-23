@@ -157,6 +157,7 @@ class BaseDrive(DebuggableSubsystem):
         self.navX = AHRS.create_spi()
         self.resetGyro()
         self.flatAngle = 0
+        self.killMoveVar = 1
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
@@ -185,6 +186,7 @@ class BaseDrive(DebuggableSubsystem):
         self.debugMotor('Front Right Motor', self.motors[1])
 
         self.resetEncoders()
+        self.enableMoveVar()
 
         self.setProfile(0)
 
@@ -303,10 +305,10 @@ class BaseDrive(DebuggableSubsystem):
 
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed)
+                motor.set(speed * self.killMoveVar)
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed)
+                motor.set(speed * self.killMoveVar)
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -363,11 +365,11 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
+                motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed * self.killMoveVar) # make this velocity
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus * self.killMoveVar)
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -689,4 +691,8 @@ class BaseDrive(DebuggableSubsystem):
     def falconGetVelocity(self):
         return [TalonFXSensorCollection(motor).getIntegratedSensorVelocity() for motor in self.activeMotors]
 
+    def killMoveVarSet(self):
+        self.killMoveVar = 0
 
+    def enableMoveVar(self):
+        self.killMoveVar = 1

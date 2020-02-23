@@ -25,9 +25,10 @@ from subsystems.turret import Turret as turret
 from subsystems.shooter import Shooter as shooter
 from subsystems.ballsystem import BallSystem as ballsystem
 from subsystems.pneumaticsystems import PneumaticSystems as pneumaticsystems
-from subsystems.climber import Climber as climber
+from subsystems.winch import Winch as winch
 from subsystems.trolley import Trolley as trolley
 from subsystems.windshieldwiper import WindshieldWiper as windshieldwiper
+from subsystems.climber import Climber as climber
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

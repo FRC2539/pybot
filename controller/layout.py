@@ -54,7 +54,11 @@ from commands.turret.setturretcommand import SetTurretCommand
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
 
-from commands.windshieldwiper.wipefastcommand import WipeFastCommand
+#from commands.winch.pullwinchcommand import PullWinchCommand
+#from commands.winch.releasewinchcommand import ReleaseWinchCommand
+
+from commands.climber.raiseclimbercommand import RaiseClimberCommand
+from commands.climber.lowerclimbercommand import LowerClimberCommand
 
 def init():
     '''
@@ -78,16 +82,21 @@ def init():
 
     driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
-    driveController.B.whenPressed(OutakeCommand())
+    driveController.B.whenPressed(GetColorCommand())
 
     driveController.Y.toggleWhenPressed(SetTurretCommand(2100))
 
     driveController.RightBumper.whileHeld(RaiseHoodCommand())
     driveController.RightTrigger.whileHeld(LowerHoodCommand())
 
-    driveController.Start.toggleWhenPressed(RunCompressorCommand())
+    #driveController.LeftJoystick.whileHeld(PullWinchCommand())
+    #driveController.RightJoystick.whileHeld(ReleaseWinchCommand())
 
-    driveController.LeftBumper.toggleWhenPressed(SetHoodCommand(10))
+    driveController.LeftBumper.whileHeld(RaiseClimberCommand())
+    driveController.RightBumper.whileHeld(LowerClimberCommand())
+
+    driveController.Start.whenPressed(RunUpUntilImpactCommand())
+    driveController.Back.whenPressed(RunDownUntilImpactCommand())
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
@@ -97,7 +106,7 @@ def init():
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
 
     operatorController.LeftJoystick.toggleWhenPressed(FarShotCommandGroup())
-    operatorController.RightJoystick.whenPressed((RunUpUntilImpactCommand())
+    operatorController.RightJoystick.whenPressed(RunUpUntilImpactCommand())
 
     operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())

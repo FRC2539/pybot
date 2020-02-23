@@ -1,9 +1,8 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
-from rev import ControlType, MotorType, CANSparkMax, IdleMode
+from rev import CANSparkMax, MotorType, IdleMode
 
 import ports
-
 
 class Climber(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -11,19 +10,16 @@ class Climber(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Climber')
 
-        self.winchMotor = CANSparkMax(ports.climber.motorID, MotorType.kBrushless)
-        self.winchController = self.winchMotor.getPIDController()
-        self.winchEncoder = self.winchMotor.getEncoder()
+        self.climberMotor = CANSparkMax(ports.climber.motorID, MotorType.kBrushless)
 
-        self.winchMotor.setIdleMode(IdleMode.kBrake)
+        self.climberMotor.setIdleMode(IdleMode.kBrake)
+        self.climberMotor.setInverted(False)
 
-        self.winchMotor.setInverted(False)
+    def raiseClimber(self):
+        self.climberMotor.set(1.0)
 
-    def retract(self): # 'pull' up.
-        self.winchMotor.set(0.8)
+    def lowerClimber(self):
+        self.climberMotor.set(-0.8)
 
-    def loosen(self):
-        self.winchMotor.set(-0.8)
-
-    def slowRetract(self):
-        self.winchMotor.set(0.4)
+    def stop(self):
+        self.climberMotor.stopMotor()

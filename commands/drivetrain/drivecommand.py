@@ -58,4 +58,3 @@ class DriveCommand(Command):
             logicalaxes.driveRotate.get() * 0.5
         )
 
-        print('vel ' + str(robot.drivetrain.getVelocity()))

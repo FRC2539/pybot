@@ -41,15 +41,21 @@ class ColorWheel(DebuggableSubsystem):
 
     def getColor(self):
         self.color = self.colorSensor.getColor()
+        print('r: ' + str(self.color.red))
+        print('g: ' + str(self.color.green))
+        print('b: ' + str(self.color.blue))
+        print('ny: ' + str(self.color.red / self.color.green))
 
-        if self.color.blue > self.color.green and self.color.blue > self.color.red:
+        if self.color.blue > (self.color.green - .18) and self.color.blue > self.color.red: # subtracts because there is more green in blue than blue lol.
             return 'b'
-        elif self.color.red > self.color.green and self.color.red > self.color.blue:
-            return 'r'
-        elif self.color.red / self.color.green > 0.52:
-            return 'y'
-        else: #self.color.green > self.color.red and self.color.green > self.color.blue:
+        #elif self.color.red > self.color.green and self.color.red > self.color.blue:
+         #   return 'r'
+        elif self.color.green - 0.25 > self.color.red and self.color.green > self.color.blue:
             return 'g'
+        elif self.color.red / self.color.green < 0.65: # checks a highly-tuned ratio for current color since yellow isn't RGB and if you think it is you're an idiot.
+            return 'y' #cough cough people who deleted Bens winch code cough cough
+        else:
+            return 'r'
 
     def reset(self):
         self.colorWheelMotor.setEncPosition(0.0)

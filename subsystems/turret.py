@@ -43,14 +43,6 @@ class Turret(DebuggableSubsystem):
         else:
             self.stop()
 
-        #if(self.motor.getSelectedSensorPosition(0)>self.max and self.motor.getSelectedSensorPosition(0)<self.min):
-            #self.motor.set(ControlMode.PercentOutput, speed)
-        #else:
-            #print('hit turret limit')
-            #self.motor.stopMotor()
-        #self.motor.set(ControlMode.PercentOutput, val)<--
-        #print('pulse position ' + str(self.motor.getPulseWidthPosition()))
-
     def move(self, val):
         self.updateNetworkTables()
         if self.isZeroed() and val > 0:
@@ -64,7 +56,7 @@ class Turret(DebuggableSubsystem):
             #if self.getPosition() < self.max and self.getPosition() > self.min:
                 #self.motor.set(ControlMode.PercentOutput, self.speed)
             #elif self.getPosition() > self.max and val > 0:
-                #self.motor.set(ControlMode.PercentOutput, self.speed)
+                ##self.motor.set(ControlMode.PercentOutput, self.speed)
             #elif self.getPosition() < self.min and val < 0:
                 #self.motor.set(ControlMode.PercentOutput, self.speed)
             #else:
@@ -95,7 +87,6 @@ class Turret(DebuggableSubsystem):
         print('self.error = '+ str(self.rotate))
         if abs(self.rotate) > .3:
             self.rotate = math.copysign(.3, self.rotate)
-            print('self.rotate = '+ str(self.rotate))
 
         self.move(self.rotate)
         #if self.error > 1:
@@ -107,8 +98,8 @@ class Turret(DebuggableSubsystem):
 
 
     def printPosition(self):
-        print(str(self.motor.getSelectedSensorPosition(0)))
-        #pass
+        #print(str(self.motor.getSelectedSensorPosition(0)))
+        pass
 
     def updateNetworkTables(self, angle=85.00):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
