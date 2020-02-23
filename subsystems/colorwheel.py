@@ -21,7 +21,8 @@ class ColorWheel(DebuggableSubsystem):
         self.colorWheelEncoder = self.colorWheelMotor.getEncoder()
         self.colorWheelController = self.colorWheelMotor.getPIDController()
 
-        self.flipperServo = wpilib.Servo(ports.ColorWheelPorts.flipperServoPort)
+        self.wwMotor = CANSparkMax(ports.ColorWheelPorts.wwMotorID, MotorType.kBrushed)
+
         self.upPosition = 135 # real physical max is 180
         self.startPosition = 0
 
@@ -74,14 +75,14 @@ class ColorWheel(DebuggableSubsystem):
     def spinCClockwise(self):
         self.colorWheelMotor.set(-0.9)
 
-    def getServoAngle(self):
-        print('min angle ' + str(self.flipperServo.getMinAngle()))
-        print('max angle ' + str(self.flipperServo.getMaxAngle()))
-        print('raw ' + str(self.flipperServo.get()))
-        print('angle ' + str(self.flipperServo.getAngle()))
+    def startSpin(self):
+        self.wwMotor.set(0.8)
 
-    def flipColorWheelUp(self):
-        self.flipperServo.setAngle(self.upPosition)
+    def reverseSpin(self):
+        self.wwMotor.set(-0.8)
 
-    def flipColorWheelDown(self):
-        self.flipperServo.setAngle(self.startPosition)
+    def stopRaise(self):
+        self.wwMotor.stopMotor()
+
+    def stopOnImpact(self):
+        return (self.wwMotor.getOutputCurrent() >= 5)

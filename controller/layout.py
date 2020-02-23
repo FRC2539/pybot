@@ -12,7 +12,8 @@ from commands.intake.outtakecommand import OutakeCommand
 from commands.intake.clearjamtwocommand import ClearJamTwoCommand
 from commands.intake.stopeverythingcommand import StopEverythingCommand
 
-from commands.colorwheel.flipcolorwheelupcommand import FlipColorwheelUpCommand
+from commands.colorwheel.runupuntilimpactcommand import RunUpUntilImpactCommand
+from commands.colorwheel.rundownuntilimpactcommand import RunDownUntilImpactCommand
 from commands.colorwheel.getcolorcommand import GetColorCommand
 
 from commands.ballsystem.runallcommand import RunAllCommand
@@ -94,8 +95,9 @@ def init():
     logicalaxes.turretX = operatorController.RightX
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
+
     operatorController.LeftJoystick.toggleWhenPressed(FarShotCommandGroup())
-    operatorController.RightJoystick.whenPressed(FlipColorwheelUpCommand())
+    operatorController.RightJoystick.whenPressed((RunUpUntilImpactCommand())
 
     operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())

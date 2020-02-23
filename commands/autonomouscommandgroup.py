@@ -44,9 +44,10 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot, Trench, Collect 5')
         def rennaFirstFunction(self):
             print ("I Shoot")#station 3 shoot balls pick up 5 in trench
+            self.addParallel(SetTurretCommand(2100), 3)
+            self.addSequential(MoveCommand(90))
             self.addParallel(SudoCommandGroup())
             self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(MoveCommand(90))
             self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
             self.addParallel(IntakeCommand(), 4)
@@ -57,7 +58,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             print ("I Shoot BUT-")#station 3, shoot balls, go through trench, picking up 3 balls then shoot
             self.addParallel(SetTurretCommand(2100), 3)
             self.addSequential(MoveCommand(90))
-            self.addParallel(SudoCommandGroup(), 5)
+            self.addParallel(SudoCommandGroup(), 4)
             self.addParallel(ShootCommand(4200), 8)
             self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
@@ -71,19 +72,21 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'SkSkSkirt off the init line')
         def getOffInitLine(self):
             print("sksksk")#start station 2, shoot balls, run to generator
-            self.addParallel(SudoCommandGroup(), 1)
+            self.addParallel(SetTurretCommand(2100), 3)
+            self.addSequential(MoveCommand(90))
+            self.addParallel(SudoCommandGroup(), 4)
             self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(MoveCommand(-90))
             self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addSequential(TurnCommand(180)) #Turn to face generator
-            self.addSequential(MoveCommand(-90))
+            self.addSequential(MoveCommand(90))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'shootie trench')
         def shootTrench(self):
             print("shootieTrench")
-            self.addParallel(SudoCommandGroup(), 1)
+            self.addSequential(MoveCommand(90))
+            self.addParallel(SetTurretCommand(2100), 3)
+            self.addParallel(SudoCommandGroup(), 4)
             self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(MoveCommand(-90))
             self.addSequential(RunUntilEmptyCommand(startingBalls))
             #finish
 
