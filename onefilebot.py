@@ -13,8 +13,6 @@ from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
 
-
-
 class FaultyCommand(Command):
     def __init__(self):
         super().__init__('Faulty')
@@ -30,6 +28,7 @@ class GenericController(Joystick):
     invertedAxes = []
 
     def __init__(self, port):
+
         '''
         Creates attributes of this class for every button and axis defined in
         its dictionaries. Subclasses need only fill in those dictionaries
@@ -61,6 +60,9 @@ class POVButton(Button):
     '''
 
     def __init__(self, controller, angle):
+
+        super(POVButton, self).__init__() # add this in to actual robot lol
+
         '''
         Pressing up on the DPad returns 0, up/right returns 45, right return 90
         and so on. So, we can tell if a button is pressed if the reading is
