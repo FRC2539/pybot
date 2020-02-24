@@ -18,8 +18,8 @@ drivetrain.backRightMotorID = 4
 
 ColorWheelPorts = PortsList()
 
-ColorWheelPorts.motorID = 15
-ColorWheelPorts.wwMotorID = 0 # PWM
+ColorWheelPorts.motorID = 12
+ColorWheelPorts.wwMotorID = 15
 
 hood = PortsList
 

@@ -1,8 +1,8 @@
-from wpilib.command import InstantCommand
+from wpilib.command import Command
 
 import robot
 
-class RunUpUntilImpactCommand(InstantCommand):
+class RunUpUntilImpactCommand(Command):
 
     def __init__(self):
         super().__init__('Run Until Impact')
@@ -13,7 +13,9 @@ class RunUpUntilImpactCommand(InstantCommand):
         robot.colorwheel.startSpin()
 
     def isFinished(self):
-        return (robot.colorwheel.stopOnImpact())
+        print(robot.colorwheel.stopOnImpact())
+        print('amp ' + str(robot.colorwheel.getAmp()))
+        return robot.colorwheel.stopOnImpact()
 
     def end(self):
         robot.colorwheel.stopRaise()
