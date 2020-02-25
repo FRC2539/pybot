@@ -169,8 +169,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 9500#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 9500#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 8000#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 8000#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -385,6 +385,8 @@ class BaseDrive(DebuggableSubsystem):
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
         '''
+
+        print('setting drivetrain positions ')
 
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')

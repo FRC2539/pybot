@@ -14,7 +14,7 @@ class RunUntilEmptyCommand(Command):
         self.ballCount = ballCount
 
     def initialize(self):
-        robot.shooter.setRPM(4200) # sets if not already set
+      #  robot.shooter.setRPM(4200) # sets if not already set
         robot.shooter.setGoalNetworkTables()
 
         robot.ballsystem.runAll()
