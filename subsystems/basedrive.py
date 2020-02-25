@@ -364,6 +364,7 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
+            print('positions: ' +  str(self.getPositions()))
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed * self.killMoveVar) # make this velocity
 
