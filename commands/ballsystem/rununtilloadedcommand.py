@@ -11,8 +11,8 @@ class RunUntilLoadedCommand(Command):
 
         self.requires(robot.ballsystem)
         self.requires(robot.intake)
-        self.timerRunning = False
-        self.timer = Timer()
+        #self.timerRunning = False
+        #self.timer = Timer()
 
     def initialize(self):
         robot.intake.intake(0.6)
@@ -27,16 +27,16 @@ class RunUntilLoadedCommand(Command):
             robot.ballsystem.stopLowerConveyor()
 
         elif robot.ballsystem.isUpperBallPrimed():
-            if not self.timerRunning:
-                self.timerRunning = True
-                self.timer.start()
+            #if not self.timerRunning:
+                #self.timerRunning = True
+                #self.timer.start()
 
-            if self.timer.get() >= 0.15 and self.timerRunning:
-                robot.ballsystem.stopVerticalConveyor()
+            #if self.timer.get() >= 0.1 and self.timerRunning:
+            robot.ballsystem.stopVerticalConveyor()
 
     def end(self):
         robot.intake.stop()
         robot.ballsystem.stopAll()
-        self.timer.stop()
-        self.timer.reset()
-        self.timerRunning = False
+        #self.timer.stop()
+        #self.timer.reset()
+        #self.timerRunning = False
