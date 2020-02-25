@@ -35,7 +35,7 @@ if [[ ! -d $PWD/.venv ]]; then
 
     virtualenv -p python3 --no-site-packages $PWD/.venv
     $PWD/.venv/bin/pip install -U pip
-    $PWD/.venv/bin/pip install -r $PWD/requirements.txt
+    $PWD/.venv/bin/pip install  --find-links https://www.tortall.net/~robotpy/wheels/2020/linux_x86_64/ --no-cache-dir -r $PWD/requirements.txt
 
     if [[ ! -d $PWD/tests ]]; then
         $PWD/.venv/bin/python $PWD/robot.py add-tests 2> /dev/null
