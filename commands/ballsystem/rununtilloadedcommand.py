@@ -31,7 +31,7 @@ class RunUntilLoadedCommand(Command):
                 self.timerRunning = True
                 self.timer.start()
 
-            if self.timer.get() >= 0.2 and self.timerRunning:
+            if self.timer.get() >= 0.15 and self.timerRunning:
                 robot.ballsystem.stopVerticalConveyor()
 
     def end(self):
