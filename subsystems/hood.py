@@ -34,11 +34,18 @@ class Hood(DebuggableSubsystem):
 
         self.angleMax = 236.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
         self.angleMin = 166.00
+        self.LLHoodTuner = 13
 
         self.zeroNetworkTables()
 
     def getPosition(self):
         return self.tbEnc.getOutput() * 360
+
+    def upLLHood(self):
+        self.LLHoodTuner = self.LLHoodTuner + .1
+
+    def downLLHood(self):
+        self.LLHoodTuner = self.LLHoodTuner - .1
 
     def stopHood(self):
         self.motor.stopMotor()
@@ -151,4 +158,4 @@ class Hood(DebuggableSubsystem):
 
 
     def getLLHoodTuner(self):
-        return 13
+        return self.LLHoodTuner
