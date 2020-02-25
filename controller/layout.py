@@ -98,7 +98,7 @@ def init():
     driveController.Start.toggleWhenPressed(RunUpUntilImpactCommand())
     driveController.Back.toggleWhenPressed(RunDownUntilImpactCommand())
 
-    driveController.DPadLeft.toggleWhenPressed(DriveWheelCommand())
+    driveController.DPadLeft.whileHeld(DriveWheelCommand())
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)

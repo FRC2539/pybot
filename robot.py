@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import wpilib.command
-#wpilib.command.Command.isFinished = lambda x: False
+wpilib.command.Command.isFinished = lambda x: False
 
 from commandbased import CommandBasedRobot
 from wpilib._impl.main import run

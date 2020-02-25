@@ -5,7 +5,6 @@ def init():
 
 
     autoNames = ['Simple Shoot',
-                 '',
                  'Shoot, Trench, Collect 5',
                  'Shoot, Trench, Collect 3, Shoot',
                  'REEEEEEEEEE',

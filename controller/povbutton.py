@@ -7,6 +7,9 @@ class POVButton(Button):
     '''
 
     def __init__(self, controller, angle):
+
+        super(POVButton, self).__init__()
+
         '''
         Pressing up on the DPad returns 0, up/right returns 45, right return 90
         and so on. So, we can tell if a button is pressed if the reading is
