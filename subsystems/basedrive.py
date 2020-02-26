@@ -69,6 +69,7 @@ class BaseDrive(DebuggableSubsystem):
             self.noStopMusicHere = self.certainlyNotStopMusic
             self.resetEncoders = self.falconResetEncoders
             self.getVelocity = self.falconGetVelocity
+            self.gyroSetPositon = self.falconGyroSetPositions
 
         else:
 
@@ -126,6 +127,7 @@ class BaseDrive(DebuggableSubsystem):
             self.noStopMusicHere = self.null
             self.resetEncoders = self.null
             self.getVelocity = self.null
+            self.gyroSetPositon = self.null
 
             print('set methods')
 
@@ -365,7 +367,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-            print('positions: ' +  str(self.getPositions()))
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed * self.killMoveVar) # make this velocity
 
@@ -387,12 +388,13 @@ class BaseDrive(DebuggableSubsystem):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
-        diff = (((self.startAngle - self.getAngle()) / 360) + 1) * self.speedLimit
+        diff = (((self.startAngle - self.getAngle()) / 360)) * self.speedLimit
 
         motorNum = 0
-        for motor in self.activeMotors:
+
+        for motor, position in zip(self.activeMotors, positions):
             motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit + diff), 0)
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
 

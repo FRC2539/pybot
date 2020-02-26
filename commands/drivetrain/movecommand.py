@@ -38,6 +38,7 @@ class MoveCommand(Command):
             self.targetPositions.append(position + (offset * sign))
             sign *= -1
 
+
         print('target: ' + str(self.targetPositions))
 
         robot.drivetrain.setPositions(self.targetPositions)

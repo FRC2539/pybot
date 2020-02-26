@@ -10,6 +10,7 @@ from commands.network.alertcommand import AlertCommand
 
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.gyromovecommand import GyroMoveCommand
 
 from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
 
@@ -40,15 +41,16 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '3 Ball Auto') # Put given game data here through network tables.
         def ThreeBallAuto(self):#should be good for now
-            self.addParallel(ShootCommand(3400))
-            self.addParallel(SetLaunchAngleCommand(26.0))
-            self.addSequential(SetTurretCommand(2100), 3)
-            self.addSequential(TurretLimelightCommand(), .5)
-            self.addParallel(TurretLimelightCommand())
-            self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunBallFlowCommandGroup(), 5)
-            self.addParallel(StopShooterCommand())
-            self.addSequential(MoveCommand(30))
+            self.addSequential(GyroMoveCommand(30))
+            #self.addParallel(ShootCommand(3400))
+            #self.addParallel(SetLaunchAngleCommand(26.0))
+            #self.addSequential(SetTurretCommand(2100), 3)
+            #self.addSequential(TurretLimelightCommand(), .5)
+            #self.addParallel(TurretLimelightCommand())
+            #self.addParallel(IntakeCommand(0.2))
+            #self.addSequential(RunBallFlowCommandGroup(), 5)
+            #self.addParallel(StopShooterCommand())
+            #self.addSequential(MoveCommand(30))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '5 Ball Auto')
         def rennaFirstFunctionButMore(self):
@@ -57,7 +59,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(MoveCommand(55))
             self.addSequential(MoveCommand(25))
             self.addSequential(SudoCommandGroup(),1)
-            self.addParallel(SudoCommandGroup(.4))
+            self.addParallel(SudoCommandGroup())
             self.addParallel(ShootCommand(4200), 8)
             self.addSequential(RunUntilEmptyCommand(5), 6)
 
