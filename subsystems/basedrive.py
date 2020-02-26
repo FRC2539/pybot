@@ -157,6 +157,7 @@ class BaseDrive(DebuggableSubsystem):
         self.navX = AHRS.create_spi()
         self.resetGyro()
         self.flatAngle = 0
+        self.startAngle = self.getAngle()
         self.killMoveVar = 1
 
         '''A record of the last arguments to move()'''
@@ -378,6 +379,22 @@ class BaseDrive(DebuggableSubsystem):
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
+
+    def captureStartAngle(self):
+        self.startAngle = self.getAngle()
+
+    def falconGyroSetPositions(self, positions):
+        if not self.useEncoders:
+            raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        diff = (((self.startAngle - self.getAngle()) / 360) + 1) * self.speedLimit
+
+        motorNum = 0
+        for motor in self.activeMotors:
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
 
 
     def falconSetPositions(self, positions):
