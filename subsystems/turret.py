@@ -124,6 +124,12 @@ class Turret(DebuggableSubsystem):
 
         return False
 
+    def isMax(self):
+        if (self.getPosition() >= self.max):
+            return True
+        else:
+            return False
+
     def initDefaultCommand(self):
         '''
         By default, unless another command is running that requires this

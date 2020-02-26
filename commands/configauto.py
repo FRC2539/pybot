@@ -7,8 +7,7 @@ def init():
     autoNames = ['3 Ball Auto',
                  '6 Ball Auto',
                  '5 Ball Auto',
-                 'SkSkSkirt off the init line',
-                 'shootie trench' ]
+                ]
 
     autoString = ''
 
