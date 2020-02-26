@@ -172,8 +172,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 8000#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 8000#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 8500#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 8500#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -543,7 +543,7 @@ class BaseDrive(DebuggableSubsystem):
         return degrees
 
     def inchesToRotations(self, distance):
-        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
         print('ROTATIONS : ' + str(rotations * 8.45))#Config('DriveTrain/ticksPerRotation', 8.45)))
 
@@ -551,7 +551,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
         return int(rotations * 8.45) * 2048#Config('DriveTrain/ticksPerRotation', 4096))
 

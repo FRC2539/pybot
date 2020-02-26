@@ -5,6 +5,7 @@ from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.playmusiccommand import PlayMusicCommand
+from commands.drivetrain.drivebaselimelightcommand import DriveBaseLimelightCommand
 from commands.resetcommand import ResetCommand
 
 from commands.intake.intakecommand import IntakeCommand
@@ -54,6 +55,7 @@ from commands.turret.setturretcommand import SetTurretCommand
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
+from commands.limelight.aimturretdrivebasecommand import AimTurretDrivebaseCommand
 
 from commands.winch.pullwinchcommand import PullWinchCommand
 from commands.winch.releasewinchcommand import ReleaseWinchCommand
@@ -98,7 +100,8 @@ def init():
     driveController.Start.toggleWhenPressed(RunUpUntilImpactCommand())
     driveController.Back.toggleWhenPressed(RunDownUntilImpactCommand())
 
-    driveController.DPadLeft.whileHeld(DriveWheelCommand())
+    driveController.DPadLeft.whileHeld(DriveBaseLimelightCommand())
+    driveController.DPadUp.whileHeld(AimTurretDrivebaseCommand())
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)

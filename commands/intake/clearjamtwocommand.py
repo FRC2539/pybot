@@ -24,9 +24,10 @@ class ClearJamTwoCommand(Command):
             if self.timer.get() % 1.5 < 0.01:
                 robot.intake.changeFumble()
         else:
-            if self.timer.get() % 0.5 < 0.01:
+            if self.timer.get() % 1 < 0.01:
                 robot.intake.changeFumble()
 
     def end(self):
         robot.intake.stop()
         self.timer.stop()
+        self.timer.reset()
