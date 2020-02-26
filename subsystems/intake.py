@@ -61,10 +61,10 @@ class Intake(DebuggableSubsystem):
     def changeFumble(self):
         if self.forward:
             self.fumbleReverse()
+            self.forward = False
         else:
             self.fumbleForward()
-
-        self.forward = not self.forward
+            self.forward = True
 
         # lol rip intake motor
 

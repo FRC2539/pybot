@@ -10,6 +10,7 @@ from commands.network.alertcommand import AlertCommand
 
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.gyromovecommand import GyroMoveCommand
 
 from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
 
@@ -34,85 +35,47 @@ class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
         super().__init__('Autonomous')
 
-        startingBalls = 3#onfig('Autonomous/NumberOfBallsAtStart', 3)
+        startingBalls = 3#Config('Autonomous/NumberOfBallsAtStart', 3)
         print('SET STUFFF ' + str(Config('Autonomous/autoModeSelect', None)))
 
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Simple Shoot') # Put given game data here through network tables.
-        def simpleAuto(self):
-            print('\n\n\n\n\n\n Started simple auto \n\n\n\n\n')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '3 Ball Auto') # Put given game data here through network tables.
+        def ThreeBallAuto(self):#should be good for now
+            #self.addSequential(GyroMoveCommand(30))
             self.addParallel(ShootCommand(3400))
             self.addParallel(SetLaunchAngleCommand(26.0))
-            self.addSequential(SetTurretCommand(2100), 3) # Takes Turret our of starting config
+            self.addSequential(SetTurretCommand(2100), 3)
             self.addSequential(TurretLimelightCommand(), .5)
             self.addParallel(TurretLimelightCommand())
-            #self.addSequential(SudoCommandGroup(), 1)# Sets the hood & turret position
-            #self.addParallel(SudoCommandGroup())
-           #self.addParallel(ShootCommand(4200), 8) # spins the shooter up while moving
             self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunBallFlowCommandGroup(), 5) #Shoots 3 balls
+            self.addSequential(RunBallFlowCommandGroup(), 5)
             self.addParallel(StopShooterCommand())
-            self.addSequential(MoveCommand(30)) # goes back 90 inches
+            self.addSequential(GyroMoveCommand(15))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot, Trench, Collect 5')
-        def rennaFirstFunction(self):
-            print ("I Shoot")#station 3 shoot balls pick up 5 in trench
-            self.addParallel(SetTurretCommand(2100), 5)
-            self.addParallel(ShootCommand(3800))
-            self.addSequential(MoveCommand(90))
-            self.addParallel(SudoCommandGroup())
-            #self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(RunUntilEmptyCommand(startingBalls))
-            self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
-            self.addParallel(IntakeCommand(), 4)
-            self.addSequential(MoveCommand(200))
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Shoot, Trench, Collect 3, Shoot')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '5 Ball Auto')
         def rennaFirstFunctionButMore(self):
-            print ("I Shoot BUT-")#station 3, shoot balls, go through trench, picking up 3 balls then shoot
             self.addParallel(SetTurretCommand(2100), 3)
             self.addParallel(IntakeCommand(), 5)
-            self.addSequential(MoveCommand(80), 5)
+            self.addSequential(MoveCommand(145))
             self.addSequential(SudoCommandGroup(),1)
             self.addParallel(SudoCommandGroup())
             self.addParallel(ShootCommand(4200), 8)
             self.addSequential(RunUntilEmptyCommand(5), 6)
-            #self.addParallel(RunUntilLoadedCommand()) #Go through the trench while picking up balls
-            #self.addParallel(IntakeCommand(), 3)
-            #self.addSequential(MoveCommand(114.63))
-            #self.addParallel(SudoCommandGroup(), 5)
-            #self.addSequential(ShootCommand(4200), 8)
-            #self.addSequential(RunUntilEmptyCommand(3))
 
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'SkSkSkirt off the init line')
-        def getOffInitLine(self):
-            print("sksksk")#start station 2, shoot balls, run to generator
-            self.addParallel(SetTurretCommand(2100), 3)
-            self.addSequential(MoveCommand(90))
-            self.addParallel(SudoCommandGroup(), 4)
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '6 Ball Auto')
+        def rennaFirstFunction(self):
+            print ("I Shoot")#station 3 shoot balls pick up 3 in trench
+            self.addParallel(ShootCommand(3400))
+            self.addParallel(SetLaunchAngleCommand(26.0))
+            self.addSequential(SetTurretCommand(2100), 3)
+            self.addSequential(TurretLimelightCommand(), .5)
+            self.addParallel(TurretLimelightCommand())
+            self.addParallel(IntakeCommand(0.2))
+            self.addSequential(RunBallFlowCommandGroup(), 5)
+            self.addParallel(StopShooterCommand())
+            self.addSequential(MoveCommand(55))
+            self.addSequential(MoveCommand(25))
+            self.addSequential(SudoCommandGroup(),1)
+            self.addParallel(SudoCommandGroup())
             self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(RunUntilEmptyCommand(startingBalls))
-            self.addSequential(TurnCommand(180)) #Turn to face generator
-            self.addSequential(MoveCommand(90))
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'shootie trench')
-        def shootTrench(self):
-            print("shootieTrench")
-            self.addSequential(MoveCommand(90))
-            self.addParallel(SetTurretCommand(2100), 3)
-            self.addParallel(SudoCommandGroup(), 4)
-            self.addParallel(ShootCommand(4200), 8)
-            self.addSequential(RunUntilEmptyCommand(startingBalls))
-            #finish
-
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'REEEEEEEEEE')
-        def donutLife (self):
-            print("dat Donut Life")
-            self.addSequential(TurnCommand(66669.96969696969696969), 15)#Turns unitl 15 are done (we are so mature)
-
-
-
-
-
+            self.addSequential(RunUntilEmptyCommand(5), 6)

@@ -3,7 +3,7 @@ from custom import driverhud
 from custom.config import MissingConfigError
 import robot
 
-class MoveCommand(Command):
+class GyroMoveCommand(Command):
 
     def __init__(self, distance, avoidCollisions=False, name=None):
         '''
@@ -38,13 +38,11 @@ class MoveCommand(Command):
             self.targetPositions.append(position + (offset * sign))
             sign *= -1
 
+        print('target: ' + str(self.targetPositions))
 
-        print('my target: ' + str(self.targetPositions))
-
-        robot.drivetrain.setPositions(self.targetPositions)
+        robot.drivetrain.gyroSetPositon(self.targetPositions)
 
     def execute(self):
-        print('my target: ' + str(self.targetPositions))
         if self.avoidCollisions:
             try:
                 if self.distance < 0:
@@ -79,6 +77,7 @@ class MoveCommand(Command):
             except NotImplementedError:
                 pass
 
+        robot.drivetrain.gyroSetPositon(self.targetPositions)
 
     def isFinished(self):
         if self.blocked:

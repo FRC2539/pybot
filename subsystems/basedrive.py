@@ -69,6 +69,7 @@ class BaseDrive(DebuggableSubsystem):
             self.noStopMusicHere = self.certainlyNotStopMusic
             self.resetEncoders = self.falconResetEncoders
             self.getVelocity = self.falconGetVelocity
+            self.gyroSetPositon = self.falconGyroSetPositions
 
         else:
 
@@ -126,6 +127,7 @@ class BaseDrive(DebuggableSubsystem):
             self.noStopMusicHere = self.null
             self.resetEncoders = self.null
             self.getVelocity = self.null
+            self.gyroSetPositon = self.null
 
             print('set methods')
 
@@ -157,6 +159,7 @@ class BaseDrive(DebuggableSubsystem):
         self.navX = AHRS.create_spi()
         self.resetGyro()
         self.flatAngle = 0
+        self.startAngle = self.getAngle()
         self.killMoveVar = 1
 
         '''A record of the last arguments to move()'''
@@ -169,8 +172,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 8000#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 8000#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 8500#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 8500#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -364,7 +367,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-            print('positions: ' +  str(self.getPositions()))
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed * self.killMoveVar) # make this velocity
 
@@ -378,6 +380,23 @@ class BaseDrive(DebuggableSubsystem):
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
+
+    def captureStartAngle(self):
+        self.startAngle = self.getAngle()
+
+    def falconGyroSetPositions(self, positions):
+        if not self.useEncoders:
+            raise RuntimeError('Cannot set position. Encoders are disabled.')
+
+        diff = (((self.startAngle - self.getAngle()) / 360)) * self.speedLimit
+
+        motorNum = 0
+
+        for motor, position in zip(self.activeMotors, positions):
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit + diff), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
 
 
     def falconSetPositions(self, positions):
@@ -524,7 +543,7 @@ class BaseDrive(DebuggableSubsystem):
         return degrees
 
     def inchesToRotations(self, distance):
-        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
         print('ROTATIONS : ' + str(rotations * 8.45))#Config('DriveTrain/ticksPerRotation', 8.45)))
 
@@ -532,7 +551,7 @@ class BaseDrive(DebuggableSubsystem):
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * 6)#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
         return int(rotations * 8.45) * 2048#Config('DriveTrain/ticksPerRotation', 4096))
 

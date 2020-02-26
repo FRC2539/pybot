@@ -76,6 +76,8 @@ class ColorWheel(DebuggableSubsystem):
         self.reset()
         ##self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # DUMMY VALUE
 
+
+
     def spinClockwise(self):
         self.colorWheelMotor.set(1)
 
