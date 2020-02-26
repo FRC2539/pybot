@@ -27,6 +27,9 @@ class BallSystem(DebuggableSubsystem):
         self.shooterSensor = DigitalInput(ports.ballsystem.shooterSensor)
         self.horizontalBeltSensor = DigitalInput(ports.ballsystem.horizontalConveyorSensor)
 
+    def slowVerticalReverse(self):
+        self.verticalConveyorMotor.set(-0.05)
+
     def runLowerConveyor(self):
         self.lowerConveyorMotor.set(ControlMode.PercentOutput, 0.8)
         self.table.putString('LowerConveyorStatus', 'Forward')
@@ -110,3 +113,8 @@ class BallSystem(DebuggableSubsystem):
             self.shooting = False # nothing there, spaced out.
 
         return startCount
+
+    def initDefaultCommand(self):
+        from commands.ballsystem.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())

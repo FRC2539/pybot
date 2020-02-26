@@ -9,24 +9,26 @@ class RunUntilEmptyCommand(Command):
         super().__init__('Run Until Empty')
 
         self.requires(robot.ballsystem)
-        self.requires(robot.shooter)
 
         self.ballCount = ballCount
+        self.primed = False
 
     def initialize(self):
-      #  robot.shooter.setRPM(4200) # sets if not already set
-        robot.shooter.setGoalNetworkTables()
+        if robot.ballsystem.isUpperBallPrimed():
+            self.primed = True
 
         robot.ballsystem.runAll()
 
     def execute(self):
-        self.ballCount = robot.ballsystem.monitorBalls(self.ballCount)
+        if self.primed and not robot.ballsystem.isUpperBallPrimed(): # if there was a ball there and its not, it's shot.
+            self.ballCount -= 1
+            self.primed = False
 
-        robot.shooter.updateNetworkTables()
+        if robot.ballsystem.isUpperBallPrimed(): # saw it, when it does not see it next, assumes it has been shot.
+            self.primed = True
 
     def isFinished(self):
-        return (self.ballCount == 0)
+        return (self.ballCount <= 0)
 
     def end(self):
-        robot.shooter.stop()
         robot.ballsystem.stopAll()
