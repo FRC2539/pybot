@@ -3,6 +3,7 @@ from . import logicalaxes
 
 from custom.config import Config
 
+from commands.drivetrain.gyromovecommand import GyroMoveCommand
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.playmusiccommand import PlayMusicCommand
 from commands.drivetrain.drivebaselimelightcommand import DriveBaseLimelightCommand
@@ -88,20 +89,22 @@ def init():
     driveController.B.toggleWhenPressed(OutakeCommand())
     driveController.Y.whileHeld(DriveWheelCommand())
 
-    driveController.RightBumper.whileHeld(RaiseHoodCommand())
-    driveController.RightTrigger.whileHeld(LowerHoodCommand())
+    driveController.LeftBumper.whileHeld(RaiseHoodCommand())
+    driveController.LeftTrigger.whileHeld(LowerHoodCommand())
 
     driveController.LeftJoystick.whileHeld(PullWinchCommand())
     driveController.RightJoystick.whileHeld(ReleaseWinchCommand())
 
-    driveController.LeftBumper.whileHeld(RaiseClimberCommand())
-    driveController.RightBumper.whileHeld(LowerClimberCommand())
+    driveController.RightBumper.whileHeld(RaiseClimberCommand())
+    driveController.RightTrigger.whileHeld(LowerClimberCommand())
 
     driveController.Start.toggleWhenPressed(RunUpUntilImpactCommand())
     driveController.Back.toggleWhenPressed(RunDownUntilImpactCommand())
 
     driveController.DPadLeft.whileHeld(DriveBaseLimelightCommand())
     driveController.DPadUp.whileHeld(AimTurretDrivebaseCommand())
+
+    driveController.DPadRight.whenPressed(GyroMoveCommand(15))
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
