@@ -5,8 +5,9 @@ def init():
 
 
     autoNames = ['3 Ball Auto',
-                 '6 Ball Auto',
+                 '3 Ball Move First',
                  '5 Ball Auto',
+                 '6 Ball Auto',
                 ]
 
     autoString = ''

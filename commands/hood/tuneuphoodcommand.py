@@ -1,22 +1,13 @@
-from wpilib.command import Command
+from wpilib.command import InstantCommand
 
 import robot
 
 
-class TuneUpHoodCommand(Command):
+class TuneUpHoodCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Tune Up Hood')
 
-
-
     def initialize(self):
         robot.hood.upLLHood()
 
-
-    def execute(self):
-        pass
-
-
-    def end(self):
-        pass

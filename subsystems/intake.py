@@ -49,6 +49,12 @@ class Intake(DebuggableSubsystem):
         if current * 1000 > 1800:
             self.ballCount += 1
 
+    def slowIntake(self):
+        self.intakeMotor.set(0.3)
+
+    def slowOuttake(self):
+        self.intakeMotor.set(-0.3)
+
     def intakeFreakOutNT(self):
         self.intakeTable.putString('Intakestatus', 'Freaking Out!')
 

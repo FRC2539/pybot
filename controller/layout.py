@@ -34,6 +34,8 @@ from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
 from commands.pneumaticsystems.runcompressor import RunCompressorCommand
 
+from commands.hood.tunedownhoodcommand import TuneDownHoodCommand
+from commands.hood.tuneuphoodcommand import TuneUpHoodCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 from commands.hood.sethoodcommand import SetHoodCommand
@@ -129,5 +131,8 @@ def init():
 
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
+
+    operatorController.DPadUp.whenPressed(TuneUpHoodCommand())
+    operatorController.DPadDown.whenPressed(TuneDownHoodCommand())
 
     operatorController.Back.whenPressed(StopEverythingCommand())

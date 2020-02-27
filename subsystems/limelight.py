@@ -40,7 +40,10 @@ class Limelight(DebuggableSubsystem):
         return self.nt.getEntry('ta').getDouble(0)
 
     def getTape(self):
-        return self.nt.getEntry('tv').getDouble(0)
+        if (self.nt.getEntry('tv').getDouble(0) == 1):
+            return True
+        else:
+            return False
 
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
