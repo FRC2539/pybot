@@ -83,10 +83,10 @@ class Turret(DebuggableSubsystem):
 
     def setPosition(self, position):
         self.error = self.getPosition() - position
-        self.rotate = self.error * 0.0025
+        self.rotate = self.error * 0.0005
         #print('self.error = '+ str(self.rotate))
         if abs(self.rotate) > .5:
-            self.rotate = math.copysign(.3, self.rotate)
+            self.rotate = math.copysign(.5, self.rotate)
 
         self.move(self.rotate)
         #if self.error > 1:
