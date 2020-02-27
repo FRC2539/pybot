@@ -78,8 +78,13 @@ class ColorWheel(DebuggableSubsystem):
         self.reset()
         ##self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # DUMMY VALUE
 
-    def alignWithSensor(self, desiredColor): # Runs the wheel until the desired color is at the sensor by watching the following colors. Returns true when aligned.
-        searchForColor = self.colors[(self.colors.index(desiredColor, 4) - 2)] # go two spaces away. The four tells it to start at the second half of the list.
+    def setSearch(self, desiredColor): # Runs the wheel until the desired color is at the sensor by watching the following colors. Returns true when aligned.
+        return self.colors[(self.colors.index(desiredColor, 4) - 2)] # go two spaces away. The four tells it to start at the second half of the list.
+
+    def alignWithSensor(self, robotColor):
+        if self.getColor() == robotColor:
+            return True
+        return False
 
     def spinClockwise(self):
         self.colorWheelMotor.set(1)
