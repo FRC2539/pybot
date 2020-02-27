@@ -135,7 +135,7 @@ def init():
     operatorController.DPadUp.whenPressed(TuneUpHoodCommand())
     operatorController.DPadDown.whenPressed(TuneDownHoodCommand())
     operatorController.DPadLeft.whileHeld(SetTurretCommand(250))
-    operatorController.DPadRight.whileHeld(SetTurretCommand(2100))
+    operatorController.DPadRight.whileHeld(SetTurretCommand(2000))
 
     operatorController.Back.whenPressed(StopEverythingCommand())
     operatorController.Start.whenPressed(DiagnosticsTestCommand())
