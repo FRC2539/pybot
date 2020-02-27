@@ -55,6 +55,7 @@ from commands.shooter.closeshotcommandgroup import CloseShotCommandGroup
 
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.setturretcommand import SetTurretCommand
+from commands.turret.turretfieldorientedcommand import TurretFieldOrientedCommand
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
@@ -107,6 +108,7 @@ def init():
 
     driveController.DPadLeft.whileHeld(DriveBaseLimelightCommand())
     driveController.DPadUp.whileHeld(AimTurretDrivebaseCommand())
+    driveController.DPadDown.whileHeld(TurretFieldOrientedCommand())
 
     driveController.DPadRight.whenPressed(GyroMoveCommand(15))
 

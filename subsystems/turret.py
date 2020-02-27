@@ -75,11 +75,14 @@ class Turret(DebuggableSubsystem):
         self.fieldAngle = robot.drivetrain.getAngle()
 
     def turretFieldOriented(self): # Use for when traveling 'round the field.
-        degrees = (self.fieldAngle - robot.drivetrain.getAngle()) * 0.003
-        if self.getPosition() + 2 < self.max and self.getPosition() - 2 > self.min:
-            self.motor.set(ControlMode.PercentOutput, degrees)
-        else:
-            self.stop()
+        #degrees = (self.fieldAngle - robot.drivetrain.getAngle()) * 0.0003
+        #if self.getPosition() + 25 < self.max and self.getPosition() - 25 > self.min:
+            #self.move(degrees)
+        #else:
+            #self.stop()
+        self.degrees = robot.drivertrain.getAngle()
+        if degrees > 180 :
+            self.setPosition((self.degrees-180)*2000/180 +100 )
 
     def setPosition(self, position):
         self.error = self.getPosition() - position

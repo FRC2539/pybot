@@ -2,18 +2,22 @@ from wpilib.command import Command
 
 import robot
 
-class TurretFieldOrientedCommand(Command):
+
+class FieldOrientationTurretCommand(Command):
 
     def __init__(self):
-        super().__init__('Turret Field Oriented')
+        super().__init__('Field Orientation Turret')
 
         self.requires(robot.turret)
+
 
     def initialize(self):
         pass
 
+
     def execute(self):
-        robot.turret.turretFieldOriented()
+        pass
+
 
     def end(self):
-        robot.turret.stop()
+        pass
