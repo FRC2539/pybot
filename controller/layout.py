@@ -66,6 +66,8 @@ from commands.winch.releasewinchcommand import ReleaseWinchCommand
 from commands.climber.raiseclimbercommand import RaiseClimberCommand
 from commands.climber.lowerclimbercommand import LowerClimberCommand
 
+from commands.diagnosticstestcommand import DiagnosticsTestCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -127,8 +129,6 @@ def init():
 
     #operatorController.DPadUp.whileHeld(FlipColorwheelUpCommand())
 
-    operatorController.Start.toggleWhenPressed(FarShotCommandGroup())
-
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
@@ -136,3 +136,4 @@ def init():
     operatorController.DPadDown.whenPressed(TuneDownHoodCommand())
 
     operatorController.Back.whenPressed(StopEverythingCommand())
+    operatorController.Start.whenPressed(DiagnosticsTestCommand())

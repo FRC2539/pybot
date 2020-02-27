@@ -1,4 +1,4 @@
-from wpilib.command import Command
+from wpilib.command import InstantCommand
 
 from networktables import NetworkTables as nt
 
@@ -6,7 +6,7 @@ from wpilib import Timer
 
 import robot
 
-class DiagnosticsTestCommand(Command):
+class DiagnosticsTestCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Diagnostics Test')
