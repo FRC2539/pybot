@@ -16,6 +16,8 @@ class ColorWheel(DebuggableSubsystem):
 
         self.colorMatcher = ColorMatch()
 
+        self.colors = ['y', 'r', 'g', 'b', 'y', 'r', 'g', 'b']
+
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
         self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushed)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
 
@@ -76,7 +78,8 @@ class ColorWheel(DebuggableSubsystem):
         self.reset()
         ##self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # DUMMY VALUE
 
-
+    def alignWithSensor(self, desiredColor): # Runs the wheel until the desired color is at the sensor by watching the following colors. Returns true when aligned.
+        searchForColor = self.colors[(self.colors.index(desiredColor, 4) - 2)] # go two spaces away. The four tells it to start at the second half of the list.
 
     def spinClockwise(self):
         self.colorWheelMotor.set(1)

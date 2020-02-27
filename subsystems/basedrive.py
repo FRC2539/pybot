@@ -554,7 +554,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
-        return int(rotations * 8.45) * 2048#Config('DriveTrain/ticksPerRotation', 4096))
+        return float((rotations * 8.45) * 2048)#Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):
