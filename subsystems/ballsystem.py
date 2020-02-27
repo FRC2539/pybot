@@ -30,6 +30,12 @@ class BallSystem(DebuggableSubsystem):
     def slowVerticalReverse(self):
         self.verticalConveyorMotor.set(-0.05)
 
+    def runVerticalSlow(self):
+        self.verticalConveyorMotor.set(0.4)
+
+    def reverseVerticalSlow(self):
+        self.verticalConveyorMotor.set(-0.4)
+
     def runLowerConveyor(self):
         self.lowerConveyorMotor.set(ControlMode.PercentOutput, 0.8)
         self.table.putString('LowerConveyorStatus', 'Forward')
@@ -37,6 +43,10 @@ class BallSystem(DebuggableSubsystem):
     def runLowerConveyorSlow(self):
         self.lowerConveyorMotor.set(ControlMode.PercentOutput, 0.4) # experiment
         self.table.putString('LowerConveyorStatus', 'Slow')
+
+    def reverseLowerConveyorSlow(self):
+        self.lowerConveyorMotor.set(ControlMode.PercentOutput, -0.4) # experiment
+        self.table.putString('LowerConveyorStatus', 'Reverse Slow')
 
     def runVerticalConveyor(self):
         self.verticalConveyorMotor.set(ControlMode.PercentOutput, 1)
