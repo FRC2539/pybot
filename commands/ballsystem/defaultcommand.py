@@ -10,7 +10,8 @@ class DefaultCommand(Command):
         self.requires(robot.ballsystem)
 
     def execute(self):
-        if abs(robot.drivetrain.getTilt()) > 10.0: # if the angle is greater than ten degrees any way, it reverses the belt slowly.
+        print('angle  ' +str(robot.drivetrain.getTilt()))
+        if abs(robot.drivetrain.getTilt()) > 1.15: # if the angle is greater than ten degrees any way, it reverses the belt slowly.
             robot.ballsystem.slowVerticalReverse()
         else:
             robot.ballsystem.stopVerticalConveyor()

@@ -50,7 +50,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(TurretLimelightCommand(), .5)
             self.addParallel(TurretLimelightCommand())
             self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunUntilEmptyCommand(), 8)
+            self.addSequential(RunUntilEmptyCommand(startingBalls), 8)
             self.addParallel(StopEverythingCommand())
             self.addSequential(GyroMoveCommand(15))
 

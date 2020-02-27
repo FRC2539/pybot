@@ -32,8 +32,6 @@ class DriveCommand(Command):
         self.slowed = False
 
     def execute(self):
-        print('positions: ' +  str(robot.drivetrain.getPositions()))
-
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()
         if self.lastY is None:

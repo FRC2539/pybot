@@ -8,9 +8,9 @@ class Winch(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
-        super().__init__('Climber')
+        super().__init__('Winch')
 
-        self.winchMotor = CANSparkMax(ports.climber.motorID, MotorType.kBrushless)
+        self.winchMotor = CANSparkMax(ports.winch.motorID, MotorType.kBrushless)
         self.winchController = self.winchMotor.getPIDController()
         self.winchEncoder = self.winchMotor.getEncoder()
 
@@ -33,4 +33,5 @@ class Winch(DebuggableSubsystem):
         self.winchMotor.set(0.4)
 
     def isHigh(self):
-        return (self.winchEncoder.getPosition() >= 256.0)
+        print('high : ' + str(self.winchEncoder.getPosition()))
+        return False#(self.winchEncoder.getPosition() >= 256.0)

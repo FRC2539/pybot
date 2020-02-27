@@ -54,11 +54,11 @@ ballsystem.horizontalConveyorSensor = 0 # On DIO; 1 for power
 
 climber = PortsList()
 
-climber.motorID = 14
+climber.motorID = 11
 
 winch = PortsList()
 
-winch.motorID = 12
+winch.motorID = 14
 
 windshieldwiper = PortsList()
 

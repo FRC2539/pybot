@@ -15,11 +15,13 @@ class Climber(DebuggableSubsystem):
         self.climberMotor.setIdleMode(IdleMode.kBrake)
         self.climberMotor.setInverted(False)
 
+        self.climberMotor.burnFlash()
+
     def raiseClimber(self):
-        self.climberMotor.set(1.0)
+        self.climberMotor.set(0.2)
 
     def lowerClimber(self):
-        self.climberMotor.set(-0.8)
+        self.climberMotor.set(-0.2)
 
     def stop(self):
         self.climberMotor.stopMotor()

@@ -13,5 +13,8 @@ class LowerClimberCommand(Command):
     def initialize(self):
         robot.climber.lowerClimber()
 
+    def execute(self):
+        robot.climber.lowerClimber()
+
     def end(self):
         robot.climber.stop()

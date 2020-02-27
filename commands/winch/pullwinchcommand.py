@@ -9,15 +9,15 @@ class PullWinchCommand(Command):
         super().__init__('Pull Winch')
 
         self.requires(robot.winch)
-        self.requires(robot.drivetrain)
+        #self.requires(robot.drivetrain)
 
     def initialize(self):
         robot.winch.retract()
 
     def execute(self):
-        if robot.winch.isHigh(): # enough hopefully
-            robot.drivetrain.killMoveVarSet() # kills drivetrain by setting mult to zero.
-
+        #if robot.winch.isHigh(): # enough hopefully
+            #robot.drivetrain.killMoveVarSet() # kills drivetrain by setting mult to zero.
+        pass
     def end(self):
         robot.winch.stopWinch()
 

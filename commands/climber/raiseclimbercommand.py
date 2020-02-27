@@ -13,5 +13,8 @@ class RaiseClimberCommand(Command):
     def initialize(self):
         robot.climber.raiseClimber()
 
+    def execute(self):
+        robot.climber.raiseClimber()
+
     def end(self):
         robot.climber.stop()

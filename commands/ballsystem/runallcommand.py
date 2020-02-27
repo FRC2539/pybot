@@ -1,5 +1,7 @@
 from wpilib.command import Command
 
+from wpilib import Timer
+
 import robot
 
 class RunAllCommand(Command):
@@ -9,8 +11,18 @@ class RunAllCommand(Command):
 
         self.requires(robot.ballsystem)
 
+        self.timer = Timer()
+
     def initialize(self):
-        robot.ballsystem.runAll()
+        robot.ballsystem.runVerticalConveyor()
+        robot.ballsystem.reverseLowerConveyorSlow()
+        self.timer.start()
+
+    def execute(self):
+        if self.timer.hasElapsed(1):
+            robot.ballsystem.runLowerConveyor()
+            self.timer.stop()
 
     def end(self):
         robot.ballsystem.stopAll()
+        self.timer.reset()

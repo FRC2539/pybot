@@ -28,11 +28,11 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = Config('DriveTrain/Speed/P', 0.001) # 0.001
-            self.falconI = Config('DriveTrain/Speed/I', 0.00) # 0.00
-            self.falconD = Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
-            self.falconF = Config('DriveTrain/Speed/F', 0.1) # 0.1
-            self.falconIZone = Config('DriveTrain/Speed/IZone', 0) # 0
+            self.falconP = 0.001#Config('DriveTrain/Speed/P', 0.001) # 0.001
+            self.falconI = 0.00#Config('DriveTrain/Speed/I', 0.00) # 0.00
+            self.falconD = 0.01#Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
+            self.falconF = 0.1#Config('DriveTrain/Speed/F', 0.1) # 0.1
+            self.falconIZone = 0#Config('DriveTrain/Speed/IZone', 0) # 0
 
             #self.bensGloriousOrchestra = Orchestra()
             self.bensGloriousOrchestra = None
@@ -189,7 +189,6 @@ class BaseDrive(DebuggableSubsystem):
         self.debugMotor('Front Right Motor', self.motors[1])
 
         self.resetEncoders()
-        self.enableMoveVar()
 
         self.setProfile(0)
 
@@ -367,12 +366,14 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
+            print('speeds' + str(speeds))
+
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed * self.killMoveVar) # make this velocity
+                motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus * self.killMoveVar)
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
         if [x, y, rotate] == self.lastInputs:
             return

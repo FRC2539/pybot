@@ -14,4 +14,4 @@ class ReleaseWinchCommand(Command):
         robot.winch.loosen()
 
     def end(self):
-        robot.winch.stop()
+        robot.winch.stopWinch()

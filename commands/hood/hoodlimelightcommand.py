@@ -20,7 +20,7 @@ class HoodLimelightCommand(Command):
                 robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)**2 + self.val) # was 15.75
             else:
                 #robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + self.val + 3)
-                robot.hood.setShootAngle(-2.3(robot.limelight.calcDistance()-120)**-3+26)
+                robot.hood.setShootAngle(-2.3 * (robot.limelight.calcDistance()-120)**-3 + 26)
         else:
             robot.hood.stopHood()
 
