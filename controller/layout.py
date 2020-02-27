@@ -134,5 +134,7 @@ def init():
 
     operatorController.DPadUp.whenPressed(TuneUpHoodCommand())
     operatorController.DPadDown.whenPressed(TuneDownHoodCommand())
+    operatorController.DPadLeft.toggleWhenPressed(SetTurretCommand(250))
+    operatorController.DPadRight.toggleWhenPressed(SetTurretCommand(2100))
 
     operatorController.Back.whenPressed(StopEverythingCommand())
