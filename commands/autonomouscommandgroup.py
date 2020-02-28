@@ -50,20 +50,21 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(TurretLimelightCommand(), .5)
             self.addParallel(TurretLimelightCommand())
             self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunUntilEmptyCommand(startingBalls), 8)
+            self.addSequential(RunUntilEmptyCommand(startingBalls), 7)
             self.addParallel(StopEverythingCommand())
-            self.addSequential(GyroMoveCommand(15))
+            self.addSequential(GyroMoveCommand(15), 2.5)
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '3 Ball Move First') # Put given game data here through network tables.
         def ThreeBallMoveFirst(self):#should be good for now
-            self.addParallel(ShootCommand(3400))
-            self.addParallel(SetLaunchAngleCommand(26.0))
+            self.addParallel(ShootCommand(3500))
+            self.addParallel(SetLaunchAngleCommand(26.0)) # referencing hood and not ending, thus prohibiting the sudo cg?
             self.addParallel(SetTurretCommand(2100), 3)
-            self.addSequential(GyroMoveCommand(30))
-            self.addSequential(AimTurretDrivebaseCommand(), .5)
-            self.addParallel(SudoCommandGroup())
+            self.addSequential(GyroMoveCommand(30), 2.5) # possibly not ending?
+            #self.addSequential(AimTurretDrivebaseCommand(), .5)
+            self.addSequential(TurretLimelightCommand(), 0.5)
+            self.addParallel(TurretLimelightCommand())
             self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunBallFlowCommandGroup(), 5)
+            self.addSequential(RunUntilEmptyCommand(startingBalls))
             self.addSequential(StopEverythingCommand())
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == '5 Ball Auto')

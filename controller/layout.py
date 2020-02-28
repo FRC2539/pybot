@@ -97,8 +97,8 @@ def init():
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
 
-    driveController.LeftJoystick.whileHeld(PullWinchCommand())
-    driveController.RightJoystick.whileHeld(ReleaseWinchCommand())
+    driveController.RightJoystick.whileHeld(PullWinchCommand())
+    driveController.LeftJoystick.whileHeld(ReleaseWinchCommand())
 
     driveController.RightBumper.whileHeld(RaiseClimberCommand())
     driveController.RightTrigger.whileHeld(LowerClimberCommand())
