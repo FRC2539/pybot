@@ -19,7 +19,10 @@ class ColorWheel(DebuggableSubsystem):
         self.colors = ['y', 'r', 'g', 'b', 'y', 'r', 'g', 'b']
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
-        self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushed)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
+        self.colorWheelMotor = CANSparkMax(ports.ColorWheelPorts.motorID, MotorType.kBrushless)# WPI_TalonSRX(ports.ColorWheelPorts.motorID)
+
+        self.colorWheelEncoder = self.colorWheelMotor.getEncoder()
+        self.colorWheelController = self.colorWheelMotor.getPIDController()
 
         self.wwMotor = CANSparkMax(ports.ColorWheelPorts.wwMotorID, MotorType.kBrushed)
 
@@ -33,11 +36,15 @@ class ColorWheel(DebuggableSubsystem):
 
         self.colorWheelMotor.setInverted(False) # might need to change
 
-        #self.colorWheelController.setP(0.01, 0) # Dummy values from the falcon tester
-        #self.colorWheelController.setI(0, 0)
-        #self.colorWheelController.setD(0.1, 0)
-        #self.colorWheelController.setIZone(1, 0)
-        #self.colorWheelController.setFF(0.1, 0)
+        self.colorWheelController.setP(0.001, 0) # Dummy values from the falcon tester
+        self.colorWheelController.setI(0, 0)
+        self.colorWheelController.setD(0, 0)
+        self.colorWheelController.setIZone(0, 0)
+        self.colorWheelController.setFF(0, 0)
+
+        #self.colorWheelController.setSmartMotionMaxVelocity(400, 0)
+        #self.colorWheelController.setSmartMotionMaxAccel(400, 0)
+        #self.colorWheelController.setSmartMotionAllowedClosedLoopError(4.0, 0)
 
         self.colorWheelMotor.burnFlash()
 
@@ -60,18 +67,19 @@ class ColorWheel(DebuggableSubsystem):
             return 'r'
 
     def reset(self):
-        pass
-        #self.colorWheelMotor.setEncPosition(0.0)
-        #self.colorWheelEncoder.setPosition(0.0)
+        self.colorWheelEncoder.setPosition(0.0)
 
-    def autoSpinWheel(self, val=9630): # This val is for the number of rotations; pass an argument for the set
-        ''' Should be about 3.25 rotations of the color wheel '''
+    def autoSpinWheel(self, val=675.0): # This val is for the number of rotations; pass an argument for the set
+        ''' Should be about 3.5 rotations of the color wheel '''
         # Need to add the offset based on direction to set the extra distance to get to the sensor.
         self.reset()
-        #self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # Look at photos for calc, Ben.
+        self.colorWheelController.setReference(val, ControlType.kPosition, 0, 0) # Look at photos for calc, Ben.
 
     def stop(self):
         self.colorWheelMotor.stopMotor()
+
+    def getEncPosition(self):
+        return self.colorWheelEncoder.getPosition()
 
     def spinToSensor(self, val):
         # only use if already on that color.
@@ -87,10 +95,10 @@ class ColorWheel(DebuggableSubsystem):
         return False
 
     def spinClockwise(self):
-        self.colorWheelMotor.set(1)
+        self.colorWheelMotor.set(0.2)
 
     def spinCClockwise(self):
-        self.colorWheelMotor.set(-1)
+        self.colorWheelMotor.set(-0.2)
 
     def startSpin(self):
         self.wwMotor.set(0.8)

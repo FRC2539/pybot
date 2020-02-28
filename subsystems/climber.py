@@ -18,10 +18,13 @@ class Climber(DebuggableSubsystem):
         self.climberMotor.burnFlash()
 
     def raiseClimber(self):
-        self.climberMotor.set(0.6)
+        self.climberMotor.set(0.12)
+
+    def elevateClimber(self):
+        self.climberMotor.set(0.25)
 
     def lowerClimber(self):
-        self.climberMotor.set(-0.6)
+        self.climberMotor.set(-0.25)
 
     def stop(self):
         self.climberMotor.stopMotor()

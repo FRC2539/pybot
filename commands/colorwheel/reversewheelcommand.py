@@ -2,15 +2,15 @@ from wpilib.command import Command
 
 import robot
 
-class DriveWheelCommand(Command):
+class ReverseWheelCommand(Command):
 
     def __init__(self):
-        super().__init__('Drive Wheel')
+        super().__init__('Reverse Wheel')
 
         self.requires(robot.colorwheel)
 
     def initialize(self):
-        robot.colorwheel.spinClockwise()
+        robot.colorwheel.spinCClockwise()
 
     def end(self):
         robot.colorwheel.stop()

@@ -13,8 +13,6 @@ class RunUpUntilImpactCommand(Command):
         robot.colorwheel.startSpin()
 
     def isFinished(self):
-        print(robot.colorwheel.stopOnImpact())
-        print('amp ' + str(robot.colorwheel.getAmp()))
         return robot.colorwheel.stopOnImpact()
 
     def end(self):

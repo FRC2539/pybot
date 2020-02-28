@@ -17,7 +17,10 @@ from commands.intake.stopeverythingcommand import StopEverythingCommand
 from commands.colorwheel.runupuntilimpactcommand import RunUpUntilImpactCommand
 from commands.colorwheel.rundownuntilimpactcommand import RunDownUntilImpactCommand
 from commands.colorwheel.getcolorcommand import GetColorCommand
+
+from commands.colorwheel.autospinwheel import AutoSpinWheelCommand
 from commands.colorwheel.drivewheelcommand import DriveWheelCommand
+from commands.colorwheel.reversewheelcommand import ReverseWheelCommand
 
 from commands.ballsystem.runallcommand import RunAllCommand
 from commands.ballsystem.runindexwithverticalcommand import RunIndexWithVerticalCommand
@@ -66,6 +69,7 @@ from commands.winch.releasewinchcommand import ReleaseWinchCommand
 
 from commands.climber.raiseclimbercommand import RaiseClimberCommand
 from commands.climber.lowerclimbercommand import LowerClimberCommand
+from commands.climber.elevateclimbercommand import ElevateClimberCommand
 
 from commands.diagnosticstestcommand import DiagnosticsTestCommand
 
@@ -97,20 +101,20 @@ def init():
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
 
-    driveController.RightJoystick.whileHeld(PullWinchCommand())
-    driveController.LeftJoystick.whileHeld(ReleaseWinchCommand())
+    driveController.LeftJoystick.whileHeld(PullWinchCommand())
+    driveController.RightJoystick.whileHeld(RaiseClimberCommand())
 
-    driveController.RightBumper.whileHeld(RaiseClimberCommand())
+    driveController.RightBumper.whileHeld(ElevateClimberCommand())
     driveController.RightTrigger.whileHeld(LowerClimberCommand())
 
     driveController.Start.toggleWhenPressed(RunUpUntilImpactCommand())
     driveController.Back.toggleWhenPressed(RunDownUntilImpactCommand())
 
-    driveController.DPadLeft.whileHeld(DriveBaseLimelightCommand())
-    driveController.DPadUp.whileHeld(AimTurretDrivebaseCommand())
-    driveController.DPadDown.whileHeld(TurretFieldOrientedCommand())
+    driveController.DPadUp.whileHeld(DriveBaseLimelightCommand())
+    driveController.DPadDown.toggleWhenPressed(AutoSpinWheelCommand())
 
-    driveController.DPadRight.whenPressed(GyroMoveCommand(15))
+    driveController.DPadRight.whileHeld(DriveWheelCommand())
+    driveController.DPadLeft.whileHeld(ReverseWheelCommand())
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
