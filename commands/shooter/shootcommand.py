@@ -13,8 +13,9 @@ class ShootCommand(Command):
     def initialize(self):
         robot.shooter.setRPM(self.rpm)
         robot.shooter.setGoalNetworkTables()
-        #robot.shooter.updateNetworkTables()
+        robot.shooter.enableLeds()
 
     def end(self):
         robot.shooter.stop()
         robot.shooter.zeroNetworkTables()
+        robot.shooter.disableLeds()

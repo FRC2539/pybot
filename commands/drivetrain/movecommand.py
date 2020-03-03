@@ -90,3 +90,6 @@ class MoveCommand(Command):
             self.onTarget = 0
 
         return self.onTarget > 5
+
+    #def end(self):
+        #robot.drivetrain.stop()

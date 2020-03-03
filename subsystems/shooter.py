@@ -1,6 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 from wpilib import DigitalInput
+from wpilib import Relay
 
 import robot
 import ports
@@ -22,6 +23,10 @@ class Shooter(DebuggableSubsystem):
         self.secondMotor = CANSparkMax(ports.shooter.motorTwoID, MotorType.kBrushless)
         self.secondEncoder = self.motor.getEncoder()
         self.secondController = self.motor.getPIDController()
+
+        self.ledController = CANSparkMax(ports.shooter.ledController, MotorType.kBrushed)
+
+        #self.ledSpike.stopMotor()
 
         self.table = nt.getTable('Shooter')
 
@@ -76,12 +81,24 @@ class Shooter(DebuggableSubsystem):
         avgVel = round(((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2), 2)
         self.table.putNumber('ShooterRPM', avgVel)
 
+    def updateShooterStatus(self, run):
+        if run:
+            self.table.putString('ShooterStatus', 'Running')
+        else:
+            self.table.putString('ShooterStatus', 'Stopped')
+
     def setGoalNetworkTables(self, rpm=3500):
         self.table.putNumber('DesiredShooterRPM', rpm)
 
     def zeroNetworkTables(self):
         self.table.putNumber('ShooterRPM', 0.00)
         self.table.putNumber('DesiredShooterRPM', 0.00)
+
+    def enableLeds(self):
+        self.ledController.set(1.0)
+
+    def disableLeds(self):
+        self.ledController.set(0.0)
 
     def getRPM(self):
         return ((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2)

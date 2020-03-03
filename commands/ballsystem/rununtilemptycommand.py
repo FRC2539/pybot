@@ -27,6 +27,8 @@ class RunUntilEmptyCommand(Command):
         if robot.ballsystem.isUpperBallPrimed(): # saw it, when it does not see it next, assumes it has been shot.
             self.primed = True
 
+        print('ball count ' + str(self.ballCount))
+
     def isFinished(self):
         return (self.ballCount <= 0)
 

@@ -43,6 +43,7 @@ shooter = PortsList()
 
 shooter.motorID = 5
 shooter.motorTwoID = 6
+shooter.ledController = 12
 
 ballsystem = PortsList()
 

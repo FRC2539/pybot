@@ -7,12 +7,15 @@ from commands.drivetrain.gyromovecommand import GyroMoveCommand
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.playmusiccommand import PlayMusicCommand
 from commands.drivetrain.drivebaselimelightcommand import DriveBaseLimelightCommand
+from commands.drivetrain.precisespeedcommand import PreciseSpeedCommand
+
 from commands.resetcommand import ResetCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outtakecommand import OutakeCommand
 from commands.intake.clearjamtwocommand import ClearJamTwoCommand
 from commands.intake.stopeverythingcommand import StopEverythingCommand
+from commands.intake.quickreversecommand import QuickReverseCommand
 
 from commands.colorwheel.runupuntilimpactcommand import RunUpUntilImpactCommand
 from commands.colorwheel.rundownuntilimpactcommand import RunDownUntilImpactCommand
@@ -96,7 +99,7 @@ def init():
     driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     driveController.B.toggleWhenPressed(OutakeCommand())
-    driveController.Y.whileHeld(DriveWheelCommand())
+    driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
@@ -110,7 +113,7 @@ def init():
     driveController.Start.toggleWhenPressed(RunUpUntilImpactCommand())
     driveController.Back.toggleWhenPressed(RunDownUntilImpactCommand())
 
-    driveController.DPadUp.whileHeld(DriveBaseLimelightCommand())
+#    driveController.DPadUp.whileHeld(DriveBaseLimelightCommand())
     driveController.DPadDown.toggleWhenPressed(AutoSpinWheelCommand())
 
     driveController.DPadRight.whileHeld(DriveWheelCommand())
@@ -126,7 +129,7 @@ def init():
     operatorController.LeftJoystick.toggleWhenPressed(FarShotCommandGroup())
     operatorController.RightJoystick.whenPressed(RunUpUntilImpactCommand())
 
-    operatorController.X.toggleWhenPressed(ClearJamTwoCommand())
+    operatorController.X.whenPressed(QuickReverseCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
     operatorController.B.toggleWhenPressed(ClearJamCommand())
 

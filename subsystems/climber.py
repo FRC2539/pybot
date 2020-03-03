@@ -24,7 +24,7 @@ class Climber(DebuggableSubsystem):
         self.climberMotor.set(0.25)
 
     def lowerClimber(self):
-        self.climberMotor.set(-0.25)
+        self.climberMotor.set(-0.4)
 
     def stop(self):
         self.climberMotor.stopMotor()

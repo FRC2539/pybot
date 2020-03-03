@@ -172,8 +172,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 8500#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 8500#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 7250#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 7250#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -617,7 +617,7 @@ class BaseDrive(DebuggableSubsystem):
             self.maxSpeed = speed
 
         '''If we can't use encoders, attempt to approximate that speed.'''
-        self.maxPercentVBus = speed / self.maxSpeed
+        #self.maxPercentVBus = speed / self.maxSpeed
 
 
     def enableSimpleDriving(self):
@@ -719,3 +719,8 @@ class BaseDrive(DebuggableSubsystem):
 
     def enableMoveVar(self):
         self.killMoveVar = 1
+
+    def toggleSlowSpeed(self):
+        self.stop()
+        self.maxSpeed = 4000
+        self.speedLimit = 4000

@@ -62,7 +62,7 @@ class Intake(DebuggableSubsystem):
         self.intakeMotor.set(1)
 
     def fumbleReverse(self):
-        self.intakeMotor.set(-0.3)
+        self.intakeMotor.set(-0.35)
 
     def changeFumble(self):
         if self.forward:
