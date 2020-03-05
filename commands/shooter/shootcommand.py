@@ -13,7 +13,13 @@ class ShootCommand(Command):
     def initialize(self):
         robot.shooter.setRPM(self.rpm)
         robot.shooter.setGoalNetworkTables()
-        robot.ledsystem.setRed()
+        robot.ledsystem.flashRed()
+
+    def execute(self):
+        if robot.shooter.getRPM() >= self.rpm - 200:
+            robot.ledsystem.setRed()
+        else:
+            robot.ledsystem.flashRed()
 
     def end(self):
         robot.shooter.stop()

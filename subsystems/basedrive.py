@@ -487,10 +487,10 @@ class BaseDrive(DebuggableSubsystem):
 
             # use the lower ones for auto moves
 
-            motor.config_kP(1, 0.01, 0)
+            motor.config_kP(1, 0.03, 0)
             motor.config_kI(1, 0.00005, 0)
             motor.config_kD(1, 0.05, 0)
-            motor.config_kF(1, 0.01, 0)
+            motor.config_kF(1, 0.03, 0)
             motor.config_IntegralZone(1, 5000, 0)
 
 

@@ -97,6 +97,6 @@ class MoveCommand(Command):
         return self.onTarget > 5
 
     def end(self):
-        #robot.drivetrain.stop()
+        robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
         robot.ledsystem.turnOff()
