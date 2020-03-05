@@ -29,6 +29,7 @@ from subsystems.winch import Winch as winch
 from subsystems.trolley import Trolley as trolley
 from subsystems.windshieldwiper import WindshieldWiper as windshieldwiper
 from subsystems.climber import Climber as climber
+from subsystems.ledsystem import LEDSystem as ledsystem
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

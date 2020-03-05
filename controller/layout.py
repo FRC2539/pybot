@@ -58,6 +58,7 @@ from commands.shooter.controlledshootcommand import ControlledShootCommand
 from commands.shooter.reverseshootercommand import ReverseShooterCommand
 from commands.shooter.farshotcommandgroup import FarShotCommandGroup
 from commands.shooter.closeshotcommandgroup import CloseShotCommandGroup
+from commands.shooter.superdanksmartshootcommand import SuperDankSmartShootCommand
 
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.setturretcommand import SetTurretCommand
@@ -141,8 +142,7 @@ def init():
     operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.DPadUp.whenPressed(TuneUpHoodCommand())
-    operatorController.DPadDown.whenPressed(TuneDownHoodCommand())
+    operatorController.DPadUp.toggleWhenPressed(SuperDankSmartShootCommand(4200))
     operatorController.DPadLeft.whileHeld(SetTurretCommand(250))
     operatorController.DPadRight.whileHeld(SetTurretCommand(2000))
 

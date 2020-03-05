@@ -11,11 +11,15 @@ class RunUntilLoadedCommand(Command):
 
         self.requires(robot.ballsystem)
         self.requires(robot.intake)
+        self.requires(robot.ledsystem)
+
         #self.timerRunning = False
         #self.timer = Timer()
 
     def initialize(self):
         robot.intake.intake(0.6)
+        robot.ledsystem.setGreen()
+
         if not robot.ballsystem.areTwoBallsPrimed():
             if not robot.ballsystem.isLowBallPrimed() and robot.ballsystem.isUpperBallPrimed():
                 robot.ballsystem.runLowerConveyorSlow()
@@ -37,6 +41,9 @@ class RunUntilLoadedCommand(Command):
     def end(self):
         robot.intake.stop()
         robot.ballsystem.stopAll()
+
+        robot.ledsystem.turnOff()
+
         #self.timer.stop()
         #self.timer.reset()
         #self.timerRunning = False

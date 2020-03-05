@@ -21,8 +21,13 @@ class HoodLimelightCommand(Command):
             else:
                 robot.hood.setShootAngle((1/2600)*(robot.limelight.calcDistance()-235)*(robot.limelight.calcDistance()-235) + self.val + 3)
                 #robot.hood.setShootAngle(-2.3 * (robot.limelight.calcDistance()-120)**-3 + 26)
+            #if robot.limelight.getX() < 3.0 and : # dummy values
+                #robot.ledsystem.onTarget = True
+
+
         else:
             robot.hood.stopHood()
+
 
     def end(self):
         robot.limelight.setPipeline(0)

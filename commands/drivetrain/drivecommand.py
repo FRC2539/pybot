@@ -54,7 +54,7 @@ class DriveCommand(Command):
 
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
-            y * 0.75,
-            logicalaxes.driveRotate.get() * 0.4
+            y,
+            logicalaxes.driveRotate.get() * 0.8
         )
 

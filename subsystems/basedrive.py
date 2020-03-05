@@ -28,10 +28,10 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = 0.001#Config('DriveTrain/Speed/P', 0.001) # 0.001
-            self.falconI = 0.00#Config('DriveTrain/Speed/I', 0.00) # 0.00
-            self.falconD = 0.01#Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
-            self.falconF = 0.1#Config('DriveTrain/Speed/F', 0.1) # 0.1
+            self.falconP = 0.0001#Config('DriveTrain/Speed/P', 0.001) # 0.001
+            self.falconI = 0.0001#Config('DriveTrain/Speed/I', 0.00) # 0.00
+            self.falconD = 1#Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
+            self.falconF = 0.045#Config('DriveTrain/Speed/F', 0.1) # 0.1
             self.falconIZone = 0#Config('DriveTrain/Speed/IZone', 0) # 0
 
             #self.bensGloriousOrchestra = Orchestra()
@@ -172,8 +172,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 7250#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 7250#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 10250#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 10250#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -478,12 +478,21 @@ class BaseDrive(DebuggableSubsystem):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
             motor.configClosedloopRamp(0, 0)
-            for profile in range(2):
-                motor.config_kP(profile, self.falconP, 0)
-                motor.config_kI(profile, self.falconI, 0)
-                motor.config_kD(profile, self.falconD, 0)
-                motor.config_kF(profile, self.falconF, 0)
-                motor.config_IntegralZone(profile, self.falconIZone, 0)
+
+            motor.config_kP(0, self.falconP, 0)
+            motor.config_kI(0, self.falconI, 0)
+            motor.config_kD(0, self.falconD, 0)
+            motor.config_kF(0, self.falconF, 0)
+            motor.config_IntegralZone(0, self.falconIZone, 0)
+
+            # use the lower ones for auto moves
+
+            motor.config_kP(1, 0.01, 0)
+            motor.config_kI(1, 0.00005, 0)
+            motor.config_kD(1, 0.05, 0)
+            motor.config_kF(1, 0.01, 0)
+            motor.config_IntegralZone(1, 5000, 0)
+
 
             #motor.configMotionAcceleration(6000, 0)
             #motor.configMotionCruiseVelocity(15000, 0)
@@ -554,7 +563,7 @@ class BaseDrive(DebuggableSubsystem):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
-        return float((rotations * 8.45) * 2048)#Config('DriveTrain/ticksPerRotation', 4096))
+        return float((rotations * 8.45) * 2132)#Config('DriveTrain/ticksPerRotation', 4096))
 
 
     def resetTilt(self):

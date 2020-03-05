@@ -98,22 +98,23 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         @fc.IF(lambda: True)
         def SixBallAuto(self):
-            self.addParallel(ShootCommand(3400))
-            self.addParallel(SetLaunchAngleCommand(26.0))
-            self.addSequential(SetTurretCommand(2000), 2.5) # starts 100 ticks less becsause we are a little far left.
-            self.addSequential(TurretLimelightCommand(), .5)
-            self.addParallel(TurretLimelightCommand())
-            self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunUntilEmptyCommand(startingBalls), 5)
-            self.addParallel(StopEverythingCommand())
-            self.addParallel(IntakeCommand(0.3))
-            self.addSequential(MoveCommand(80.72), 3) # add distance here
-            self.addSequential(ShootCommand(4200), 1)
-            self.addParallel(ResetEncodersCommand())
-            self.addSequential(MoveCommand(-50.96), 3) # add distance here
-            self.addSequential(SudoCommandGroup(), 1)
-            self.addParallel(SudoCommandGroup())
-            self.addSequential(ClearJamCommand(), 0.5)
-            self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunUntilEmptyCommand(2), 6)
-            self.addSequential(StopEverythingCommand())
+            self.addSequential(MoveCommand(12))
+            #self.addParallel(ShootCommand(3400))
+            #self.addParallel(SetLaunchAngleCommand(26.0))
+            #self.addSequential(SetTurretCommand(2000), 2.5) # starts 100 ticks less becsause we are a little far left.
+            #self.addSequential(TurretLimelightCommand(), .5)
+            #self.addParallel(TurretLimelightCommand())
+            #self.addParallel(IntakeCommand(0.2))
+            #self.addSequential(RunUntilEmptyCommand(startingBalls), 5)
+            #self.addParallel(StopEverythingCommand())
+            #self.addParallel(IntakeCommand(0.3))
+            #self.addSequential(MoveCommand(80.72), 3) # add distance here
+            #self.addSequential(ShootCommand(4200), 1)
+            #self.addParallel(ResetEncodersCommand())
+            #self.addSequential(MoveCommand(-50.96), 3) # add distance here
+            #self.addSequential(SudoCommandGroup(), 1)
+            #self.addParallel(SudoCommandGroup())
+            #self.addSequential(ClearJamCommand(), 0.5)
+            #self.addParallel(IntakeCommand(0.2))
+            #self.addSequential(RunUntilEmptyCommand(2), 6)
+            #self.addSequential(StopEverythingCommand())

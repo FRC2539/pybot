@@ -20,6 +20,7 @@ class MoveCommand(Command):
         self.blocked = False
         self.avoidCollisions = avoidCollisions
         self.requires(robot.drivetrain)
+        self.requires(robot.ledsystem)
 
 
     def _initialize(self):
@@ -27,11 +28,13 @@ class MoveCommand(Command):
         self.precision = robot.drivetrain.inchesToUnits(1)
 
     def initialize(self):
+        robot.ledsystem.flashWhite()
         print('began Move command \n\n')
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
         self.targetPositions = []
+        robot.drivetrain.setProfile(1)
         offset = robot.drivetrain.inchesToUnits(self.distance)
         sign = 1
         for position in robot.drivetrain.getPositions():
@@ -44,6 +47,8 @@ class MoveCommand(Command):
         robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
+        print('my position ' + str(robot.drivetrain.getPositions()))
+
         print('my target: ' + str(self.targetPositions))
         if self.avoidCollisions:
             try:
@@ -91,5 +96,7 @@ class MoveCommand(Command):
 
         return self.onTarget > 5
 
-    #def end(self):
+    def end(self):
         #robot.drivetrain.stop()
+        robot.drivetrain.setProfile(0)
+        robot.ledsystem.turnOff()

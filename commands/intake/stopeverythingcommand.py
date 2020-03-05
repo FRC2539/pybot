@@ -9,9 +9,10 @@ class StopEverythingCommand(InstantCommand):
 
         self.requires(robot.shooter)
         self.requires(robot.ballsystem)
+        self.requires(robot.ledsystem)
 
     def initialize(self):
         robot.ballsystem.stopAll()
         robot.shooter.stop()
 
-        robot.shooter.disableLeds()
+        robot.ledsystem.turnOff()
