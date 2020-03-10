@@ -27,3 +27,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.windshieldwiper)
         self.requires(robot.climber)
         self.requires(robot.ledsystem)
+        self.requires(robot.newclimber)

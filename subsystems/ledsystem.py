@@ -44,3 +44,6 @@ class LEDSystem(DebuggableSubsystem):
 
     def rainbowLava(self):
         self.blinkin.set(-0.93)
+
+    def setPurple(self):
+        self.blinkin.set(0.91)

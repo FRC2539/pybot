@@ -19,7 +19,7 @@ class TurnCommand(MoveCommand):
 
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
-        robot.drivetrain.setProfile(1)
+        robot.drivetrain.setProfile(2)
         offset = self._calculateDisplacement()
         self.targetPositions = []
         for position in robot.drivetrain.getPositions():

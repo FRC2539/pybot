@@ -493,6 +493,14 @@ class BaseDrive(DebuggableSubsystem):
             motor.config_kF(1, 0.03, 0)
             motor.config_IntegralZone(1, 5000, 0)
 
+            # use below for turn
+
+            motor.config_kP(2, 0.03, 0)
+            motor.config_kI(2, 0.00005, 0)
+            motor.config_kD(2, 0.05, 0)
+            motor.config_kF(2, 0.08, 0) # more ff?
+            motor.config_IntegralZone(2, 5000, 0)
+
 
             #motor.configMotionAcceleration(6000, 0)
             #motor.configMotionCruiseVelocity(15000, 0)

@@ -49,6 +49,7 @@ from commands.hood.hoodtestcommand import hoodTestCommand
 from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTablesCommand
 from commands.hood.hoodlimelightcommand import HoodLimelightCommand
 from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
+from commands.hood.experimentalcommand import ExperimentalCommand
 
 from commands.limelight.lltestcommand import llTestCommand
 from commands.limelight.finitereecommand import finiteReeCommand
@@ -131,7 +132,7 @@ def init():
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
 
-    operatorController.LeftJoystick.toggleWhenPressed(FarShotCommandGroup())
+    operatorController.LeftJoystick.toggleWhenPressed(ExperimentalCommand())
     operatorController.RightJoystick.whenPressed(RunUpUntilImpactCommand())
 
     operatorController.X.whenPressed(QuickReverseCommand())
@@ -153,9 +154,5 @@ def init():
 
     operatorController.DPadDown.toggleWhenPressed(ShootCommand(2400))
     operatorController.DPadRight.whileHeld(MoveFieldAngleCommand(10))#2400 and all the way down
-    #operatorController.DPadUp.toggleWhenPressed(SuperDankSmartShootCommand(4200))
-    #operatorController.DPadLeft.whileHeld(SetTurretCommand(250))
-    #operatorController.DPadRight.whileHeld(SetTurretCommand(2000))
-
     operatorController.Back.whenPressed(StopEverythingCommand())
     operatorController.Start.whenPressed(DiagnosticsTestCommand())
