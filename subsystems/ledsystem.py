@@ -16,11 +16,16 @@ class LEDSystem(DebuggableSubsystem):
         self.blinkin = Spark(ports.ledsystem.controllerID)
         self.onTarget = False
 
+        self.setOrange()
+
     def turnOff(self):
         self.blinkin.set(0.99)
 
     def setRed(self):
         self.blinkin.set(0.61)
+
+    def setGold(self):
+        self.blinkin.set(0.67)
 
     def setBlue(self):
         self.blinkin.set(0.87)
@@ -36,3 +41,6 @@ class LEDSystem(DebuggableSubsystem):
 
     def flashWhite(self):
         self.blinkin.set(-0.05)
+
+    def rainbowLava(self):
+        self.blinkin.set(-0.93)

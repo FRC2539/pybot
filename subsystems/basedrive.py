@@ -172,8 +172,8 @@ class BaseDrive(DebuggableSubsystem):
 
 
         self.setUseEncoders(True)
-        self.maxSpeed = 10250#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 10250#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 12250#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 12250#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 

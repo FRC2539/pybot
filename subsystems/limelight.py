@@ -1,7 +1,7 @@
 from .debuggablesubsystem import DebuggableSubsystem
 
 import ports
-
+import robot
 import math
 from custom.config import Config
 from networktables import NetworkTables
@@ -14,7 +14,7 @@ class Limelight(DebuggableSubsystem):
         super().__init__('Limelight')
         self.nt = NetworkTables.getTable('limelight')
         self.tv = Config('limelight/tv', 0)
-        self.tx = Config('limelight/tx', 1)
+        self.tx = Config('limelight/tx', 0)
         self.ty = Config('limelight/ty', 0)
         self.ta = Config('limelight/ta', 0)
 
@@ -53,8 +53,43 @@ class Limelight(DebuggableSubsystem):
         #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
         self.angle = math.radians(36.098 + self.getY())
         self.distance = self.height/math.tan(self.angle)
-   #     print(str(self.distance))
+        print(str(self.distance))
         return self.distance
+
+
+
+    def areaDistance(self):
+        self.aDistance = math.log(self.getA(), .992924) + 221.996
+        return self.aDistance
+
+    def onTarget(self):
+        if self.getTape():
+            if self.getX() < .75:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def getFeildAngle(self):
+        self.goal = robot.turret.getFieldPosition()
+        self.aimed = robot.turret.getPosition()
+        self.theta = ((self.goal - self.aimed)*360)/4096
+        return self.theta
+
+    def calcXDistance(self):
+        self.theta = self.getFeildAngle()
+        self.d = self.calcDistance()
+        self.xD = math.sin(math.radians(self.theta)) * self.d
+        return self.xD
+
+
+    def calcYDistance(self):
+        self.theta = self.getFeildAngle()
+        self.d = self.calcDistance()
+        self.yD = math.cos(math.radians(self.theta)) * self.d
+        return self.yD
+
 
     def updateNetworkTables(self):
         self.driveTable.putNumber('distance', self.calcDistance())

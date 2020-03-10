@@ -8,6 +8,7 @@ from custom.config import Config
 
 from commands.network.alertcommand import AlertCommand
 
+from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.gyromovecommand import GyroMoveCommand
@@ -24,8 +25,13 @@ from commands.colorwheel.autosetwheel import AutoSetWheelCommand
 
 from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.limelight.aimturretdrivebasecommand import AimTurretDrivebaseCommand
+from commands.limelight.ogsudocommandgroup import OgSudoCommandGroup
+from commands.limelight.passcommand import PassCommand
 
+from commands.ballsystem.stopallcommand import StopAllCommand
+from commands.ballsystem.endwhenemptycommand import EndWhenEmptyCommand
 from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
+from commands.ballsystem.runbasicsystemcommand import RunBasicSystemCommand
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 from commands.ballsystem.rununtilemptycommand import RunUntilEmptyCommand
 from commands.ballsystem.runallcommand import RunAllCommand
@@ -33,6 +39,7 @@ from commands.ballsystem.clearjamcommand import ClearJamCommand
 
 from commands.turret.setturretcommand import SetTurretCommand
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
+from commands.turret.turretstartcommandgroup import TurretStartCommandGroup
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.stopeverythingcommand import StopEverythingCommand
@@ -95,26 +102,37 @@ class AutonomousCommandGroup(fc.CommandFlow):
             #self.addParallel(ShootCommand(4200), 8)
             #self.addSequential(RunUntilEmptyCommand(5), 6)
             #self.addSequential(StopEverythingCommand())
-
+## WORKING 6 BALLS
         @fc.IF(lambda: True)
         def SixBallAuto(self):
-            #self.addSequential(MoveCommand(120))
-            self.addParallel(ShootCommand(3400))
-            self.addParallel(SetTurretCommand(2000)) # starts 100 ticks less becsause we are a little far left.
-            self.addSequential(MoveCommand(74))
-            self.addSequential(SudoCommandGroup(), 0.5)
-            self.addParallel(SudoCommandGroup())
-            self.addParallel(IntakeCommand(0.2))
-            self.addSequential(RunUntilEmptyCommand(startingBalls), 5)
-            self.addParallel(StopEverythingCommand())
-            self.addParallel(IntakeCommand(0.3))
-            self.addSequential(MoveCommand(110), 3) # add distance here
+            self.addSequential(SetSpeedCommand(5500))
             self.addParallel(ShootCommand(4200))
+            self.addParallel(TurretStartCommandGroup())
+            self.addSequential(MoveCommand(74))
+             # should remain running
+            self.addParallel(RunUntilLoadedCommand(), 10)
+            self.addSequential(RunUntilEmptyCommand(startingBalls), 5)
+            #self.addParallel(StopAllCommand())# keeps everything in running status
+            #self.addParallel(IntakeCommand(0.3))
+            #self.addParallel(RunUntilLoadedCommand())
+            self.addSequential(MoveCommand(110), 3)
             self.addParallel(ResetEncodersCommand())
-            self.addSequential(MoveCommand(-60), 5) # add distance here
-            self.addSequential(SudoCommandGroup(), 1)
-            self.addParallel(SudoCommandGroup())
-            self.addSequential(ClearJamCommand(), 0.5)
-            self.addParallel(IntakeCommand(0.2))
+            self.addSequential(MoveCommand(-110), 3) # gives plenty of time to shoot until its empty.
             self.addSequential(RunUntilEmptyCommand(3), 6)
-            self.addSequential(StopEverythingCommand())
+            self.addSequential(SetSpeedCommand(10250))
+            self.addParallel(StopEverythingCommand())
+
+
+        #@fc.IF(lambda: True)
+        #def SixBallAuto(self):
+            ##self.addSequential(SetSpeedCommand(5500))
+            ##self.addParallel(ShootCommand(4200))
+            ##self.addParallel(TurretStartCommandGroup())
+            #self.addSequential(TurnCommand(90), 2)
+            #self.addSequential(TurnCommand(-90), 2)
+            #self.addSequential(MoveCommand(110))
+            #self.addSequential(TurnCommand(-180), 1.75)
+            #self.addSequential(MoveCommand(-25))
+            #self.addSequential(TurnCommand(360), 3)
+            #self.addSequential(MoveCommand(-50))
+            #self.addSequential(TurnCommand(90),3)

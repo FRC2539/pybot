@@ -13,5 +13,5 @@ class DefaultCommand(Command):
         self.requires(robot.turret)
 
     def execute(self):
-        robot.turret.move(logicalaxes.operatorX.get() * 0.8)
+        robot.turret.testMove(logicalaxes.operatorX.get())
         # WARNING: DO NOT USE THIS COMMAND USE TURRET MOVE

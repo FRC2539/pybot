@@ -19,14 +19,14 @@ class TurnCommand(MoveCommand):
 
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
-
+        robot.drivetrain.setProfile(1)
         offset = self._calculateDisplacement()
-        targetPositions = []
+        self.targetPositions = []
         for position in robot.drivetrain.getPositions():
-            targetPositions.append(position + offset)
+            self.targetPositions.append(position + offset)
 
-        print('pos ' + str(targetPositions))
-        robot.drivetrain.setPositions(targetPositions)
+        print('pos ' + str(self.targetPositions))
+        robot.drivetrain.setPositions(self.targetPositions)
 
     def isFinished(self):
         ''' Get the current angle to the desired position, and stop it if it's nearby. '''
@@ -38,6 +38,9 @@ class TurnCommand(MoveCommand):
 
         return False
 
+    def end(self):
+        robot.drivetrain.setProfile(0)
+        robot.drivetrain.stop()
 
     def _calculateDisplacement(self):
         '''

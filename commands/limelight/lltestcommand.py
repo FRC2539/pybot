@@ -8,7 +8,7 @@ class llTestCommand(Command):
     def __init__(self):
         super().__init__('ll Test')
 
-        self.requires(robot.limelight)
+       #self.requires(robot.limelight)
         #self.requires(robot.drivetrain)
 
 
@@ -22,7 +22,10 @@ class llTestCommand(Command):
     def execute(self):
         #self.rotate = robot.limelight.getX()*.03
         #robot.drivetrain.move(0,0,self.rotate)
-        print(str(robot.limelight.calcDistance()))
+        print('skew = '+str(robot.limelight.getFeildAngle()))
+        print('distance = ' + str(robot.limelight.calcDistance()))
+        print('x = '+ str(robot.limelight.calcXDistance()))
+        print('y = '+ str(robot.limelight.calcYDistance()))
 
 
     def end(self):

@@ -2,6 +2,7 @@ from .debuggablesubsystem import DebuggableSubsystem
 
 import ports
 import wpilib
+import math
 
 from rev import CANSparkMax, MotorType, ControlType
 from custom.config import Config
@@ -52,12 +53,12 @@ class Hood(DebuggableSubsystem):
 
     def setPercent(self, speed):
         self.motor.set(speed)
+
         self.updateNetworkTables(self.getPosition())
 
     def raiseHood(self):
         if self.getPosition() < self.angleMax:
             self.motor.set(0.1)
-            print(str(self.getPosition()))
         else:
             self.motor.stopMotor()
         self.updateNetworkTables(self.getPosition())
@@ -65,7 +66,6 @@ class Hood(DebuggableSubsystem):
     def lowerHood(self):
         if self.getPosition() > self.angleMin:
             self.motor.set(-0.1)
-            print(str(self.getPosition()))
         else:
             self.motor.stopMotor()
         self.updateNetworkTables(self.getPosition())
@@ -141,20 +141,29 @@ class Hood(DebuggableSubsystem):
         self.updateNetworkTables(self.getPosition())
 
     def setShootAngle(self, angle):
-        self.targetpos = self.angleMax- 2 * (angle - 8.84)
+        self.targetpos = self.angleMax - 2 * (angle - 8.84)
         self.error = -1* (self.getPosition() - self.targetpos)
         if (self.angleMin < self.targetpos < self.angleMax):
-            if (abs(self.error) < .4):
+            if (abs(self.error) < .1):
                 self.stopHood()
-                #print('there')
             else:
                 self.speed = self.error * .01
-                if (self.speed > .2 ):
-                    self.speed = .2
+                if (abs(self.speed) > .5 ):
+                    self.speed = math.copysign(.5, self.speed)
                 self.setPercent(self.speed)
-                #print(str(self.error))
-                #print('target = ' + str(self.targetpos))
-                #print(str(self.getPosition()))
+
+
+    def setAngle(self, angle):
+        self.targetpos = 260 - (2 * angle)
+        self.error = -1 * (self.getPosition() - self.targetpos)
+        if (self.angleMin < self.targetpos < self.angleMax):
+            if (abs(self.error) < .1):
+                self.stopHood()
+            else:
+                self.speed = self.error * .03
+                if (abs(self.speed) > .5 ):
+                    self.speed = math.copysign(.5, self.speed)
+                self.setPercent(self.speed)
 
 
     def getLLHoodTuner(self):

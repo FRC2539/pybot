@@ -14,7 +14,7 @@ class TurretMoveCommand(Command):
         self.requires(robot.turret)
 
     def execute(self):
-        robot.turret.move(logicalaxes.turretX.get() * -0.2)
+        robot.turret.testMove(logicalaxes.turretX.get() * -0.75)
         #print(robot.turret.getPosition())
         robot.turret.printPosition()
 

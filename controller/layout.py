@@ -63,6 +63,7 @@ from commands.shooter.superdanksmartshootcommand import SuperDankSmartShootComma
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.setturretcommand import SetTurretCommand
 from commands.turret.turretfieldorientedcommand import TurretFieldOrientedCommand
+from commands.turret.movefieldanglecommand import MoveFieldAngleCommand
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
@@ -76,6 +77,8 @@ from commands.climber.lowerclimbercommand import LowerClimberCommand
 from commands.climber.elevateclimbercommand import ElevateClimberCommand
 
 from commands.diagnosticstestcommand import DiagnosticsTestCommand
+from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
+from commands.drivetrain.setfieldpositioncommand import SetFieldPositionCommand
 
 def init():
     '''
@@ -116,9 +119,10 @@ def init():
 
 #    driveController.DPadUp.whileHeld(DriveBaseLimelightCommand())
     driveController.DPadDown.toggleWhenPressed(AutoSpinWheelCommand())
-
+    driveController.DPadUp.whenPressed(ZeroGyroCommand())
     driveController.DPadRight.whileHeld(DriveWheelCommand())
     driveController.DPadLeft.whileHeld(ReverseWheelCommand())
+    #driveController.DPadUp.whileHeld(SetFieldPositionCommand(0, 120))
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)
@@ -131,6 +135,7 @@ def init():
     operatorController.RightJoystick.whenPressed(RunUpUntilImpactCommand())
 
     operatorController.X.whenPressed(QuickReverseCommand())
+    #operatorController.Y.whenPressed(ZeroGyroCommand())
     operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
     operatorController.B.toggleWhenPressed(ClearJamCommand())
 
@@ -139,12 +144,18 @@ def init():
 
     #operatorController.DPadUp.whileHeld(FlipColorwheelUpCommand())
 
-    operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
+    #operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
+    operatorController.LeftTrigger.toggleWhenPressed(llTestCommand())
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.DPadUp.toggleWhenPressed(SuperDankSmartShootCommand(4200))
-    operatorController.DPadLeft.whileHeld(SetTurretCommand(250))
-    operatorController.DPadRight.whileHeld(SetTurretCommand(2000))
+    operatorController.DPadUp.toggleWhenPressed(TurretFieldOrientedCommand())
+    operatorController.DPadLeft.whileHeld(MoveFieldAngleCommand(-10))
+
+    operatorController.DPadDown.toggleWhenPressed(ShootCommand(2400))
+    operatorController.DPadRight.whileHeld(MoveFieldAngleCommand(10))#2400 and all the way down
+    #operatorController.DPadUp.toggleWhenPressed(SuperDankSmartShootCommand(4200))
+    #operatorController.DPadLeft.whileHeld(SetTurretCommand(250))
+    #operatorController.DPadRight.whileHeld(SetTurretCommand(2000))
 
     operatorController.Back.whenPressed(StopEverythingCommand())
     operatorController.Start.whenPressed(DiagnosticsTestCommand())

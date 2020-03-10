@@ -21,16 +21,17 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, 0.001, 0)
         self.motor.config_kF(0, 0.00019, 0)
         #self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 2200# Dummy values
+        self.max = 2150# Dummy values
         self.min = 0 # Dummy values
 
         self.table = nt.getTable('Turret')
 
         self.limitSwitch = wpilib.DigitalInput(ports.turret.limitSwitch)
 
-        self.fieldAngle = 0
+        self.fieldAngle = 100
 
         self.motor.setNeutralMode(NeutralMode.Brake)
+
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
         self.motor.setSelectedSensorPosition(1061, 0, 0) #1061 starting position
@@ -52,15 +53,28 @@ class Turret(DebuggableSubsystem):
         else:
             self.motor.set(val)
 
-            #self.speed = val * 1
-            #if self.getPosition() < self.max and self.getPosition() > self.min:
-                #self.motor.set(ControlMode.PercentOutput, self.speed)
-            #elif self.getPosition() > self.max and val > 0:
-                ##self.motor.set(ControlMode.PercentOutput, self.speed)
-            #elif self.getPosition() < self.min and val < 0:
-                #self.motor.set(ControlMode.PercentOutput, self.speed)
-            #else:
-                #self.stop()
+    def testMove(self, val):
+        self.updateNetworkTables()
+        if (self.getPosition() < self.max - self.getPosition()):
+            self.speedLimit = self.getPosition() * .0015
+        else:
+            self.speedLimit = (self.max- self.getPosition()) * .0015
+
+        if self.speedLimit < .2:
+            self.speedLimit = .2
+
+        if self.speedLimit > .4:
+            self.speedLimit = .4
+
+        if abs(val) > self.speedLimit :
+            val = math.copysign(self.speedLimit, val)
+
+        if self.isZeroed() and val > 0:
+            self.stop() # does not let a positive direction proceed if zeroed.
+        elif self.getPosition() >= self.max and val < 0:
+            self.stop() # does not let a negative direction proceed if maxed.
+        else:
+            self.motor.set(val)
 
     def stop(self):
         self.motor.stopMotor()
@@ -75,28 +89,32 @@ class Turret(DebuggableSubsystem):
         self.fieldAngle = robot.drivetrain.getAngle()
 
     def turretFieldOriented(self): # Use for when traveling 'round the field.
-        #degrees = (self.fieldAngle - robot.drivetrain.getAngle()) * 0.0003
-        #if self.getPosition() + 25 < self.max and self.getPosition() - 25 > self.min:
-            #self.move(degrees)
-        #else:
-            #self.stop()
-        self.degrees = robot.drivertrain.getAngle()
-        if degrees > 180 :
-            self.setPosition((self.degrees-180)*2000/180 +100 )
+        if self.getFieldPosition() > 25 and self.getFieldPosition() < 2150 :
+            self.setPosition(self.getFieldPosition())
+        else:
+            self.stop()
+            #if self.getFieldPosition() > self.getFieldPosition() - 2150 :
+                #self.setPosition(25)
+            #elif self.getFieldPosition() < self.getFieldPosition() - 2150:
+                #self.setPosition(2150)
+            #else:
+                #self.stop
+
+    def getFieldPosition(self):
+        self.degrees = robot.drivetrain.getAngle()
+        print(self.degrees)
+        self.ticks = ((180-self.degrees)*4096)/360 + self.fieldAngle
+        if self.ticks < 0 :
+            self.ticks = self.ticks + 4096
+        return self.ticks
 
     def setPosition(self, position):
         self.error = self.getPosition() - position
-        self.rotate = self.error * 0.0005
-        #print('self.error = '+ str(self.rotate))
-        if abs(self.rotate) > .5:
-            self.rotate = math.copysign(.5, self.rotate)
-
-        self.move(self.rotate)
-        #if self.error > 1:
-            #self.move(self.rotate)
-            #print('self.rotate = '+ str(self.rotate))
-        #else:
-            #self.stop()
+        self.rotate = self.error * 0.00075
+        #if abs(self.rotate) > .5:
+            #self.rotate = math.copysign(.5, self.rotate)
+        self.testMove(self.rotate)
+        print('rotate: '+ str(self.rotate))
 
 
 
@@ -127,6 +145,9 @@ class Turret(DebuggableSubsystem):
 
         return False
 
+    def moveFieldAngle(self, val):
+        self.fieldAngle = self.fieldAngle + (val * 1)
+
     def isMax(self):
         if (self.getPosition() >= self.max):
             return True
@@ -140,6 +161,7 @@ class Turret(DebuggableSubsystem):
         Config.
         '''
         from commands.turret.turretmovecommand import TurretMoveCommand
+        from commands.turret.fieldcommandgroup import FieldCommandGroup
 
         self.setDefaultCommand(TurretMoveCommand())
 
