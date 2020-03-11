@@ -21,7 +21,7 @@ class Limelight(DebuggableSubsystem):
         self.driveTable = NetworkTables.getTable('DriveTrain')
 
         self.LimelightHeight = 20
-        self.TargetHeight = 106.75
+        self.TargetHeight = 90.75
         self.calDistance = 120
 
         #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
@@ -51,7 +51,7 @@ class Limelight(DebuggableSubsystem):
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight
         #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
-        self.angle = math.radians(36.098 + self.getY())
+        self.angle = math.radians(30.52289 + self.getY())
         self.distance = self.height/math.tan(self.angle)
         print(str(self.distance))
         return self.distance
