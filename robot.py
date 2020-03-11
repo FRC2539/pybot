@@ -124,6 +124,10 @@ class KryptonBot(magicbot.MagicRobot):
         self.shooterMotor = CANSparkMax(ports.ShooterPorts.motorID, MotorType.kBrushless)
 
         self.hoodMotor = CANSparkMax(ports.HoodPorts.motorID, MotorType.kBrushless)
+        self.hoodEncoder = wpilib.DutyCycle(wpilib.DigitalInput(ports.HoodPorts.throughBore))
+
+        self.hoodMax = 236.0
+        self.hoodMin = 166.0
 
         self.turretMotor = WPI_TalonSRX(ports.TurretPorts.motorID)
 

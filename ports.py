@@ -29,6 +29,8 @@ HoodPorts = PortsList()
 
 HoodPorts.motorID = 9
 
+HoodPorts.throughBore = 9 # DI/O
+
 ShooterPorts = PortsList()
 
 ShooterPorts.motorID = 10

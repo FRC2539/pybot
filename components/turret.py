@@ -11,13 +11,13 @@ class Turret:
 
 
     def setPosition(self):
-        turretMotor.set(Controlmode.Position, 10)
+        self.turretMotor.set(Controlmode.Position, 10)
 
     def rotate(self, speed):
-        turretMotor.set(Controlmode.PercentOutput, speed)
+        self.turretMotor.set(Controlmode.PercentOutput, speed)
 
     def stop(self):
-        turretMotor.stopMotor()
+        self.turretMotor.stopMotor()
 
     def execute(self):
         pass
