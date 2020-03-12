@@ -12,8 +12,6 @@ class ShootCommand(Command):
 
         self.rpm = rpm
 
-        self.table = NetworkTables.getTable('Shooter')
-
     def initialize(self):
         robot.shooter.setRPM(self.rpm)
         robot.shooter.setGoalNetworkTables(self.rpm)
@@ -27,7 +25,7 @@ class ShootCommand(Command):
         else:
             robot.ledsystem.flashRed()
 
-        self.table.putNumber('ShooterRPM', currentRPM)
+        robot.shooter.updateNetworkTables(currentRPM)
 
     def end(self):
         robot.shooter.stop()

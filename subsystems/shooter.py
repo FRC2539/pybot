@@ -77,8 +77,7 @@ class Shooter(DebuggableSubsystem):
             #self.shooting = False
         #self.table.putNumber('BallCount', robot.intake.ballCount)
 
-    def updateNetworkTables(self):
-        avgVel = round(((self.encoder.getVelocity() + self.secondEncoder.getVelocity()) / 2), 2)
+    def updateNetworkTables(self, avgVel):
         self.table.putNumber('ShooterRPM', avgVel)
 
     def updateShooterStatus(self, run):
