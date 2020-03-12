@@ -1,10 +1,10 @@
-from .debuggablesubsystem import DebuggableSystem
+from .debuggablesubsystem import DebuggableSubsystem
 
 from rev import CANSparkMax, MotorType, ControlType
 
 import ports
 
-class NewClimber(DebuggableSystem):
+class NewClimber(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
