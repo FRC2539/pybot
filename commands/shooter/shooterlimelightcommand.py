@@ -16,7 +16,7 @@ class ShooterLimelightCommand(Command):
 
 
         robot.shooter.setRPM(4200)
-
+        robot.shooter.setGoalNetworkTables(4200)
 
         #if robot.limelight.getA() < 1.289:
             #robot.shooter.setRPM(4200)
@@ -27,9 +27,9 @@ class ShooterLimelightCommand(Command):
             #robot.shooter.setRPM(2500)
 
     def execute(self):
+        robot.shooter.updateNetworkTables(robot.shooter.getRPM())
 
-
-        robot.shooter.setRPM(4200)
+        #robot.shooter.setRPM(4200)
 
 
         #if robot.limelight.getA() < 1.289:
@@ -70,3 +70,4 @@ class ShooterLimelightCommand(Command):
         robot.ledsystem.turnOff()
         robot.limelight.setPipeline(0)
         robot.shooter.stop()
+        robot.shooter.zeroNetworkTables()
