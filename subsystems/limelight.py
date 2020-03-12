@@ -57,6 +57,14 @@ class Limelight(DebuggableSubsystem):
         return self.distance
 
 
+    def calcDistanceGood(self):
+        self.height = 77.25
+        self.angle = math.radians(30.52289 + self.getY())
+        self.distance = self.height/math.tan(self.angle)
+        print(str(self.distance))
+        return self.distance
+
+
 
     def areaDistance(self):
         self.aDistance = math.log(self.getA(), .992924) + 221.996
@@ -74,7 +82,7 @@ class Limelight(DebuggableSubsystem):
     def getFeildAngle(self):
         self.goal = robot.turret.getFieldPosition()
         self.aimed = robot.turret.getPosition()
-        self.theta = ((self.goal - self.aimed)*360)/4096
+        self.theta = ((self.goal - self.aimed)*360)/4096 + self.getX()
         return self.theta
 
     def calcXDistance(self):

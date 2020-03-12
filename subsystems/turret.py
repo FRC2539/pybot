@@ -21,20 +21,20 @@ class Turret(DebuggableSubsystem):
         self.motor.config_kD(0, 0.001, 0)
         self.motor.config_kF(0, 0.00019, 0)
         #self.motor.config_IntegralZone(0, 0, 0)
-        self.max = 2150# Dummy values
+        self.max = 1275# Dummy values
         self.min = 0 # Dummy values
 
         self.table = nt.getTable('Turret')
 
         self.limitSwitch = wpilib.DigitalInput(ports.turret.limitSwitch)
 
-        self.fieldAngle = 100
+        self.fieldAngle = 860
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
-        self.motor.setSelectedSensorPosition(1061, 0, 0) #1061 starting position
+        self.motor.setSelectedSensorPosition(0, 0, 0) #1061 starting position
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
     def rotateClockwise(self, val):
@@ -89,7 +89,7 @@ class Turret(DebuggableSubsystem):
         self.fieldAngle = robot.drivetrain.getAngle()
 
     def turretFieldOriented(self): # Use for when traveling 'round the field.
-        if self.getFieldPosition() > 25 and self.getFieldPosition() < 2150 :
+        if self.getFieldPosition() > 25 and self.getFieldPosition() < self.max - 25 :
             self.setPosition(self.getFieldPosition())
         else:
             self.stop()
@@ -102,10 +102,12 @@ class Turret(DebuggableSubsystem):
 
     def getFieldPosition(self):
         self.degrees = robot.drivetrain.getAngle()
-        print(self.degrees)
-        self.ticks = ((180-self.degrees)*4096)/360 + self.fieldAngle
+        #print(self.degrees)
+        self.ticks = -1*((self.degrees)*4096)/360 + self.fieldAngle
         if self.ticks < 0 :
             self.ticks = self.ticks + 4096
+        if self.ticks > 4096:
+            self.ticks = self.ticks - 4096
         return self.ticks
 
     def setPosition(self, position):

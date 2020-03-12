@@ -14,7 +14,7 @@ class SudoCommandGroup(CommandGroup):
 
         # Add commands here with self.addSequential() and self.addParallel()
         #self.addParallel(HoodLimelightCommand())
-        #self.addParallel(ExperimentalCommand())
-        self.addParallel(HoodLimelightCommand())
+        self.addParallel(ExperimentalCommand())
+        #self.addParallel(HoodLimelightCommand())
         self.addParallel(TurretLimelightCommand())
         self.addParallel(ShooterLimelightCommand())

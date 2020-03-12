@@ -1,7 +1,7 @@
 from wpilib.command import Command
 
 import robot
-
+import math
 
 class llTestCommand(Command):
 
@@ -10,6 +10,7 @@ class llTestCommand(Command):
 
        #self.requires(robot.limelight)
         #self.requires(robot.drivetrain)
+        self.requires(robot.turret)
 
 
 
@@ -20,9 +21,14 @@ class llTestCommand(Command):
 
 
     def execute(self):
-        #self.rotate = robot.limelight.getX()*.03
-        #robot.drivetrain.move(0,0,self.rotate)
-        print('skew = '+str(robot.limelight.getFeildAngle()))
+        self.x = robot.limelight.getX()
+        self.rotate = self.x * -.03
+        if (abs(self.rotate) > .5):
+            self.rotate = math.copysign(.5, self.rotate)
+        robot.turret.move(self.rotate)
+
+
+        print('Field Angle = '+str(robot.limelight.getFeildAngle()))
         print('distance = ' + str(robot.limelight.calcDistance()))
         print('x = '+ str(robot.limelight.calcXDistance()))
         print('y = '+ str(robot.limelight.calcYDistance()))
