@@ -170,6 +170,11 @@ class BaseDrive(DebuggableSubsystem):
         #except:
             #print('failed to load orchestra')
 
+        self.turnSet = False
+        self.turnDone = False
+
+        self.moveSet = False
+        self.moveDone = False
 
         self.setUseEncoders(True)
         self.maxSpeed = 12250#Config('DriveTrain/maxSpeed', 1)
@@ -399,6 +404,58 @@ class BaseDrive(DebuggableSubsystem):
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
 
+    def turnThenMove(self, distance, angle):
+
+        if not self.turnDone:
+            if not self.turnSet:
+                turnTargetPositions = []
+
+                self.setProfile(2)
+
+                inchesPerDegree = math.pi * 25.75 / 360#Config('DriveTrain/width') / 360
+                totalDistanceInInches = angle * inchesPerDegree # maybe the angle variable?
+                offset = self.inchesToUnits(totalDistanceInInches)
+
+                for position in self.getPositions():
+                    turnTargetPositions.append(position + offset)
+
+                self.setPositions(turnTargetPositions)
+
+                self.turnSet = True
+                break
+
+            else:
+                if abs(self.getAngleTo(angle)) < 1:
+                    self.turnDone = True
+                    # if turn is done
+
+        if not self.moveDone:
+            if not self.moveSet:
+                precision = self.inchesToUnits(1)
+
+                moveTargetPositions = []
+
+                self.setProfile(1)
+
+                offset = self.inchesToUnits(distance)
+                sign = 1
+
+                for position in self.getPositions():
+                    moveTargetPositions.append(position + (offset * sign))
+                    sign *= -1
+
+                self.setPositions(moveTargetPositions)
+
+                self.moveSet = True
+                break
+            else:
+                if self.atPosition(moveTargetPositions, precision):
+                    self.moveDone = True
+
+            if self.turnDone and self.moveDone:
+                return True
+
+            return False
 
     def falconSetPositions(self, positions):
         '''
