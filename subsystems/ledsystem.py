@@ -25,7 +25,7 @@ class LEDSystem(DebuggableSubsystem):
         self.blinkin.set(-0.31)
 
     def solidRed(self):
-        self.blinkin.set(0.01)
+        self.blinkin.set(0.61)
 
     def setGradient(self):
         self.blinkin.set(0.41)
@@ -40,10 +40,11 @@ class LEDSystem(DebuggableSubsystem):
         self.blinkin.set(0.63) # does not look like orange lol
 
     def setGreen(self):
-        self.blinkin.set(0.77)
+        self.blinkin.set(0.21)
 
     def solidGreen(self):
         self.blinkin.set(0.77)
+
     def flashRed(self):
         self.blinkin.set(-0.11)
 
