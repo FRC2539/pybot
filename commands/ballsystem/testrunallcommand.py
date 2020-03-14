@@ -21,11 +21,11 @@ class TestRunAllCommand(Command):
 
     def execute(self):
         if self.timer.hasElapsed(1):
-            if robot.limelight.onTarget():
-                robot.ballsystem.runLowerConveyor()
+            if robot.shooter.atRPM:
+                robot.ballsystem.runAll()
                 self.timer.stop()
             else:
-                robot.ballsystem.stopLowerConveyor()
+                robot.ballsystem.stopAll()
                 self.timer.stop()
 
     def end(self):

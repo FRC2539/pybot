@@ -50,6 +50,8 @@ class Shooter(DebuggableSubsystem):
         self.secondMotor.follow(self.motor, True) # inverts it
 
         self.zeroNetworkTables()
+        self.goal = 0
+        self.tolerance = 100
 
     def reverse(self):
         self.motor.set(-0.7)
@@ -88,10 +90,12 @@ class Shooter(DebuggableSubsystem):
 
     def setGoalNetworkTables(self, rpm=3500):
         self.table.putNumber('DesiredShooterRPM', rpm)
+        self.goal = rpm
 
     def zeroNetworkTables(self):
         self.table.putNumber('ShooterRPM', 0.00)
         self.table.putNumber('DesiredShooterRPM', 0.00)
+        self.goal = 0
 
     def enableLeds(self):
         self.ledController.set(1.0)
@@ -105,3 +109,9 @@ class Shooter(DebuggableSubsystem):
     def setRPM(self, rpm):
         self.controller.setReference(float(rpm), ControlType.kVelocity, 0, 0)
         #self.secondController.setReference(float(rpm), ControlType.kVelocity, 0, 0)
+
+    def atRPM(self):
+        if self.getRPM() > self.goal - self.tolerance and self.getRPM() < self.goal + self.tolerance:
+            return True
+        else :
+            return False

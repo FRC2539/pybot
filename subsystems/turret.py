@@ -32,6 +32,8 @@ class Turret(DebuggableSubsystem):
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
+        self.tollerance = 5 #ticks
+
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
         self.motor.setSelectedSensorPosition(0, 0, 0) #1061 starting position
@@ -63,11 +65,10 @@ class Turret(DebuggableSubsystem):
         if self.speedLimit < .2:
             self.speedLimit = .2
 
-        if self.speedLimit > .4:
-            self.speedLimit = .4
+        #if self.speedLimit > .4:
+            #self.speedLimit = .4
 
-        if abs(val) > self.speedLimit :
-            val = math.copysign(self.speedLimit, val)
+        val = val * self.speedLimit
 
         if self.isZeroed() and val > 0:
             self.stop() # does not let a positive direction proceed if zeroed.
@@ -116,7 +117,10 @@ class Turret(DebuggableSubsystem):
         #if abs(self.rotate) > .5:
             #self.rotate = math.copysign(.5, self.rotate)
         self.testMove(self.rotate)
-        print('rotate: '+ str(self.rotate))
+        if self.getPosition() > position - self.tollerance and self.getPosition() < position + self.tollerance:
+            return True
+        else:
+            return False
 
 
 
@@ -128,13 +132,7 @@ class Turret(DebuggableSubsystem):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
 
     def getPosition(self):
-        #return (self.motor.getSelectedSensorPosition(0) % 360)
         return (self.motor.getSelectedSensorPosition(0))
-
-    #def setZero(self):
-        #self.zero = self.getPosition() % 360 # keeps below 360 degrees
-        #if self.zero > 180:
-            #self.zero = (self.zero - 180) * -1 # sets a zero between -180 and 180. IT WORKS.
 
     def setZero(self):
         self.motor.setSelectedSensorPosition(0, 0, 0)

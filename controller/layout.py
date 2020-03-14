@@ -33,7 +33,7 @@ from commands.ballsystem.clearjamcommand import ClearJamCommand
 from commands.ballsystem.slowrunballflowcommandgroup import SlowRunBallFlowCommandGroup
 from commands.ballsystem.loadballfromhoppercommand import LoadBallFromHopperCommand
 from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
-
+from commands.ballsystem.testrunallcommand import TestRunAllCommand
 from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalCommand
 
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
@@ -145,8 +145,8 @@ def init():
 
     #operatorController.DPadUp.whileHeld(FlipColorwheelUpCommand())
 
-    #operatorController.LeftTrigger.toggleWhenPressed(ShootCommand(4200))
-    operatorController.LeftTrigger.toggleWhenPressed(llTestCommand())
+    operatorController.LeftTrigger.toggleWhenPressed(TestRunAllCommand())
+    #operatorController.LeftTrigger.toggleWhenPressed(llTestCommand())
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
     operatorController.DPadUp.toggleWhenPressed(TurretFieldOrientedCommand())
