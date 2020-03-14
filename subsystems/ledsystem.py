@@ -22,7 +22,13 @@ class LEDSystem(DebuggableSubsystem):
         self.blinkin.set(0.99)
 
     def setRed(self):
-        self.blinkin.set(0.61)
+        self.blinkin.set(-0.31)
+
+    def solidRed(self):
+        self.blinkin.set(0.01)
+
+    def setGradient(self):
+        self.blinkin.set(0.41)
 
     def setGold(self):
         self.blinkin.set(0.67)
@@ -36,6 +42,8 @@ class LEDSystem(DebuggableSubsystem):
     def setGreen(self):
         self.blinkin.set(0.77)
 
+    def solidGreen(self):
+        self.blinkin.set(0.77)
     def flashRed(self):
         self.blinkin.set(-0.11)
 
