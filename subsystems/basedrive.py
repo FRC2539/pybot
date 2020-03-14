@@ -194,6 +194,7 @@ class BaseDrive(DebuggableSubsystem):
         self.debugMotor('Front Right Motor', self.motors[1])
 
         self.resetEncoders()
+        self.resetPID()
 
         self.setProfile(0)
 
@@ -408,32 +409,40 @@ class BaseDrive(DebuggableSubsystem):
 
         if not self.turnDone:
             if not self.turnSet:
-                turnTargetPositions = []
+                #turnTargetPositions = []
 
-                self.setProfile(2)
+                #inchesPerDegree = math.pi * 25.75 / 360#Config('DriveTrain/width') / 360
+                #totalDistanceInInches = angle * inchesPerDegree # maybe the angle variable?
+                #offset = self.inchesToUnits(totalDistanceInInches)
 
-                inchesPerDegree = math.pi * 25.75 / 360#Config('DriveTrain/width') / 360
-                totalDistanceInInches = angle * inchesPerDegree # maybe the angle variable?
-                offset = self.inchesToUnits(totalDistanceInInches)
+                #for position in self.getPositions():
+                    #turnTargetPositions.append(position + offset)
 
-                for position in self.getPositions():
-                    turnTargetPositions.append(position + offset)
-
-                self.setPositions(turnTargetPositions)
+                #self.setPositions(turnTargetPositions)
+                #mult = 1
+                #if angle < self.getAngle():
+                    #mult = -1
 
                 self.turnSet = True
-                break
 
             else:
-                if abs(self.getAngleTo(angle)) < 1:
+                if abs(self.getAngleTo(angle)) <= 5:
+                    self.stop()
                     self.turnDone = True
+
+                else:
+                    self.rotate = (self.getAngleTo(angle) / 90)
+                    if abs (self.rotate) < .125:
+                        self.rotate = math.copysign(.125, self.rotate)
+                    self.move(0, 0, self.rotate)
                     # if turn is done
 
-        if not self.moveDone:
-            if not self.moveSet:
-                precision = self.inchesToUnits(1)
+        if not self.moveDone and self.turnDone:
 
-                moveTargetPositions = []
+            if not self.moveSet:
+                self.precision = self.inchesToUnits(5)
+
+                self.moveTargetPositions = []
 
                 self.setProfile(1)
 
@@ -441,21 +450,21 @@ class BaseDrive(DebuggableSubsystem):
                 sign = 1
 
                 for position in self.getPositions():
-                    moveTargetPositions.append(position + (offset * sign))
+                    self.moveTargetPositions.append(position + (offset * sign))
                     sign *= -1
 
-                self.setPositions(moveTargetPositions)
+                self.setPositions(self.moveTargetPositions)
 
                 self.moveSet = True
-                break
+
             else:
-                if self.atPosition(moveTargetPositions, precision):
+                if self.atPosition(self.moveTargetPositions, self.precision):
+                    self.stop()
                     self.moveDone = True
 
-            if self.turnDone and self.moveDone:
-                return True
+        print(self.moveDone)
 
-            return False
+        return (self.moveDone and self.turnDone)
 
     def falconSetPositions(self, positions):
         '''
@@ -552,11 +561,11 @@ class BaseDrive(DebuggableSubsystem):
 
             # use below for turn
 
-            motor.config_kP(2, 0.03, 0)
-            motor.config_kI(2, 0.00005, 0)
+            motor.config_kP(2, 3, 0)
+            motor.config_kI(2, 5, 0)
             motor.config_kD(2, 0.05, 0)
-            motor.config_kF(2, 0.08, 0) # more ff?
-            motor.config_IntegralZone(2, 5000, 0)
+            motor.config_kF(2, 12, 0) # more ff?
+            motor.config_IntegralZone(2, 0, 0)
 
 
             #motor.configMotionAcceleration(6000, 0)

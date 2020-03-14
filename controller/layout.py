@@ -136,8 +136,8 @@ def init():
     operatorController.RightJoystick.whenPressed(RunUpUntilImpactCommand())
 
     operatorController.X.whenPressed(QuickReverseCommand())
-    #operatorController.Y.whenPressed(llTestCommand())
-    operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
+    operatorController.Y.toggleWhenPressed(llTestCommand())
+    #operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
     operatorController.B.toggleWhenPressed(ClearJamCommand())
 
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())

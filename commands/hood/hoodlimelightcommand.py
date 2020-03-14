@@ -20,8 +20,8 @@ class HoodLimelightCommand(Command):
         if robot.limelight.getTape():
             if robot.limelight.getA() > 1.289 :
                 robot.hood.setShootAngle(1.76491*(robot.limelight.getA()*robot.limelight.getA())+14)
-            elif robot.limelight.getA()<.75:
-                robot.hood.setShootAngle(1.76491*(robot.limelight.getA()*robot.limelight.getA())+12.5917)
+            #elif robot.limelight.getA()<.75:
+                #robot.hood.setShootAngle(1.76491*(robot.limelight.getA()*robot.limelight.getA())+12.5917)
             else:
                 robot.hood.setShootAngle(1.76491*(robot.limelight.getA()*robot.limelight.getA())+11.5917)
             #if robot.limelight.calcDistance() > 160:
