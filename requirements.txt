@@ -1,3 +1,6 @@
 pyfrc
 robotpy-ctre
+robotpy-rev
 robotpy-navx
+robotpy-commands-v1
+

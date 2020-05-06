@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+from wpilib.command import Command
+Command.isFinished = lambda x: False
+
 from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
+
 
 #from custom import driverhud
 import controller.layout
