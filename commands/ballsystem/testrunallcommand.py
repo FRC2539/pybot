@@ -1,7 +1,8 @@
 from wpilib.command import Command
 
-import robot
+from wpilib import Timer
 
+import robot
 
 class TestRunAllCommand(Command):
 

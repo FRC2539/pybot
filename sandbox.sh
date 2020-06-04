@@ -33,7 +33,7 @@ if [[ ! -d $PWD/.venv ]]; then
         done
     fi
 
-    virtualenv -p python3 --no-site-packages $PWD/.venv
+    virtualenv -p python3 $PWD/.venv
     $PWD/.venv/bin/pip install -U pip
     $PWD/.venv/bin/pip install  --find-links https://www.tortall.net/~robotpy/wheels/2020/linux_x86_64/ --no-cache-dir -r $PWD/requirements.txt
 

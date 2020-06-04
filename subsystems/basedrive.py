@@ -70,6 +70,7 @@ class BaseDrive(DebuggableSubsystem):
             self.resetEncoders = self.falconResetEncoders
             self.getVelocity = self.falconGetVelocity
             self.gyroSetPositon = self.falconGyroSetPositions
+            self.unitsToInches = self.ticksToInches
 
         else:
 
@@ -128,6 +129,7 @@ class BaseDrive(DebuggableSubsystem):
             self.resetEncoders = self.null
             self.getVelocity = self.null
             self.gyroSetPositon = self.null
+            self.unitsToInches = self.rotationsToInches
 
             print('set methods')
 
@@ -639,6 +641,11 @@ class BaseDrive(DebuggableSubsystem):
 
         return float((rotations * 8.45) * 2132)#Config('DriveTrain/ticksPerRotation', 4096))
 
+    def rotationsToInches(self, rotations):
+        return (rotations / 8.45) * 18.25
+
+    def ticksToInches(self, ticks):
+        return ((ticks / 2132) / 8.45) * 18.25
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
