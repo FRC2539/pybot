@@ -374,7 +374,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-            print('speeds' + str(speeds))
 
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
@@ -468,25 +467,24 @@ class BaseDrive(DebuggableSubsystem):
 
         return (self.moveDone and self.turnDone)
 
-    def falconSetPositions(self, positions):
+    def falconSetPositions(self, positions, override=True):
         '''
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
         '''
-
-        print('setting drivetrain positions ')
 
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
+            if override:
+                motor.selectProfileSlot(1, 0)
             motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
             motor.configMotionAcceleration(int(self.speedLimit), 0)
             motor.set(ControlMode.MotionMagic, position)
 
-    def neoSetPositions(self, positions):
+    def neoSetPositions(self, positions, override=True):
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
@@ -563,11 +561,11 @@ class BaseDrive(DebuggableSubsystem):
 
             # use below for turn
 
-            motor.config_kP(2, 3, 0)
-            motor.config_kI(2, 5, 0)
+            motor.config_kP(2, 0.03, 0)
+            motor.config_kI(2, 0.00005, 0)
             motor.config_kD(2, 0.05, 0)
-            motor.config_kF(2, 12, 0) # more ff?
-            motor.config_IntegralZone(2, 0, 0)
+            motor.config_kF(2, 0.03, 0) # more ff?
+            motor.config_IntegralZone(2, 5000, 0)
 
 
             #motor.configMotionAcceleration(6000, 0)
@@ -614,6 +612,9 @@ class BaseDrive(DebuggableSubsystem):
 
         return self.navX.getAngle() % 360
 
+    def getRawAngle(self):
+
+        return self.navX.getAngle()
 
     def getAngleTo(self, targetAngle):
         '''
@@ -629,17 +630,15 @@ class BaseDrive(DebuggableSubsystem):
         return degrees
 
     def inchesToRotations(self, distance):
-        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
-
-        print('ROTATIONS : ' + str(rotations * 8.45))#Config('DriveTrain/ticksPerRotation', 8.45)))
+        rotations = distance / 18.85#Config('DriveTrain/wheelDiameter', 6))
 
         return float(rotations * 8.45)#Config('DriveTrain/GearRatio', 8.45))
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.85#Config('DriveTrain/wheelDiameter', 6))
 
-        return float((rotations * 8.45) * 2132)#Config('DriveTrain/ticksPerRotation', 4096))
+        return float((rotations) * 2048) * 8.45#Config('DriveTrain/ticksPerRotation', 4096))
 
     def rotationsToInches(self, rotations):
         return (rotations / 8.45) * 18.25

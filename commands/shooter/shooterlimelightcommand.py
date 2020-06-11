@@ -1,4 +1,5 @@
 from wpilib.command import Command
+from commands.drivetrain.turncommand import TurnCommand
 
 from wpilib import Timer
 
@@ -34,7 +35,12 @@ class ShooterLimelightCommand(Command):
             robot.shooter.setGoalNetworkTables(self.speed)
 
 
+        #print("fart")
         robot.shooter.setRPM(self.speed)
+        #print("beans")
+
+        #TurnCommand(500)
+
 
 
     def end(self):

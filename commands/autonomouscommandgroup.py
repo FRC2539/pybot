@@ -105,22 +105,20 @@ class AutonomousCommandGroup(fc.CommandFlow):
 ## WORKING 6 BALLS
         @fc.IF(lambda: True)
         def SixBallAuto(self):
-            self.addSequential(SetSpeedCommand(5500))
-            self.addParallel(ShootCommand(4200))
-            self.addParallel(TurretStartCommandGroup())
-            self.addSequential(MoveCommand(74))
-             # should remain running
-            self.addParallel(RunUntilLoadedCommand(), 10)
-            self.addSequential(RunUntilEmptyCommand(startingBalls), 5)
-            #self.addParallel(StopAllCommand())# keeps everything in running status
-            #self.addParallel(IntakeCommand(0.3))
-            #self.addParallel(RunUntilLoadedCommand())
-            self.addSequential(MoveCommand(110), 3)
-            self.addParallel(ResetEncodersCommand())
-            self.addSequential(MoveCommand(-110), 3) # gives plenty of time to shoot until its empty.
-            self.addSequential(RunUntilEmptyCommand(3), 6)
-            self.addSequential(SetSpeedCommand(10250))
-            self.addParallel(StopEverythingCommand())
+            self.addSequential(TurnCommand(180))
+            #self.addSequential(SetSpeedCommand(5500))
+            #self.addParallel(ShootCommand(4200))
+            #self.addParallel(TurretStartCommandGroup())
+            #self.addSequential(MoveCommand(74))
+             ## should remain running
+            #self.addParallel(RunUntilLoadedCommand(), 10)
+            #self.addSequential(RunUntilEmptyCommand(startingBalls), 5)
+            #self.addSequential(MoveCommand(110), 3)
+            #self.addParallel(ResetEncodersCommand())
+            #self.addSequential(MoveCommand(-110), 3) # gives plenty of time to shoot until its empty.
+            #self.addSequential(RunUntilEmptyCommand(3), 6)
+            #self.addSequential(SetSpeedCommand(10250))
+            #self.addParallel(StopEverythingCommand())
 
 
         #@fc.IF(lambda: True)
