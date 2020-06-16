@@ -3,6 +3,8 @@ from . import logicalaxes
 
 from custom.config import Config
 
+from commands.shooter.aseriouscommandthatwecanactuallyunderstandcommandgroup import ASeriousCommandThatWeCanActuallyUnderstandCommandGroup
+
 from commands.drivetrain.gyromovecommand import GyroMoveCommand
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.playmusiccommand import PlayMusicCommand
@@ -132,12 +134,12 @@ def init():
 
     operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
 
-    operatorController.LeftJoystick.toggleWhenPressed(ExperimentalCommand())
+    #operatorController.LeftJoystick.toggleWhenPressed(ExperimentalCommand())
+    operatorController.LeftJoystick.toggleWhenPressed(ASeriousCommandThatWeCanActuallyUnderstandCommandGroup())
     operatorController.RightJoystick.whenPressed(RunUpUntilImpactCommand())
 
     operatorController.X.whenPressed(QuickReverseCommand())
-    operatorController.Y.toggleWhenPressed(llTestCommand())
-    #operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
+    operatorController.Y.toggleWhenPressed(ReverseShooterCommand())
     operatorController.B.toggleWhenPressed(ClearJamCommand())
 
     operatorController.RightBumper.whileHeld(RaiseHoodCommand())
