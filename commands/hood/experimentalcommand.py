@@ -17,7 +17,7 @@ class ExperimentalCommand(Command):
 
     def execute(self):
         distance = robot.limelight.calcDistanceGood()
-        print('distance ' + str(distance))
+        #print('distance ' + str(distance))
         robot.limelight.updateNetworkTables()
 
         if robot.limelight.getTape():

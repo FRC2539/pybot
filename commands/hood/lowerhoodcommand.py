@@ -13,7 +13,7 @@ class LowerHoodCommand(Command):
         robot.hood.lowerHood()
 
     def isFinished(self):
-        print(robot.hood.getPosition())
+        #print(robot.hood.getPosition())
 
         if robot.hood.atLowest():
             robot.hood.stopHood()
@@ -23,4 +23,4 @@ class LowerHoodCommand(Command):
 
     def end(self):
         robot.hood.stopHood()
-        print('\n\n\n\nDONE\n\n\n\n')
+        #print('\n\n\n\nDONE\n\n\n\n')

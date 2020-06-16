@@ -24,7 +24,7 @@ from subsystems.hood import Hood as hood
 from subsystems.turret import Turret as turret
 from subsystems.shooter import Shooter as shooter
 from subsystems.ballsystem import BallSystem as ballsystem
-from subsystems.pneumaticsystems import PneumaticSystems as pneumaticsystems
+#from subsystems.pneumaticsystems import PneumaticSystems as pneumaticsystems
 from subsystems.winch import Winch as winch
 from subsystems.trolley import Trolley as trolley
 from subsystems.windshieldwiper import WindshieldWiper as windshieldwiper

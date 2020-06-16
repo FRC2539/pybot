@@ -42,17 +42,17 @@ class RunUntilEmptyCommand(Command):
             self.primed = True
 
         if robot.shooter.getRPM() >= (self.rpm - self.tol):
-            print('running vertical only!\n')
+            #print('running vertical only!\n')
             robot.ballsystem.safeRunVertical()
             if self.timer.hasElapsed(1):
-                print('RUNNING ALL BS!\n')
+                #print('RUNNING ALL BS!\n')
                 robot.ballsystem.runAll()
                 self.timer.stop()
 
         else:
             robot.ballsystem.stopAll()
 
-        print('ball count ' + str(self.ballCount))
+        #print('ball count ' + str(self.ballCount))
 
     def isFinished(self):
         return (self.ballCount <= 0)

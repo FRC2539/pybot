@@ -13,7 +13,7 @@ class RaiseHoodCommand(Command):
         robot.hood.raiseHood()
 
     def isFinished(self):
-        print(robot.hood.getPosition())
+        #print(robot.hood.getPosition())
         if robot.hood.atHighest():
             robot.hood.stopHood()
             return True
@@ -22,4 +22,4 @@ class RaiseHoodCommand(Command):
 
     def end(self):
         robot.hood.stopHood()
-        print('\n\n\n\nDONE\n\n\n\n')
+        #print('\n\n\n\nDONE\n\n\n\n')

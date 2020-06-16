@@ -62,6 +62,7 @@ class Shooter(DebuggableSubsystem):
 
     def shootBall(self):
         self.motor.set(0.6)
+        #print("SHOOTING")
         #self.secondMotor.set(0.6)
 
     def stop(self):

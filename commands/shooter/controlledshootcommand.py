@@ -18,7 +18,7 @@ class ControlledShootCommand(Command):
         robot.shooter.setGoalNetworkTables(self.rpm)
 
     def execute(self):
-        print('rpom ' + str(robot.shooter.getRPM()))
+        #print('rpom ' + str(robot.shooter.getRPM()))
         if (robot.shooter.getRPM() + 10) >= self.rpm:
             robot.ballsystem.runAll()
             robot.intake.intake(0.4)
