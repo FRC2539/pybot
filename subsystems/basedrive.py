@@ -76,7 +76,7 @@ class BaseDrive(DebuggableSubsystem):
 
             # For practice bot with NEO's
 
-            print('in neos!!!\n\n\n')
+            #print('in neos!!!\n\n\n')
 
             self.NEOencoders = []
             self.NEOcontrollers = []
@@ -90,7 +90,7 @@ class BaseDrive(DebuggableSubsystem):
             self.bensGloriousOrchestra = None # this makes me sad lol
 
             try:
-                print('configured motors')
+                #print('configured motors')
                 self.motors = [
                     CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
                     CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
@@ -131,7 +131,7 @@ class BaseDrive(DebuggableSubsystem):
             self.gyroSetPositon = self.null
             self.unitsToInches = self.rotationsToInches
 
-            print('set methods')
+            #print('set methods')
 
     def __init__(self, name):
         super().__init__(name)
@@ -224,14 +224,14 @@ class BaseDrive(DebuggableSubsystem):
         #print(self.recordData)
         if self.firstSave:
             with open(self.folder +'/' + 'data.csv', 'w', newline='') as firstfile:
-                print('first write')
+                #print('first write')
                 self.writer = csv.writer(firstfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
                 for index, motor in enumerate(self.motors):
                     self.writer.writerow(['Motor: ' + str(index)] + ['RPM: ' + str((motor.getEncoder()).getVelocity())] + ['Amps: ' + str(motor.getOutputCurrent())] + ['Bus Volts: ' + str(motor.getBusVoltage())] + ['Time (s): ' + str(self.timer.get())])
                 self.firstSave = False
         else:
             with open(self.folder +'/' + 'data.csv', 'a', newline='') as file:
-                print('writing')
+                #print('writing')
                 self.writer = csv.writer(file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_ALL, lineterminator='\n')
 
                 for index, motor in enumerate(self.motors):
@@ -374,7 +374,6 @@ class BaseDrive(DebuggableSubsystem):
                 for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
 
@@ -463,7 +462,7 @@ class BaseDrive(DebuggableSubsystem):
                     self.stop()
                     self.moveDone = True
 
-        print(self.moveDone)
+        ##print(self.moveDone)
 
         return (self.moveDone and self.turnDone)
 
@@ -630,7 +629,7 @@ class BaseDrive(DebuggableSubsystem):
         return degrees
 
     def inchesToRotations(self, distance):
-        rotations = distance / 18.85#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
         return float(rotations * 8.45)#Config('DriveTrain/GearRatio', 8.45))
 

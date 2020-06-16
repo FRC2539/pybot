@@ -26,7 +26,7 @@ class RecordDriveCommand(Command):
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
         except (ValueError, MissingConfigError):
-            print('Could not set speed to %s' % self.speedLimit)
+            #print('Could not set speed to %s' % self.speedLimit)
             driverhud.showAlert('Drive Train is not configured')
             #robot.drivetrain.enableSimpleDriving()
 
@@ -69,14 +69,14 @@ class RecordDriveCommand(Command):
         self.currentLeft = robot.drivetrain.unitsToInches(pos[0])
         self.currentRight = robot.drivetrain.unitsToInches(pos[1])
 
-        print('FL Distance: ' + str(self.currentLeft))
-        print('FR Distance: ' + str(self.currentRight))
+        #print('FL Distance: ' + str(self.currentLeft))
+        #print('FR Distance: ' + str(self.currentRight))
 
     def end(self):
         robot.drivetrain.stop()
 
         finalAngle = robot.drivetrain.getAngle()
 
-        print('FL Distance: ' + str(self.currentLeft))
-        print('FR Distance: ' + str(self.currentRight))
-        print('Final Angle: ' + str(finalAngle - self.startAngle))
+        #print('FL Distance: ' + str(self.currentLeft))
+        #print('FR Distance: ' + str(self.currentRight))
+        #print('Final Angle: ' + str(finalAngle - self.startAngle))

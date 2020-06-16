@@ -24,7 +24,7 @@ class DriveCommand(Command):
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
         except (ValueError, MissingConfigError):
-            print('Could not set speed to %s' % self.speedLimit)
+            #print('Could not set speed to %s' % self.speedLimit)
             driverhud.showAlert('Drive Train is not configured')
             #robot.drivetrain.enableSimpleDriving()
 

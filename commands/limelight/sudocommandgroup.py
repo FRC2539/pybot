@@ -13,8 +13,8 @@ class SudoCommandGroup(CommandGroup):
         super().__init__('Sudo')
 
         # Add commands here with self.addSequential() and self.addParallel()
-        self.addParallel(HoodLimelightCommand())
-        #self.addParallel(ExperimentalCommand())
         self.addParallel(TurretLimelightCommand())
+        #self.addParallel(ExperimentalCommand())
+        self.addParallel(HoodLimelightCommand())
         self.addSequential(ShooterLimelightCommand())
 

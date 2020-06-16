@@ -17,6 +17,7 @@ class AimTurretDrivebaseCommand(Command):
 
 
     def execute(self):
+        #print("aiming")
         if (robot.turret.isZeroed() or robot.turret.isMax()):
             self.UseDriveTrain = True
         else:

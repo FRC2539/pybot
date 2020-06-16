@@ -36,7 +36,7 @@ class AutoSetWheelCommand(Command):
         else:
             robot.colorwheel.spinToSensor(75.12) # 37.56 * 2
 
-        print('self.distance ' + str(self.distance))
+        #print('self.distance ' + str(self.distance))
 
 
         robot.colorwheel.autoSpinWheel(self.colorDistance * self.colorDistance * self.direction)

@@ -27,7 +27,7 @@ class SetHoodCommand(Command):
             self.dir = 'u'
             self.angle -= 5
 
-        print(self.dir)
+        #print(self.dir)
         if abs(robot.hood.getPosition() - self.angle) < 1:
             robot.hood.stopHood()
 
@@ -36,7 +36,7 @@ class SetHoodCommand(Command):
 
 
     def execute(self):
-        print(robot.hood.getPosition())
+        #print(robot.hood.getPosition())
         if (robot.hood.getPosition() <= self.angle and self.dir == 'd') or (robot.hood.getPosition() >= self.angle and self.dir == 'u'):
             robot.hood.stopHood()
         else:

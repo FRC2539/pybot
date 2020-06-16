@@ -36,25 +36,25 @@ class SetFieldPositionCommand(Command):
 
         self.cY = self.gY - self.yD
         self.cX = self.gX - self.xD
-        print(str(self.cY))
-        print(str(self.cX))
+        #print(str(self.cY))
+        #print(str(self.cX))
         self.rotate = (90-self.angle) * .01
         if abs(self.rotate) > (.2):
-            print('rotate x ')
+            #print('rotate x ')
             robot.drivetrain.move(0,0,self.rotate)
         else:
             self.speed = self.cX * -.0075
             if self.cX > 10 :
                 robot.drivetrain.move(0,self.speed,0)
-                print('x')
+                ##print('x')
             else:
                 self.rotate = (180-self.angle) * -.01
                 if abs(self.rotate) > (.01):
                     robot.drivetrain.move(0,0,self.rotate)
-                    print('rotate y')
+                    ##print('rotate y')
                 else:
                     self.speed = self.cY *.0075
-                    print('y')
+                    #print('y')
                     robot.drivetrain.move(0,self.speed,0)
 
 

@@ -27,7 +27,7 @@ class GyroMoveCommand(Command):
         self.precision = robot.drivetrain.inchesToUnits(1)
 
     def initialize(self):
-        print('began Move command \n\n')
+        #print('began Move command \n\n')
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
@@ -38,7 +38,7 @@ class GyroMoveCommand(Command):
             self.targetPositions.append(position + (offset * sign))
             sign *= -1
 
-        print('target: ' + str(self.targetPositions))
+        #print('target: ' + str(self.targetPositions))
 
         robot.drivetrain.gyroSetPositon(self.targetPositions)
 

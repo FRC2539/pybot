@@ -28,18 +28,33 @@ class TurnCommand(MoveCommand):
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset)
 
-        print('pos ' + str(self.targetPositions))
-        robot.drivetrain.setPositions(self.targetPositions, False)
+
+
+
+        ##print('pos ' + str(self.targetPositions))
+        #robot.drivetrain.setPositions(self.targetPositions)
 
     #def isFinished(self):
         #''' Get the current angle to the desired position, and stop it if it's nearby. '''
-        #print(robot.drivetrain.getAngle())
+        ##print(robot.drivetrain.getAngle())
         #if abs(robot.drivetrain.getAngleTo(self.degrees)) < 3:
             #robot.drivetrain.stop()
-            #print('done')
+            ##print('done')
             #return True
 
-        #return False
+        #print('pos ' + str(self.targetPositions))
+        #robot.drivetrain.setPositions(self.targetPositions, False)
+
+    ##def isFinished(self):
+        ##''' Get the current angle to the desired position, and stop it if it's nearby. '''
+        ##print(robot.drivetrain.getAngle())
+        ##if abs(robot.drivetrain.getAngleTo(self.degrees)) < 3:
+            ##robot.drivetrain.stop()
+            ##print('done')
+            ##return True
+
+        ##return False
+
 
     def isFinished(self):
         print(' b ' + str(abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees))

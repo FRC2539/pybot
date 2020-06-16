@@ -17,8 +17,8 @@ class LoadBallFromHopperCommand(Command):
                 robot.ballsystem.runAllSlow()
 
     def execute(self):
-        print('low ' + str(robot.ballsystem.isLowBallPrimed()))
-        print('up ' + str(robot.ballsystem.isUpperBallPrimed()))
+        #print('low ' + str(robot.ballsystem.isLowBallPrimed()))
+        #print('up ' + str(robot.ballsystem.isUpperBallPrimed()))
         if robot.ballsystem.isLowBallPrimed() and robot.ballsystem.isUpperBallPrimed():
             robot.ballsystem.stopLowerConveyor()
 

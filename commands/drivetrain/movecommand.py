@@ -29,7 +29,7 @@ class MoveCommand(Command):
 
     def initialize(self):
         robot.ledsystem.flashWhite()
-        print('began Move command \n\n')
+        #print('began Move command \n\n')
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
@@ -42,14 +42,14 @@ class MoveCommand(Command):
             sign *= -1
 
 
-        print('my target: ' + str(self.targetPositions))
+        #print('my target: ' + str(self.targetPositions))
 
         robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
-        print('my position ' + str(robot.drivetrain.getPositions()))
+        #print('my position ' + str(robot.drivetrain.getPositions()))
 
-        print('my target: ' + str(self.targetPositions))
+        #print('my target: ' + str(self.targetPositions))
         if self.avoidCollisions:
             try:
                 if self.distance < 0:

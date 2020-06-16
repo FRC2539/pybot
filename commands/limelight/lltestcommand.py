@@ -29,7 +29,7 @@ class llTestCommand(Command):
             if robot.turret.getPosition() > 900:
                 self.turret = True
             robot.turret.setPosition(975)
-            print('turret')
+            #print('turret')
 
 
         elif not self.aimed:
@@ -43,7 +43,7 @@ class llTestCommand(Command):
             if abs(self.rotate) < .15 and abs(self.x) > 2:
                 self.rotate = math.copysign(.15, self.rotate)
             robot.drivetrain.move(0,0,self.rotate)
-            print('aim')
+            #print('aim')
 
         elif not self.measured:
             self.x = robot.limelight.calcXDistance()
@@ -57,11 +57,11 @@ class llTestCommand(Command):
                 self.angle = self.angle + 360
             if self.angle > 360 :
                 self.angle = self.angle - 360
-            print('measure')
+            ##print('measure')
 
         elif not self.finished:
             self.finished= robot.drivetrain.turnThenMove(self.deltaD, self.angle)
-            print('finish')
+            #print('finish')
 
         self._isFinished = self.finished
 
