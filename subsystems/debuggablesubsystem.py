@@ -8,6 +8,9 @@ class DebuggableSubsystem(Subsystem):
     sensors.
     '''
 
+    def __init__(self):
+        self.enablePrints = True
+
     def debugSensor(self, label, sensor):
         return
         sensor.SetName(self.getName(), label)
@@ -16,3 +19,12 @@ class DebuggableSubsystem(Subsystem):
         return
         motor.SetName(self.getName(), label)
 
+    def cp(self, output):
+        if self.enablePrints:
+            print(str(output))
+
+    def disablePrint(self):
+        self.enablePrints = False
+
+    def enablePrint(self):
+        self.enablePrints = True
