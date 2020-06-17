@@ -126,7 +126,7 @@ class BallSystem(DebuggableSubsystem):
     def monitorBalls(self, startCount):
 
 
-        print("monitoring")
+        #print("monitoring")
         if not self.shooterSensor.get() and not self.shooting: # is there something there that was not there last time?
             if startCount != 0:
                 startCount -= 1

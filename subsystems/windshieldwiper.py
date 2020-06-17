@@ -32,7 +32,7 @@ class WindshieldWiper(DebuggableSubsystem):
         self.wwMotor.set(0.1 * self.direction)
 
     def swapDirection(self):
-        print('switched')
+        #print('switched')
         self.direction *= -1
 
     def getAmperage(self):

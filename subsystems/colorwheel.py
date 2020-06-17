@@ -50,10 +50,10 @@ class ColorWheel(DebuggableSubsystem):
 
     def getColor(self):
         self.color = self.colorSensor.getColor()
-        print('r: ' + str(self.color.red))
-        print('g: ' + str(self.color.green))
-        print('b: ' + str(self.color.blue))
-        print('ny: ' + str(self.color.red / self.color.green))
+        #print('r: ' + str(self.color.red))
+        #print('g: ' + str(self.color.green))
+        #print('b: ' + str(self.color.blue))
+        #print('ny: ' + str(self.color.red / self.color.green))
 
         if self.color.blue > (self.color.green - .18) and self.color.blue > self.color.red: # subtracts because there is more green in blue than blue lol.
             return 'b'

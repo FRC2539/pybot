@@ -33,5 +33,5 @@ class Winch(DebuggableSubsystem):
         self.winchMotor.set(0.4)
 
     def isHigh(self):
-        print('high : ' + str(self.winchEncoder.getPosition()))
+        #print('high : ' + str(self.winchEncoder.getPosition()))
         return False#(self.winchEncoder.getPosition() >= 256.0)

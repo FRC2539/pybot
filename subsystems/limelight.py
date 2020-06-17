@@ -53,6 +53,10 @@ class Limelight(DebuggableSubsystem):
         #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
         self.angle = math.radians(30.52289 + self.getY())
         self.distance = self.height/math.tan(self.angle)
+<<<<<<< HEAD
+        #print(str(self.distance))
+=======
+>>>>>>> 4fee88c35e4e227c31ee2032945bdd6c780b0e61
         return self.distance
 
 
@@ -60,7 +64,7 @@ class Limelight(DebuggableSubsystem):
         self.height = 77.25
         self.angle = math.radians(30.52289 + self.getY())
         self.distance = self.height/math.tan(self.angle)
-        print(str(self.distance))
+        #print(str(self.distance))
         return self.distance
 
 

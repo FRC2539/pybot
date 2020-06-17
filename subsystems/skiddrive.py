@@ -34,7 +34,7 @@ class SkidDrive(BaseDrive):
                 self.motors[RobotDriveBase.MotorType.kRearRight] \
                     .follow(self.motors[RobotDriveBase.MotorType.kFrontRight])
 
-            print('configured followers')
+            #print('configured followers')
 
     def _calculateSpeeds(self, x, y, rotate):
         return [y + rotate, -y + rotate]

@@ -45,6 +45,9 @@ class Intake(DebuggableSubsystem):
     def monitorIntake(self): # Experimental
         # Gets output current, puts it in milliamperes. The free current (of a bag) at top speed is about 1.8 amps, will spike if more resistance (ball) - see motor chart.
         current = self.intakeMotor.getOutputCurrent()
+
+        #print(current)
+
         if current * 1000 > 1800:
             self.ballCount += 1
 
@@ -74,7 +77,7 @@ class Intake(DebuggableSubsystem):
         # lol rip intake motor
 
     def sensorCount(self):
-        print('hmm   ' + str(self.intakeSensor.get()))
+        #print('hmm   ' + str(self.intakeSensor.get()))
         if not self.intakeSensor.get() and not self.intaking:
             self.ballCount += 1
             self.intaking = True
