@@ -643,7 +643,7 @@ class BaseDrive(DebuggableSubsystem):
         return (rotations / 8.45) * 18.25
 
     def ticksToInches(self, ticks):
-        return ((ticks / 2132) / 8.45) * 18.25
+        return ((ticks / 2048) / 8.45) * 18.25 # 0.46355
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
