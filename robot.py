@@ -46,6 +46,8 @@ class KryptonBot(CommandBasedRobot):
         driverhud.init()
         configauto.init()
 
+        self.enabledPrints = True
+
         from commands.startupcommandgroup import StartUpCommandGroup
         StartUpCommandGroup().start()
 

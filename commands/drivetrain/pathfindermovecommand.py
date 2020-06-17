@@ -21,7 +21,7 @@ class PathfinderMoveCommand(Command):
 
     def initialize(self):
         points = [
-        pf.Waypoint(-4, -1, 0),   # Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+        pf.Waypoint(0, 5, 0),
         pf.Waypoint(0, 0, 0),                       # Waypoint @ x=0, y=0,   exit angle=0 radians
         ]
 
@@ -41,8 +41,8 @@ class PathfinderMoveCommand(Command):
         self.left.configureEncoder(robot.drivetrain.getPositions()[0], 2048, 0.5)
         self.right.configureEncoder(robot.drivetrain.getPositions()[1], 2048, 0.5)
 
-        self.left.configurePIDVA(1.0, 0.0000, 0, (1 / 5), 0)
-        self.right.configurePIDVA(1.0, 0.0000, 0, (1 / 5), 0)
+        self.left.configurePIDVA(0.001, 0.0000, 0, (1 / 5), 0)
+        self.right.configurePIDVA(0.001, 0.0000, 0, (1 / 5), 0)
 
         robot.drivetrain.resetGyro()
 
