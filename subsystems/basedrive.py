@@ -1,4 +1,4 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from wpilib import Timer
 
@@ -337,6 +337,8 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
+        print('check')
 
         if [x, y, rotate] == self.lastInputs:
             return

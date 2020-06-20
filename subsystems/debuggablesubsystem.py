@@ -1,7 +1,13 @@
+from __future__ import print_function
+
+import builtins as __builtin__
+
 from wpilib.command import Subsystem
 from wpilib import LiveWindow
 
 import robot
+
+import sys
 
 class DebuggableSubsystem(Subsystem):
     '''
@@ -18,14 +24,13 @@ class DebuggableSubsystem(Subsystem):
         return
         motor.SetName(self.getName(), label)
 
-    def print(self, output):
-        print('custom')
-        if robot.enablePrints:
-            print(str(output))
+def print(output):
+    if robot.globalObject.enabledPrints:
+        __builtin__.print(str(output))
 
-    def disablePrint(self):
-        robot.enablePrints = False
+def disablePrint():
+    robot.globalObject.enabledPrints = False
 
-    def enablePrint(self):
-        robot.enablePrints = True
+def enablePrint():
+    robot.globalObject.enabledPrints = True
 

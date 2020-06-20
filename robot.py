@@ -46,8 +46,6 @@ class KryptonBot(CommandBasedRobot):
         driverhud.init()
         configauto.init()
 
-        self.enabledPrints = True
-
         from commands.startupcommandgroup import StartUpCommandGroup
         StartUpCommandGroup().start()
 
@@ -82,6 +80,12 @@ class KryptonBot(CommandBasedRobot):
             except TypeError:
                 pass
 
+class Global:
+    pass
+
+globalObject = Global()
+
+globalObject.enabledPrints = True
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':

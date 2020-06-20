@@ -24,6 +24,8 @@ class Limelight(DebuggableSubsystem):
         self.TargetHeight = 90.75
         self.calDistance = 120
 
+        self.setPipeline(2)
+
         #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         #print(str(self.calAngle))
 
@@ -45,6 +47,9 @@ class Limelight(DebuggableSubsystem):
         else:
             return False
 
+    def getLLDistance(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])
+
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
 
@@ -53,12 +58,8 @@ class Limelight(DebuggableSubsystem):
         #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
         self.angle = math.radians(30.52289 + self.getY())
         self.distance = self.height/math.tan(self.angle)
-<<<<<<< HEAD
-        #print(str(self.distance))
-=======
->>>>>>> 4fee88c35e4e227c31ee2032945bdd6c780b0e61
-        return self.distance
 
+        return self.distance
 
     def calcDistanceGood(self):
         self.height = 77.25
@@ -66,8 +67,6 @@ class Limelight(DebuggableSubsystem):
         self.distance = self.height/math.tan(self.angle)
         #print(str(self.distance))
         return self.distance
-
-
 
     def areaDistance(self):
         self.aDistance = math.log(self.getA(), .992924) + 221.996
@@ -103,8 +102,8 @@ class Limelight(DebuggableSubsystem):
 
 
     def updateNetworkTables(self):
+        self.driveTable.putString('ll Distance', str(self.getLLDistance()))
         self.driveTable.putNumber('distance', self.calcDistance())
-
 
     def initDefaultCommand(self):
         from commands.limelight.defaultcommand import DefaultCommand
