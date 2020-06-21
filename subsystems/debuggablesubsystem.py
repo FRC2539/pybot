@@ -2,8 +2,12 @@ from __future__ import print_function
 
 import builtins as __builtin__
 
+import csv
+
 from wpilib.command import Subsystem
 from wpilib import LiveWindow
+
+import pprint
 
 import robot
 
@@ -33,4 +37,19 @@ def disablePrint():
 
 def enablePrint():
     robot.globalObject.enabledPrints = True
+
+def getFromCSV(name):
+    pass # Read it, and look through all of the lines, attempting to find requested variable.
+
+def saveVar(value):
+    variable = value # Reassigns to reassure that it's in the scope.
+
+    presentVars = dict(globals())
+
+    string = list(presentVars.keys())[list(presentVars.values()).index(variable)]
+
+    with open('saveddata.csv', 'a', newline='') as f:
+        writer = csv.writer(f, delimiter='|')
+        writer.writerow([string, self, None, value]) # Name, system, current val, original val
+
 

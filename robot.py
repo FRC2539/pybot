@@ -13,6 +13,8 @@ import controller.layout
 import subsystems
 import shutil, sys
 
+import csv
+
 from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
@@ -65,6 +67,23 @@ class KryptonBot(CommandBasedRobot):
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)
+
+    def disabledInit(self): # Get the current values for all variables.
+        newData = []
+        with open('saveddata.csv') as f:
+            data = [line.split() for line in f]
+            print(data)
+            for varData in data:
+                newVal = eval(str(varData[1]) + '.'  + varData[0]) # Gets the current value of the previously declared variable.
+                newData.append([varData[0], varData[1], newVal, varData[2]])
+
+        f = open('saveddata.csv', 'w+') # Erases by writing no data.
+        f.close()
+
+        with open('saveddata.csv', 'w', newline='') as f: # Repopulates the file with updated data.
+            writer = csv.writer(f, delimiter='|')
+            writer.writerows(newData)
+
 
     @classmethod
     def subsystems(cls):

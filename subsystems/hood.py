@@ -94,41 +94,6 @@ class Hood(DebuggableSubsystem):
         self.table.putNumber('DesiredHoodAngle', self.angleMin)
         self.table.putNumber('LaunchAngle', self.angleMin)
 
-    def initializeSetPosition(self, angle):
-        self.angle = angle
-
-        if self.getPosition() >= self.angle:
-            self.setSpeed = -0.3
-            self.dir = 'd'
-            self.angle += 5 # compensating for gear lash
-        else:
-            self.setSpeed = 0.3
-            self.dir = 'u'
-            self.angle -= 5
-
-        if abs(self.getPosition() - self.angle) < 1:
-            self.stopHood()
-
-        else:
-            self.setPercent((self.setSpeed))
-
-    def executeSetPosition(self):
-        if (self.getPosition() <= self.angle and self.dir == 'd') or (self.getPosition() >= self.angle and self.dir == 'u'):
-            self.stopHood()
-        else:
-            self.setPercent((self.setSpeed))
-
-    def isFinishedSetPosition(self):
-        if abs(self.getPosition() - self.angle) <= 1:
-            return True
-
-        return False
-
-    def endSetPosition(self):
-        self.stopHood()
-        self.updateNetworkTables()
-
-
     def OpenLoopSetPos(self, pos):
         self.angle = pos # give it in terms between min and max as of now, add 85 onto an angle between 0 and 35,
         # multiply that by 2: 85 + (2 * x). THIS WILL WORK
@@ -165,6 +130,9 @@ class Hood(DebuggableSubsystem):
                     self.speed = math.copysign(.5, self.speed)
                 self.setPercent(self.speed)
 
+    def goTo(self, angle): # angle is the raw encoder value.
+        pos = self.getPosition()
+        self.motor.set(math.copysign(max([0.3, (0.75 - max([angle / pos, pos / angle]))]), angle - pos)) # Damn, this is hot.
 
     def getLLHoodTuner(self):
         return self.LLHoodTuner

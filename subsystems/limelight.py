@@ -47,8 +47,26 @@ class Limelight(DebuggableSubsystem):
         else:
             return False
 
-    def getLLDistance(self):
+    def getCamTran(self):
         return self.nt.getEntry('camtran').getDoubleArray([])
+
+    def get3D_X(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[0]
+
+    def get3D_Y(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[1]
+
+    def get3D_Z(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[2]
+
+    def get3D_Pitch(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[3]
+
+    def get3D_Yaw(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[4]
+
+    def get3D_Roll(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[5]
 
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
@@ -102,7 +120,7 @@ class Limelight(DebuggableSubsystem):
 
 
     def updateNetworkTables(self):
-        self.driveTable.putString('ll Distance', str(self.getLLDistance()))
+        self.driveTable.putNumberArray('camTran', self.getCamTran())
         self.driveTable.putNumber('distance', self.calcDistance())
 
     def initDefaultCommand(self):

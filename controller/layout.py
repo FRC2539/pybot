@@ -67,6 +67,7 @@ from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.setturretcommand import SetTurretCommand
 from commands.turret.turretfieldorientedcommand import TurretFieldOrientedCommand
 from commands.turret.movefieldanglecommand import MoveFieldAngleCommand
+from commands.turret.camtranturretlimelight import CamTranTurretLimelight
 
 from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
@@ -103,7 +104,8 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
+    driveController.A.toggleWhenPressed(CamTranTurretLimelight())
+    #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     driveController.B.toggleWhenPressed(OutakeCommand())
     driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank

@@ -34,7 +34,6 @@ class Turret(DebuggableSubsystem):
 
         self.tollerance = 5 #ticks
 
-
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
         self.motor.setSelectedSensorPosition(0, 0, 0) #1061 starting position
         #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
@@ -56,14 +55,14 @@ class Turret(DebuggableSubsystem):
             self.motor.set(val)
 
     def testMove(self, val):
+        print('here')
         self.updateNetworkTables()
         if (self.getPosition() < self.max - self.getPosition()):
             self.speedLimit = self.getPosition() * .0015
         else:
             self.speedLimit = (self.max- self.getPosition()) * .0015
 
-        if self.speedLimit < .2:
-            self.speedLimit = .2
+        self.speedLimit = max([.2, self.speedLimit])
 
         #if self.speedLimit > .4:
             #self.speedLimit = .4
@@ -122,8 +121,6 @@ class Turret(DebuggableSubsystem):
         else:
             return False
 
-
-
     def printPosition(self):
         #print(str(self.motor.getSelectedSensorPosition(0)))
         pass
@@ -144,6 +141,9 @@ class Turret(DebuggableSubsystem):
             return True
 
         return False
+
+    def followTarget(self, desiredPosition):
+        self.motor.set(math.copysign(min([1 - (abs(min([desiredPosition, self.getPosition()]) / max([desiredPosition, self.getPosition()]))), 0.6]), desiredPosition - self.getPosition()))
 
     def moveFieldAngle(self, val):
         self.fieldAngle = self.fieldAngle + (val * 1)
