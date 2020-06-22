@@ -43,6 +43,8 @@ class KryptonBot(CommandBasedRobot):
         if RobotBase.isSimulation():
             import mockdata
 
+        self.clearCSV() # Clears data before adding it again in the subsystems.
+
         self.subsystems()
         controller.layout.init()
         driverhud.init()
@@ -99,12 +101,9 @@ class KryptonBot(CommandBasedRobot):
             except TypeError:
                 pass
 
-class Global:
-    pass
-
-globalObject = Global()
-
-globalObject.enabledPrints = True
+    def clearCSV(self):
+        f = open('saveddata.csv', 'w+')
+        f.close()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':

@@ -40,8 +40,6 @@ from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalComman
 
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
-from commands.pneumaticsystems.runcompressor import RunCompressorCommand
-
 from commands.hood.tunedownhoodcommand import TuneDownHoodCommand
 from commands.hood.tuneuphoodcommand import TuneUpHoodCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
@@ -69,7 +67,6 @@ from commands.turret.turretfieldorientedcommand import TurretFieldOrientedComman
 from commands.turret.movefieldanglecommand import MoveFieldAngleCommand
 from commands.turret.camtranturretlimelight import CamTranTurretLimelight
 
-from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.limelight.aimturretdrivebasecommand import AimTurretDrivebaseCommand
 

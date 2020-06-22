@@ -1,4 +1,4 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 from wpilib import Timer
 
 from rev import CANSparkMax, MotorType
