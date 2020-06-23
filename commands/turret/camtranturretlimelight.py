@@ -14,7 +14,7 @@ class CamTranTurretLimelight(Command):
 
     def execute(self):
         print(robot.limelight.get3D_Yaw())
-        diff = (robot.limelight.get3D_Yaw() / 360) * 4096 # Puts it into ticks.
+        diff = (robot.limelight.getX() / 360) * 4096 # Puts it into ticks.
 
         robot.turret.followTarget(robot.turret.getPosition() + diff)
 
