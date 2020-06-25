@@ -2,6 +2,8 @@ from .debuggablesubsystem import *
 
 import wpilib
 
+from wpilib.controller import PIDController
+
 import ports
 from ctre import ControlMode, FeedbackDevice, WPI_TalonSRX, NeutralMode
 
@@ -16,11 +18,11 @@ class Turret(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, 0.0001, 0)
+        self.motor.config_kP(0, 0.001, 0)
         self.motor.config_kI(0, 0, 0)
-        self.motor.config_kD(0, 0.001, 0)
-        self.motor.config_kF(0, 0.00019, 0)
-        #self.motor.config_IntegralZone(0, 0, 0)
+        self.motor.config_kD(0, 0, 0)
+        self.motor.config_kF(0, 0, 0)
+
         self.max = 1275# Dummy values
         self.min = 0 # Dummy values
 
@@ -36,7 +38,6 @@ class Turret(DebuggableSubsystem):
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
         self.motor.setSelectedSensorPosition(0, 0, 0) #1061 starting position
-        #self.motor.setPulseWidthPosition(0, 0)  # NOTE: Temporary reset at beginning in attmept to zero the sensor.
 
     def rotateClockwise(self, val):
         if self.getPosition() < self.max and self.getPosition() > self.min:
@@ -93,12 +94,6 @@ class Turret(DebuggableSubsystem):
             self.setPosition(self.getFieldPosition())
         else:
             self.stop()
-            #if self.getFieldPosition() > self.getFieldPosition() - 2150 :
-                #self.setPosition(25)
-            #elif self.getFieldPosition() < self.getFieldPosition() - 2150:
-                #self.setPosition(2150)
-            #else:
-                #self.stop
 
     def getFieldPosition(self):
         self.degrees = robot.drivetrain.getAngle()
@@ -121,12 +116,11 @@ class Turret(DebuggableSubsystem):
         else:
             return False
 
-    def printPosition(self):
-        #print(str(self.motor.getSelectedSensorPosition(0)))
-        pass
-
     def updateNetworkTables(self, angle=85.00):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
+
+    def outOfRange(self):
+        return (self.getPosition() > self.max) or (self.getPosition() < self.min)
 
     def getPosition(self):
         return (self.motor.getSelectedSensorPosition(0))
@@ -142,8 +136,32 @@ class Turret(DebuggableSubsystem):
 
         return False
 
-    def followTarget(self, desiredPosition):
-        self.motor.set(math.copysign(min([1 - (abs(min([desiredPosition, self.getPosition()]) / max([desiredPosition, self.getPosition()]))), 0.6]), desiredPosition - self.getPosition()))
+    def followTargetPID(self, newPosition):
+        pos = self.clampYaBoi(newPosition)
+
+        self.motor.set(ControlMode.Position, pos)
+
+    def followTarget(self, diff, dist):
+
+        val = abs(diff / 275)
+
+        distMod = 0
+
+        if abs(dist) > 120:
+            distMod = abs((dist - 120) / 500) # We want to make the sign opposite of diff so we can combine them.
+
+        print('out ' + str(math.copysign(val - distMod, -diff)))
+
+        self.motor.set(math.copysign(val - distMod, -diff))
+
+        #try:
+            #pos = self.getPosition()
+            #speed = math.copysign(min([abs(1 - (abs(min([desiredPosition, pos]) / max([desiredPosition, pos])))), 0.6]), pos - desiredPosition)
+            #print('CalculatedSpeed = ' + str(speed))
+            #self.motor.set(math.copysign(min([abs(speed), 0.5]), speed))
+
+        #except(ZeroDivisionError):
+            #pass
 
     def moveFieldAngle(self, val):
         self.fieldAngle = self.fieldAngle + (val * 1)
@@ -165,4 +183,6 @@ class Turret(DebuggableSubsystem):
 
         self.setDefaultCommand(TurretMoveCommand())
 
+    def clampYaBoi(self, number):
+        return max(min(self.max, number), self.min)
 

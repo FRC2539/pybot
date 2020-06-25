@@ -151,7 +151,6 @@ class BaseDrive(DebuggableSubsystem):
 
         self.setDriveTrain(self.compBot)
 
-
         self.setupRecordData()
 
         self.activeMotors = []
@@ -167,6 +166,9 @@ class BaseDrive(DebuggableSubsystem):
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
+
+        disablePrint()
+
         #try:
             #self.folderSong = '/home/lvuser/py/subsystems'
             #print('loaded' + str(self.bensGloriousOrchestra.loadMusic(self.folderSong + '/' + 'song.chrp')))

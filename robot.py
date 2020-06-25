@@ -15,6 +15,8 @@ import shutil, sys
 
 import csv
 
+import os
+
 from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
@@ -72,19 +74,23 @@ class KryptonBot(CommandBasedRobot):
 
     def disabledInit(self): # Get the current values for all variables.
         newData = []
-        with open('saveddata.csv') as f:
+
+        myPath = os.path.dirname(os.path.abspath(__file__))
+        fName = os.path.join(myPath, 'saveddata.csv')
+
+        with open(fName) as f:
             data = [line.split() for line in f]
             print(data)
             for varData in data:
                 newVal = eval(str(varData[1]) + '.'  + varData[0]) # Gets the current value of the previously declared variable.
                 newData.append([varData[0], varData[1], newVal, varData[2]])
 
-        f = open('saveddata.csv', 'w+') # Erases by writing no data.
-        f.close()
+        #f = open('saveddata.csv', 'w+') # Erases by writing no data.
+        #f.close()
 
-        with open('saveddata.csv', 'w', newline='') as f: # Repopulates the file with updated data.
-            writer = csv.writer(f, delimiter='|')
-            writer.writerows(newData)
+        #with open('./saveddata.csv', 'w', newline='') as f: # Repopulates the file with updated data.
+         #   writer = csv.writer(f, delimiter='|')
+          #  writer.writerows(newData)
 
 
     @classmethod
@@ -102,7 +108,10 @@ class KryptonBot(CommandBasedRobot):
                 pass
 
     def clearCSV(self):
-        f = open('saveddata.csv', 'w+')
+        myPath = os.path.dirname(os.path.abspath(__file__))
+        fName = os.path.join(myPath, 'saveddata.csv')
+
+        f = open(fName)
         f.close()
 
 if __name__ == '__main__':

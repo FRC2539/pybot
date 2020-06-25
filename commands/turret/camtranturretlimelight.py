@@ -13,10 +13,16 @@ class CamTranTurretLimelight(Command):
         robot.turret.stop()
 
     def execute(self):
-        print(robot.limelight.get3D_Yaw())
         diff = (robot.limelight.getX() / 360) * 4096 # Puts it into ticks.
 
-        robot.turret.followTarget(robot.turret.getPosition() + diff)
+        #robot.turret.followTarget(diff, robot.limelight.get3D_Z())
+        robot.turret.followTargetPID(diff + robot.turret.getPosition()) # Try this out tonight.
+
+        print('At: ' +  str(robot.turret.getPosition()))
+
+    def isFinished(self):
+        if (abs(robot.limelight.getX()) < 0.1) or (robot.turret.outOfRange()):
+            return True
 
     def end(self):
         robot.turret.stop()

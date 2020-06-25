@@ -30,7 +30,7 @@ class DebuggableSubsystem(Subsystem):
         return
         motor.SetName(self.getName(), label)
 
-def print(output, doubleSpace):
+def print(output):
     if ALLOWPRINTS:
         __builtin__.print(str(output))
 

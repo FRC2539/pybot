@@ -50,6 +50,7 @@ from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTables
 from commands.hood.hoodlimelightcommand import HoodLimelightCommand
 from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
 from commands.hood.experimentalcommand import ExperimentalCommand
+from commands.hood.camtranhoodlimelight import CamTranHoodLimelight
 
 from commands.limelight.lltestcommand import llTestCommand
 from commands.limelight.finitereecommand import finiteReeCommand
@@ -102,9 +103,10 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
 
     driveController.A.toggleWhenPressed(CamTranTurretLimelight())
+    driveController.B.toggleWhenPressed(CamTranHoodLimelight())
     #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
-    driveController.B.toggleWhenPressed(OutakeCommand())
+    #driveController.B.toggleWhenPressed(OutakeCommand())
     driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
