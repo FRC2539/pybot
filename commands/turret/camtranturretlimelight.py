@@ -11,18 +11,26 @@ class CamTranTurretLimelight(Command):
 
     def initialize(self):
         robot.turret.stop()
+        robot.turret.motor.setSensorPhase(True)
+        robot.turret.motor.setInverted(True)
+
+        self.goal = robot.turret.getPosition() + (robot.limelight.getX() / 360) * 4096 # Puts it into ticks, and sets a position once!
 
     def execute(self):
-        diff = (robot.limelight.getX() / 360) * 4096 # Puts it into ticks.
+        robot.turret.followTargetPID(self.goal) # Try this out tonight.
 
-        #robot.turret.followTarget(diff, robot.limelight.get3D_Z())
-        robot.turret.followTargetPID(diff + robot.turret.getPosition()) # Try this out tonight.
+        print('Goal: ' + str(self.goal)) # GOAL SHOULD NOT BE CHANGING.
 
         print('At: ' +  str(robot.turret.getPosition()))
 
     def isFinished(self):
-        if (abs(robot.limelight.getX()) < 0.1) or (robot.turret.outOfRange()):
+        print('x' + str(robot.limelight.getX()))
+        if ((abs(robot.limelight.getX()) < 0.1) and (robot.limelight.getTape())) or (robot.turret.outOfRange()):
             return True
+
+        return False
 
     def end(self):
         robot.turret.stop()
+        robot.turret.motor.setSensorPhase(False)
+        robot.turret.motor.setInverted(False)

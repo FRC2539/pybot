@@ -18,9 +18,9 @@ class Turret(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, 0.001, 0)
+        self.motor.config_kP(0, 1, 0)
         self.motor.config_kI(0, 0, 0)
-        self.motor.config_kD(0, 0, 0)
+        self.motor.config_kD(0, 0.001, 0)
         self.motor.config_kF(0, 0, 0)
 
         self.max = 1275# Dummy values
@@ -34,10 +34,10 @@ class Turret(DebuggableSubsystem):
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
-        self.tollerance = 5 #ticks
+        self.tollerance = 5 # ticks
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
-        self.motor.setSelectedSensorPosition(0, 0, 0) #1061 starting position
+        #self.motor.setSelectedSensorPosition(0, 0, 0)
 
     def rotateClockwise(self, val):
         if self.getPosition() < self.max and self.getPosition() > self.min:
@@ -120,7 +120,9 @@ class Turret(DebuggableSubsystem):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
 
     def outOfRange(self):
-        return (self.getPosition() > self.max) or (self.getPosition() < self.min)
+        print('ma ' + str(self.getPosition() > self.max))
+        print('mi ' + str(self.getPosition() < self.min) + str(self.getPosition()))
+        return False#(self.getPosition() > self.max) or (self.getPosition() < self.min)
 
     def getPosition(self):
         return (self.motor.getSelectedSensorPosition(0))

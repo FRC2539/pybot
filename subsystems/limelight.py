@@ -44,8 +44,7 @@ class Limelight(DebuggableSubsystem):
     def getTape(self):
         if (self.nt.getEntry('tv').getDouble(0) == 1):
             return True
-        else:
-            return False
+        return False
 
     def getCamTran(self):
         return self.nt.getEntry('camtran').getDoubleArray([])

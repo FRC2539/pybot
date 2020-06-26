@@ -19,6 +19,8 @@ class Hood(DebuggableSubsystem):
         self.encoder = self.motor.getEncoder()
         self.controller = self.motor.getPIDController()
 
+        disablePrint()
+
         self.table = nt.getTable('Hood')
 
         #self.controller.setFF(0.00019, 0)
