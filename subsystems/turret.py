@@ -156,15 +156,6 @@ class Turret(DebuggableSubsystem):
 
         self.motor.set(math.copysign(val - distMod, -diff))
 
-        #try:
-            #pos = self.getPosition()
-            #speed = math.copysign(min([abs(1 - (abs(min([desiredPosition, pos]) / max([desiredPosition, pos])))), 0.6]), pos - desiredPosition)
-            #print('CalculatedSpeed = ' + str(speed))
-            #self.motor.set(math.copysign(min([abs(speed), 0.5]), speed))
-
-        #except(ZeroDivisionError):
-            #pass
-
     def moveFieldAngle(self, val):
         self.fieldAngle = self.fieldAngle + (val * 1)
 

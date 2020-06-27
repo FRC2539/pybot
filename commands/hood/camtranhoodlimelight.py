@@ -20,11 +20,10 @@ class CamTranHoodLimelight(Command):
         robot.hood.stopHood()
 
     def execute(self):
-        d = robot.limelight.get3D_Z() # Is this the distance? Check Tuesday.
+        self.goal = robot.hood.benSetAngle(robot.limelight.getY())
 
-        angle = math.atan(77.25 / d) # Provides the angle we need to shoot.
-
-        robot.hood.setAngle(angle)
+    def isFinished(self):
+        return ((not robot.hood.withinBounds()) or (abs(self.goal - robot.hood.getPosition()) <= 3))
 
     def end(self):
         robot.hood.stopHood()

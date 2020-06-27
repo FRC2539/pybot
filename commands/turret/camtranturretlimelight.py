@@ -11,7 +11,7 @@ class CamTranTurretLimelight(Command):
 
     def initialize(self):
         robot.turret.stop()
-        robot.turret.motor.setSensorPhase(True)
+        robot.turret.motor.setSensorPhase(True) # I need to invert this stuff for whatever reason.
         robot.turret.motor.setInverted(True)
 
         self.goal = robot.turret.getPosition() + (robot.limelight.getX() / 360) * 4096 # Puts it into ticks, and sets a position once!
