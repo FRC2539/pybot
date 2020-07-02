@@ -11,7 +11,7 @@ class DefaultCommand(Command):
 
 
     def initialize(self):
-        pass
+        robot.limelight.setPipeline(2)
 
 
     def execute(self):

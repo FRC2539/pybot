@@ -1,4 +1,4 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from wpilib import Timer
 
@@ -13,6 +13,7 @@ from rev import CANSparkMax, MotorType, ControlType
 from navx import AHRS
 
 from custom.config import Config
+
 import ports
 
 
@@ -150,7 +151,6 @@ class BaseDrive(DebuggableSubsystem):
 
         self.setDriveTrain(self.compBot)
 
-
         self.setupRecordData()
 
         self.activeMotors = []
@@ -166,6 +166,9 @@ class BaseDrive(DebuggableSubsystem):
 
         '''A record of the last arguments to move()'''
         self.lastInputs = None
+
+        disablePrint()
+
         #try:
             #self.folderSong = '/home/lvuser/py/subsystems'
             #print('loaded' + str(self.bensGloriousOrchestra.loadMusic(self.folderSong + '/' + 'song.chrp')))
@@ -337,6 +340,8 @@ class BaseDrive(DebuggableSubsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
+        print('check')
 
         if [x, y, rotate] == self.lastInputs:
             return

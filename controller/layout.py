@@ -40,8 +40,6 @@ from commands.ballsystem.reversehorizontalcommand import ReverseHorizontalComman
 
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 
-from commands.pneumaticsystems.runcompressor import RunCompressorCommand
-
 from commands.hood.tunedownhoodcommand import TuneDownHoodCommand
 from commands.hood.tuneuphoodcommand import TuneUpHoodCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
@@ -52,6 +50,7 @@ from commands.hood.updatehoodnetworktablescommand import UpdateHoodNetworkTables
 from commands.hood.hoodlimelightcommand import HoodLimelightCommand
 from commands.hood.setlaunchanglecommand import SetLaunchAngleCommand
 from commands.hood.experimentalcommand import ExperimentalCommand
+from commands.hood.camtranhoodlimelight import CamTranHoodLimelight
 
 from commands.limelight.lltestcommand import llTestCommand
 from commands.limelight.finitereecommand import finiteReeCommand
@@ -67,8 +66,8 @@ from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.setturretcommand import SetTurretCommand
 from commands.turret.turretfieldorientedcommand import TurretFieldOrientedCommand
 from commands.turret.movefieldanglecommand import MoveFieldAngleCommand
+from commands.turret.camtranturretlimelight import CamTranTurretLimelight
 
-from commands.pneumaticsystems.extendclimberpistoncommand import ExtendClimberPistonCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.limelight.aimturretdrivebasecommand import AimTurretDrivebaseCommand
 
@@ -103,9 +102,11 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
+    driveController.A.toggleWhenPressed(CamTranTurretLimelight())
+    driveController.B.toggleWhenPressed(CamTranHoodLimelight())
+    #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
-    driveController.B.toggleWhenPressed(OutakeCommand())
+    #driveController.B.toggleWhenPressed(OutakeCommand())
     driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())

@@ -1,7 +1,7 @@
 import wpilib
 import ports
 
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from rev import ControlType, CANSparkMax, MotorType
 

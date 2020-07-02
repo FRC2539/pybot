@@ -1,4 +1,4 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from rev import CANSparkMax, MotorType, ControlType
 

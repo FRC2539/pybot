@@ -1,4 +1,4 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from wpilib import DigitalInput
 from wpilib import Relay

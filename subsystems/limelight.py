@@ -1,4 +1,4 @@
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 import ports
 import robot
@@ -24,6 +24,8 @@ class Limelight(DebuggableSubsystem):
         self.TargetHeight = 90.75
         self.calDistance = 120
 
+        self.setPipeline(2)
+
         #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         #print(str(self.calAngle))
 
@@ -42,8 +44,28 @@ class Limelight(DebuggableSubsystem):
     def getTape(self):
         if (self.nt.getEntry('tv').getDouble(0) == 1):
             return True
-        else:
-            return False
+        return False
+
+    def getCamTran(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])
+
+    def get3D_X(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[0]
+
+    def get3D_Y(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[1]
+
+    def get3D_Z(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[2]
+
+    def get3D_Pitch(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[3]
+
+    def get3D_Yaw(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[4]
+
+    def get3D_Roll(self):
+        return self.nt.getEntry('camtran').getDoubleArray([])[5]
 
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
@@ -56,15 +78,12 @@ class Limelight(DebuggableSubsystem):
 
         return self.distance
 
-
     def calcDistanceGood(self):
         self.height = 77.25
         self.angle = math.radians(30.52289 + self.getY())
         self.distance = self.height/math.tan(self.angle)
         #print(str(self.distance))
         return self.distance
-
-
 
     def areaDistance(self):
         self.aDistance = math.log(self.getA(), .992924) + 221.996
@@ -100,8 +119,8 @@ class Limelight(DebuggableSubsystem):
 
 
     def updateNetworkTables(self):
+        self.driveTable.putNumberArray('camTran', self.getCamTran())
         self.driveTable.putNumber('distance', self.calcDistance())
-
 
     def initDefaultCommand(self):
         from commands.limelight.defaultcommand import DefaultCommand

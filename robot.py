@@ -13,6 +13,10 @@ import controller.layout
 import subsystems
 import shutil, sys
 
+import csv
+
+import os
+
 from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
@@ -41,6 +45,8 @@ class KryptonBot(CommandBasedRobot):
         if RobotBase.isSimulation():
             import mockdata
 
+        self.clearCSV() # Clears data before adding it again in the subsystems.
+
         self.subsystems()
         controller.layout.init()
         driverhud.init()
@@ -66,6 +72,27 @@ class KryptonBot(CommandBasedRobot):
         super().handleCrash()
         driverhud.showAlert('Fatal Error: %s' % error)
 
+    def disabledInit(self): # Get the current values for all variables.
+        newData = []
+
+        myPath = os.path.dirname(os.path.abspath(__file__))
+        fName = os.path.join(myPath, 'saveddata.csv')
+
+        with open(fName) as f:
+            data = [line.split() for line in f]
+            print(data)
+            for varData in data:
+                newVal = eval(str(varData[1]) + '.'  + varData[0]) # Gets the current value of the previously declared variable.
+                newData.append([varData[0], varData[1], newVal, varData[2]])
+
+        #f = open('saveddata.csv', 'w+') # Erases by writing no data.
+        #f.close()
+
+        #with open('./saveddata.csv', 'w', newline='') as f: # Repopulates the file with updated data.
+         #   writer = csv.writer(f, delimiter='|')
+          #  writer.writerows(newData)
+
+
     @classmethod
     def subsystems(cls):
         vars = globals()
@@ -80,6 +107,12 @@ class KryptonBot(CommandBasedRobot):
             except TypeError:
                 pass
 
+    def clearCSV(self):
+        myPath = os.path.dirname(os.path.abspath(__file__))
+        fName = os.path.join(myPath, 'saveddata.csv')
+
+        f = open(fName)
+        f.close()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'deploy':

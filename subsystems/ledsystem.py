@@ -1,6 +1,6 @@
 from wpilib.command import Subsystem
 
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from wpilib import Spark
 

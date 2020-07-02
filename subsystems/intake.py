@@ -1,6 +1,6 @@
 import ports
 
-from .debuggablesubsystem import DebuggableSubsystem
+from .debuggablesubsystem import *
 
 from networktables import NetworkTables
 
