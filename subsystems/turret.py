@@ -18,9 +18,9 @@ class Turret(DebuggableSubsystem):
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, 1, 0)
-        self.motor.config_kI(0, 0, 0)
-        self.motor.config_kD(0, 0.001, 0)
+        self.motor.config_kP(0, 10, 0)
+        self.motor.config_kI(0, 0.0001, 0)
+        self.motor.config_kD(0, 0, 0)
         self.motor.config_kF(0, 0, 0)
 
         self.max = 1275# Dummy values
