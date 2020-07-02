@@ -132,7 +132,7 @@ def init():
 
     logicalaxes.turretX = operatorController.RightX
 
-    operatorController.A.toggleWhenPressed(RunBallFlowCommandGroup())
+    operatorController.A.toggleWhenPressed(SlowRunBallFlowCommandGroup())
 
     #operatorController.LeftJoystick.toggleWhenPressed(ExperimentalCommand())
     operatorController.LeftJoystick.toggleWhenPressed(ASeriousCommandThatWeCanActuallyUnderstandCommandGroup())
@@ -147,7 +147,7 @@ def init():
 
     #operatorController.DPadUp.whileHeld(FlipColorwheelUpCommand())
 
-    operatorController.LeftTrigger.toggleWhenPressed(TestRunAllCommand())
+    operatorController.LeftTrigger.whileHeld(TestRunAllCommand())
     #operatorController.LeftTrigger.toggleWhenPressed(llTestCommand())
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 

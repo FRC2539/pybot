@@ -8,9 +8,6 @@ class DebuggableSubsystem(Subsystem):
     sensors.
     '''
 
-    def __init__(self):
-        self.enablePrints = True
-
     def debugSensor(self, label, sensor):
         return
         sensor.SetName(self.getName(), label)
