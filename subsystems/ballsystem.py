@@ -77,6 +77,7 @@ class BallSystem(DebuggableSubsystem):
         self.verticalConveyorMotor.stopMotor()
 
     def runAll(self):
+        print("running all")
         self.runLowerConveyor()
         self.runVerticalConveyor()
 

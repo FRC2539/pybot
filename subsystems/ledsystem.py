@@ -4,8 +4,7 @@ from .debuggablesubsystem import *
 
 from wpilib import Spark
 
-import ports
-
+import math,ports,random
 
 class LEDSystem(DebuggableSubsystem):
     '''Describe what this subsystem does.'''
@@ -56,3 +55,6 @@ class LEDSystem(DebuggableSubsystem):
 
     def setPurple(self):
         self.blinkin.set(0.91)
+
+    def setRandom(self):
+        self.blinkin.set(random.SystemRandom().randint(-99,99)/100)

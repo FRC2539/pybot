@@ -111,8 +111,8 @@ class Shooter(DebuggableSubsystem):
         self.controller.setReference(float(rpm), ControlType.kVelocity, 0, 0)
         #self.secondController.setReference(float(rpm), ControlType.kVelocity, 0, 0)
 
-    def atRPM(self):
-        if self.getRPM() > self.goal - self.tolerance and self.getRPM() < self.goal + self.tolerance:
+    def atRPM(self,tolerance=100):
+        if self.getRPM() > self.goal - tolerance and self.getRPM() < self.goal + tolerance:
             return True
-        else :
+        else:
             return False
