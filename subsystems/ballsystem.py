@@ -25,7 +25,7 @@ class BallSystem(DebuggableSubsystem):
         self.table = NetworkTables.getTable('BallSystem')
 
         self.shooterSensor = DigitalInput(ports.ballsystem.shooterSensor)
-        self.horizontalBeltSensor = DigitalInput(ports.ballsystem.horizontalConveyorSensor)
+        self.queueingSensor = DigitalInput(ports.ballsystem.queueingSensor)
 
     def slowVerticalReverse(self):
         self.verticalConveyorMotor.set(-0.05)
@@ -109,11 +109,14 @@ class BallSystem(DebuggableSubsystem):
         #self.horizontalBeltSensor.setEnabled(False)
 
     def updateNetworktables(self):
-        self.table.putNumber('BallInChamber', (not self.horizontalBeltSensor.get()))
+        self.table.putNumber('BallInChamber', (not self.queueingSensor.get()))
 
     def isLowBallPrimed(self):
         self.updateNetworktables()
-        return not self.horizontalBeltSensor.get() # may need to invert
+        return not self.queueingSensor.get() # may need to invert
+
+    def needsToQueue(self):
+        return not (self.queueingSensor.get())
 
     def isUpperBallPrimed(self):
         self.updateNetworktables()
@@ -121,10 +124,9 @@ class BallSystem(DebuggableSubsystem):
 
     def areTwoBallsPrimed(self):
         self.updateNetworktables()
-        return (not self.horizontalBeltSensor.get()) and (not self.shooterSensor.get())
+        return (not self.queueingSensor.get()) and (not self.shooterSensor.get())
 
     def monitorBalls(self, startCount):
-
 
         #print("monitoring")
         if not self.shooterSensor.get() and not self.shooting: # is there something there that was not there last time?
@@ -136,8 +138,3 @@ class BallSystem(DebuggableSubsystem):
             self.shooting = False # nothing there, spaced out.
 
         return startCount
-
-    def initDefaultCommand(self):
-        from commands.ballsystem.defaultcommand import DefaultCommand
-
-        self.setDefaultCommand(DefaultCommand())

@@ -33,7 +33,6 @@ from commands.limelight.passcommand import PassCommand
 from commands.ballsystem.stopallcommand import StopAllCommand
 from commands.ballsystem.endwhenemptycommand import EndWhenEmptyCommand
 from commands.ballsystem.rununtilloadedcommand import RunUntilLoadedCommand
-from commands.ballsystem.runbasicsystemcommand import RunBasicSystemCommand
 from commands.ballsystem.runballflowcommandgroup import RunBallFlowCommandGroup
 from commands.ballsystem.rununtilemptycommand import RunUntilEmptyCommand
 from commands.ballsystem.runallcommand import RunAllCommand
