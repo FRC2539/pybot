@@ -18,6 +18,7 @@ from commands.intake.outtakecommand import OutakeCommand
 from commands.intake.clearjamtwocommand import ClearJamTwoCommand
 from commands.intake.stopeverythingcommand import StopEverythingCommand
 from commands.intake.quickreversecommand import QuickReverseCommand
+from commands.intake.intakeandqueuecommandgroup import IntakeAndQueueCommandGroup
 
 from commands.colorwheel.runupuntilimpactcommand import RunUpUntilImpactCommand
 from commands.colorwheel.rundownuntilimpactcommand import RunDownUntilImpactCommand
@@ -101,7 +102,7 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(CamTranTurretLimelight())
+    driveController.A.toggleWhenPressed(IntakeAndQueueCommandGroup())
     driveController.B.toggleWhenPressed(CamTranHoodLimelight())
     #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
@@ -131,8 +132,6 @@ def init():
     operatorController = LogitechDualShock(1)
 
     logicalaxes.turretX = operatorController.RightX
-
-    operatorController.A.toggleWhenPressed(SlowRunBallFlowCommandGroup())
 
     #operatorController.LeftJoystick.toggleWhenPressed(ExperimentalCommand())
     operatorController.LeftJoystick.toggleWhenPressed(ASeriousCommandThatWeCanActuallyUnderstandCommandGroup())

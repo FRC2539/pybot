@@ -10,8 +10,11 @@ class DetectAndQueueCommand(Command):
 
         self.requires(robot.ballsystem)
 
+    def initialize(self):
+        robot.ballsystem.stopAll()
+
     def execute(self):
-        if robot.ballsystem.needsToQueue():
+        if robot.ballsystem.needsToQueue() and (not robot.ballsystem.isUpperBallPrimed()):
             robot.ballsystem.runAllSlow()
 
         else:
