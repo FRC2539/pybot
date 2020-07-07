@@ -14,6 +14,6 @@ class SlowRunBallFlowCommandGroup(fc.CommandFlow):
         super().__init__('Slow Run Ball Flow')
 
         self.addParallel(RunAllCommand())
-        self.addParallel(IntakeCommand(0.15))
+        self.addParallel(IntakeCommand(.25))
         self.addParallel(ShootCommand(500))
         # Add commands here with self.addSequential() and self.addParallel()
