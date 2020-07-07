@@ -9,8 +9,10 @@ class DetectAndQueueCommand(Command):
         super().__init__('Detect And Queue')
 
         self.requires(robot.ballsystem)
+        self.requires(robot.intake)
 
     def initialize(self):
+        robot.intake.stop()
         robot.ballsystem.stopAll()
 
     def execute(self):
@@ -20,5 +22,12 @@ class DetectAndQueueCommand(Command):
         else:
             robot.ballsystem.stopAll()
 
+        if not robot.ballsystem.isUpperBallPrimed():
+            robot.intake.intake(0.35)
+
+        else:
+            robot.intake.stop()
+
     def end(self):
         robot.ballsystem.stopAll()
+        robot.intake.stop()

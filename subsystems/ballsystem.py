@@ -86,8 +86,8 @@ class BallSystem(DebuggableSubsystem):
         self.runVerticalConveyor()
 
     def runAllSlow(self):
-        self.lowerConveyorMotor.set(0.4)
-        self.verticalConveyorMotor.set(0.4)
+        self.lowerConveyorMotor.set(0.35)
+        self.verticalConveyorMotor.set(0.35)
 
     def reverseAll(self):
         self.reverseLowerConveyor()

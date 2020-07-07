@@ -103,7 +103,9 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
 
     driveController.A.toggleWhenPressed(IntakeAndQueueCommandGroup())
-    driveController.B.toggleWhenPressed(CamTranHoodLimelight())
+    driveController.B.toggleWhenPressed(ShootCommand(4000))
+
+    #driveController.B.toggleWhenPressed(CamTranHoodLimelight())
     #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     #driveController.B.toggleWhenPressed(OutakeCommand())
@@ -146,7 +148,7 @@ def init():
 
     #operatorController.DPadUp.whileHeld(FlipColorwheelUpCommand())
 
-    operatorController.LeftTrigger.whileHeld(TestRunAllCommand())
+    operatorController.LeftTrigger.toggleWhenPressed(RunBallFlowCommandGroup())
     #operatorController.LeftTrigger.toggleWhenPressed(llTestCommand())
     operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
 
