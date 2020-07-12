@@ -1,5 +1,3 @@
-# Everything in meters!
-
 from wpilib.command import Command
 
 from ctre import ControlMode
@@ -9,6 +7,12 @@ import robot
 import math
 
 import pathfinder as pf
+
+import os.path
+
+import pickle
+
+import wpilib
 
 from pathfinder.followers import EncoderFollower
 
@@ -20,16 +24,29 @@ class PathfinderMoveCommand(Command):
         self.requires(robot.drivetrain)
 
     def initialize(self):
+        #pickleFile = os.path.join(os.path.dirname(__file__), 'pfile.pickle')
+
+        #if wpilib.RobotBase.isSimulation():
+
         points = [
-        pf.Waypoint(0, 5, 0),
-        pf.Waypoint(0, 0, 0),                       # Waypoint @ x=0, y=0,   exit angle=0 radians
+            pf.Waypoint(0, 5, 0),
+            pf.Waypoint(0, 1, 0)                       # Waypoint @ x=0, y=0,   exit angle=0 radians
         ]
 
         info, trajectory = pf.generate(points, pf.FIT_HERMITE_CUBIC, pf.SAMPLES_HIGH,
                                     dt=0.02, # 20ms
-                                    max_velocity=5,
-                                    max_acceleration=6,
-                                    max_jerk=120.0)
+                                    max_velocity=5.0,
+                                    max_acceleration=6.0,
+                                    max_jerk=120.0
+                                    )
+            #print('in deploying')
+
+            #with open(pickleFile, 'wb') as pF_:
+                #pickle.dump(trajectory, pF_)
+
+        #else:
+            #with open(pickleFile, 'rb') as fp:
+                #trajectory = pickle.load(fp)
 
         modifier = pf.modifiers.TankModifier(trajectory).modify(2.0)
 
