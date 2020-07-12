@@ -17,7 +17,7 @@ class Revolver(DebuggableSubsystem):
         self.motor = CANSparkMax(ports.revolver.motorID, MotorType.kBrushless)
 
         self.motor.setIdleMode(IdleMode.kBrake)
-        self.motor.setInverted(True) # CC is negative, C is positive
+        self.motor.setInverted(False) # CC is negative, C is positive
 
         self.encoder = self.motor.getEncoder()
 
@@ -29,7 +29,7 @@ class Revolver(DebuggableSubsystem):
         self.controller.setIZone(0.0, 0)
         self.controller.setFF(0.0, 0)
 
-        self.gearRatio = 2
+        self.gearRatio = 1.5
 
     def spinCounterClockwise(self):
         self.motor.set(-0.2)
