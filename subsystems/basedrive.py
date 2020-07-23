@@ -1,9 +1,11 @@
 from wpilib.command import Subsystem
 
+from .cougarsystem import *
+
 import math
 
 from networktables import NetworkTables
-from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
+from rev import CANSparkMax, ControlType, MotorType, IdleMode
 from navx import AHRS
 
 from custom.config import Config
@@ -26,22 +28,22 @@ class BaseDrive(Subsystem):
         '''
         try:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
+                CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
             ]
 
         except AttributeError:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.leftMotorID),
-                WPI_TalonSRX(ports.drivetrain.rightMotorID),
+                CANSparkMax(ports.drivetrain.leftMotorID, MotorType.kBrushless),
+                CANSparkMax(ports.drivetrain.rightMotorID, MotorType.kBrushless)
             ]
 
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Coast)
-            motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
+            motor.setIdleMode(IdleMode.kBrake)
+
+        self.motors[0].setInverted(True)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -57,10 +59,10 @@ class BaseDrive(Subsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.setUseEncoders()
-        self.maxSpeed = Config('DriveTrain/maxSpeed')
-        self.speedLimit = Config('DriveTrain/normalSpeed')
-        self.deadband = Config('DriveTrain/deadband', 0.05)
+        self.setUseEncoders(False)
+        self.maxSpeed = 2500#Config('DriveTrain/maxSpeed')
+        self.speedLimit = 2000#Config('DriveTrain/normalSpeed')
+        self.deadband = 20#Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1
 
         '''Allow changing CAN Talon settings from dashboard'''
@@ -99,31 +101,26 @@ class BaseDrive(Subsystem):
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
-        '''Prevent speeds > 1'''
-        maxSpeed = 0
-        for speed in speeds:
-            maxSpeed = max(abs(speed), maxSpeed)
+        for motor, speed in zip(self.activeMotors, speeds):
+            motor.set(speed)
 
-        if maxSpeed > 1:
-            speeds = [x / maxSpeed for x in speeds]
+        #'''Use speeds to feed motor output.'''
+        #if self.useEncoders:
+            #if not any(speeds):
+                #'''
+                #When we are trying to stop, clearing the I accumulator can
+                #reduce overshooting, thereby shortening the time required to
+                #come to a stop.
+                #'''
+                #for motor in self.activeMotors:
+                    #motor.setIntegralAccumulator(0, 0, 0)
 
-        '''Use speeds to feed motor output.'''
-        if self.useEncoders:
-            if not any(speeds):
-                '''
-                When we are trying to stop, clearing the I accumulator can
-                reduce overshooting, thereby shortening the time required to
-                come to a stop.
-                '''
-                for motor in self.activeMotors:
-                    motor.setIntegralAccumulator(0, 0, 0)
+            #for motor, speed in zip(self.activeMotors, speeds):
+                #motor.set(ControlMode.Velocity, speed * self.speedLimit)
 
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
-
-        else:
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+        #else:
+            #for motor, speed in zip(self.activeMotors, speeds):
+                #motor.set(speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -167,22 +164,17 @@ class BaseDrive(Subsystem):
         self.lastInputs = None
 
 
-    def setProfile(self, profile):
-        '''Select which PID profile to use.'''
-        for motor in self.activeMotors:
-            motor.selectProfileSlot(profile, 0)
-
-
     def resetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            motor.configClosedLoopRamp(0, 0)
+            motor.setClosedLoopRampRate(0)
+            controller = motor.getPIDController()
             for profile in range(2):
-                motor.config_kP(profile, 0, 0)
-                motor.config_kI(profile, 0, 0)
-                motor.config_kD(profile, 0, 0)
-                motor.config_kF(profile, 0, 0)
-                motor.config_IntegralZone(profile, 0, 0)
+                controller.setP(0.001, profile)
+                controller.setI(0, profile)
+                controller.setD(0, profile)
+                controller.setFF(0, profile)
+                controller.setIZone(0, profile)
 
 
     def resetGyro(self):

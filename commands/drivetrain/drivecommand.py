@@ -11,6 +11,7 @@ logicalaxes.registerAxis('driveY')
 logicalaxes.registerAxis('driveRotate')
 
 class DriveCommand(Command):
+
     def __init__(self, speedLimit):
         super().__init__('DriveCommand %s' % speedLimit)
 
@@ -20,7 +21,6 @@ class DriveCommand(Command):
 
     def initialize(self):
         robot.drivetrain.stop()
-        robot.drivetrain.setProfile(0)
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
         except (ValueError, MissingConfigError):
@@ -48,13 +48,8 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        tilt = robot.drivetrain.getTilt()
-        correction = tilt / 20
-        if abs(correction) < 0.2:
-            correction = 0
-
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
-            y - correction,
+            y,
             logicalaxes.driveRotate.get()
         )

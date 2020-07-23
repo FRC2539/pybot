@@ -6,6 +6,13 @@ from custom.config import Config
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 
+from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
+from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
+
+from commands.balllauncher.launchballscommand import LaunchBallsCommand
+from commands.balllauncher.reverseballscommand import ReverseBallsCommand
+
+from commands.shooter.spitballscommand import SpitBallsCommand
 
 def init():
     '''
@@ -24,10 +31,17 @@ def init():
     logicalaxes.driveX = driveController.LeftX
     logicalaxes.driveY = driveController.LeftY
     logicalaxes.driveRotate = driveController.RightX
+    logicalaxes.speedControl = driveController.RightY
 
     driveController.Back.whenPressed(ResetCommand())
-    driveController.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
 
+    driveController.A.toggleWhenPressed(ShooterDirectionCommand())
+    driveController.B.toggleWhenPressed(IntakeDirectionCommand())
+
+    driveController.X.toggleWhenPressed(LaunchBallsCommand())
+    driveController.Y.toggleWhenPressed(ReverseBallsCommand())
+
+    driveController.RightTrigger.toggleWhenPressed(SpitBallsCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)

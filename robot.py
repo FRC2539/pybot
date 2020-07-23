@@ -16,6 +16,9 @@ from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.revolver import Revolver as revolver
+from subsystems.balllauncher import BallLauncher as balllauncher
+from subsystems.shooter import Shooter as shooter
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
