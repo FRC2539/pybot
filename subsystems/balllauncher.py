@@ -14,14 +14,14 @@ class BallLauncher(Subsystem):
 
         self.launcherMotors = WPI_TalonSRX(ports.balllauncher.motorID)
 
-        self.launcherMotors.setNeutralMode(NeutralMode.kBrake)
-        self.launcherMotors.setInverted(False)
+        self.launcherMotors.setNeutralMode(NeutralMode.Brake)
+        self.launcherMotors.setInverted(True)
 
     def launchBalls(self):
-        self.launcherMotors.set(ControlMode.PercentOutput, 0.7)
+        self.launcherMotors.set(ControlMode.PercentOutput, 0.9)
 
     def reverseBalls(self):
-        self.launcherMotors.set(ControlMode.PercentOutput, -0.5)
+        self.launcherMotors.set(ControlMode.PercentOutput, -0.7)
 
     def stopLauncher(self):
         self.launcherMotors.stopMotor()

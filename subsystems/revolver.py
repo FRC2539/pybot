@@ -22,7 +22,7 @@ class Revolver(Subsystem):
         self.motor.set(speed)
 
     def setStaticSpeed(self):
-        self.motor.set(0.50253546253654)
+        self.motor.set(0.30253546253654)
 
     def stopRevolver(self):
         self.motor.stopMotor()
