@@ -18,6 +18,8 @@ class Revolver(Subsystem):
         self.motor.setClosedLoopRampRate(2)
         self.motor.setOpenLoopRampRate(2)
 
+        self.encoder = self.motor.getEncoder()
+
     def setVariableSpeed(self, speed):
         self.motor.set(speed)
 
@@ -26,3 +28,6 @@ class Revolver(Subsystem):
 
     def stopRevolver(self):
         self.motor.stopMotor()
+
+    def getRotations(self):
+        return self.encoder.getPosition()

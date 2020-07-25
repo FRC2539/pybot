@@ -30,3 +30,7 @@ class Shooter(Subsystem):
 
     def stopShooter(self):
         self.motorOne.stopMotor()
+
+    def getRPM(self): # Returns the average RPM
+        return (self.encoderOne.getVelocity() + self.encoderTwo.getVelocity()) / 2
+
