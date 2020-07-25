@@ -18,3 +18,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.revolver)
         self.requires(robot.balllauncher)
         self.requires(robot.shooter)
+        self.requires(robot.intake)

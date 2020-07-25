@@ -18,7 +18,7 @@ class BallLauncher(Subsystem):
         self.launcherMotors.setInverted(False)
 
     def launchBalls(self):
-        self.launcherMotors.set(ControlMode.PercentOutput, 0.5)
+        self.launcherMotors.set(ControlMode.PercentOutput, 0.7)
 
     def reverseBalls(self):
         self.launcherMotors.set(ControlMode.PercentOutput, -0.5)

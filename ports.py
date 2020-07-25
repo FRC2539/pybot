@@ -35,5 +35,3 @@ shooter = PortsList()
 
 shooter.motorOneID = 8
 shooter.motorTwoID = 9
-
-cougarsystem = PortsList()

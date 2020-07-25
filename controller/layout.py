@@ -14,6 +14,10 @@ from commands.balllauncher.reverseballscommand import ReverseBallsCommand
 
 from commands.shooter.spitballscommand import SpitBallsCommand
 
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.outakecommand import OutakeCommand
+from commands.intake.kickcommand import KickCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
