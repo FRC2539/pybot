@@ -29,8 +29,8 @@ class Pneumatics(Subsystem):
     def retractBallLauncherSolenoid(self):
         self.ballLauncherSolenoid.set(DoubleSolenoid.Value.kReverse)
 
-    def getBallLauncherSolenoidStatus(self):
-        return self.ballLauncherSolenoid.get()
+    def isLowered(self):
+        return (self.ballLauncherSolenoid.get() == DoubleSolenoid.Value.kForward)
 
     def enableCLC(self):
         self.pneumaticCompressor.setClosedLoopControl(True)

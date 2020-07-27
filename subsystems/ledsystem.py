@@ -33,5 +33,11 @@ class LEDSystem(Subsystem):
     def setYellow(self):
         self.set(0.65)
 
+    def setWhite(self):
+        self.set(0.93)
+
     def rainbowLava(self):
         self.set(-0.93)
+
+    def colorOneChase(self):
+        self.set(0.01)

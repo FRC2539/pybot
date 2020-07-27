@@ -50,3 +50,4 @@ ledsystem.controllerID = 0 # PWM
 hood = PortsList()
 
 hood.motorID = 12
+hood.absoluteThroughbore = 9 # DI/O

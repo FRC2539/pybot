@@ -17,11 +17,19 @@ class BallLauncher(Subsystem):
         self.launcherMotors.setNeutralMode(NeutralMode.Brake)
         self.launcherMotors.setInverted(True)
 
+        self.launching = False
+
     def launchBalls(self):
-        self.launcherMotors.set(ControlMode.PercentOutput, 0.9)
+        self.launching = True
+        self.launcherMotors.set(ControlMode.PercentOutput, 0.95)
 
     def reverseBalls(self):
+        self.launching = False
         self.launcherMotors.set(ControlMode.PercentOutput, -0.7)
 
     def stopLauncher(self):
+        self.launching = False
         self.launcherMotors.stopMotor()
+
+    def isMoving(self):
+        return self.launching

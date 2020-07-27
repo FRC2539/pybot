@@ -19,6 +19,9 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outakecommand import OutakeCommand
 from commands.intake.kickcommand import KickCommand
 
+from commands.hood.raisehoodcommand import RaiseHoodCommand
+from commands.hood.lowerhoodcommand import LowerHoodCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -49,6 +52,9 @@ def init():
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
 
     driveController.RightTrigger.toggleWhenPressed(SpitBallsCommand())
+
+    driveController.LeftBumper.whileHeld(RaiseHoodCommand())
+    driveController.LeftTrigger.whileHeld(LowerHoodCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)

@@ -1,5 +1,7 @@
 from wpilib.command import Command
 
+from wpilib import Timer
+
 import robot
 
 class ShootWhenReadyCommand(Command):
@@ -12,16 +14,30 @@ class ShootWhenReadyCommand(Command):
 
         self.targetRPM = targetRPM
 
+        self.proceed = False
+
+        self.t = Timer()
+
     def initialize(self):
         robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
-        if robot.shooter.getRPM() >= self.targetRPM:
-            robot.balllauncher.launchBalls()
+        if robot.shooter.getRPM() >= self.targetRPM and not self.proceed:
+            robot.revolver.setStaticSpeed()
+            self.proceed = True
+            self.t.start()
 
-        else:
-            robot.balllauncher.stopLauncher()
+        if self.proceed and self.t.get() >= 2: # Wait at least two seconds for revolver spinup.
+            robot.balllauncher.launchBalls()
+            robot.pneumatics.extendBallLauncherSolenoid()
+            self.t.stop()
+            self.t.reset()
+
 
     def end(self):
         robot.shooter.stopShooter()
+        robot.revolver.stopRevolver()
         robot.balllauncher.stopLauncher()
+        robot.pneumatics.retractBallLauncherSolenoid()
+
+        self.proceed = False

@@ -43,8 +43,6 @@ class BaseDrive(Subsystem):
         for motor in self.motors:
             motor.setIdleMode(IdleMode.kBrake)
 
-        self.motors[0].setInverted(True)
-
         '''
         Subclasses should configure motors correctly and populate activeMotors.
         '''
@@ -100,6 +98,8 @@ class BaseDrive(Subsystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
+
+        speeds = [speeds[0] * -1, speeds[1]]
 
         for motor, speed in zip(self.activeMotors, speeds):
             motor.set(speed)

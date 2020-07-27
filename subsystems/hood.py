@@ -83,6 +83,7 @@ class Hood(Subsystem):
 
     def atLowest(self):
         if self.getPosition() <=  self.angleMin:
+            print('oof ' +  str(self.getPosition()))
             self.motor.stopMotor()
             return True
         else:
