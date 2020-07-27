@@ -11,6 +11,7 @@ from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
 
 from commands.balllauncher.launchballscommand import LaunchBallsCommand
 from commands.balllauncher.reverseballscommand import ReverseBallsCommand
+from commands.balllauncher.extendlaunchercommand import ExtendLauncherCommand
 
 from commands.shooter.spitballscommand import SpitBallsCommand
 
@@ -44,6 +45,8 @@ def init():
 
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(ReverseBallsCommand())
+
+    driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
 
     driveController.RightTrigger.toggleWhenPressed(SpitBallsCommand())
 
