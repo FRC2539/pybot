@@ -10,15 +10,35 @@ class DefaultCommand(Command):
         self.requires(robot.ledsystem)
         self.requires(robot.pneumatics)
 
+        self.modifierOne = False
+
     def execute(self):
-        if robot.pneumatics.isPressureLow():
-            robot.ledsystem.setRed()
+        if robot.pneumatics.isPressureLow() and not robot.shooter.shooting: # Run the compressor if we don't need the current.
 
-        elif robot.shooter.shooting and robot.pneumatics.isLowered() and robot.balllauncher.isMoving():
-            robot.ledsystem.colorOneChase() # Should be shooting!
+            robot.pneumatics.enableCLC()
+            robot.ledsystem.setRed() # Compressor is running
 
-        elif robot.shooter.shooting or robot.pneumatics.isLowered() or robot.balllauncher.isMoving():
-            robot.ledsystem.setWhite() # Something is not right!
+        elif robot.pneumatics.isPressureLow() and robot.shooter.shooting and \
+            robot.pneumatics.isCompressorRunning():  # Third condition allows us to not repeat here.
+
+            robot.pneumatics.disableCLC()
+            self.modifierOne = True
+
+        elif robot.shooter.shooting and robot.pneumatics.isLowered() and \
+            robot.balllauncher.isMoving() and robot.revolver.isRevolving():
+
+            if self.modifierOne:
+                robot.ledsystem.colorOneHeartbeat() # Alerts that the compressor is low as well, and was halted.
+            else:
+                robot.ledsystem.colorOneChase() # Should be shooting!
+
+        elif robot.shooter.shooting or robot.pneumatics.isLowered() or \
+            robot.balllauncher.isMoving() or robot.revolver.isRevolving():
+
+            if self.modifierOne:
+                robot.ledsystem.whiteHeartbeat() # Alerts that the compressor is low as well, and was halted.
+            else:
+                robot.ledsystem.setWhite() # Something is not right!
 
         else:
             robot.ledsystem.rainbowLava() # All set!

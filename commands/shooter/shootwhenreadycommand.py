@@ -1,43 +1,40 @@
 from wpilib.command import Command
 
-from wpilib import Timer
-
 import robot
 
 class ShootWhenReadyCommand(Command):
 
-    def __init__(self, targetRPM):
+    def __init__(self, targetRPM, tol=40):
         super().__init__('Shoot When Ready')
 
         self.requires(robot.shooter)
         self.requires(robot.balllauncher)
 
         self.targetRPM = targetRPM
+        self.tol = tol
+        self.startRot = robot.revolver.getRotations()
 
         self.proceed = False
-
-        self.t = Timer()
 
     def initialize(self):
         robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
-        if robot.shooter.getRPM() >= self.targetRPM and not self.proceed:
+        print(robot.shooter.getRPM())
+        if robot.shooter.getRPM() + self.tol >= self.targetRPM and not self.proceed:
             robot.revolver.setStaticSpeed()
-            self.proceed = True
-            self.t.start()
-
-        if self.proceed and self.t.get() >= 2: # Wait at least two seconds for revolver spinup.
             robot.balllauncher.launchBalls()
-            robot.pneumatics.extendBallLauncherSolenoid()
-            self.t.stop()
-            self.t.reset()
 
+            self.startRot = robot.revolver.getRotations()
+            self.proceed = True
+
+        if robot.revolver.isTriggered() and self.proceed: # Wait at least two seconds for revolver spinup.
+            robot.pneumatics.extendBallLauncherSolenoid()
 
     def end(self):
+        robot.pneumatics.retractBallLauncherSolenoid()
         robot.shooter.stopShooter()
         robot.revolver.stopRevolver()
         robot.balllauncher.stopLauncher()
-        robot.pneumatics.retractBallLauncherSolenoid()
 
         self.proceed = False

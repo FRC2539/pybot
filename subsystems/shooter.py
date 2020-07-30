@@ -20,8 +20,8 @@ class Shooter(Subsystem):
         self.encoderTwo = self.motorTwo.getEncoder()
         self.controllerTwo = self.motorTwo.getPIDController()
 
-        self.controllerOne.setFF(0.000162, 0)
-        self.controllerOne.setP(0.0015, 0)
+        self.controllerOne.setFF(0.000171, 0)
+        self.controllerOne.setP(0.0004, 0)
         self.controllerOne.setI(0, 0)
         self.controllerOne.setD(0.001, 0)
         self.controllerOne.setIZone(0, 0)
@@ -41,6 +41,9 @@ class Shooter(Subsystem):
     def stopShooter(self):
         self.motorOne.stopMotor()
         self.shooting = False
+
+    def isShooting(self):
+        return self.shooting
 
     def getRPM(self): # Returns the average RPM
         return (self.encoderOne.getVelocity() + self.encoderTwo.getVelocity()) / 2

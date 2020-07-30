@@ -41,3 +41,9 @@ class LEDSystem(Subsystem):
 
     def colorOneChase(self):
         self.set(0.01)
+
+    def whiteHeartbeat(self):
+        self.set(-0.21)
+
+    def colorOneHeartbeat(self):
+        self.set(0.05)

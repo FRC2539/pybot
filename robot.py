@@ -23,6 +23,7 @@ from subsystems.intake import Intake as intake
 from subsystems.pneumatics import Pneumatics as pneumatics
 from subsystems.ledsystem import LEDSystem as ledsystem
 from subsystems.hood import Hood as hood
+from subsystems.turret import Turret as turret
 
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''

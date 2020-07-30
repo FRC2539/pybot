@@ -22,6 +22,8 @@ from commands.intake.kickcommand import KickCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
+from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -34,12 +36,17 @@ def init():
     '''
 
     # The controller for driving the robot
+
     driveController = LogitechDualShock(0)
+
+    operatorController = LogitechDualShock(1)
 
     logicalaxes.driveX = driveController.LeftX
     logicalaxes.driveY = driveController.LeftY
     logicalaxes.driveRotate = driveController.RightX
     logicalaxes.speedControl = driveController.RightY
+
+    logicalaxes.turretX = operatorController.RightX
 
     driveController.Back.whenPressed(ResetCommand())
 
@@ -53,10 +60,11 @@ def init():
 
     driveController.RightTrigger.toggleWhenPressed(SpitBallsCommand())
 
+    driveController.RightJoystick.toggleWhenPressed(ShootWhenReadyCommand(4000))
+
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
 
     # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(1)
 
-    componentController.Back.whenPressed(ResetCommand())
+    operatorController.Back.whenPressed(ResetCommand())

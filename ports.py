@@ -1,9 +1,3 @@
-
-
-
-
-
-
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -25,6 +19,7 @@ drivetrain.backRightMotorID = 4
 revolver = PortsList()
 
 revolver.motorID = 5
+revolver.limitSwitch = 7 # DI/O
 
 intake = PortsList()
 
@@ -51,3 +46,8 @@ hood = PortsList()
 
 hood.motorID = 12
 hood.absoluteThroughbore = 9 # DI/O
+
+turret = PortsList()
+
+turret.motorID = 10
+turret.limitSwitch = 8 # DI/O

@@ -10,7 +10,7 @@ class SpitBallsCommand(Command):
         self.requires(robot.shooter)
 
     def initialize(self):
-        robot.shooter.setRPM(1000)
+        robot.shooter.setRPM(3500)
 
     def end(self):
         robot.shooter.stopShooter()

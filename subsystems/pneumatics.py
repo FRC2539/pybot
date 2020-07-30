@@ -21,6 +21,9 @@ class Pneumatics(Subsystem):
         self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
 
     def isPressureLow(self):
+        return self.pneumaticCompressor.getPressureSwitchValve()
+
+    def isCompressorRunning(self):
         return self.pneumaticCompressor.enabled()
 
     def extendBallLauncherSolenoid(self):
@@ -37,6 +40,7 @@ class Pneumatics(Subsystem):
 
     def disableCLC(self):
         self.pneumaticCompressor.setClosedLoopControl(False)
+        self.pneumaticCompressor.stop()
 
     def startCompressor(self):
         self.pneumaticCompressor.start()
