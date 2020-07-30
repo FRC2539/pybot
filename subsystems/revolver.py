@@ -23,9 +23,11 @@ class Revolver(Subsystem):
         self.encoder = self.motor.getEncoder()
         self.resetRevolverEncoder()
 
-        self.dropTrigger = DigitalInput(ports.revolver.limitSwitch)
+        self.dropTrigger = DigitalInput(ports.revolver.limitSwitch) # The magnetic limit switch used to trigger the solenoid.
 
         self.isSpinning = False
+
+        self.gearRatio = 1.5 # 3:2 or vise versa
 
     def setVariableSpeed(self, speed):
         self.isSpinning = True
@@ -43,7 +45,7 @@ class Revolver(Subsystem):
         self.encoder.setPosition(0, 0)
 
     def getRotations(self):
-        return self.encoder.getPosition()
+        return self.encoder.getPosition() / self.gearRatio
 
     def isRevolving(self):
         return self.isSpinning

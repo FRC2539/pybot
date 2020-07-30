@@ -1,3 +1,5 @@
+from .cougarsystem import *
+
 from wpilib.command import Subsystem
 
 from wpilib import Spark
@@ -5,7 +7,7 @@ from wpilib import Spark
 import ports
 
 class LEDSystem(Subsystem):
-    '''Describe what this subsystem does.'''
+    '''Manages a part of the LED system on the robot.'''
 
     def __init__(self):
         super().__init__('LEDSystem')
