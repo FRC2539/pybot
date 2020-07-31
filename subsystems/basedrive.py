@@ -99,30 +99,27 @@ class BaseDrive(Subsystem):
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
-        maxSpeed = 0
-        for speed in speeds:
-            maxSpeed = max(abs(speed), maxSpeed)
+        #maxSpeed = 0
+        #for speed in speeds:
+            #maxSpeed = max(abs(speed), maxSpeed)
 
-        if maxSpeed > 1:
-            speeds = [x / maxSpeed for x in speeds]
+        #if maxSpeed > 1:
+            #speeds = [x / maxSpeed for x in speeds]
 
-        '''Use speeds to feed motor output.'''
-        if self.useEncoders:
-            if not any(speeds):
-                '''
-                When we are trying to stop, clearing the I accumulator can
-                reduce overshooting, thereby shortening the time required to
-                come to a stop.
-                '''
-                for motor in self.activeMotors:
-                    motor.setIntegralAccumulator(0, 0, 0)
+        #'''Use speeds to feed motor output.'''
+        #if self.useEncoders:
+            #if not any(speeds):
+                #'''
+                #When we are trying to stop, clearing the I accumulator can
+                #reduce overshooting, thereby shortening the time required to
+                #come to a stop.
+                #'''
+            #for motor, speed in zip(self.activeMotors, speeds):
+                #motor.set(ControlMode.Velocity, speed * self.speedLimit)
 
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit)
-
-        else:
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed * self.maxPercentVBus)
+        #else:
+            #for motor, speed in zip(self.activeMotors, speeds):
+                #motor.set(speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
