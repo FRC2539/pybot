@@ -16,12 +16,16 @@ class DefaultCommand(Command):
         if robot.pneumatics.isPressureLow() and not robot.shooter.shooting: # Run the compressor if we don't need the current.
 
             robot.pneumatics.enableCLC()
+            robot.pneumatics.startCompressor()
+
             robot.ledsystem.setRed() # Compressor is running
 
         elif robot.pneumatics.isPressureLow() and robot.shooter.shooting and \
             robot.pneumatics.isCompressorRunning():  # Third condition allows us to not repeat here.
 
             robot.pneumatics.disableCLC()
+            robot.pneumatics.stopCompressor()
+
             self.modifierOne = True
 
         elif robot.shooter.shooting and robot.pneumatics.isLowered() and \
@@ -42,3 +46,6 @@ class DefaultCommand(Command):
 
         else:
             robot.ledsystem.rainbowLava() # All set!
+
+        if not robot.pneumatics.isPressureLow():
+            self.modifierOne = False

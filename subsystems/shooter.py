@@ -32,10 +32,10 @@ class Shooter(Subsystem):
 
     def setRPM(self, rpm):
         self.shooting = True
-        self.motorOne.set(0.6)
-        #self.controllerOne.setReference(rpm, ControlType.kVelocity, 0, 0)
+        self.controllerOne.setReference(rpm, ControlType.kVelocity, 0, 0)
 
     def reverseShooter(self):
+        self.shooting = True
         self.motorOne.set(-0.4)
 
     def stopShooter(self):

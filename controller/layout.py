@@ -52,18 +52,19 @@ def init():
 
     driveController.A.toggleWhenPressed(ShooterDirectionCommand())
     driveController.B.toggleWhenPressed(IntakeDirectionCommand())
-
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(ReverseBallsCommand())
 
+    driveController.DPadUp.toggleWhenPressed(ShootWhenReadyCommand(3200))
+
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
-
     driveController.RightTrigger.toggleWhenPressed(SpitBallsCommand())
-
-    driveController.RightJoystick.toggleWhenPressed(ShootWhenReadyCommand(4000))
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
+
+    driveController.RightJoystick.toggleWhenPressed(IntakeCommand())
+    driveController.LeftJoystick.toggleWhenPressed(OutakeCommand())
 
     # The controller for non-driving subsystems of the robot
 

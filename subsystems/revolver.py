@@ -42,7 +42,7 @@ class Revolver(Subsystem):
         self.motor.stopMotor()
 
     def resetRevolverEncoder(self):
-        self.encoder.setPosition(0, 0)
+        self.encoder.setPosition(0)
 
     def getRotations(self):
         return self.encoder.getPosition() / self.gearRatio
@@ -51,4 +51,4 @@ class Revolver(Subsystem):
         return self.isSpinning
 
     def isTriggered(self): # Lol
-        return self.dropTrigger.get()
+        return not self.dropTrigger.get()

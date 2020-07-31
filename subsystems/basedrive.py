@@ -57,7 +57,7 @@ class BaseDrive(Subsystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.setUseEncoders(False)
+        self.setUseEncoders(True)
         self.maxSpeed = 2500#Config('DriveTrain/maxSpeed')
         self.speedLimit = 2000#Config('DriveTrain/normalSpeed')
         self.deadband = 20#Config('DriveTrain/deadband', 0.05)
@@ -86,7 +86,7 @@ class BaseDrive(Subsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
-        if [x, y, rotate] == self.lastInputs:
+        if [x, y, rotate] == self.lastInputs or [x, y, rotate] == [0, 0, 0]:
             return
 
         self.lastInputs = [x, y, rotate]
@@ -99,28 +99,30 @@ class BaseDrive(Subsystem):
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
-        speeds = [speeds[0] * -1, speeds[1]]
+        maxSpeed = 0
+        for speed in speeds:
+            maxSpeed = max(abs(speed), maxSpeed)
 
-        for motor, speed in zip(self.activeMotors, speeds):
-            motor.set(speed)
+        if maxSpeed > 1:
+            speeds = [x / maxSpeed for x in speeds]
 
-        #'''Use speeds to feed motor output.'''
-        #if self.useEncoders:
-            #if not any(speeds):
-                #'''
-                #When we are trying to stop, clearing the I accumulator can
-                #reduce overshooting, thereby shortening the time required to
-                #come to a stop.
-                #'''
-                #for motor in self.activeMotors:
-                    #motor.setIntegralAccumulator(0, 0, 0)
+        '''Use speeds to feed motor output.'''
+        if self.useEncoders:
+            if not any(speeds):
+                '''
+                When we are trying to stop, clearing the I accumulator can
+                reduce overshooting, thereby shortening the time required to
+                come to a stop.
+                '''
+                for motor in self.activeMotors:
+                    motor.setIntegralAccumulator(0, 0, 0)
 
-            #for motor, speed in zip(self.activeMotors, speeds):
-                #motor.set(ControlMode.Velocity, speed * self.speedLimit)
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(ControlMode.Velocity, speed * self.speedLimit)
 
-        #else:
-            #for motor, speed in zip(self.activeMotors, speeds):
-                #motor.set(speed * self.maxPercentVBus)
+        else:
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
