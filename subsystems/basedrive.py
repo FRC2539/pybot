@@ -67,6 +67,8 @@ class BaseDrive(Subsystem):
         self._publishPID('Speed', 0)
         self._publishPID('Position', 1)
 
+        self.resetEncoders()
+        self.resetPID()
 
     def initDefaultCommand(self):
         '''
@@ -99,27 +101,30 @@ class BaseDrive(Subsystem):
 
         speeds = self._calculateSpeeds(x, y, rotate)
 
-        #maxSpeed = 0
-        #for speed in speeds:
-            #maxSpeed = max(abs(speed), maxSpeed)
+        maxSpeed = 0
+        for speed in speeds:
+            maxSpeed = max(abs(speed), maxSpeed)
 
-        #if maxSpeed > 1:
-            #speeds = [x / maxSpeed for x in speeds]
+        if maxSpeed > 1:
+            speeds = [x / maxSpeed for x in speeds]
 
-        #'''Use speeds to feed motor output.'''
-        #if self.useEncoders:
-            #if not any(speeds):
-                #'''
-                #When we are trying to stop, clearing the I accumulator can
-                #reduce overshooting, thereby shortening the time required to
-                #come to a stop.
-                #'''
-            #for motor, speed in zip(self.activeMotors, speeds):
-                #motor.set(ControlMode.Velocity, speed * self.speedLimit)
+        '''Use speeds to feed motor output.'''
+        if self.useEncoders:
+            if not any(speeds):
+                '''
+                When we are trying to stop, clearing the I accumulator can
+                reduce overshooting, thereby shortening the time required to
+                come to a stop.
+                '''
+                for motor in self.motors:
+                    (motor.getPIDController()).setIAccum(0)
 
-        #else:
-            #for motor, speed in zip(self.activeMotors, speeds):
-                #motor.set(speed * self.maxPercentVBus)
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.getPIDController().setReference(ControlType.kVelocity, speed * self.speedLimit) # 'Speed' is a percent.
+
+        else:
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -133,10 +138,7 @@ class BaseDrive(Subsystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
+            motor.getPIDController().setReference(position, ControlType.kPosition, 0, 0)
 
 
     def averageError(self):
@@ -154,6 +156,9 @@ class BaseDrive(Subsystem):
         '''
         return self.averageError() <= tolerance
 
+    def resetEncoders(self):
+        for motor in self.motors:
+            motor.getEncoder().setPosition(0.0)
 
     def stop(self):
         '''Disable all motors until set() is called again.'''

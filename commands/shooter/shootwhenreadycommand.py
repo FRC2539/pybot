@@ -17,6 +17,8 @@ class ShootWhenReadyCommand(Command):
         self.proceedVal = False
 
     def initialize(self):
+        self.proceedVal = False
+        self.startRot = 0
         robot.revolver.resetRevolverEncoder()
         robot.shooter.setRPM(self.targetRPM)
 
@@ -29,8 +31,8 @@ class ShootWhenReadyCommand(Command):
             self.startRot = robot.revolver.getRotations()
             self.proceedVal = True
 
-        elif robot.revolver.isTriggered() and abs(self.startRot - robot.revolver.getRotations()) >= 10 \
-            and self.proceedVal: # Wait at least two rotations for revolver spinup.
+        elif robot.revolver.isTriggered() and abs(self.startRot - robot.revolver.getRotations()) >= 3 \
+            and self.proceedVal: # Wait at least three rotations for revolver spinup.
 
             robot.pneumatics.extendBallLauncherSolenoid()
 
