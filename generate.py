@@ -32,8 +32,9 @@ def generateSubsystem():
         f.write('''
 from wpilib.command import Subsystem
 
-import ports
+from .cougarsystem import *
 
+import ports
 
 class {subsystem}(Subsystem):
     \'\'\'Describe what this subsystem does.\'\'\'
@@ -57,7 +58,6 @@ class {subsystem}(Subsystem):
 
     with open('robot.py', 'w') as f:
         f.write(init)
-
 
     with open('ports.py', 'r') as f:
         ports = f.read()
