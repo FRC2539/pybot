@@ -11,6 +11,7 @@ from navx import AHRS
 from custom.config import Config
 import ports
 
+from crapthatwillneverwork.simcansparkmax import SimCANSparkMax
 
 class BaseDrive(Subsystem):
     '''
@@ -26,12 +27,14 @@ class BaseDrive(Subsystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
+
         try:
             self.motors = [
                 CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
+
             ]
 
         except AttributeError:
@@ -88,6 +91,7 @@ class BaseDrive(Subsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+
         if [x, y, rotate] == self.lastInputs or [x, y, rotate] == [0, 0, 0]:
             return
 
@@ -120,7 +124,7 @@ class BaseDrive(Subsystem):
                     (motor.getPIDController()).setIAccum(0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.getPIDController().setReference(ControlType.kVelocity, speed * self.speedLimit) # 'Speed' is a percent.
+                motor.getPIDController().setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):

@@ -19,12 +19,12 @@ drivetrain.backRightMotorID = 4
 
 revolver = PortsList()
 
-revolver.motorID = 5
+revolver.motorID = 6
 revolver.limitSwitch = 7 # DI/O
 
 intake = PortsList()
 
-intake.motorID = 6
+intake.motorID = 5
 
 balllauncher = PortsList()
 
@@ -37,7 +37,7 @@ shooter.motorTwoID = 9
 
 pneumatics = PortsList()
 
-pneumatics.PCM = 11
+pneumatics.PCM = 17
 
 ledsystem = PortsList()
 
@@ -52,5 +52,3 @@ turret = PortsList()
 
 turret.motorID = 10
 turret.limitSwitch = 8 # DI/O
-
-test = PortsList()
