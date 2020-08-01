@@ -9,34 +9,28 @@ class TurretLimelightCommand(Command):
         super().__init__('Turret Limelight')
 
         self.requires(robot.turret)
-        self.turretOnTarget = False
 
     def initialize(self):
         robot.limelight.setPipeline(1)
-        robot.ledsystem.onTarget = False
-        self.count = 0
+
+        robot.turret.stop()
+        robot.turret.motor.setSensorPhase(True) # I need to invert this stuff for whatever reason.
+        robot.turret.motor.setInverted(True)
+
+        self.goal = robot.turret.getPosition() + (robot.limelight.getX() / 360) * 4096
 
     def execute(self):
-        #print('x ' + str(robot.limelight.getX()))
-        self.x = robot.limelight.getX()
-        #if self.x < 1:
-            #self.rotate = self.x * -.15
-        #else:
-            #self.rotate = self.x * -.05
-        self.rotate = self.x * -.03
-        if (abs(self.rotate) > .5):
-            self.rotate = math.copysign(.5, self.rotate)
+        robot.turret.followTargetPID(self.goal)
 
-        robot.turret.move(self.rotate)
-        #print(str(self.rotate))
+    def isFinished(self):
+        if ((abs(robot.limelight.getX()) < 0.1) and (robot.limelight.getTape())) or (robot.turret.outOfRange()):
+            return True
 
-        if self.count >=4:
-            robot.limelight.takeSnapShot()
-        else:
-            self.count = self.count + 1
-
-        robot.ledsystem.onTarget = (robot.limelight.getX() <= 1.0)
+        return False
 
     def end(self):
         robot.turret.stop()
+        robot.turret.motor.setSensorPhase(False) # I need to invert this stuff for whatever reason.
+        robot.turret.motor.setInverted(False)
+
         robot.limelight.setPipeline(0)

@@ -24,8 +24,9 @@ class Turret(Subsystem):
         self.motor.config_kD(0, 0, 0)
         self.motor.config_kF(0, 0, 0)
 
-        self.max = 1275# Dummy values
-        self.min = 0 # Dummy values
+        self.max = 1365 # Max value
+        self.middle = 682.5
+        self.min = 0 # Min value
 
         self.table = nt.getTable('Turret')
 
@@ -48,7 +49,6 @@ class Turret(Subsystem):
             self.stop()
 
     def move(self, val):
-        self.updateNetworkTables()
         if self.isZeroed() and val > 0:
             self.stop() # does not let a positive direction proceed if zeroed.
         elif self.getPosition() >= self.max and val < 0:
@@ -56,7 +56,7 @@ class Turret(Subsystem):
         else:
             self.motor.set(val)
 
-    def testMove(self, val):
+    def testMove(self, val): # Don't use this.
         print('here')
         self.updateNetworkTables()
         if (self.getPosition() < self.max - self.getPosition()):
@@ -77,6 +77,10 @@ class Turret(Subsystem):
             self.stop() # does not let a negative direction proceed if maxed.
         else:
             self.motor.set(val)
+
+    def accelMove(self, direction):
+        speed = 1 - ((abs(self.middle - self.getPosition())) / self.max)
+        self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.15), direction)) # Clamps it.
 
     def stop(self):
         self.motor.stopMotor()

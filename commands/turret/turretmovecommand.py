@@ -14,8 +14,13 @@ class TurretMoveCommand(Command):
         self.requires(robot.turret)
 
     def execute(self):
-        robot.turret.testMove(logicalaxes.turretX.get() * -0.75)
-        print('turret ' + str(robot.turret.getPosition()))
+        direction = logicalaxes.turretX.get() * -0.75
+        if (not robot.turret.isZeroed() and not robot.turret.isMax()) or \
+            (robot.turret.isZeroed() and direction >= 0) or \
+            (robot.turret.isMax() and direction <= 0):
+
+            robot.turret.accelMove(direction)
+
 
     def end(self):
         robot.turret.stop()
