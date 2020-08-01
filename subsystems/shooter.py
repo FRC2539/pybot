@@ -30,6 +30,9 @@ class Shooter(Subsystem):
 
         self.shooting = False
 
+        self.maxVel = 5800 # Experimental velocities.
+        self.minVel = 2800
+
     def setRPM(self, rpm):
         self.shooting = True
         self.controllerOne.setReference(rpm, ControlType.kVelocity, 0, 0)
@@ -44,6 +47,9 @@ class Shooter(Subsystem):
 
     def isShooting(self):
         return self.shooting
+
+    def generateVelocity(self, distance): # Returns the calculated velocity based off of the distance, in inches.
+        return 3622.819 * 1.0012328 ** distance
 
     def getRPM(self): # Returns the average RPM
         return (self.encoderOne.getVelocity() + self.encoderTwo.getVelocity()) / 2

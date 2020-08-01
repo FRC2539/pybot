@@ -110,19 +110,12 @@ class Limelight(DebuggableSubsystem):
         self.xD = math.sin(math.radians(self.theta)) * self.d
         return self.xD
 
-
     def calcYDistance(self):
         self.theta = self.getFeildAngle()
         self.d = self.calcDistance()
         self.yD = math.cos(math.radians(self.theta)) * self.d
         return self.yD
 
-
     def updateNetworkTables(self):
         self.driveTable.putNumberArray('camTran', self.getCamTran())
         self.driveTable.putNumber('distance', self.calcDistance())
-
-    def initDefaultCommand(self):
-        from commands.limelight.defaultcommand import DefaultCommand
-
-        self.setDefaultCommand(DefaultCommand())
