@@ -9,6 +9,7 @@ class ShootWhenReadyCommand(Command):
 
         self.requires(robot.shooter)
         self.requires(robot.balllauncher)
+        self.requires(robot.revolver)
 
         self.targetRPM = targetRPM
         self.tol = tol
@@ -18,6 +19,9 @@ class ShootWhenReadyCommand(Command):
         self.targetLocated = True
 
     def initialize(self):
+
+        robot.shooter.setRPM(2000)
+
         self.proceedVal = False
         self.startRot = 0
         robot.revolver.resetRevolverEncoder()
@@ -30,6 +34,7 @@ class ShootWhenReadyCommand(Command):
             self.targetLocated = False
 
         else: # We don't want velocity based off of a distance.
+            print('here')
             robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):

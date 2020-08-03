@@ -19,7 +19,7 @@ class Turret(Subsystem):
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, 10, 0)
+        self.motor.config_kP(0, 1, 0)
         self.motor.config_kI(0, 0.0001, 0)
         self.motor.config_kD(0, 0, 0)
         self.motor.config_kF(0, 0, 0)
@@ -27,6 +27,8 @@ class Turret(Subsystem):
         self.max = 1365 # Max value
         self.middle = 682.5
         self.min = 0 # Min value
+
+        self.turretDeadband = 0.1
 
         self.table = nt.getTable('Turret')
 
@@ -39,7 +41,7 @@ class Turret(Subsystem):
         self.tollerance = 5 # ticks
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
-        #self.motor.setSelectedSensorPosition(0, 0, 0)
+        self.motor.setSelectedSensorPosition(0, 0, 0)
 
     def rotateClockwise(self, val):
         if self.getPosition() < self.max and self.getPosition() > self.min:
@@ -79,8 +81,16 @@ class Turret(Subsystem):
             self.motor.set(val)
 
     def accelMove(self, direction):
-        speed = 1 - ((abs(self.middle - self.getPosition())) / self.max)
-        self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.15), direction)) # Clamps it.
+
+        direction = math.copysign(max(abs(direction) - self.turretDeadband, 0), direction)
+
+        if direction != 0.0:
+
+            speed = (abs(self.middle - self.getPosition())) / self.max
+            self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.1), direction)) # Clamps it with 60% and 10%
+
+        else:
+            self.stop()
 
     def stop(self):
         self.motor.stopMotor()
@@ -88,8 +98,8 @@ class Turret(Subsystem):
     def givePosition(self):
         self.motor.setSelectedSensorPosition(1500)
 
-    def returnZero(self):
-        self.motor.set(ControlMode.Position, 0)
+    def returnToZero(self):
+        self.motor.set(ControlMode.Position, self.min)
 
     def captureOrientation(self):
         self.fieldAngle = robot.drivetrain.getAngle()
@@ -125,23 +135,21 @@ class Turret(Subsystem):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
 
     def outOfRange(self):
-        print('ma ' + str(self.getPosition() > self.max))
-        print('mi ' + str(self.getPosition() < self.min) + str(self.getPosition()))
-        return False#(self.getPosition() > self.max) or (self.getPosition() < self.min)
+        return (self.getPosition() > self.max) or (self.getPosition() < self.min)
 
     def getPosition(self):
-        return (self.motor.getSelectedSensorPosition(0))
+        return self.motor.getSelectedSensorPosition(0)
 
-    def setZero(self):
-        self.motor.setSelectedSensorPosition(0, 0, 0)
+    def setMax(self):
+        self.motor.setSelectedSensorPosition(self.max, 0, 0)
 
     def simpleMove(self, x):
         self.motor.set(ControlMode.PercentOutput, math.copysign(min([abs(x), 0.4]), x))
 
-    def isZeroed(self):
+    def isLimitSwitch(self): # Limit switch is at the upper end.
         if not self.limitSwitch.get():
             self.stop()
-            self.setZero()
+            self.setMax()
             return True
 
         return False
@@ -151,27 +159,14 @@ class Turret(Subsystem):
 
         self.motor.set(ControlMode.Position, pos)
 
-    def followTarget(self, diff, dist):
-
-        val = abs(diff / 275)
-
-        distMod = 0
-
-        if abs(dist) > 120:
-            distMod = abs((dist - 120) / 500) # We want to make the sign opposite of diff so we can combine them.
-
-        print('out ' + str(math.copysign(val - distMod, -diff)))
-
-        self.motor.set(math.copysign(val - distMod, -diff))
-
     def moveFieldAngle(self, val):
         self.fieldAngle = self.fieldAngle + (val * 1)
 
     def isMax(self):
-        if (self.getPosition() >= self.max):
-            return True
-        else:
-            return False
+        return self.getPosition() >= self.max
+
+    def isMin(self):
+        return self.getPosition() <= self.min
 
     def initDefaultCommand(self):
         '''

@@ -20,7 +20,7 @@ drivetrain.backRightMotorID = 4
 revolver = PortsList()
 
 revolver.motorID = 6
-revolver.limitSwitch = 7 # DI/O
+revolver.limitSwitch = 2 # DI/O
 
 intake = PortsList()
 
@@ -45,10 +45,10 @@ ledsystem.controllerID = 0 # PWM
 
 hood = PortsList()
 
-hood.motorID = 12
+hood.motorID = 11
 hood.absoluteThroughbore = 9 # DI/O
 
 turret = PortsList()
 
 turret.motorID = 10
-turret.limitSwitch = 8 # DI/O
+turret.limitSwitch = 7 # DI/O

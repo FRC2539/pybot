@@ -62,8 +62,8 @@ class BaseDrive(Subsystem):
 
         self.setUseEncoders(True)
         self.maxSpeed = 2500#Config('DriveTrain/maxSpeed')
-        self.speedLimit = 2000#Config('DriveTrain/normalSpeed')
-        self.deadband = 20#Config('DriveTrain/deadband', 0.05)
+        self.speedLimit = 4000#Config('DriveTrain/normalSpeed')
+        self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 
         '''Allow changing CAN Talon settings from dashboard'''
@@ -115,6 +115,8 @@ class BaseDrive(Subsystem):
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
             if not any(speeds):
+
+                print('speed' + str(speeds))
                 '''
                 When we are trying to stop, clearing the I accumulator can
                 reduce overshooting, thereby shortening the time required to
@@ -122,9 +124,9 @@ class BaseDrive(Subsystem):
                 '''
                 for motor in self.motors:
                     (motor.getPIDController()).setIAccum(0)
-
-            for motor, speed in zip(self.activeMotors, speeds):
-                motor.getPIDController().setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
+            print(speeds)
+            for controller, speed in zip(self.activePIDControllers, speeds):
+                controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
 
         else:
             for motor, speed in zip(self.activeMotors, speeds):
@@ -178,7 +180,7 @@ class BaseDrive(Subsystem):
             motor.setClosedLoopRampRate(0)
             controller = motor.getPIDController()
             for profile in range(2):
-                controller.setP(0.001, profile)
+                controller.setP(0.01, profile)
                 controller.setI(0, profile)
                 controller.setD(0, profile)
                 controller.setFF(0, profile)

@@ -1,4 +1,6 @@
-from .debuggablesubsystem import *
+#from .debuggablesubsystem import *
+
+from wpilib.command import Subsystem
 
 import ports
 import robot
@@ -7,7 +9,7 @@ from custom.config import Config
 from networktables import NetworkTables
 
 
-class Limelight(DebuggableSubsystem):
+class Limelight(Subsystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):

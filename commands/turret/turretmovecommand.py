@@ -14,13 +14,12 @@ class TurretMoveCommand(Command):
         self.requires(robot.turret)
 
     def execute(self):
-        direction = logicalaxes.turretX.get() * -0.75
-        if (not robot.turret.isZeroed() and not robot.turret.isMax()) or \
-            (robot.turret.isZeroed() and direction >= 0) or \
-            (robot.turret.isMax() and direction <= 0):
-
-            robot.turret.accelMove(direction)
-
+        direction = logicalaxes.turretX.get() * -0.85 # This is actually 75%; the deadband calculator in accelMove drops it by the deadband (0.1)
+        if (not robot.turret.isLimitSwitch() and not robot.turret.isMin()) or \
+            (robot.turret.isLimitSwitch() and direction >= 0) or \
+            (robot.turret.isMin() and direction <= 0):
+            pass
+        robot.turret.accelMove(direction)
 
     def end(self):
         robot.turret.stop()

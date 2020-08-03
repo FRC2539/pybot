@@ -2,7 +2,7 @@ from rev import CANSparkMax # Base off of the original CANSparkMax, rewrite what
 
 import rev
 
-from hal import *
+#from hal import *
 
 class SimCANSparkMax(CANSparkMax):
 
