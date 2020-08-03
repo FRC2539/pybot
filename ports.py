@@ -32,8 +32,8 @@ balllauncher.motorID = 7
 
 shooter = PortsList()
 
-shooter.motorOneID = 8
-shooter.motorTwoID = 9
+shooter.shooterMotorOneID = 8
+shooter.shooterMotorTwoID = 9
 
 pneumatics = PortsList()
 

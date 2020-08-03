@@ -61,6 +61,7 @@ class Hood(Subsystem):
         self.updateNetworkTables(self.getPosition())
 
     def raiseHood(self):
+        print('hood up ' + str(self.getPosition()))
         if self.getPosition() < self.angleMax:
             self.motor.set(0.1)
         else:
@@ -68,6 +69,7 @@ class Hood(Subsystem):
         self.updateNetworkTables(self.getPosition())
 
     def lowerHood(self):
+        print('hood down ' + str(self.getPosition()))
         if self.getPosition() > self.angleMin:
             self.motor.set(-0.1)
         else:

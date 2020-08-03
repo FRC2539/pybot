@@ -12,8 +12,8 @@ class SetRPMCommand(Command):
 
     def initialize(self):
         print('begunb')
-        robot.shooter.setRPM(self.rpm)
+        robot.shooter.pseudoSet()
 
     def end(self):
         print('done')
-        robot.shooter.stopShooter()
+        robot.shooter.pseudoStop()

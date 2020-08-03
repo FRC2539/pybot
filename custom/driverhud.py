@@ -39,8 +39,8 @@ def init():
 
     SmartDashboard.putData('Autonomous Program', autonChooser)
 
-    showCommand(ResetTiltCommand())
-    showCommand(ConfigurePIDCommandGroup())
+    #showCommand(ResetTiltCommand())
+    #showCommand(ConfigurePIDCommandGroup())
 
 
 def getAutonomousProgram():

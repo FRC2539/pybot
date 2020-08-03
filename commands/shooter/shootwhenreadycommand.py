@@ -7,7 +7,6 @@ class ShootWhenReadyCommand(Command):
     def __init__(self, targetRPM=None, tol=40):
         super().__init__('Shoot When Ready')
 
-        self.requires(robot.shooter)
         self.requires(robot.balllauncher)
         self.requires(robot.revolver)
 
@@ -19,8 +18,6 @@ class ShootWhenReadyCommand(Command):
         self.targetLocated = True
 
     def initialize(self):
-
-        robot.shooter.setRPM(2000)
 
         self.proceedVal = False
         self.startRot = 0
@@ -38,6 +35,9 @@ class ShootWhenReadyCommand(Command):
             robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
+
+        print('i am stupid')
+
         if self.targetLocated: # If we found one, lock in and proceed.
             if robot.shooter.getRPM() + self.tol >= self.targetRPM and not self.proceedVal:
                 robot.revolver.setStaticSpeed()

@@ -11,4 +11,4 @@ class StartUpCommandGroup(CommandGroup):
         super().__init__('Start Up')
         self.setRunWhenDisabled(True)
 
-        self.addParallel(ResetTiltCommand())
+        #self.addParallel(ResetTiltCommand())

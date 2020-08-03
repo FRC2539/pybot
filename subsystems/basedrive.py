@@ -81,7 +81,7 @@ class BaseDrive(Subsystem):
         '''
         from commands.drivetrain.drivecommand import DriveCommand
 
-        self.setDefaultCommand(DriveCommand(self.speedLimit))
+        #self.setDefaultCommand(DriveCommand(self.speedLimit))
 
 
     def move(self, x, y, rotate):
@@ -124,10 +124,11 @@ class BaseDrive(Subsystem):
                 '''
                 for motor in self.motors:
                     (motor.getPIDController()).setIAccum(0)
-            print(speeds)
-            for controller, speed in zip(self.activePIDControllers, speeds):
-                controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
 
+            print(speeds)
+            for controller, speed in zip(self.activeMotors, speeds):
+                #controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
+                controller.set(speed)
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed * self.maxPercentVBus)
@@ -180,9 +181,9 @@ class BaseDrive(Subsystem):
             motor.setClosedLoopRampRate(0)
             controller = motor.getPIDController()
             for profile in range(2):
-                controller.setP(0.01, profile)
+                controller.setP(0.0000001, profile)
                 controller.setI(0, profile)
-                controller.setD(0, profile)
+                controller.setD(0.0001, profile)
                 controller.setFF(0, profile)
                 controller.setIZone(0, profile)
 

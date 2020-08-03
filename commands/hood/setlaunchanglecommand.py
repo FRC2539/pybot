@@ -10,14 +10,8 @@ class SetLaunchAngleCommand(Command):
         self.requires(robot.hood)
         self.angle = val
 
-
-    def initialize(self):
-        pass
-
-
     def execute(self):
         robot.hood.setShootAngle(self.angle)
-
 
     def end(self):
         robot.hood.stopHood()
