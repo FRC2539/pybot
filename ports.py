@@ -1,4 +1,5 @@
 
+
 '''
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -52,3 +53,8 @@ turret = PortsList()
 
 turret.motorID = 10
 turret.limitSwitch = 7 # DI/O
+
+climber = PortsList()
+
+climber.motorID = 12
+

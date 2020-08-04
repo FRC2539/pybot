@@ -24,3 +24,4 @@ class ResetCommand(InstantCommand):
         self.requires(robot.hood)
         self.requires(robot.turret)
         self.requires(robot.limelight)
+        self.requires(robot.climber)
