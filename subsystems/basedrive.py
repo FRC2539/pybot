@@ -28,6 +28,8 @@ class BaseDrive(Subsystem):
         since the PID loops will provide braking.
         '''
 
+        disablePrints()
+
         try:
             self.motors = [
                 CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
@@ -62,7 +64,7 @@ class BaseDrive(Subsystem):
 
         self.setUseEncoders(True)
         self.maxSpeed = 2500#Config('DriveTrain/maxSpeed')
-        self.speedLimit = 4000#Config('DriveTrain/normalSpeed')
+        self.speedLimit = 5000#Config('DriveTrain/normalSpeed')
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 
@@ -124,6 +126,8 @@ class BaseDrive(Subsystem):
                     (motor.getPIDController()).setIAccum(0)
 
             print(speeds)
+            print('vel ' + str(self.getSpeeds()))
+
             for controller, speed in zip(self.activePIDControllers, speeds):
                 controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
                 #controller.set(speed)
@@ -176,13 +180,13 @@ class BaseDrive(Subsystem):
     def resetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            motor.setClosedLoopRampRate(0)
+            motor.setClosedLoopRampRate(0.25)
             controller = motor.getPIDController()
             for profile in range(2):
-                controller.setP(0.0000001, profile)
+                controller.setP(0.00008, profile)
                 controller.setI(0, profile)
                 controller.setD(0.0001, profile)
-                controller.setFF(0, profile)
+                controller.setFF(0.0005, profile)
                 controller.setIZone(0, profile)
 
 
@@ -241,7 +245,7 @@ class BaseDrive(Subsystem):
 
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
-        return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
+        return [x.getVelocity() for x in self.activeEncoders]
 
 
     def getPositions(self):

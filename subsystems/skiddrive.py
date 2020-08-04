@@ -20,6 +20,7 @@ class SkidDrive(BaseDrive):
                 .follow(self.motors[1])
 
         self.activePIDControllers = [y.getPIDController() for y in self.activeMotors]
+        self.activeEncoders = [y.getEncoder() for y in self.activeMotors]
 
         #'''Invert encoders'''
         #for motor in self.activeMotors:

@@ -18,8 +18,8 @@ class TurretMoveCommand(Command):
         if (not robot.turret.isLimitSwitch() and not robot.turret.isMin()) or \
             (robot.turret.isLimitSwitch() and direction >= 0) or \
             (robot.turret.isMin() and direction <= 0):
-            pass
-        robot.turret.accelMove(direction)
+
+            robot.turret.accelMove(direction)
 
     def end(self):
         robot.turret.stop()

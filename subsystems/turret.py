@@ -26,7 +26,7 @@ class Turret(Subsystem):
 
         self.max = 1365 # Max value
         self.middle = 682.5
-        self.min = 0 # Min value
+        self.min = 10 # Min value
 
         self.turretDeadband = 0.1
 
@@ -86,8 +86,9 @@ class Turret(Subsystem):
 
         if direction != 0.0:
 
-            speed = (abs(self.middle - self.getPosition())) / self.max
-            self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.1), direction)) # Clamps it with 60% and 10%
+            speed = 0.5 - (abs(self.getPosition() - self.middle) / self.max)
+
+            self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.2), direction))
 
         else:
             self.stop()
@@ -104,7 +105,7 @@ class Turret(Subsystem):
     def captureOrientation(self):
         self.fieldAngle = robot.drivetrain.getAngle()
 
-    def turretFieldOriented(self): # Use for when traveling 'round the field.
+    def turretFieldOriented(self): # Use for when traveling round the field.
         if self.getFieldPosition() > 25 and self.getFieldPosition() < self.max - 25 :
             self.setPosition(self.getFieldPosition())
         else:
