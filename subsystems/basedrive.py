@@ -81,7 +81,7 @@ class BaseDrive(Subsystem):
         '''
         from commands.drivetrain.drivecommand import DriveCommand
 
-        #self.setDefaultCommand(DriveCommand(self.speedLimit))
+        self.setDefaultCommand(DriveCommand(self.speedLimit))
 
 
     def move(self, x, y, rotate):
@@ -115,8 +115,6 @@ class BaseDrive(Subsystem):
         '''Use speeds to feed motor output.'''
         if self.useEncoders:
             if not any(speeds):
-
-                print('speed' + str(speeds))
                 '''
                 When we are trying to stop, clearing the I accumulator can
                 reduce overshooting, thereby shortening the time required to
@@ -126,9 +124,9 @@ class BaseDrive(Subsystem):
                     (motor.getPIDController()).setIAccum(0)
 
             print(speeds)
-            for controller, speed in zip(self.activeMotors, speeds):
-                #controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
-                controller.set(speed)
+            for controller, speed in zip(self.activePIDControllers, speeds):
+                controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
+                #controller.set(speed)
         else:
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(speed * self.maxPercentVBus)

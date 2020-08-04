@@ -34,8 +34,6 @@ class DriveCommand(Command):
 
 
     def execute(self):
-        for x in range(4):
-            print(str(x) + ' ' + str(robot.drivetrain.motors[x].get()))
 
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()
