@@ -13,7 +13,7 @@ import ports
 
 from crapthatwillneverwork.simcansparkmax import SimCANSparkMax
 
-class BaseDrive(Subsystem):
+class BaseDrive(CougarSystem):
     '''
     A general case drive train system. It abstracts away shared functionality of
     the various drive types that we can employ. Anything that can be done
@@ -64,7 +64,7 @@ class BaseDrive(Subsystem):
 
         self.setUseEncoders(True)
         self.maxSpeed = 2500#Config('DriveTrain/maxSpeed')
-        self.speedLimit = 5000#Config('DriveTrain/normalSpeed')
+        self.speedLimit = 3500#Config('DriveTrain/normalSpeed')
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 
@@ -125,8 +125,6 @@ class BaseDrive(Subsystem):
                 for motor in self.motors:
                     (motor.getPIDController()).setIAccum(0)
 
-            print(speeds)
-            print('vel ' + str(self.getSpeeds()))
 
             for controller, speed in zip(self.activePIDControllers, speeds):
                 controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.

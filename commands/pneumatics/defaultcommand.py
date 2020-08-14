@@ -50,4 +50,5 @@ class DefaultCommand(Command):
         if not robot.pneumatics.isPressureLow():
             self.modifierOne = False
 
-
+        else:
+            self.modifierOne = True

@@ -9,6 +9,7 @@ from commands.drivetrain.drivecommand import DriveCommand
 
 from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
 from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
+from commands.revolver.advancedmovecommand import AdvancedMoveCommand
 
 from commands.balllauncher.launchballscommand import LaunchBallsCommand
 from commands.balllauncher.reverseballscommand import ReverseBallsCommand
@@ -17,9 +18,12 @@ from commands.balllauncher.extendlaunchercommand import ExtendLauncherCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outakecommand import OutakeCommand
 from commands.intake.kickcommand import KickCommand
+from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
+
+from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
@@ -55,10 +59,12 @@ def init():
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(ReverseBallsCommand())
 
-    driveController.DPadUp.toggleWhenPressed(ShootWhenReadyCommand(targetRPM=3200))
+    driveController.DPadUp.toggleWhenPressed(ShootWhenReadyCommand())
+    driveController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
+    driveController.DPadRight.toggleWhenPressed(SudoCommandGroup())
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
-    driveController.RightTrigger.toggleWhenPressed(SetRPMCommand(2400))
+    driveController.RightTrigger.toggleWhenPressed(SetRPMCommand(4500))
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())

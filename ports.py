@@ -20,7 +20,8 @@ drivetrain.backRightMotorID = 4
 revolver = PortsList()
 
 revolver.motorID = 6
-revolver.limitSwitch = 2 # DI/O
+#revolver.limitSwitch = 2 # DI/O
+revolver.absoluteThroughbore = 6 # DI/O
 
 intake = PortsList()
 

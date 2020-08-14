@@ -6,7 +6,7 @@ from wpilib import Spark
 
 import ports
 
-class LEDSystem(Subsystem):
+class LEDSystem(CougarSystem):
     '''Manages a part of the LED system on the robot.'''
 
     def __init__(self):

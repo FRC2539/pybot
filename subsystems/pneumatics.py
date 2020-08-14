@@ -6,7 +6,7 @@ from wpilib import Compressor, DoubleSolenoid
 
 import ports
 
-class Pneumatics(Subsystem):
+class Pneumatics(CougarSystem):
     '''Controls all pneumatic functions on the robot. Reference these in commands for other systems, as there are no general pneumatic commands.'''
 
     def __init__(self):

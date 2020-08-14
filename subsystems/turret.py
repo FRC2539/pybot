@@ -13,20 +13,20 @@ from networktables import NetworkTables as nt
 import robot
 import math
 
-class Turret(Subsystem):
+class Turret(CougarSystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, 1, 0)
-        self.motor.config_kI(0, 0.0001, 0)
-        self.motor.config_kD(0, 0, 0)
-        self.motor.config_kF(0, 0, 0)
+        self.motor.config_kP(0, 5.2, 0)
+        self.motor.config_kI(0, 0, 0)
+        self.motor.config_kD(0, 0.0001, 0)
+        self.motor.config_kF(0, 0.07, 0)
 
         self.max = 1365 # Max value
         self.middle = 682.5
-        self.min = 10 # Min value
+        self.min = 0 # Min value
 
         self.turretDeadband = 0.1
 
@@ -41,6 +41,9 @@ class Turret(Subsystem):
         self.tollerance = 5 # ticks
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
+
+        #self.capture('position', 'getPosition')
+
         self.motor.setSelectedSensorPosition(0, 0, 0)
 
     def rotateClockwise(self, val):
@@ -136,6 +139,7 @@ class Turret(Subsystem):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
 
     def outOfRange(self):
+        print(self.getPosition())
         return (self.getPosition() > self.max) or (self.getPosition() < self.min)
 
     def getPosition(self):
@@ -167,7 +171,7 @@ class Turret(Subsystem):
         return self.getPosition() >= self.max
 
     def isMin(self):
-        return self.getPosition() <= self.min
+        return self.getPosition() <= self.min + 12
 
     def initDefaultCommand(self):
         '''

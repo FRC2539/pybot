@@ -2,6 +2,8 @@
 
 from wpilib.command import Subsystem
 
+from .cougarsystem import *
+
 import ports
 import robot
 import math
@@ -9,7 +11,7 @@ from custom.config import Config
 from networktables import NetworkTables
 
 
-class Limelight(Subsystem):
+class Limelight(CougarSystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
@@ -23,8 +25,11 @@ class Limelight(Subsystem):
         self.driveTable = NetworkTables.getTable('DriveTrain')
 
         self.LimelightHeight = 20
-        self.TargetHeight = 90.75
+        self.TargetHeight = 98.25
         self.calDistance = 120
+
+        self.llHeight = 19.5 # Height on robot.
+        self.llAngle = 22 # Limelight angle in degrees, relative to the ground.
 
         self.setPipeline(2)
 
@@ -51,13 +56,13 @@ class Limelight(Subsystem):
     def getCamTran(self):
         return self.nt.getEntry('camtran').getDoubleArray([])
 
-    def get3D_X(self):
+    def get3D_X(self): # Left / Right
         return self.nt.getEntry('camtran').getDoubleArray([])[0]
 
     def get3D_Y(self):
         return self.nt.getEntry('camtran').getDoubleArray([])[1]
 
-    def get3D_Z(self):
+    def get3D_Z(self): # Distance?
         return self.nt.getEntry('camtran').getDoubleArray([])[2]
 
     def get3D_Pitch(self):
@@ -71,6 +76,13 @@ class Limelight(Subsystem):
 
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
+
+    def generateVelocity(self, distance): # Returns the calculated velocity based off of the distance, in inches.
+        if distance == 0.0:
+            distance = self.calcDistanceGood()
+
+        print('shooting with ' + str(distance))
+        return min(4.6097902097902 * abs(distance) + 4264.6153846154, 5500)
 
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight
@@ -117,6 +129,10 @@ class Limelight(Subsystem):
         self.d = self.calcDistance()
         self.yD = math.cos(math.radians(self.theta)) * self.d
         return self.yD
+
+    def bensDistance(self):
+        print('Y ' + str(self.getY()))
+        return (98.25 - self.llHeight) / (math.tan(math.radians(self.llAngle + self.getY())))
 
     def updateNetworkTables(self):
         self.driveTable.putNumberArray('camTran', self.getCamTran())

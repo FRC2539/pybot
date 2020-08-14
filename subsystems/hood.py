@@ -11,7 +11,7 @@ from custom.config import Config
 
 from networktables import NetworkTables as nt
 
-class Hood(Subsystem):
+class Hood(CougarSystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
@@ -36,10 +36,11 @@ class Hood(Subsystem):
         self.setSpeed = 0.3
 
         self.angleMax = 236.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
-        self.angleMin = 100.00 # was 166; need to adjust these values.
+        self.angleMin = 166.00 # was 166; need to adjust these values.
         self.LLHoodTuner = 13
 
-        self.limelightAngleMatch = 220
+        self.parallelToGroundish = 281.0
+        self.llHeight = 19.5 # Height on robot.
 
         self.zeroNetworkTables()
 
@@ -137,14 +138,35 @@ class Hood(Subsystem):
                     self.speed = math.copysign(.5, self.speed)
                 self.setPercent(self.speed)
 
-    def benSetAngle(self, angle): # TO 45 FROM 25
-        desiredAngle = self.limelightAngleMatch + (angle * 2) # Multiply because the encoder gear turns twice per rotation of the hood gear.
+    def benCalcAngle(self, distance):
+        #theta = math.degrees(math.atan((98.25 - self.llHeight) / abs(distance)))
 
-        rotations = desiredAngle * 2 * 210 # This is now in rotations of the motor.
+        print('using ' + str(distance))
 
-        self.controller.setReference(rotations, ControlType.kPosition, 0, 0) # If this does not work, use the WPILIB PID Controller.
+        y = 0.218735542 * abs(distance) + 162.4104165
 
-        return desiredAngle
+        #y = -0.0014719708 * abs(distance) ** 2 + 0.739691936 * abs(distance) + 129.197073
+
+        return self.benSetAngle(y)#self.parallelToGroundish - (theta * 2) - 10)
+
+    def benSetAngle(self, desiredAngle):
+
+        diff = self.getPosition() - desiredAngle
+
+        if abs(diff) <= 3.0:
+            print('done')
+            self.stopHood()
+            return True
+
+        diff /= 120
+
+        val = math.copysign(min(abs(max(abs(diff / 130), 0.08)), 0.3), -diff)
+
+        print(val)
+
+        self.motor.set(val)
+
+        return False
 
     def goTo(self, angle): # angle is the raw encoder value.
         pos = self.getPosition()

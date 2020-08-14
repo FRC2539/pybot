@@ -6,7 +6,7 @@ from ctre import WPI_TalonSRX, ControlMode, NeutralMode
 
 import ports
 
-class BallLauncher(Subsystem):
+class BallLauncher(CougarSystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):
@@ -21,7 +21,7 @@ class BallLauncher(Subsystem):
 
     def launchBalls(self):
         self.launching = True
-        self.launcherMotors.set(ControlMode.PercentOutput, 0.95)
+        self.launcherMotors.set(ControlMode.PercentOutput, 1.0)
 
     def reverseBalls(self):
         self.launching = False

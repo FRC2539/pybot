@@ -11,8 +11,6 @@ class TurretLimelightCommand(Command):
         self.requires(robot.turret)
 
     def initialize(self):
-        robot.limelight.setPipeline(1)
-
         robot.turret.stop()
         robot.turret.motor.setSensorPhase(True) # I need to invert this stuff for whatever reason.
         robot.turret.motor.setInverted(True)
@@ -23,7 +21,7 @@ class TurretLimelightCommand(Command):
         robot.turret.followTargetPID(self.goal)
 
     def isFinished(self):
-        if ((abs(robot.limelight.getX()) < 0.1) and (robot.limelight.getTape())) or (robot.turret.outOfRange()):
+        if ((abs(robot.limelight.getX()) < 0.001) and (robot.limelight.getTape())) or (robot.turret.outOfRange()):
             return True
 
         return False
@@ -32,5 +30,3 @@ class TurretLimelightCommand(Command):
         robot.turret.stop()
         robot.turret.motor.setSensorPhase(False) # I need to invert this stuff for whatever reason.
         robot.turret.motor.setInverted(False)
-
-        robot.limelight.setPipeline(0)

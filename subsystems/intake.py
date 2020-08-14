@@ -6,7 +6,7 @@ from rev import CANSparkMax, ControlType, MotorType, IdleMode
 
 import ports
 
-class Intake(Subsystem):
+class Intake(CougarSystem):
     '''Describe what this subsystem does.'''
 
     def __init__(self):

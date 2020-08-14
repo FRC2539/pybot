@@ -4,7 +4,7 @@ import robot
 
 class ShootWhenReadyCommand(Command):
 
-    def __init__(self, targetRPM=None, tol=40):
+    def __init__(self, targetRPM=None, tol=100):
         super().__init__('Shoot When Ready')
 
         self.requires(robot.balllauncher)
@@ -23,8 +23,12 @@ class ShootWhenReadyCommand(Command):
         self.startRot = 0
         robot.revolver.resetRevolverEncoder()
 
+        robot.pneumatics.retractBallLauncherSolenoid()
+
+        print('og dist ' + str(robot.limelight.get3D_Z()))
+
         if self.targetRPM is None and robot.limelight.getTape(): # We need speed calc, and we see it.
-            self.targetRPM = robot.shooter.generateVelocity(robot.limelight.get3D_Z()) # May be the wrong method; look on the web config later.
+            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.get3D_Z()) # May be the wrong method; look on the web config later.
             robot.shooter.setRPM(self.targetRPM)
 
         elif self.targetRPM is None: # We need speed calc, but we don't see it.
@@ -35,19 +39,39 @@ class ShootWhenReadyCommand(Command):
             robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
-
-        print('i am stupid')
+        print("rev pos: " + str(robot.revolver.getPosition()))
 
         if self.targetLocated: # If we found one, lock in and proceed.
-            if robot.shooter.getRPM() + self.tol >= self.targetRPM and not self.proceedVal:
+            print(robot.shooter.getRPM())
+            print('target ' + str(self.targetRPM))
+            print('distance ' + str(robot.limelight.get3D_Z()))
+            print('calc distance ' +str(robot.limelight.calcDistanceGood()))
+            robot.revolver.setStaticSpeed()
+            if abs(robot.shooter.getRPM()) + self.tol >= self.targetRPM and not self.proceedVal:
                 robot.revolver.setStaticSpeed()
-                robot.balllauncher.launchBalls()
+               # robot.balllauncher.launchBalls() TEST
 
-                self.startRot = robot.revolver.getRotations()
                 self.proceedVal = True
 
-            elif robot.revolver.isTriggered() and abs(self.startRot - robot.revolver.getRotations()) >= 3 \
-                and self.proceedVal: # Wait at least three rotations for revolver spinup.
+            elif robot.revolver.inDropZone() and self.proceedVal:
+                robot.revolver.stopRevolver() # TEST
+
+                #for x in range(10000): # TEST
+                #    print('ahh')
+
+                robot.revolver.setStaticSpeed()
+
+
+
+                #for x in range(2500): # TEST
+                #    print('ahh')
+
+
+
+                robot.balllauncher.launchBalls() # END TEST
+
+                for x in range(200): # TEST
+                    print('run launcher delay')
 
                 robot.pneumatics.extendBallLauncherSolenoid()
 
