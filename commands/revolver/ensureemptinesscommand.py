@@ -13,14 +13,17 @@ class EnsureEmptinessCommand(Command):
         if robot.revolver.isFrontEmpty():
             robot.revolver.stopRevolver()
         else:
-            robot.revolver.setVariableSpeed(-0.35)
+            robot.revolver.setVariableSpeed(0.4)
+
+        robot.balllauncher.reverseBalls()
 
     def execute(self):
         if robot.revolver.isFrontEmpty():
             robot.revolver.stopRevolver()
 
         else:
-            robot.revolver.setVariableSpeed(-0.35)
+            robot.revolver.setVariableSpeed(0.4)
 
     def end(self):
         robot.revolver.stopRevolver()
+        robot.balllauncher.stopLauncher()

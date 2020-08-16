@@ -28,6 +28,8 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
 
+from commands.turret.toggleturretmodecommand import ToggleTurretModeCommand
+
 def init():
     '''
     Declare all controllers, assign axes to logical axes, and trigger
@@ -62,6 +64,7 @@ def init():
     driveController.DPadUp.toggleWhenPressed(ShootWhenReadyCommand())
     driveController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
     driveController.DPadRight.toggleWhenPressed(SudoCommandGroup())
+    driveController.DPadLeft.toggleWhenPressed(SetRPMCommand(3500))
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
     driveController.RightTrigger.toggleWhenPressed(SetRPMCommand(4500))
@@ -72,6 +75,27 @@ def init():
     driveController.RightJoystick.toggleWhenPressed(IntakeCommand())
     driveController.LeftJoystick.toggleWhenPressed(OutakeCommand())
 
-    # The controller for non-driving subsystems of the robot
+    driveController.Start.toggleWhenPressed(ReverseBallsCommand())
 
-    operatorController.Back.whenPressed(ResetCommand())
+    # The controller for non-driving subsystems of the robot
+    # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone
+
+    operatorController.Start.whenPressed(ResetCommand())
+    operatorController.Back.whenPressed(ToggleTurretModeCommand())
+
+    operatorController.A.toggleWhenPressed(IntakeDirectionCommand())
+    operatorController.B.toggleWhenPressed(ShooterDirectionCommand())
+    operatorController.X.toggleWhenPressed(LaunchBallsCommand())
+    operatorController.Y.toggleWhenPressed(ReverseBallsCommand())
+
+    operatorController.DPadUp.toggleWhenPressed(ExtendLauncherCommand())
+    operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
+    operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
+
+    operatorController.RightTrigger.toggleWhenPressed(ShootWhenReadyCommand())
+    operatorController.RightBumper.toggleWhenPressed(SetRPMCommand(3500))
+
+    operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
+    operatorController.LeftBumper.whileHeld(LowerHoodCommand())
+
+    operatorController.LeftJoystick.toggleWhenPressed(OutakeCommand())

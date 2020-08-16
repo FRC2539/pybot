@@ -18,6 +18,9 @@ class TurretLimelightCommand(Command):
         self.goal = robot.turret.getPosition() + (robot.limelight.getX() / 360) * 4096
 
     def execute(self):
+        if robot.turret.turretActiveMode:
+            self.goal = robot.turret.getPosition() + (robot.limelight.getX() / 360) * 4096
+
         robot.turret.followTargetPID(self.goal)
 
     def isFinished(self):

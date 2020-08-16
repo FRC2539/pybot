@@ -16,11 +16,16 @@ class HoodLimelightCommand(Command):
 
     def execute(self):
         if robot.hood.withinBounds() and robot.limelight.getTape():
-            if robot.limelight.get3D_Z() == 0.0:
-                self.res = robot.hood.benCalcAngle(robot.limelight.bensDistance())
-            else:
-                self.res = robot.hood.benCalcAngle(robot.limelight.get3D_Z())
+            #if robot.limelight.get3D_Z() == 0.0:
 
+            #self.res = robot.hood.benCalcAngle(robot.limelight.bensDistance())
+            #else:
+                #self.res = robot.hood.benCalcAngle(robot.limelight.get3D_Z())
+            if robot.limelight.getA() > 1.289:
+                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() ** 2) + 14)
+
+            else:
+                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() ** 2) + 11.5917)
         else:
             robot.hood.stopHood()
 

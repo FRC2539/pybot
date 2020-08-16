@@ -19,14 +19,16 @@ class Turret(CougarSystem):
     def __init__(self):
         super().__init__('Turret')
         self.motor = WPI_TalonSRX(ports.turret.motorID)
-        self.motor.config_kP(0, 5.2, 0)
+        self.motor.config_kP(0, 4, 0)
         self.motor.config_kI(0, 0, 0)
-        self.motor.config_kD(0, 0.0001, 0)
+        self.motor.config_kD(0, 30, 0)
         self.motor.config_kF(0, 0.07, 0)
 
         self.max = 1365 # Max value
         self.middle = 682.5
         self.min = 0 # Min value
+
+        self.turretActiveMode = True
 
         self.turretDeadband = 0.1
 

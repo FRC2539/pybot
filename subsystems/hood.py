@@ -59,8 +59,6 @@ class Hood(CougarSystem):
     def setPercent(self, speed):
         self.motor.set(speed)
 
-        self.updateNetworkTables(self.getPosition())
-
     def raiseHood(self):
         print('hood up ' + str(self.getPosition()))
         if self.getPosition() < self.angleMax:
@@ -121,8 +119,7 @@ class Hood(CougarSystem):
                 self.stopHood()
             else:
                 self.speed = self.error * .01
-                if (abs(self.speed) > .5 ):
-                    self.speed = math.copysign(.5, self.speed)
+                self.speed = math.copysign(max(min(0.5, abs(self.speed)), 0.08), self.speed)
                 self.setPercent(self.speed)
 
 
@@ -139,15 +136,15 @@ class Hood(CougarSystem):
                 self.setPercent(self.speed)
 
     def benCalcAngle(self, distance):
-        #theta = math.degrees(math.atan((98.25 - self.llHeight) / abs(distance)))
-
         print('using ' + str(distance))
 
-        y = 0.218735542 * abs(distance) + 162.4104165
+        y = 0.194735542 * abs(distance) + 170.4104165
+
+        #theta = math.degrees(math.atan(98.25 - self.llHeight) / abs(distance))
 
         #y = -0.0014719708 * abs(distance) ** 2 + 0.739691936 * abs(distance) + 129.197073
 
-        return self.benSetAngle(y)#self.parallelToGroundish - (theta * 2) - 10)
+        return self.benSetAngle(y)#self.parallelToGroundish - (theta * 2))
 
     def benSetAngle(self, desiredAngle):
 

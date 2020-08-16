@@ -54,8 +54,8 @@ class KryptonBot(CommandBasedRobot):
         auton.start()
         driverhud.showInfo("Starting %s" % auton)
 
- #   def disabledInit(self):
-#        self.captureDisbaleVars()
+    #def disabledInit(self):
+        #self.captureDisbaleVars()
 
     def handleCrash(self, error):
         super().handleCrash()

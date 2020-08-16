@@ -76,7 +76,7 @@ class ShootWhenReadyCommand(Command):
                 robot.pneumatics.extendBallLauncherSolenoid()
 
         elif robot.limelight.getTape(): # Search for a target until we find one
-            self.targetRPM = robot.shooter.generateVelocity(robot.limelight.get3D_Z()) # May be the wrong method; look on the web config later.
+            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.get3D_Z()) # May be the wrong method; look on the web config later.
             robot.shooter.setRPM(self.targetRPM)
 
             self.targetLocated = True

@@ -25,7 +25,7 @@ class BallLauncher(CougarSystem):
 
     def reverseBalls(self):
         self.launching = False
-        self.launcherMotors.set(ControlMode.PercentOutput, -0.7)
+        self.launcherMotors.set(ControlMode.PercentOutput, -0.4)
 
     def stopLauncher(self):
         self.launching = False

@@ -10,7 +10,7 @@ class IntakeDirectionCommand(Command):
         self.requires(robot.revolver)
 
     def initialize(self):
-        robot.revolver.setVariableSpeed(-0.25)
+        robot.revolver.setVariableSpeed(0.4)
 
 
 #    def isFinished(self):
