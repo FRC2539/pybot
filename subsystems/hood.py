@@ -122,6 +122,8 @@ class Hood(CougarSystem):
                 self.speed = math.copysign(min(0.5, abs(self.speed)), self.speed)
                 self.setPercent(self.speed)
 
+        return self.targetpos
+
 
     def setAngle(self, angle):
         self.targetpos = 260 - (2 * angle)

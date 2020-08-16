@@ -9,7 +9,7 @@ class HoodLimelightCommand(Command):
 
         self.requires(robot.hood)
 
-        self.res = False
+        self.res = 0
 
     def initialize(self):
         pass
@@ -22,15 +22,15 @@ class HoodLimelightCommand(Command):
             #else:
                 #self.res = robot.hood.benCalcAngle(robot.limelight.get3D_Z())
             if robot.limelight.getA() > 1.289:
-                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() ** 2) + 14)
+                self.res = robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() ** 2) + 14)
 
             else:
-                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() ** 2) + 11.5917)
+                self.res = robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() ** 2) + 11.5917)
         else:
             robot.hood.stopHood()
 
     def isFinished(self):
-        return self.res
+        return (abs(self.res - robot.hood.getPosition()) <= 1.0)
 
     def end(self):
         robot.hood.stopHood()
