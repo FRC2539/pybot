@@ -119,7 +119,7 @@ class Hood(CougarSystem):
                 self.stopHood()
             else:
                 self.speed = self.error * .01
-                self.speed = math.copysign(max(min(0.5, abs(self.speed)), 0.08), self.speed)
+                self.speed = math.copysign(min(0.5, abs(self.speed)), self.speed)
                 self.setPercent(self.speed)
 
 
