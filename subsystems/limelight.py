@@ -31,7 +31,7 @@ class Limelight(CougarSystem):
         self.llHeight = 19.5 # Height on robot.
         self.llAngle = 22 # Limelight angle in degrees, relative to the ground.
 
-        self.setPipeline(2)
+        self.setPipeline(1)
 
         #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         #print(str(self.calAngle))
@@ -39,10 +39,10 @@ class Limelight(CougarSystem):
     def setPipeline(self, pipeline: int):
         self.nt.putNumber('pipeline', pipeline)
 
-    def getX(self):
+    def getY(self):
         return self.nt.getEntry('tx').getDouble(0)
 
-    def getY(self):
+    def getX(self):
         return self.nt.getEntry('ty').getDouble(0)
 
     def getA(self):

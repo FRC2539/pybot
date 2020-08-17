@@ -44,6 +44,17 @@ class Hood(CougarSystem):
 
         self.zeroNetworkTables()
 
+    def mobileHoodControl(self, y, distanceControl=None):
+        if distanceControl != None:
+            y += (abs(distanceControl) / 95) ** 1.4 # might need to check the signs here . . .
+
+        if abs(y) <= 0.1:
+            self.stopHood()
+            return True
+
+        self.motor.set(math.copysign(max(min(0.6, abs(y / 100)), 0.06), -y))
+        return False
+
     def getPosition(self):
         return self.tbEnc.getOutput() * 360
 

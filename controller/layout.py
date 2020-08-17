@@ -26,6 +26,7 @@ from commands.hood.lowerhoodcommand import LowerHoodCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
+from commands.shooter.endshootingprocesscommand import EndShootingProcessCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
 
 from commands.turret.toggleturretmodecommand import ToggleTurretModeCommand
@@ -80,7 +81,7 @@ def init():
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone
 
-    operatorController.Start.whenPressed(ResetCommand())
+    operatorController.Start.whenPressed(EndShootingProcessCommand())
     operatorController.Back.whenPressed(ToggleTurretModeCommand())
 
     operatorController.A.toggleWhenPressed(IntakeDirectionCommand())
