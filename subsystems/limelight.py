@@ -28,7 +28,7 @@ class Limelight(CougarSystem):
         self.TargetHeight = 98.25
         self.calDistance = 120
 
-        self.llHeight = 19.5 # Height on robot.
+        self.llHeight = 25 # Height on robot.
         self.llAngle = 22 # Limelight angle in degrees, relative to the ground.
 
         self.setPipeline(1)
@@ -130,9 +130,13 @@ class Limelight(CougarSystem):
         self.yD = math.cos(math.radians(self.theta)) * self.d
         return self.yD
 
-    def bensDistance(self):
+    def bensDistance(self, llAngle):
         print('Y ' + str(self.getY()))
-        return (98.25 - self.llHeight) / (math.tan(math.radians(self.llAngle + self.getY())))
+        print('angle ' + str(llAngle))
+
+        print('2 ' + str(math.tan(math.radians(llAngle))))
+
+        return (98.25 - self.llHeight) / (math.tan(math.radians(llAngle + self.getY())))
 
     def updateNetworkTables(self):
         self.driveTable.putNumberArray('camTran', self.getCamTran())

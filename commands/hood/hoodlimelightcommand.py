@@ -12,6 +12,7 @@ class HoodLimelightCommand(Command):
         self.res = False
 
     def initialize(self):
+        print('ran?')
         robot.limelight.setPipeline(0)
 
     def execute(self):
@@ -21,8 +22,8 @@ class HoodLimelightCommand(Command):
             #else:
                 #self.res = robot.hood.ben  CalcAngle(robot.limelight.get3D_Z())
 
-            if robot.limelight.bensDistance() > 180:
-                self.res = robot.hood.mobileHoodControl(robot.limelight.getY(), robot.limelight.bensDistance())
+            if robot.limelight.getA() < 8.0: # adjust based off of measurements.
+                self.res = robot.hood.mobileHoodControl(robot.limelight.getY(), robot.limelight.getA())
             else:
                 self.res = robot.hood.mobileHoodControl(robot.limelight.getY())
         else:
@@ -32,6 +33,7 @@ class HoodLimelightCommand(Command):
         return self.res
 
     def end(self):
+        print('DONE?!?!?')
         robot.hood.stopHood()
 
         robot.limelight.setPipeline(1)

@@ -44,11 +44,13 @@ class Hood(CougarSystem):
 
         self.zeroNetworkTables()
 
-    def mobileHoodControl(self, y, distanceControl=None):
-        if distanceControl != None:
-            y += (abs(distanceControl) / 95) ** 1.4 # might need to check the signs here . . .
+    def mobileHoodControl(self, y, areaControl=None):
+        oldY = y
+        if areaControl != None:
+            mod = (abs(areaControl) ** -1) * 15  # might need to check the signs here . . .
+            y += mod
 
-        if abs(y) <= 0.1:
+        if abs(oldY) - mod <= 0.1: # Call oldY because this is the exact offset of the sensor.
             self.stopHood()
             return True
 
@@ -181,6 +183,9 @@ class Hood(CougarSystem):
     def goTo(self, angle): # angle is the raw encoder value.
         pos = self.getPosition()
         self.motor.set(math.copysign(max([0.3, (0.75 - max([angle / pos, pos / angle]))]), angle - pos)) # Damn, this is hot.
+
+    def estimateAngle(self):
+        return abs(self.parallelToGroundish - self.getPosition()) / 2
 
     def getLLHoodTuner(self):
         return self.LLHoodTuner

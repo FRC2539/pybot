@@ -26,10 +26,8 @@ class ShootWhenReadyCommand(Command):
 
         robot.pneumatics.retractBallLauncherSolenoid()
 
-        print('og dist ' + str(robot.limelight.bensDistance()))
-
         if self.targetRPM is None and robot.limelight.getTape(): # We need speed calc, and we see it.
-            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.bensDistance()) # May be the wrong method; look on the web config later.
+            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.bensDistance(robot.hood.estimateAngle())) # May be the wrong method; look on the web config later.
             robot.shooter.setRPM(self.targetRPM)
 
         elif self.targetRPM is None: # We need speed calc, but we don't see it.
@@ -45,8 +43,8 @@ class ShootWhenReadyCommand(Command):
         if self.targetLocated: # If we found one, lock in and proceed.
             print(robot.shooter.getRPM())
             print('target ' + str(self.targetRPM))
-            print('distance ' + str(robot.limelight.bensDistance()))
             print('calc distance ' +str(robot.limelight.calcDistanceGood()))
+            print('my distance' + str(robot.limelight.bensDistance(robot.hood.estimateAngle())))
             robot.revolver.setStaticSpeed()
             if abs(robot.shooter.getRPM()) + self.tol >= self.targetRPM and not self.proceedVal:
                 robot.revolver.setStaticSpeed()
@@ -77,7 +75,7 @@ class ShootWhenReadyCommand(Command):
                 robot.pneumatics.extendBallLauncherSolenoid()
 
         elif robot.limelight.getTape(): # Search for a target until we find one
-            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.bensDistance()) # May be the wrong method; look on the web config later.
+            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.bensDistance(robot.hood.estimateAngle())) # May be the wrong method; look on the web config later.
             robot.shooter.setRPM(self.targetRPM)
 
             self.targetLocated = True
