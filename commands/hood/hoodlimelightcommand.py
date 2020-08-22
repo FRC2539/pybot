@@ -10,6 +10,7 @@ class HoodLimelightCommand(Command):
         self.requires(robot.hood)
 
         self.res = False
+        self.area = 0
 
     def initialize(self):
         print('ran?')
@@ -21,9 +22,13 @@ class HoodLimelightCommand(Command):
                 #self.res = robot.hood.benCalcAngle(robot.limelight.bensDistance())
             #else:
                 #self.res = robot.hood.ben  CalcAngle(robot.limelight.get3D_Z())
+            self.area = robot.limelight.getA()
 
-            if robot.limelight.getA() < 8.0: # adjust based off of measurements.
-                self.res = robot.hood.mobileHoodControl(robot.limelight.getY(), robot.limelight.getA())
+            print('aaaa ' + str(self.area))
+
+            if abs(abs(self.area) - 0.6) < 0.05: # adjust based off of measurements.
+                self.res = robot.hood.mobileHoodControl(robot.limelight.getY(), self.area)
+
             else:
                 self.res = robot.hood.mobileHoodControl(robot.limelight.getY())
         else:
@@ -37,3 +42,5 @@ class HoodLimelightCommand(Command):
         robot.hood.stopHood()
 
         robot.limelight.setPipeline(1)
+
+        self.proceed = False

@@ -27,7 +27,13 @@ class ShootWhenReadyCommand(Command):
         robot.pneumatics.retractBallLauncherSolenoid()
 
         if self.targetRPM is None and robot.limelight.getTape(): # We need speed calc, and we see it.
-            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.bensDistance(robot.hood.estimateAngle())) # May be the wrong method; look on the web config later.
+            if abs(robot.limelight.getA()) > 1.5:
+                self.targetRPM = 3500
+            elif abs(robot.limelight.getA()) > 0.6:
+                self.targetRPM = robot.limelight.generateVelocity(False)
+            else:
+                self.targetRPM = robot.limelight.generateVelocity(True)
+
             robot.shooter.setRPM(self.targetRPM)
 
         elif self.targetRPM is None: # We need speed calc, but we don't see it.
@@ -74,8 +80,13 @@ class ShootWhenReadyCommand(Command):
 
                 robot.pneumatics.extendBallLauncherSolenoid()
 
-        elif robot.limelight.getTape(): # Search for a target until we find one
-            self.targetRPM = robot.limelight.generateVelocity(robot.limelight.bensDistance(robot.hood.estimateAngle())) # May be the wrong method; look on the web config later.
+        elif robot.limelight.getTape(): # Search for a target until we find one.
+            if abs(robot.limelight.getA()) > 1.5:
+                self.targetRPM = 3600
+            elif abs(robot.limelight.getA()) > 0.6:
+                self.targetRPM = robot.limelight.generateVelocity(False)
+            else:
+                self.targetRPM = robot.limelight.generateVelocity(True)
             robot.shooter.setRPM(self.targetRPM)
 
             self.targetLocated = True

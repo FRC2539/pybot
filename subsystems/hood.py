@@ -46,15 +46,20 @@ class Hood(CougarSystem):
 
     def mobileHoodControl(self, y, areaControl=None):
         oldY = y
+        mod = 0
         if areaControl != None:
-            mod = (abs(areaControl) ** -1) * 15  # might need to check the signs here . . .
+            mod = (abs(areaControl) ** -0.2) * 5  # might need to check the signs here . . .
             y += mod
 
-        if abs(oldY) - mod <= 0.1: # Call oldY because this is the exact offset of the sensor.
+        print('ogY ' + str(oldY))
+        print('moodddd ' + str(mod))
+        print('yyy ' + str(y))
+
+        if abs(abs(oldY) - mod) <= 0.1: # Call oldY because this is the exact offset of the sensor.'
             self.stopHood()
             return True
 
-        self.motor.set(math.copysign(max(min(0.6, abs(y / 100)), 0.06), -y))
+        self.motor.set(math.copysign(max(min(0.6, abs(y / 80)), 0.03), -y))
         return False
 
     def getPosition(self):

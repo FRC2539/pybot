@@ -3,6 +3,8 @@ from wpilib.command import Subsystem
 from .cougarsystem import *
 
 import math
+import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
+import sympy
 
 from networktables import NetworkTables
 from rev import CANSparkMax, ControlType, MotorType, IdleMode
@@ -35,8 +37,7 @@ class BaseDrive(CougarSystem):
                 CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
                 CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
-                CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless),
-
+                CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless)
             ]
 
         except AttributeError:
@@ -188,6 +189,60 @@ class BaseDrive(CougarSystem):
                 controller.setIZone(0, profile)
 
 
+    def generatePolynomial(self, xOne, xTwo, yOne, yTwo, yPrimeOne, yPrimeTwo, special):
+        '''
+        Use matrices and points to solve for the constants of our custom cubic polynomial (ax^3 + bx^2 + cx + d).
+
+        Screw me.
+
+        [x1^3  x1^2 x1 1]
+        [x2^3  x2^2 x2 1]
+        [3x1^2 2x1  1  0]
+        [3x2^2 2x2  1  0]
+
+        '''
+
+        if not special:
+
+            matrixOne = numpy.array(
+                [[           0,         0,    0, 1],
+                [xTwo ** 3    , xTwo ** 2, xTwo, 1],
+                [            0,         0,    1, 0],
+                [3 * xTwo ** 2,  2 * xTwo,    1, 0]]
+                )
+
+        else:
+
+            matrixOne = numpy.array(
+                [[xOne ** 3, xOne ** 2, xOne, 1],
+                [xTwo ** 3, xTwo ** 2, xTwo, 1],
+                [3 * xOne ** 2, 2 * xOne, 1, 0],
+                [3 * xTwo ** 2, 2 * xTwo, 1, 0]]
+                )
+
+
+        matrixTwo = numpy.array(
+            [[yOne],
+            [yTwo],
+            [yPrimeOne],
+            [yPrimeTwo]]
+            )
+
+        solutionMatrix = numpy.linalg.inv(matrixOne) * matrixTwo
+
+        return solutionMatrix[0], solutionMatrix[1], solutionMatrix[2], solutionMatrix[3] # a, b, c, d
+
+    def getEquation(self, a, b, c, d):
+        return str(a) + ' * x ** 3 + ' + str(b) + ' * x ** 2 + ' + str(c) + ' * x + ' + str(d)
+
+    def calcArcLength(self, lowerLimit, upperLimit, equation):
+        x = sympy.Symbol('x')
+        y = eval(equation)
+
+        derivative = y.diff(x) # Gets the derivative. Tested, should work.
+
+        return sympy.integrate(sympy.sqrt((derivative ** 2) + 1), (x, lowerLimit, upperLimit)), derivative # Kwakulus made easy! (Not really.)
+
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
 
@@ -199,7 +254,6 @@ class BaseDrive(CougarSystem):
 
         self.navX.reset()
         self.navX.setAngleAdjustment(angle)
-
 
     def getAngle(self):
         '''Current gyro reading'''

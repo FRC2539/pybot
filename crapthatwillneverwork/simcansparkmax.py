@@ -43,4 +43,5 @@ class SimCANSparkMax(CANSparkMax):
 
     def stopMotor(self):
         super().stopMotor()
+
         self.set(0.0)

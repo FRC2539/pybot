@@ -46,8 +46,10 @@ class Turret(CougarSystem):
 
         #self.capture('position', 'getPosition')
 
-        self.motor.setSelectedSensorPosition(0, 0, 0)
+        #print('\n\n received ' + str(self.get('position', 'ewwwwwwww')) + '\n\n')
 
+        #self.motor.setSelectedSensorPosition(self.get('position', 0.0), 0, 0)
+        self.motor.setSelectedSensorPosition(0, 0, 0)
     def rotateClockwise(self, val):
         if self.getPosition() < self.max and self.getPosition() > self.min:
             self.motor.set(val)
@@ -86,7 +88,6 @@ class Turret(CougarSystem):
             self.motor.set(val)
 
     def accelMove(self, direction):
-
         direction = math.copysign(max(abs(direction) - self.turretDeadband, 0), direction)
 
         if direction != 0.0:
@@ -154,7 +155,7 @@ class Turret(CougarSystem):
         self.motor.set(ControlMode.PercentOutput, math.copysign(min([abs(x), 0.4]), x))
 
     def isLimitSwitch(self): # Limit switch is at the upper end.
-        if not self.limitSwitch.get():
+        if not self.limitSwitch.get() or self.getPosition() >= self.max + 10:
             self.stop()
             self.setMax()
             return True

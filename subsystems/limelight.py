@@ -77,12 +77,11 @@ class Limelight(CougarSystem):
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
 
-    def generateVelocity(self, distance): # Returns the calculated velocity based off of the distance, in inches.
-        if distance == 0.0:
-            distance = self.calcDistanceGood()
-
-        print('shooting with ' + str(distance))
-        return min(4.6097902097902 * abs(distance) + 4264.6153846154, 5500)
+    def generateVelocity(self, longShot=False): # Returns the calculated velocity based off of the distance, in inches.
+        if longShot:
+            return 5600
+        else:
+            return 5100
 
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight

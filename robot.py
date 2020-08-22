@@ -54,8 +54,8 @@ class KryptonBot(CommandBasedRobot):
         auton.start()
         driverhud.showInfo("Starting %s" % auton)
 
-    #def disabledInit(self):
-        #self.captureDisbaleVars()
+    def disabledInit(self):
+        self.captureDisbaleVars()
 
     def handleCrash(self, error):
         super().handleCrash()
@@ -65,7 +65,6 @@ class KryptonBot(CommandBasedRobot):
         writeThese = []
         vars = globals()
         module = sys.modules['robot']
-        #print(vars)
 
         for key, var in vars.items():
             try:
@@ -77,7 +76,7 @@ class KryptonBot(CommandBasedRobot):
             except(TypeError):
                 continue
 
-        with open('.data.txt', 'w') as f:
+        with open('/home/lvuser/py/data.txt', 'w') as f:
             print('len ' + str(writeThese))
             for listitem in writeThese:
                 f.write(str(listitem) + '\n')
