@@ -6,6 +6,7 @@ from custom.config import Config
 from commands.resetcommand import ResetCommand
 
 from commands.drivetrain.drivecommand import DriveCommand
+from commands.drivetrain.arcfollowercommand import ArcFollowerCommand
 
 from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
 from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
@@ -57,7 +58,8 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(ShooterDirectionCommand())
+    driveController.A.toggleWhenPressed(ShooterDirectionCommand(
+))
     driveController.B.toggleWhenPressed(IntakeDirectionCommand())
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(ReverseBallsCommand())
@@ -76,7 +78,7 @@ def init():
     driveController.RightJoystick.toggleWhenPressed(IntakeCommand())
     driveController.LeftJoystick.toggleWhenPressed(OutakeCommand())
 
-    driveController.Start.toggleWhenPressed(ReverseBallsCommand())
+    driveController.Start.toggleWhenPressed(ArcFollowerCommand(8, 90, True))
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone
