@@ -8,7 +8,7 @@ from custom.config import Config
 
 from commands.network.alertcommand import AlertCommand
 
-from commands.drivetrain.pathfindermovecommand import PathfinderMoveCommand
+#from commands.drivetrain.pathfindermovecommand import PathfinderMoveCommand
 
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.movecommand import MoveCommand
@@ -106,7 +106,8 @@ class AutonomousCommandGroup(fc.CommandFlow):
 ## WORKING 6 BALLS
         @fc.IF(lambda: True)
         def SixBallAuto(self):
-            self.addSequential(PathfinderMoveCommand())
+            pass
+            #self.addSequential(PathfinderMoveCommand())
             #self.addSequential(SetSpeedCommand(5500))
             #self.addParallel(ShootCommand(4200))
             #self.addParallel(TurretStartCommandGroup())
