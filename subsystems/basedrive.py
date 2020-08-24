@@ -61,6 +61,7 @@ class BaseDrive(CougarSystem):
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
         self.resetGyro()
+        self.zeroDisplacement()
         self.flatAngle = 0
 
         '''A record of the last arguments to move()'''

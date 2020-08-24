@@ -58,8 +58,7 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(ShooterDirectionCommand(
-))
+    driveController.A.toggleWhenPressed(ShooterDirectionCommand())
     driveController.B.toggleWhenPressed(IntakeDirectionCommand())
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(ReverseBallsCommand())
@@ -78,7 +77,7 @@ def init():
     driveController.RightJoystick.toggleWhenPressed(IntakeCommand())
     driveController.LeftJoystick.toggleWhenPressed(OutakeCommand())
 
-    driveController.Start.toggleWhenPressed(ArcFollowerCommand(8, 90, True))
+    driveController.Start.toggleWhenPressed(ArcFollowerCommand(6, 9))
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone

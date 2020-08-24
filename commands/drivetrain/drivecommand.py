@@ -19,7 +19,6 @@ class DriveCommand(Command):
 
         self.speedLimit = speedLimit
 
-
     def initialize(self):
         robot.drivetrain.stop()
         try:
@@ -32,9 +31,8 @@ class DriveCommand(Command):
         self.lastY = None
         self.slowed = False
 
-
     def execute(self):
-
+        print('displacement x ' + str(robot.drivetrain.getXDisplacement()))
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get() * 0.8
         if self.lastY is None:
