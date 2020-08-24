@@ -3,8 +3,8 @@ from wpilib.command import Subsystem
 from .cougarsystem import *
 
 import math
-#import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
-#import sympy
+import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
+import sympy
 
 from networktables import NetworkTables
 from rev import CANSparkMax, ControlType, MotorType, IdleMode
@@ -56,6 +56,7 @@ class BaseDrive(CougarSystem):
         self._configureMotors()
 
         self.drivetrainWidth = 23.75
+        self.trajectoryDerivative = None
 
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
@@ -202,49 +203,58 @@ class BaseDrive(CougarSystem):
         [3x1^2 2x1  1  0]
         [3x2^2 2x2  1  0]
 
-        #'''
+        '''
 
-        #if not special:
+        if not special:
 
-            #matrixOne = numpy.array(
-                #[[           0,         0,    0, 1],
-                #[xTwo ** 3    , xTwo ** 2, xTwo, 1],
-                #[            0,         0,    1, 0],
-                #[3 * xTwo ** 2,  2 * xTwo,    1, 0]]
-                #)
+            matrixOne = numpy.array(
+                [[           0,         0,    0, 1],
+                [    xTwo ** 3, xTwo ** 2, xTwo, 1],
+                [            0,         0,    1, 0],
+                [3 * xTwo ** 2,  2 * xTwo,    1, 0]]
+                )
 
-        #else:
+        else:
 
-            #matrixOne = numpy.array(
-                #[[xOne ** 3, xOne ** 2, xOne, 1],
-                #[xTwo ** 3, xTwo ** 2, xTwo, 1],
-                #[3 * xOne ** 2, 2 * xOne, 1, 0],
-                #[3 * xTwo ** 2, 2 * xTwo, 1, 0]]
-                #)
+            matrixOne = numpy.array(
+                [[xOne ** 3, xOne ** 2, xOne, 1],
+                [xTwo ** 3, xTwo ** 2, xTwo, 1],
+                [3 * xOne ** 2, 2 * xOne, 1, 0],
+                [3 * xTwo ** 2, 2 * xTwo, 1, 0]]
+                )
 
 
-        #matrixTwo = numpy.array(
-            #[[yOne],
-            #[yTwo],
-            #[yPrimeOne],
-            #[yPrimeTwo]]
-            #)
+        matrixTwo = numpy.array(
+            [[yOne],
+            [yTwo],
+            [yPrimeOne],
+            [yPrimeTwo]]
+            )
 
-        #solutionMatrix = numpy.linalg.inv(matrixOne) * matrixTwo
+        solutionMatrix = numpy.linalg.inv(matrixOne) * matrixTwo
 
-        #return solutionMatrix[0], solutionMatrix[1], solutionMatrix[2], solutionMatrix[3] # a, b, c, d
+        return solutionMatrix[0], solutionMatrix[1], solutionMatrix[2], solutionMatrix[3] # a, b, c, d
 
     def getEquation(self, a, b, c, d):
         return str(a) + ' * x ** 3 + ' + str(b) + ' * x ** 2 + ' + str(c) + ' * x + ' + str(d)
 
     def calcArcLength(self, lowerLimit, upperLimit, equation):
-        #x = sympy.Symbol('x')
-        #y = eval(equation)
+        x = sympy.Symbol('x')
+        y = eval(equation)
 
-        #derivative = y.diff(x) # Gets the derivative. Tested, should work.
+        derivative = y.diff(x) # Gets the derivative. Tested, should work.
 
-        #return sympy.integrate(sympy.sqrt((derivative ** 2) + 1), (x, lowerLimit, upperLimit)), derivative # Kwakulus made easy! (Not really.)
-        pass
+        return sympy.integrate(sympy.sqrt((derivative ** 2) + 1), (x, lowerLimit, upperLimit)), derivative # Kwakulus made easy! (Not really.)
+
+    def assignDerivative(self, der):
+        self.trajectoryDerivative = str(der)
+
+    def getHeadingDifference(self):
+        y = float(eval(self.trajectoryDerivative.replace('x', str(self.getXDisplacement())))) # Took the derivative, so this is the slope.
+
+        desiredAngle = numpy.copysign(90 - numpy.degrees(numpy.arctan(abs(y))), y) # AS OF NOW IT ONLY
+
+        return desiredAngle - self.getAngle()
 
     def calcSideDistances(self, radius, angle):
         radians = math.radians(angle)
@@ -253,6 +263,23 @@ class BaseDrive(CougarSystem):
         outsideLength = radians * (radius + self.drivetrainWidth)
 
         return insideLength, outsideLength
+
+    def angleControlDrive(self, angleDiff):
+        adjustment = angleDiff * 0.006
+
+        if adjustment > 0:
+            self.activeMotors[0].set(0.5 + adjustment)
+            self.activeMotors[1].set(0.5)
+
+        else:
+            self.activeMotors[0].set(0.5)
+            self.activeMotors[1].set(0.5 + adjustment)
+
+    def getXDisplacement(self):
+        return self.navX.getDisplacementX() * 3.28084 # Returns in feet (was meters).
+
+    def zeroDisplacement(self):
+        self.navX.resetDisplacement()
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''
@@ -286,12 +313,14 @@ class BaseDrive(CougarSystem):
         return degrees
 
 
-    def inchesToTicks(self, distance):
+    def inchesToRotations(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / (math.pi * Config('DriveTrain/wheelDiameter'))
+        rotations = distance / 18.25#(math.pi * Config('DriveTrain/wheelDiameter'))
 
-        return int(rotations * Config('DriveTrain/ticksPerRotation', 4096))
+        return float(rotations * 10.71)
 
+    def rotationsToInches(self, rotations):
+        return (rotations / 10.71) * 18.25
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
@@ -313,7 +342,7 @@ class BaseDrive(CougarSystem):
 
     def getPositions(self):
         '''Returns the position of each active motor.'''
-        return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+        return [x.getEncoder().getPosition() for x in self.activeMotors]
 
 
     def getFrontClearance(self):
