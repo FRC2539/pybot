@@ -5,25 +5,38 @@ import robot
 
 class ArcFollowerCommand(Command):
 
-    def __init__(self, xTwo, yTwo, slopeOne, slopeTwo, xOne=0.0, yOne=0.0): # NOTE: Give slope as an integer or fraction, NO DECIMALS!
+    def __init__(self, xTwo, yTwo, slopeStart=75, slopeEnd=75, xOne=0.0, yOne=0.0): # NOTE: Give slope as an integer or fraction, NO DECIMALS!
         super().__init__('Arc Follower')
+
+        '''
+
+        Experimental command for a standard tank system with a NavX.
+
+        xTwo: The end point's x-coordinate
+        yTwo: The end point's y-coordinate
+        slopeStart: The starting 'angle' of the robot. Think of this as rise over run! 75 (the default) is about a straight, vertical line.
+        slopeEnd: The ending 'angle' of the robot. See slopeStart.
+        xOne: The start point's x-coordinate, typically 0.0.
+        yOne: The start point's y-coordinate, typically 0.0.
+
+        '''
 
         self.requires(robot.drivetrain)
 
-        if self.radius < (robot.drivetrain.drivetrainWidth / 12) * 2:
-            raise Exception('You cannot have a radius that small for that drive train!')
+        if xOne == xTwo:
+            raise Exception('Use the drive command for a vertical line! . . . I really hope it\'s a vertical line . . . ')
 
         special = True
 
-        if '/' in str(slopeOne):
-            yPrimeOne = float(str(slopeOne).split('/')[0])
+        if '/' in str(slopeStart):
+            yPrimeOne = float(str(slopeStart).split('/')[0])
         else:
-            yPrimeOne = float(slopeOne)
+            yPrimeOne = float(slopeStart)
 
-        if '/' in str(slopeTwo):
-            yPrimeTwo = float(str(slopeTwo).split('/')[0])
+        if '/' in str(slopeEnd):
+            yPrimeTwo = float(str(slopeEnd).split('/')[0])
         else:
-            yPrimeTwo = float(slopeTwo)
+            yPrimeTwo = float(slopeEnd)
 
         if xOne == 0.0:
             special = False

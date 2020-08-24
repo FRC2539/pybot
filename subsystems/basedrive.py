@@ -192,7 +192,7 @@ class BaseDrive(CougarSystem):
                 controller.setIZone(0, profile)
 
 
-    def generatePolynomial(self, xOne, xTwo, yOne, yTwo, yPrimeOne, yPrimeTwo, special):
+    def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         '''
         Use matrices and points to solve for the constants of our custom cubic polynomial (ax^3 + bx^2 + cx + d).
 
