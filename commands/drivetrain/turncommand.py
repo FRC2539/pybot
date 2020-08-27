@@ -34,16 +34,16 @@ class TurnCommand(MoveCommand):
         ##print('pos ' + str(self.targetPositions))
         #robot.drivetrain.setPositions(self.targetPositions)
 
-    #def isFinished(self):
-        #''' Get the current angle to the desired position, and stop it if it's nearby. '''
-        ##print(robot.drivetrain.getAngle())
-        #if abs(robot.drivetrain.getAngleTo(self.degrees)) < 3:
-            #robot.drivetrain.stop()
-            ##print('done')
-            #return True
+    def isFinished(self):
+        ''' Get the current angle to the desired position, and stop it if it's nearby. '''
+        #print(robot.drivetrain.getAngle())
+        if abs(robot.drivetrain.getAngleTo(self.degrees)) < 3:
+            robot.drivetrain.stop()
+            #print('done')
+            return True
 
-        #print('pos ' + str(self.targetPositions))
-        #robot.drivetrain.setPositions(self.targetPositions, False)
+        print('pos ' + str(self.targetPositions))
+        robot.drivetrain.setPositions(self.targetPositions, False)
 
     ##def isFinished(self):
         ##''' Get the current angle to the desired position, and stop it if it's nearby. '''
@@ -56,9 +56,9 @@ class TurnCommand(MoveCommand):
         ##return False
 
 
-    def isFinished(self):
-        print(' b ' + str(abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees))
-        return (abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees)
+    #def isFinished(self):
+        #print(' b ' + str(abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees))
+        #return (abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees)
 
     def end(self):
         robot.drivetrain.stop()

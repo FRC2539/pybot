@@ -80,7 +80,7 @@ class KryptonBot(CommandBasedRobot):
 
         with open(fName) as f:
             data = [line.split() for line in f]
-            print(data)
+            #print(data)
             for varData in data:
                 newVal = eval(str(varData[1]) + '.'  + varData[0]) # Gets the current value of the previously declared variable.
                 newData.append([varData[0], varData[1], newVal, varData[2]])

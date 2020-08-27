@@ -341,7 +341,7 @@ class BaseDrive(DebuggableSubsystem):
         coordinates have not changed.
         '''
 
-        print('check')
+        #print('check')
 
         if [x, y, rotate] == self.lastInputs:
             return

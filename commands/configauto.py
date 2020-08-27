@@ -4,10 +4,8 @@ def init():
     table = NetworkTables.getTable('Autonomous')
 
 
-    autoNames = ['3 Ball Auto',
-                 '3 Ball Move First',
-                 '5 Ball Auto',
-                 '6 Ball Auto',
+    autoNames = ['Move Test',
+                 'Move Test 2',
                 ]
 
     autoString = ''
