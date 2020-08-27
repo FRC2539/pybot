@@ -28,12 +28,17 @@ class CougarSystem(Subsystem):
 
         self.name = name
 
-        with open('/home/lvuser/py/data.txt', 'r') as f:
-            for line in f:
-                if eval(str(line[:-1]) + '[0]') == self.name: # Checks the data file for data for the subsystem.
-                    self.data[eval(str(line[:-1]) + '[1]')] = eval(str(line[:-1]) + '[2]')
+        try:
 
-        print('\n\n updated ' + str(self.data) + ' \n\n\n')
+            with open('/home/lvuser/py/data.txt', 'r') as f:
+                for line in f:
+                    if eval(str(line[:-1]) + '[0]') == self.name: # Checks the data file for data for the subsystem.
+                        self.data[eval(str(line[:-1]) + '[1]')] = eval(str(line[:-1]) + '[2]')
+
+            print('\n\n updated ' + str(self.data) + ' \n\n\n')
+
+        except(FileNotFoundError):
+            pass
 
     def get(self, var, default=None):
         if var in self.data:

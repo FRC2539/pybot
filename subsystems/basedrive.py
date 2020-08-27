@@ -4,7 +4,7 @@ from .cougarsystem import *
 
 import math
 import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
-import sympy
+#import sympy
 
 from networktables import NetworkTables
 from rev import CANSparkMax, ControlType, MotorType, IdleMode
@@ -57,6 +57,8 @@ class BaseDrive(CougarSystem):
 
         self.drivetrainWidth = 23.75
         self.trajectoryDerivative = None
+        self.trajectoryLength = None
+        self.finalX = None
 
         '''Initialize the navX MXP'''
         self.navX = AHRS.create_spi()
@@ -232,26 +234,33 @@ class BaseDrive(CougarSystem):
             [yPrimeTwo]]
             )
 
-        solutionMatrix = numpy.linalg.inv(matrixOne) * matrixTwo
+        solutionMatrix = list(numpy.linalg.inv(matrixOne).dot(matrixTwo))
 
-        return solutionMatrix[0], solutionMatrix[1], solutionMatrix[2], solutionMatrix[3] # a, b, c, d
+        return float(solutionMatrix[0]), float(solutionMatrix[1]), float(solutionMatrix[2]), float(solutionMatrix[3]) # a, b, c, d
 
     def getEquation(self, a, b, c, d):
         return str(a) + ' * x ** 3 + ' + str(b) + ' * x ** 2 + ' + str(c) + ' * x + ' + str(d)
 
     def calcArcLength(self, lowerLimit, upperLimit, equation):
-        x = sympy.Symbol('x')
+        x = 2#sympy.Symbol('x')
         y = eval(equation)
 
         derivative = y.diff(x) # Gets the derivative. Tested, should work.
 
-        return sympy.integrate(sympy.sqrt((derivative ** 2) + 1), (x, lowerLimit, upperLimit)), derivative # Kwakulus made easy! (Not really.)
+        return 0,0#sympy.integrate(sympy.sqrt((derivative ** 2) + 1), (x, lowerLimit, upperLimit)), derivative # Kwakulus made easy! (Not really.)
 
     def assignDerivative(self, der):
         self.trajectoryDerivative = str(der)
 
+    def assignArcLength(self, length):
+        self.trajectoryLength = length
+
+    def assignFinalX(self, x):
+        self.finalX = x
+
     def getHeadingDifference(self):
-        y = float(eval(self.trajectoryDerivative.replace('x', str(self.getXDisplacement())))) # Took the derivative, so this is the slope.
+        X = (self.getFeetTravelled() / self.trajectoryLength) * self.finalX
+        y = float(eval(self.trajectoryDerivative.replace('x', str(X)))) # Took the derivative, so this is the slope.
 
         desiredAngle = numpy.copysign(90 - numpy.degrees(numpy.arctan(abs(y))), y) # AS OF NOW IT ONLY
 
@@ -276,8 +285,10 @@ class BaseDrive(CougarSystem):
             self.activeMotors[0].set(0.5)
             self.activeMotors[1].set(0.5 + adjustment)
 
-    def getXDisplacement(self):
-        return self.navX.getDisplacementX() * 3.28084 # Returns in feet (was meters).
+    def getFeetTravelled(self):
+        pos = self.getPositions()
+        averagePos = (pos[0] + math.copysign(pos[1], pos[0])) / 2
+        return self.rotationsToInches(averagePos) / 12
 
     def zeroDisplacement(self):
         self.navX.resetDisplacement()

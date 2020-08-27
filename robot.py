@@ -76,10 +76,13 @@ class KryptonBot(CommandBasedRobot):
             except(TypeError):
                 continue
 
-        with open('/home/lvuser/py/data.txt', 'w') as f:
-            print('len ' + str(writeThese))
-            for listitem in writeThese:
-                f.write(str(listitem) + '\n')
+        try:
+            with open('/home/lvuser/py/data.txt', 'w') as f:
+                print('len ' + str(writeThese))
+                for listitem in writeThese:
+                    f.write(str(listitem) + '\n')
+        except(FileNotFoundError):
+            pass
 
     @classmethod
     def subsystems(cls):

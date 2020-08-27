@@ -9,20 +9,34 @@ class EnsureEmptinessCommand(Command):
 
         self.requires(robot.revolver)
 
-    def initialize(self):
-        if robot.revolver.isFrontEmpty():
-            robot.revolver.stopRevolver()
-        else:
-            robot.revolver.setVariableSpeed(0.4)
+        self.there = False
 
-        robot.balllauncher.reverseBalls()
+    def initialize(self):
+        if robot.revolver.isFrontEmpty() and robot.revolver.atHole() and not self.there:
+            robot.revolver.stopRevolver()
+            self.there = True
+
+        elif robot.revolver.isFrontEmpty() and not self.there:
+            robot.revolver.stopRevolver()
+
+        else:
+            self.there = False
+            robot.revolver.setVariableSpeed(0.5)
 
     def execute(self):
-        if robot.revolver.isFrontEmpty():
+        print('hole ' + str(robot.revolver.atHole()))
+        print('empty ' + str(robot.revolver.isFrontEmpty()))
+
+        if robot.revolver.isFrontEmpty() and robot.revolver.atHole() and not self.there:
+            robot.revolver.stopRevolver()
+            self.there = True
+
+        elif robot.revolver.isFrontEmpty() and not self.there:
             robot.revolver.stopRevolver()
 
         else:
-            robot.revolver.setVariableSpeed(0.4)
+            self.there = False
+            robot.revolver.setVariableSpeed(0.5)
 
     def end(self):
         robot.revolver.stopRevolver()

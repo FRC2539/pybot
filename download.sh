@@ -13,3 +13,5 @@ robotpy-installer download-opkg robotpy-ctre
 robotpy-installer download-opkg robotpy-navx
 robotpy-installer download-opkg commands-v1
 robotpy-installer download-opkg robotpy-rev-color
+robotpy-installer download-opkg numpy
+

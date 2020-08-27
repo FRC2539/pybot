@@ -40,7 +40,7 @@ class Revolver(CougarSystem):
 
         self.frontSensor.configureProximitySensor(ColorSensorV3.ProximityResolution.k11bit, ColorSensorV3.ProximityMeasurementRate.k100ms)
 
-        self.holeLocations = [0, 0.2, 0.4, 0.6, 0.8]
+        self.holeLocations = [9, 81, 153, 225, 297]
         self.dropPositions = [317.5] # The middle of the drop zones. Zones must be five degrees wide.
 
         self.isSpinning = False
@@ -87,6 +87,13 @@ class Revolver(CougarSystem):
 
     def atPosition(self, pos):
         return abs(self.getAbsolute() - pos) <= 0.05
+
+    def atHole(self):
+        for x in self.holeLocations:
+            if abs(x - self.getPosition()) <= 3:
+                return True
+
+        return False
 
     def isRevolving(self):
         return self.isSpinning

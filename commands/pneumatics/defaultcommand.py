@@ -13,6 +13,9 @@ class DefaultCommand(Command):
         self.modifierOne = False
 
     def execute(self):
+
+        print(robot.revolver.getPosition())
+
         if robot.pneumatics.isPressureLow() and not robot.shooter.shooting: # Run the compressor if we don't need the current.
 
             robot.pneumatics.enableCLC()

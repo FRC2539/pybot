@@ -5,7 +5,7 @@ import robot
 
 class ArcFollowerCommand(Command):
 
-    def __init__(self, xTwo, yTwo, slopeStart=75, slopeEnd=75, xOne=0.0, yOne=0.0): # NOTE: Give slope as an integer or fraction, NO DECIMALS!
+    def __init__(self, xTwo, yTwo, slopeStart, slopeEnd, xOne=0.0, yOne=0.0): # NOTE: Give slope as an integer or fraction, NO DECIMALS!
         super().__init__('Arc Follower')
 
         '''
@@ -47,11 +47,16 @@ class ArcFollowerCommand(Command):
 
         self.arcLength, self.derivative = robot.drivetrain.calcArcLength(xOne, xTwo, eq)
 
+        self.finalX = xTwo
+
     def initialize(self):
         robot.drivetrain.resetEncoders()
         robot.drivetrain.resetGyro()
         robot.drivetrain.zeroDisplacement()
+
         robot.drivetrain.assignDerivative(self.derivative)
+        robot.drivetrain.assignArcLength(self.arcLength)
+        robot.drivetrain.assignFinalX(self.finalX)
 
     def execute(self):
         robot.drivetrain.angleControlDrive(robot.drivetrain.getHeadingDifference())

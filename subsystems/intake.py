@@ -17,6 +17,8 @@ class Intake(CougarSystem):
         self.intakeMotor.setIdleMode(IdleMode.kBrake)
         self.intakeMotor.setInverted(False)
 
+        self.intakeMotor.burnFlash()
+
     def intakeBalls(self):
         self.intakeMotor.set(0.5)
 

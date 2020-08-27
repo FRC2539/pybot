@@ -77,7 +77,7 @@ def init():
     driveController.RightJoystick.toggleWhenPressed(IntakeCommand())
     driveController.LeftJoystick.toggleWhenPressed(OutakeCommand())
 
-    driveController.Start.toggleWhenPressed(ArcFollowerCommand(6, 9))
+   # driveController.Start.toggleWhenPressed(ArcFollowerCommand(6, 9, 1, 0))
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone
