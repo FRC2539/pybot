@@ -8,12 +8,9 @@ from custom.config import Config
 
 #from commands.network.alertcommand import AlertCommand
 
-
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.gyromovecommand import GyroMoveCommand
-
-
 
 class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
