@@ -817,3 +817,7 @@ class BaseDrive(DebuggableSubsystem):
         self.stop()
         self.maxSpeed = 4000
         self.speedLimit = 4000
+
+
+    def setSpeeds(self, speedLeft, speedRight):
+        pass
