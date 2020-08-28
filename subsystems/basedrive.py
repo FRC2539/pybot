@@ -484,9 +484,9 @@ class BaseDrive(DebuggableSubsystem):
         for motor, position in zip(self.activeMotors, positions):
             if override:
                 motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
+            #motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            #motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.Position, position)
 
     def neoSetPositions(self, positions, override=True):
         if not self.useEncoders:
@@ -636,13 +636,13 @@ class BaseDrive(DebuggableSubsystem):
     def inchesToRotations(self, distance):
         rotations = distance / 18.25#Config('DriveTrain/wheelDiameter', 6))
 
-        return float(rotations * 8.45)#Config('DriveTrain/GearRatio', 8.45))
+        return float(rotations * 10.71)#Config('DriveTrain/GearRatio', 8.45))
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / 18.85#Config('DriveTrain/wheelDiameter', 6))
 
-        return float((rotations) * 2048) * 8.45#Config('DriveTrain/ticksPerRotation', 4096))
+        return float((rotations) * 2048) * 10.71#Config('DriveTrain/ticksPerRotation', 4096))
 
     def rotationsToInches(self, rotations):
         return (rotations / 8.45) * 18.25
