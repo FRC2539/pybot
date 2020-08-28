@@ -56,7 +56,7 @@ class Turret(DebuggableSubsystem):
             self.motor.set(val)
 
     def testMove(self, val):
-        print('here')
+        #print('here')
         self.updateNetworkTables()
         if (self.getPosition() < self.max - self.getPosition()):
             self.speedLimit = self.getPosition() * .0015
@@ -120,8 +120,8 @@ class Turret(DebuggableSubsystem):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
 
     def outOfRange(self):
-        print('ma ' + str(self.getPosition() > self.max))
-        print('mi ' + str(self.getPosition() < self.min) + str(self.getPosition()))
+        #print('ma ' + str(self.getPosition() > self.max))
+        #print('mi ' + str(self.getPosition() < self.min) + str(self.getPosition()))
         return False#(self.getPosition() > self.max) or (self.getPosition() < self.min)
 
     def getPosition(self):
@@ -152,7 +152,7 @@ class Turret(DebuggableSubsystem):
         if abs(dist) > 120:
             distMod = abs((dist - 120) / 500) # We want to make the sign opposite of diff so we can combine them.
 
-        print('out ' + str(math.copysign(val - distMod, -diff)))
+        #print('out ' + str(math.copysign(val - distMod, -diff)))
 
         self.motor.set(math.copysign(val - distMod, -diff))
 
