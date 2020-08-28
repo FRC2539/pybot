@@ -1,5 +1,8 @@
 from wpilib.command import Subsystem
 
+from wpilib.kinematics import DifferentialDriveOdometry, DifferentialDriveWheelSpeeds
+from wpilib.geometry import Rotation2d
+
 from .cougarsystem import *
 
 import math
@@ -82,6 +85,8 @@ class BaseDrive(CougarSystem):
         self.resetEncoders()
         self.resetPID()
 
+        self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))
+
     def initDefaultCommand(self):
         '''
         By default, unless another command is running that requires this
@@ -91,6 +96,24 @@ class BaseDrive(CougarSystem):
         from commands.drivetrain.drivecommand import DriveCommand
 
         self.setDefaultCommand(DriveCommand(self.speedLimit))
+
+    def updateOdometry(self):
+        distance = self.getDistance()
+        self.odometry.update(Rotation2d.fromDegrees(self.getHeadingWithLimit()), distance[0], distance[1])
+
+    def getDistance(self):
+        return [(x / 10.71) * 0.47879 for x in self.getPositions()] # The weird float is the circumference of the wheel in meters.
+
+    def getWheelSpeeds(self): # Returns meters per second
+        mps = [((x / 60) / 10.71) * 0.47879 for x in self.getSpeeds()]
+        return DifferentialDriveWheelSpeeds(mps[0], mps[1])
+
+    def getPose(self):
+        return self.odometry.getPoseMeters()
+
+    def setVolts(self, leftPower, rightPower):
+        self.activeMotors[0].setVoltage(leftPower)
+        self.activeMotors[1].setVoltage(rightPower)
 
 
     def move(self, x, y, rotate):
@@ -292,6 +315,13 @@ class BaseDrive(CougarSystem):
 
     def zeroDisplacement(self):
         self.navX.resetDisplacement()
+
+    def getHeadingWithLimit(self):
+        angle = self.getAngle()
+        if angle > 180:
+            angle = 180 - angle
+
+        return angle
 
     def resetGyro(self):
         '''Force the navX to consider the current angle to be zero degrees.'''

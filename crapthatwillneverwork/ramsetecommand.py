@@ -28,13 +28,13 @@ class RamseteCommand(Command):
         self.timer = Timer()
         self.trajectory = trajectory
         self.pose = pose
-        self.controller = controller
+        self.follower = controller
         self.feedforward = feedforward
         self.kinematics = kinematics
-        self.wheelSpeeds = wheelSpeeds
+        self.speeds = wheelSpeeds
         self.leftController = leftController
         self.rightController = rightController
-        self.outputVolts = outputVolts
+        self.output = outputVolts
         self.requirements = requirements
 
         self.usePID = True
@@ -61,4 +61,36 @@ class RamseteCommand(Command):
         curTime = self.timer.get()
         dt = curTime - self.prevTime # Delta T.
 
-        # At this point, we encountered an error. Look at the github.
+        targetWheelSpeeds = self.kinematics.toWheelSpeeds(
+            self.follower.calculate(self.pose.get(), self.trajectory.sample(curTime)))
+
+        leftSpeedSetpoint = targetWheelSpeeds.leftMetersPerSecond
+        rightSpeedSetpoint = targetWheelSpeeds.rightMetersPerSecond
+
+        if self.usePID:
+            leftFeedforward = self.feedforward.calculate(leftSpeedSetpoint,
+                                                        (leftSpeedSetpoint - self.prevSpeeds.leftMetersPerSecond) / dt)
+
+            rightFeedforward = self.feedforward.calculate(rightSpeedSetpoint,
+                                                         (rightSpeedSetpoint - self.prevSpeeds.rightMetersPerSecond) / dt)
+
+            leftOutput = leftFeedforward + self.leftController.calculate(self.speeds.get().leftMetersPerSecond,
+                                                                         leftSpeedSetpoint)
+
+            rightOutput = rightFeedforward + self.rightController.calculate(self.speeds.get().rightMetersPerSecond,
+                                                                            rightSpeedSetpoint)
+
+        else:
+            leftOutput = leftSpeedSetpoint
+            rightOutput = rightSpeedSetpoint
+
+        self.output.accept(leftOutput, rightOutput)
+
+        self.prevTime = curTime
+        self.prevSpeeds = targetWheelSpeeds
+
+    def isFinished(self):
+        return self.timer.hasElapsed(self.trajectory.getTotalTimeSeconds())
+
+    def end(self):
+        self.timer.stop()

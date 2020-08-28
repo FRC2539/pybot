@@ -20,6 +20,7 @@ class DriveCommand(Command):
         self.speedLimit = speedLimit
 
     def initialize(self):
+        robot.drivetrain.updateOdometry()
         robot.drivetrain.stop()
         try:
             robot.drivetrain.setSpeedLimit(self.speedLimit)
@@ -32,6 +33,7 @@ class DriveCommand(Command):
         self.slowed = False
 
     def execute(self):
+        robot.drivetrain.updateOdometry()
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get() * 0.8
         if self.lastY is None:
