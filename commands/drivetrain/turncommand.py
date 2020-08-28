@@ -22,17 +22,23 @@ class TurnCommand(MoveCommand):
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
 
+        print('TURN COMMAND')
+
         self.start = robot.drivetrain.getRawAngle()
 
         robot.drivetrain.setProfile(2)
 
-        offset = self._calculateDisplacement()
+        offset = math.copysign(self._calculateDisplacement(), self.degrees)
 
         pos = robot.drivetrain.getPositions()
 
-        self.targetPositions = [pos[0] + offset, pos[1] - offset]
+        self.targetPositions = [pos[0] + offset, pos[1] + offset]
 
         robot.drivetrain.setPositions(self.targetPositions)
+
+
+    def execute(self):
+        print(self.targetPositions)
 
     def isFinished(self):
         ''' Get the current angle to the desired position, and stop it if it's nearby. '''
@@ -45,20 +51,6 @@ class TurnCommand(MoveCommand):
         print('pos ' + str(self.targetPositions))
         robot.drivetrain.setPositions(self.targetPositions, False)
 
-    ##def isFinished(self):
-        ##''' Get the current angle to the desired position, and stop it if it's nearby. '''
-        ##print(robot.drivetrain.getAngle())
-        ##if abs(robot.drivetrain.getAngleTo(self.degrees)) < 3:
-            ##robot.drivetrain.stop()
-            ##print('done')
-            ##return True
-
-        ##return False
-
-
-    #def isFinished(self):
-        #print(' b ' + str(abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees))
-        #return (abs(self.start - robot.drivetrain.getRawAngle()) >= self.fDegrees)
 
     def end(self):
         robot.drivetrain.stop()
