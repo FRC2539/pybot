@@ -820,4 +820,5 @@ class BaseDrive(DebuggableSubsystem):
 
 
     def setSpeeds(self, speedLeft, speedRight):
-        pass
+        self.activeMotors[0].set(ControlMode.Velocity, speedLeft)
+        self.activeMotors[1].set(ControlMode.Velocity, speedRight)

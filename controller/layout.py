@@ -10,6 +10,8 @@ from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.playmusiccommand import PlayMusicCommand
 from commands.drivetrain.drivebaselimelightcommand import DriveBaseLimelightCommand
 from commands.drivetrain.precisespeedcommand import PreciseSpeedCommand
+from commands.drivetrain.testcommand import TestCommand
+from commands.drivetrain.curvecommand import CurveCommand
 
 from commands.resetcommand import ResetCommand
 
@@ -81,6 +83,7 @@ from commands.climber.elevateclimbercommand import ElevateClimberCommand
 from commands.diagnosticstestcommand import DiagnosticsTestCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.setfieldpositioncommand import SetFieldPositionCommand
+from commands.drivetrain.pathtestcommandgroup import PathTestCommandGroup
 
 def init():
     '''
@@ -109,7 +112,9 @@ def init():
     #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
     driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
     #driveController.B.toggleWhenPressed(OutakeCommand())
-    driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
+    #driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
+    driveController.Y.whileHeld(CurveCommand(-1200, 80))
+    #driveController.Y.whileHeld(PathTestCommandGroup())
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
