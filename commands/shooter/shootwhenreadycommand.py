@@ -12,83 +12,50 @@ class ShootWhenReadyCommand(Command):
 
         self.targetRPM = targetRPM
         self.tol = tol
-        self.startRot = 0
-
-        self.proceedVal = False
+        self.closeShotRPM = robot.limelight.minShooterRPM
+        self.swapArea = robot.limelight.swapArea
+        self.endPos = None
+        
         self.targetLocated = True
 
     def initialize(self):
         robot.limelight.setPipeline(0)
-
-        self.proceedVal = False
-        self.startRot = 0
+        
         robot.revolver.resetRevolverEncoder()
 
         robot.pneumatics.retractBallLauncherSolenoid()
 
-        if self.targetRPM is None and robot.limelight.getTape(): # We need speed calc, and we see it.
-            if abs(robot.limelight.getA()) > 1.5:
-                self.targetRPM = 3500
-            elif abs(robot.limelight.getA()) > 0.6:
-                self.targetRPM = robot.limelight.generateVelocity(False)
+        if self.targetRPM is None and robot.limelight.getTape():
+            if robot.limelight.getA() > self.swapArea: # Dummy value. Close shot, static rpm and align the axises. Find the limit tho.
+                robot.shooter.setRPM(3800)
+                robot.limelight.closeShot = True
             else:
-                self.targetRPM = robot.limelight.generateVelocity(True)
-
-            robot.shooter.setRPM(self.targetRPM)
-
+                robot.shooter.setRPM(robot.limelight.generateVelocity(robot.limelight.getA(), self.swapArea))
+                robot.limelight.closeShot = False
+                
         elif self.targetRPM is None: # We need speed calc, but we don't see it.
             self.targetLocated = False
 
         else: # We don't want velocity based off of a distance.
-            print('here')
             robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
         print("rev pos: " + str(robot.revolver.getPosition()))
 
         if self.targetLocated: # If we found one, lock in and proceed.
-            print(robot.shooter.getRPM())
-            print('target ' + str(self.targetRPM))
-            print('calc distance ' +str(robot.limelight.calcDistanceGood()))
-            print('my distance' + str(robot.limelight.bensDistance(robot.hood.estimateAngle())))
             robot.revolver.setStaticSpeed()
-            if abs(robot.shooter.getRPM()) + self.tol >= self.targetRPM and not self.proceedVal:
-                robot.revolver.setStaticSpeed()
-               # robot.balllauncher.launchBalls() TEST
-
-                self.proceedVal = True
-
-            elif robot.revolver.inDropZone() and self.proceedVal:
-                robot.revolver.stopRevolver() # TEST
-
-                #for x in range(10000): # TEST
-                #    print('ahh')
-
-                robot.revolver.setStaticSpeed()
-
-
-
-                #for x in range(2500): # TEST
-                #    print('ahh')
-
-
-
-                robot.balllauncher.launchBalls() # END TEST
-
-                for x in range(200): # TEST
-                    print('run launcher delay')
-
+            if abs(robot.shooter.getRPM()) + self.tol >= self.targetRPM and robot.revolver.inDropZone():
+                robot.balllauncher.launchBalls() 
                 robot.pneumatics.extendBallLauncherSolenoid()
-
+                
         elif robot.limelight.getTape(): # Search for a target until we find one.
-            if abs(robot.limelight.getA()) > 1.5:
-                self.targetRPM = 3600
-            elif abs(robot.limelight.getA()) > 0.6:
-                self.targetRPM = robot.limelight.generateVelocity(False)
+            if robot.limelight.getA() > self.swapArea: # Dummy value. Close shot, static rpm and align the axises. Find the limit tho.
+                robot.shooter.setRPM(3800)
+                robot.limelight.closeShot = True
             else:
-                self.targetRPM = robot.limelight.generateVelocity(True)
-            robot.shooter.setRPM(self.targetRPM)
-
+                robot.shooter.setRPM(robot.limelight.generateVelocity(robot.limelight.getA(), self.swapArea))
+                robot.limelight.closeShot = False
+                
             self.targetLocated = True
 
     def end(self):
@@ -97,9 +64,9 @@ class ShootWhenReadyCommand(Command):
         robot.revolver.stopRevolver()
         robot.balllauncher.stopLauncher()
 
-        self.proceedVal = False
-
-        self.startRot = 0
+        self.targetLocated = False
+        self.endPos = None
+        
         robot.revolver.resetRevolverEncoder()
 
         robot.limelight.setPipeline(1)

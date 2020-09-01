@@ -9,6 +9,7 @@ class HoodLimelightCommand(Command):
 
         self.requires(robot.hood)
 
+        self.isHoodAligned = False
         self.res = False
         self.area = 0
 
@@ -18,19 +19,10 @@ class HoodLimelightCommand(Command):
 
     def execute(self):
         if robot.hood.withinBounds() and robot.limelight.getTape():
-            #if robot.limelight.get3D_Z() == 0.0:
-                #self.res = robot.hood.benCalcAngle(robot.limelight.bensDistance())
-            #else:
-                #self.res = robot.hood.ben  CalcAngle(robot.limelight.get3D_Z())
-            self.area = robot.limelight.getA()
-
-            print('aaaa ' + str(self.area))
-
-            if abs(abs(self.area) - 0.6) < 0.05: # adjust based off of measurements.
-                self.res = robot.hood.mobileHoodControl(robot.limelight.getY(), self.area)
-
+            if robot.limelight.closeShot:
+                self.isHoodAligned = robot.hood.alignAxises(robot.limelight.getY())
             else:
-                self.res = robot.hood.mobileHoodControl(robot.limelight.getY())
+                self.isHoodAligned = robot.hood.alignAxisesFar(robot.limelight.getY(), robot.limelight.getA())
         else:
             robot.hood.stopHood()
 
@@ -43,4 +35,5 @@ class HoodLimelightCommand(Command):
 
         robot.limelight.setPipeline(1)
 
-        self.proceed = False
+        self.isHoodAligned = False
+        

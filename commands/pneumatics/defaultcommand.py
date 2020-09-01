@@ -14,7 +14,10 @@ class DefaultCommand(Command):
 
     def execute(self):
 
-        print(robot.revolver.getPosition())
+        if robot.limelight.getA() > robot.limelight.swapArea:
+            robot.limelight.closeShot = True
+        else:
+            robot.limelight.closeShot = False
 
         if robot.pneumatics.isPressureLow() and not robot.shooter.shooting: # Run the compressor if we don't need the current.
 

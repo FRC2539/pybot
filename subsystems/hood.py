@@ -197,3 +197,25 @@ class Hood(CougarSystem):
 
     def withinBounds(self):
         return (self.angleMin <= self.getPosition() <= self.angleMax)
+    
+    def alignAxises(self, y):
+        if abs(y) <= 0.1:
+            self.stopHood()
+            return True
+        
+        self.motor.set(math.copysign(max(min(0.6, abs(y / 80)), 0.03), -y))
+        
+        return False
+    
+    def alignAxisesFar(self, y, area):
+        y += self.calcOffset(area) 
+        if abs(y) <= 0.1:
+            self.stopHood()
+            return True
+        
+        self.motor.set(math.copysign(max(min(0.6, abs(y / 80)), 0.03), -y))
+    
+        return False
+    
+    def calcOffset(self, area):
+        return (1.5 - abs(area)) / 0.32

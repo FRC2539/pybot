@@ -30,8 +30,14 @@ class Limelight(CougarSystem):
 
         self.llHeight = 25 # Height on robot.
         self.llAngle = 22 # Limelight angle in degrees, relative to the ground.
+        self.swapArea = 1.5
+        
+        self.maxShooterRPM = 5600
+        self.minShooterRPM = 3800
 
         self.setPipeline(1)
+
+        self.closeShot = True
 
         #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         #print(str(self.calAngle))
@@ -77,12 +83,9 @@ class Limelight(CougarSystem):
     def takeSnapShot(self):
         self.nt.putNumber('snapshot', 1)
 
-    def generateVelocity(self, longShot=False): # Returns the calculated velocity based off of the distance, in inches.
-        if longShot:
-            return 5600
-        else:
-            return 5100
-
+    def generateVelocity(self, area, limit, longShot=False): # Returns the calculated velocity based off of the distance, in inches.
+        return min(self.minShooterRPM + (limit - abs(area) / 0.0007), self.maxShooterRPM)
+        
     def calcDistance(self):
         self.height = self.TargetHeight - self.LimelightHeight
         #self.angle = self.calAngle  + math.radians(Limelight.getY(self))
