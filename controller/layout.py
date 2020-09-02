@@ -84,6 +84,7 @@ from commands.diagnosticstestcommand import DiagnosticsTestCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 from commands.drivetrain.setfieldpositioncommand import SetFieldPositionCommand
 from commands.drivetrain.pathtestcommandgroup import PathTestCommandGroup
+from commands.drivetrain.curveleftcommand import CurveLeftCommand
 
 def init():
     '''
@@ -110,11 +111,11 @@ def init():
 
     #driveController.B.toggleWhenPressed(CamTranHoodLimelight())
     #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
-    driveController.X.toggleWhenPressed(LoadBallFromHopperCommand())
+    driveController.X.whileHeld(CurveCommand(-1200, 80))
     #driveController.B.toggleWhenPressed(OutakeCommand())
     #driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
-    driveController.Y.whileHeld(CurveCommand(-1200, 80))
-    #driveController.Y.whileHeld(PathTestCommandGroup())
+    #driveController.Y.whileHeld(CurveLeftCommand(-1200, 80))
+    driveController.Y.whileHeld(PathTestCommandGroup())
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
