@@ -1,14 +1,14 @@
-from wpilib.geometry import *
+from wpilib.geometry import Pose2d, Rotation2d, Translation2d
 
 class Constant:
     pass
 
 DriveConstants = Constant()
 
-DriveConstants.ksVolts = 0
-DriveConstants.kvVoltsSecondPerMeter = 0
-DriveConstants.kaVoltSecondsSquaredPerMeter = 0
-DriveConstants.kPDriveVel = 0
+DriveConstants.ksVolts = 0.169
+DriveConstants.kvVoltsSecondPerMeter = 0.0766
+DriveConstants.kaVoltSecondsSquaredPerMeter = 0.0096
+DriveConstants.kPDriveVel = 0.214
 
 DriveConstants.kTrackWidthMeters = 0.6096
 

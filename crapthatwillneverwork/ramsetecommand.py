@@ -6,8 +6,6 @@ from wpilib.kinematics import ChassisSpeeds, DifferentialDriveKinematics, Differ
 
 from wpilib.trajectory import Trajectory
 
-from wpilib.geometry import Pose2D
-
 from wpilib.command import Command
 
 class RamseteCommand(Command):

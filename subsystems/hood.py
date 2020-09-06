@@ -35,8 +35,8 @@ class Hood(CougarSystem):
         self.dir = 'u'
         self.setSpeed = 0.3
 
-        self.angleMax = 236.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
-        self.angleMin = 166.00 # was 166; need to adjust these values.
+        self.angleMax = 250.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
+        self.angleMin = 175.00 # was 166; need to adjust these values.
         self.LLHoodTuner = 13
 
         self.parallelToGroundish = 281.0

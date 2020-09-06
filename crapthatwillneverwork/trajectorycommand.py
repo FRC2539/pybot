@@ -61,3 +61,5 @@ class TrajectoryCommand(Command):
                                         robot.drivetrain.setVolts,
                                         robot.drivetrain
                                         )
+                                        
+        return ramseteCommand

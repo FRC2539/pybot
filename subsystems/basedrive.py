@@ -73,8 +73,8 @@ class BaseDrive(CougarSystem):
         self.lastInputs = None
 
         self.setUseEncoders(True)
-        self.maxSpeed = 12250#Config('DriveTrain/maxSpeed') # 2500
-        self.speedLimit = 12250#Config('DriveTrain/normalSpeed') # 4500
+        self.maxSpeed = 2500#Config('DriveTrain/maxSpeed') # 2500
+        self.speedLimit = 2500#Config('DriveTrain/normalSpeed') # 4500
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 
@@ -208,13 +208,13 @@ class BaseDrive(CougarSystem):
     def resetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            #motor.setClosedLoopRampRate(0.25)
+            motor.setClosedLoopRampRate(0.25)
             controller = motor.getPIDController()
             for profile in range(2):
-                controller.setP(0.0001, profile) # 0.00008
-                controller.setI(0.0001, profile) # 0
-                controller.setD(1, profile) # 0.0001
-                controller.setFF(0.045, profile) # 0.0005
+                controller.setP(0.00004, profile) # 0.00008
+                controller.setI(0, profile) # 0
+                controller.setD(0.0001, profile) # 0.0001
+                controller.setFF(0.0005, profile) # 0.0005
                 controller.setIZone(0, profile) # 0
 
 

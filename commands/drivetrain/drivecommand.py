@@ -35,7 +35,7 @@ class DriveCommand(Command):
     def execute(self):
         robot.drivetrain.updateOdometry()
         # Avoid quick changes in direction
-        y = logicalaxes.driveY.get() #* 0.8
+        y = logicalaxes.driveY.get() * 0.8
         if self.lastY is None:
             self.lastY = y
         else:
@@ -52,5 +52,5 @@ class DriveCommand(Command):
         robot.drivetrain.move(
             logicalaxes.driveX.get(),
             y,
-            logicalaxes.driveRotate.get() * 0.6# 0.45
+            logicalaxes.driveRotate.get() * 0.45
         )

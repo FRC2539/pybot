@@ -15,7 +15,7 @@
     # a fraction [motor turns]/[wheel turns]
     "gearing": 10.71,
     # Wheel diameter (in units of your choice - will dictate units of analysis)
-    "wheelDiameter": 6.5, # INCHES
+    "wheelDiameter": 5.75, # INCHES
     # Your gyro type (one of "NavX", "Pigeon", "ADXRS450", "AnalogGyro", or "None")
     "gyroType": "NavX",
     # Whatever you put into the constructor of your gyro
@@ -28,6 +28,7 @@
     # "" (NavX using default SPI, ADXRS450 using onboard CS0, or no gyro)
     "gyroPort": "",
 }
+
 
 
 
