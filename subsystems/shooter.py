@@ -2,7 +2,7 @@ from wpilib.command import Subsystem
 
 from .cougarsystem import *
 
-from rev import CANSparkMax, IdleMode, MotorType, ControlType
+from ctre import WPI_TalonFX, FeedbackDevice, ControlMode
 
 import ports
 
@@ -12,23 +12,22 @@ class Shooter(CougarSystem):
     def __init__(self):
         super().__init__('Shooter')
 
-        self.shooterMotorOne = CANSparkMax(ports.shooter.shooterMotorOneID, MotorType.kBrushless)
-        self.encoderOne = self.shooterMotorOne.getEncoder()
-        self.controllerOne = self.shooterMotorOne.getPIDController()
+        self.shooterMotorOne = WPI_TalonFX(ports.shooter.shooterMotorOneID)
+        self.shooterMotorOne.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
 
-        self.shooterMotorTwo = CANSparkMax(ports.shooter.shooterMotorTwoID, MotorType.kBrushless)
-        self.encoderTwo = self.shooterMotorTwo.getEncoder()
-        self.controllerTwo = self.shooterMotorTwo.getPIDController()
+        self.shooterMotorTwo = WPI_TalonFX(ports.shooter.shooterMotorTwoID)
+        self.shooterMotorTwo.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
 
-        self.controllerOne.setFF(0.00019, 0)
-        self.controllerOne.setP(0.001, 0)
-        self.controllerOne.setI(0, 0)
-        self.controllerOne.setD(0.0001, 0)
-        self.controllerOne.setIZone(0, 0)
+        self.shooterMotorOne.config_kF(0, 0.00019, 0)
+        self.shooterMotorOne.config_kP(0, 0.001, 0)
+        self.shooterMotorOne.config_kI(0, 0, 0)
+        self.shooterMotorOne.config_kD(0, 0.0001, 0)
+        self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
         self.shooterMotorOne.setInverted(True)
+        self.shooterMotorTwo.setInverted(False)
 
-        self.shooterMotorTwo.follow(self.shooterMotorOne, True) # True to invert the motor NOTE: Follow does not seem to work. REV sucks ngl.
+        self.shooterMotorTwo.follow(self.shooterMotorOne) # True to invert the motor NOTE: Follow does not seem to work. REV sucks ngl.
 
         self.shooting = False
 
@@ -37,23 +36,29 @@ class Shooter(CougarSystem):
 
     def setRPM(self, rpm):
         self.shooting = True
-        self.controllerOne.setReference(-rpm, ControlType.kVelocity, 0, 0)
+        self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(-rpm))
 
     def setPercent(self, val):
-        self.shooterMotorOne.set(val)
+        self.shooterMotorOne.set(ControlMode.PercentOutput, val)
 
     def reverseShooter(self):
         self.shooting = True
-        self.shooterMotorOne.set(-0.4)
+        self.shooterMotorOne.set(ControlMode.PercentOutput, -0.4)
 
     def stopShooter(self):
         self.shooterMotorOne.stopMotor()
         self.shooterMotorTwo.stopMotor()
 
         self.shooting = False
+        
+    def rpmToSensor(self, rpm):
+        return (rpm * 2048) / 600
+    
+    def sensorToRPM(self, units):
+        return (units * 600) / 2048
 
     def isShooting(self):
         return self.shooting
 
     def getRPM(self): # Returns the average RPM
-        return (self.encoderOne.getVelocity() + self.encoderTwo.getVelocity()) / 2
+        return (self.sensorToRPM(self.shooterMotorOne.getSelectedSensorVelocity()))
