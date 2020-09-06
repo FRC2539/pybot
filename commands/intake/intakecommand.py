@@ -10,6 +10,9 @@ class IntakeCommand(Command):
         self.requires(robot.intake)
 
     def initialize(self):
+        if not robot.pneumatics.isIntakeLowered():
+            robot.pneumatics.extendIntakeSolenoid()
+            
         robot.intake.intakeBalls()
 
     def end(self):
