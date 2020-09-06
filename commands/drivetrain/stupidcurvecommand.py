@@ -1,19 +1,27 @@
 from wpilib.command import Command
 
 import robot
-import math
 
 
-class CurveCommand(Command):
+class StupidCurveCommand(Command):
 
-    def __init__(self, val, num, turnRight):
-
-        super().__init__('Curve')
+    def __init__(self, x, y, turnRight):
+        super().__init__('Stupid Curve')
 
         self.requires(robot.drivetrain)
+        if x > y:
+            self.radius = y
+            self.difference = x - y
+
+        else:
+            self.radius = x
+            self.difference = y - x
+
         self.turnRight = turnRight
-        self.degrees = val
-        self.radius = num
+        self.degrees = 90
+        self.x = x
+        self.y = y
+
 
     def initialize(self):
         if self.turnRight:
@@ -36,6 +44,7 @@ class CurveCommand(Command):
             self.startDistanceR = robot.drivetrain.getPositions()[1] * -1
             self.finishDistanceL = self.startDistanceL - self.distanceL
             self.finishDistanceR = (self.startDistanceR - self.distanceR )
+
 
     def execute(self):
         if self.turnRight:
@@ -84,3 +93,7 @@ class CurveCommand(Command):
                 robot.drivetrain.stop()
             if self.currentDistanceR > self.finishDistanceR - 50 and self.currentDistanceR < self.finishDistanceR + 50:
                 robot.drivetrain.stop()
+
+
+    def end(self):
+        pass
