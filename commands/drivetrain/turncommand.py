@@ -24,19 +24,25 @@ class TurnCommand(MoveCommand):
 
         #print('TURN COMMAND')
 
+        robot.drivetrain.setProfile(2)
+        
+        robot.drivetrain.resetEncoders()
+        robot.drivetrain.resetGyro()
+
         self.start = robot.drivetrain.getRawAngle()
 
-        robot.drivetrain.setProfile(2)
+        print('starting angle ' + str(self.start))
 
         offset = math.copysign(self._calculateDisplacement(), self.degrees)
 
-        pos = robot.drivetrain.getPositions()
+        print('offset ' + str(offset))
 
-        self.targetPositions = [pos[0] + offset, pos[1] + offset]
+        self.targetPositions = [offset, offset]
+
+        print('target ' + str(self.targetPositions))
 
         robot.drivetrain.setPositions(self.targetPositions)
-
-
+        
     #def execute(self):
         #print(self.targetPositions)
 
@@ -49,7 +55,7 @@ class TurnCommand(MoveCommand):
             return True
 
         #print('pos ' + str(self.targetPositions))
-        robot.drivetrain.setPositions(self.targetPositions, False)
+        #robot.drivetrain.setPositions(self.targetPositions, False)
 
 
     def end(self):
