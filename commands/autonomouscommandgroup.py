@@ -9,8 +9,9 @@ from custom.config import Config
 #from commands.network.alertcommand import AlertCommand
 
 from commands.drivetrain.movecommand import MoveCommand
-#from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.turncommand import TurnCommand
 #from commands.drivetrain.gyromovecommand import GyroMoveCommand
+from commands.drivetrain.curveleftcommand import CurveLeftCommand
 
 class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
@@ -18,7 +19,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         #establish the auto modes for dashboard and use these values in auto if string check
         table = NetworkTables.getTable('Autonomous')
-        autoNames = ['Move Test','Move Test 2','More Move Test']
+        autoNames = ['Turn Test','Move Test','More Move Test']
         autoString = ''
         for auto in autoNames:
             autoString += str(auto + '$')
@@ -28,14 +29,13 @@ class AutonomousCommandGroup(fc.CommandFlow):
         startingBalls = 3#Config('Autonomous/NumberOfBallsAtStart', 3)
 
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Test')
-        def MoveTest(self):#should be good for now
-            self.addSequential(MoveCommand(80))
-            self.addSequential(PrintCommand("move: 80"))
-            ##self.addSequential(GyroMoveCommand(15))
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Turn Test')
+        def Test(self):#should be good for now
+            #self.addSequential(MoveCommand(80))
+            self.addSequential(PrintCommand("turn 90"))
+            self.addSequential(TurnCommand(90))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Test 2')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Test')
         def MoveTest2(self):#should be good for now
             self.addSequential(MoveCommand(30))
-            self.addSequential(PrintCommand("move2: 30"))
-            ##self.addSequential(GyroMoveCommand(15))
+            self.addSequential(PrintCommand("move: 30"))
