@@ -24,6 +24,17 @@ AutoConstants.kRamseteZeta = 0.7
 
 TrajectoryPoints = Constant()
 
-TrajectoryPoints.points = {
+TrajectoryPoints.points = { # Remember to format like ID 0; use an X, Y, and a rotation in degrees.
     0 : [Pose2d(0, 0, Rotation2d(0)), Translation2d(1, 1), Translation2d(2, -1), Pose2d(3, 0, Rotation2d(0))]
     }
+
+def generateObjects(self, list_):
+    newList = []
+    newList.append(Pose2d(list_[0][0], list_[0][1], Rotation2d(list_[0][2]))) # Adds the first pose in.
+    
+    for X, Y, angle in list_[1:-1]: # Adds the middle translations in.
+        newList.append(Translation2d(X, Y)) # Doesn't need the angle. 
+        
+    newList.append(Pose2d(list_[-1][0], list_[-1][1], Rotation2d(list_[-1][2]))) # Adds the last pose in.
+    
+    return newList

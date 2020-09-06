@@ -9,7 +9,7 @@ from wpilib.controller import SimpleMotorFeedforward, RamseteController, PIDCont
 
 from wpilib.kinematics import DifferentialDriveKinematics
 
-from trajectoryconstants import DriveConstants, AutoConstants, TrajectoryPoints
+from trajectoryconstants import DriveConstants, AutoConstants, TrajectoryPoints, generateObjects
 
 from crapthatwillneverwork.ramsetecommand import RamseteCommand
 
@@ -17,7 +17,15 @@ import robot
 
 class TrajectoryCommand(Command):
 
-    def __init__(self, trajectoryNumber):
+    def __init__(self, desiredPointsOrID):
+        
+        if type(desiredPointsOrID) == int or type(desiredPointsOrID) == float:
+            path = TrajectoryPoints.points[desiredPointsOrID] # We have a preset. 
+            
+        else:
+            # NOTE: If you choose to use custom points, remember to provide an X, Y, and rotation in degrees.
+            
+            path = generateObjects(desiredPointsOrID)
 
         # This is terrifying lol.
 
@@ -39,8 +47,6 @@ class TrajectoryCommand(Command):
 
         self.trajectoryConfig.setKinematics(self.kDriveKinematics)
         self.trajectoryConfig.addConstraint(self.autoVoltageConstraint)
-
-        path = TrajectoryPoints.points[trajectoryNumber]
 
         self.trajectory = TrajectoryGenerator.generateTrajectory(path[0],
                                                                  path[1:-1],
