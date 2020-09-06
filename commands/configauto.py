@@ -1,18 +1,18 @@
-from networktables import NetworkTables
+#from networktables import NetworkTables
 
-def init():
-    table = NetworkTables.getTable('Autonomous')
+#def init():
+    #table = NetworkTables.getTable('Autonomous')
 
 
-    autoNames = ['Move Test',
-                 'Move Test 2',
-                ]
+    #autoNames = ['Move Test',
+                 #'Move Test 2',
+                #]
 
-    autoString = ''
+    #autoString = ''
 
-    for auto in autoNames:
-        autoString += str(auto + '$')
+    #for auto in autoNames:
+        #autoString += str(auto + '$')
 
-    autoString = autoString[:-1]
+    #autoString = autoString[:-1]
 
-    table.putString('autoModes', autoString)
+    #table.putString('autoModes', autoString)

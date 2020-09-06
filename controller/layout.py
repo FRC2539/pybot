@@ -111,10 +111,10 @@ def init():
 
     #driveController.B.toggleWhenPressed(CamTranHoodLimelight())
     #driveController.A.toggleWhenPressed(RunUntilLoadedCommand())
-    driveController.X.whileHeld(CurveCommand(-1200, 80))
+    #driveController.X.whileHeld(CurveCommand(-1200, 80))
     #driveController.B.toggleWhenPressed(OutakeCommand())
     #driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
-    #driveController.Y.whileHeld(CurveLeftCommand(-1200, 80))
+    driveController.Y.whileHeld(CurveLeftCommand(-1200, 80))
     driveController.Y.whileHeld(PathTestCommandGroup())
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
@@ -134,7 +134,7 @@ def init():
     driveController.DPadUp.whenPressed(ZeroGyroCommand())
     driveController.DPadRight.whileHeld(DriveWheelCommand())
     driveController.DPadLeft.whileHeld(ReverseWheelCommand())
-    #driveController.DPadUp.whileHeld(SetFieldPositionCommand(0, 120))
+    #driveController.DPadUp.whileHeld(SetFieldPositionCommand(0, 120))0
 
     # The controller for non-driving subsystems of the robot
     operatorController = LogitechDualShock(1)

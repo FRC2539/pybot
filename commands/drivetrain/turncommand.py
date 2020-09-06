@@ -22,7 +22,7 @@ class TurnCommand(MoveCommand):
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
 
-        print('TURN COMMAND')
+        #print('TURN COMMAND')
 
         self.start = robot.drivetrain.getRawAngle()
 
@@ -37,8 +37,8 @@ class TurnCommand(MoveCommand):
         robot.drivetrain.setPositions(self.targetPositions)
 
 
-    def execute(self):
-        print(self.targetPositions)
+    #def execute(self):
+        #print(self.targetPositions)
 
     def isFinished(self):
         ''' Get the current angle to the desired position, and stop it if it's nearby. '''
@@ -48,7 +48,7 @@ class TurnCommand(MoveCommand):
             #print('done')
             return True
 
-        print('pos ' + str(self.targetPositions))
+        #print('pos ' + str(self.targetPositions))
         robot.drivetrain.setPositions(self.targetPositions, False)
 
 

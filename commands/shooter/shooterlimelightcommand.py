@@ -16,7 +16,7 @@ class ShooterLimelightCommand(Command):
         self.timer = Timer()
 
     def initialize(self):
-        print("init shooter")
+        #print("init shooter")
         robot.limelight.setPipeline(1)
         robot.ledsystem.setRed()
 
@@ -27,7 +27,7 @@ class ShooterLimelightCommand(Command):
 
     def execute(self):
 
-        print("executing")
+        #print("executing")
         self.speed = 4800 - 850 * robot.limelight.getA()
         if self.speed > 4800:
             self.speed = 4800

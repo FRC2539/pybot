@@ -16,7 +16,7 @@ class TurretMoveCommand(Command):
     def execute(self):
         robot.turret.testMove(logicalaxes.turretX.get() * -0.75)
         #print(robot.turret.getPosition())
-        print(robot.turret.getPosition())
+        #print(robot.turret.getPosition())
 
     def end(self):
         robot.turret.stop()

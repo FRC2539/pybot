@@ -27,24 +27,24 @@ class TestRunAllCommand(Command):
         self.iterations = 0
 
     def execute(self): # execute
-        print("TESTRUNALLCOMMAND: " + str(self.runming) + " " + str(robot.shooter.atRPM(self.atRPMTolerance)) + " " + str(self.iterations))
+        #print("TESTRUNALLCOMMAND: " + str(self.runming) + " " + str(robot.shooter.atRPM(self.atRPMTolerance)) + " " + str(self.iterations))
         if ((not self.runming or self.runming == "Beans") and robot.shooter.atRPM(self.atRPMTolerance)) or (self.iterations >= self.iterTimeout and self.iterations < self.iterTimeout*2):
             self.runming = True
             robot.ballsystem.runAll()
             robot.intake.intake()
-            print("TESTRUNALLCOMMAND: RUNNING")
+            #print("TESTRUNALLCOMMAND: RUNNING")
             robot.ledsystem.setRed()
         elif (self.runming or self.runming == "Beans") and (not robot.shooter.atRPM(self.atRPMTolerance)) or self.iterations >= self.iterTimeout*2:
             self.runming = False
             robot.ballsystem.stopAll()
             robot.intake.stop()
-            print("TESTRUNALLCOMMAND: STOPPING")
+            #print("TESTRUNALLCOMMAND: STOPPING")
             self.iterations = 0
             robot.ledsystem.setBlue()
         self.iterations += 1
 
     def end(self): # turn everything off again but don't set some variables
-        print("According to all known laws of aviation, there is no way a bee should be able to fly.")
+        #print("According to all known laws of aviation, there is no way a bee should be able to fly.")
         robot.ballsystem.stopAll()
         robot.intake.stop()
         robot.ledsystem.turnOff()

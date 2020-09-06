@@ -81,8 +81,8 @@ class PathfinderMoveCommand(Command):
         robot.drivetrain.activeMotors[0].set(ControlMode.PercentOutput, -(self.leftOutput + turn))
         robot.drivetrain.activeMotors[1].set(ControlMode.PercentOutput, -(self.rightOutput - turn))
 
-        print('LEFT: ' + str(self.leftOutput + turn))
-        print('RIGHT: ' + str(self.rightOutput - turn))
+        #print('LEFT: ' + str(self.leftOutput + turn))
+        #print('RIGHT: ' + str(self.rightOutput - turn))
 
     def end(self):
         robot.drivetrain.stop()

@@ -65,7 +65,7 @@ class BaseDrive(DebuggableSubsystem):
             self.inchesToUnits = self.inchesToTicks
             self.getPositions = self.falconGetPositions
             self.averageError = self.falconAverageError
-            self.neverPlayMusic = self.definitleyNotPlayMusic
+            #self.neverPlayMusic = self.definitleyNotPlayMusic
             self.nopeNotPauseMusic = self.notPauseMusic
             self.noStopMusicHere = self.certainlyNotStopMusic
             self.resetEncoders = self.falconResetEncoders
@@ -789,9 +789,9 @@ class BaseDrive(DebuggableSubsystem):
 
         raise NotImplementedError()
 
-    def definitleyNotPlayMusic(self):
-        #self.bensGloriousOrchestra.play()
-        print('PLAY MUSIC\n\n\n')
+    #def definitleyNotPlayMusic(self):
+        ##self.bensGloriousOrchestra.play()
+        #print('PLAY MUSIC\n\n\n')
 
     def notPauseMusic(self):
         #self.bensGloriousOrchestra.pause()
