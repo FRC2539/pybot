@@ -2,7 +2,7 @@ from wpilib.command import Subsystem
 
 from .cougarsystem import *
 
-from ctre import WPI_TalonFX, FeedbackDevice, ControlMode
+from ctre import WPI_TalonFX, FeedbackDevice, ControlMode, NeutralMode
 
 import ports
 
@@ -18,14 +18,17 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo = WPI_TalonFX(ports.shooter.shooterMotorTwoID)
         self.shooterMotorTwo.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
 
+        self.shooterMotorOne.setNeutralMode(NeutralMode.Coast)
+        self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
+
         self.shooterMotorOne.config_kF(0, 0.00019, 0)
-        self.shooterMotorOne.config_kP(0, 0.001, 0)
+        self.shooterMotorOne.config_kP(0, 0.003, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
-        self.shooterMotorOne.setInverted(True)
-        self.shooterMotorTwo.setInverted(False)
+        self.shooterMotorOne.setInverted(False)
+        self.shooterMotorTwo.setInverted(True)
 
         self.shooterMotorTwo.follow(self.shooterMotorOne) # True to invert the motor NOTE: Follow does not seem to work. REV sucks ngl.
 
@@ -47,7 +50,6 @@ class Shooter(CougarSystem):
 
     def stopShooter(self):
         self.shooterMotorOne.stopMotor()
-        self.shooterMotorTwo.stopMotor()
 
         self.shooting = False
         

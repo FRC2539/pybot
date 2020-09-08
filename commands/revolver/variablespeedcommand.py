@@ -1,20 +1,18 @@
 from wpilib.command import Command
 
-from controller import logicalaxes
-
 import robot
-
-logicalaxes.registerAxis('speedControl')
 
 class VariableSpeedCommand(Command):
 
-    def __init__(self):
+    def __init__(self, speed):
         super().__init__()
 
         self.requires(robot.revolver)
 
+        self.speed = speed
+
     def execute(self):
-        robot.revolver.setVariableSpeed(logicalaxes.speedControl.get())
+        robot.revolver.setVariableSpeed(self.speed)
 
     def end(self):
         robot.revolver.stopRevolver()

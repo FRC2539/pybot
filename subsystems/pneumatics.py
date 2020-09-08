@@ -19,12 +19,22 @@ class Pneumatics(CougarSystem):
         self.pneumaticCompressor.setClosedLoopControl(True) # Enables and ensures automatic compressor activity.
 
         self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
+        self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
 
     def isPressureLow(self):
         return self.pneumaticCompressor.getPressureSwitchValue()
 
     def isCompressorRunning(self):
         return self.pneumaticCompressor.enabled()
+    
+    def extendIntakeSolenoid(self):
+        self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
+        
+    def retractIntakeSolenoid(self):
+        self.intakeSolenoid.set(DoubleSolenoid.Value.kReverse)
+
+    def isIntakeLowered(self):
+        return (self.intakeSolenoid.get() == DoubleSolenoid.Value.kForward)
 
     def extendBallLauncherSolenoid(self):
         self.ballLauncherSolenoid.set(DoubleSolenoid.Value.kForward)

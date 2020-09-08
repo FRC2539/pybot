@@ -6,11 +6,10 @@ from custom.config import Config
 from commands.resetcommand import ResetCommand
 
 from commands.drivetrain.drivecommand import DriveCommand
-from commands.drivetrain.arcfollowercommand import ArcFollowerCommand
 
 from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
 from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
-from commands.revolver.advancedmovecommand import AdvancedMoveCommand
+from commands.revolver.variablespeedcommand import VariableSpeedCommand
 
 from commands.balllauncher.launchballscommand import LaunchBallsCommand
 from commands.balllauncher.reverseballscommand import ReverseBallsCommand
@@ -20,6 +19,7 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.outakecommand import OutakeCommand
 from commands.intake.kickcommand import KickCommand
 from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
+from commands.intake.deployintakecommand import DeployIntakeCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
@@ -58,26 +58,25 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(ShooterDirectionCommand())
-    driveController.B.toggleWhenPressed(IntakeDirectionCommand())
+    driveController.A.toggleWhenPressed(IntakeCommand()) # Used at pickup station
+    driveController.B.toggleWhenPressed(ShooterDirectionCommand())
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
-    driveController.Y.toggleWhenPressed(ReverseBallsCommand())
+    driveController.Y.toggleWhenPressed(IntakeDirectionCommand())
 
-    driveController.DPadUp.toggleWhenPressed(ShootWhenReadyCommand())
-    driveController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
-    driveController.DPadRight.toggleWhenPressed(SudoCommandGroup())
-    driveController.DPadLeft.toggleWhenPressed(SetRPMCommand(3500))
+    driveController.DPadUp.toggleWhenPressed(SudoCommandGroup())
+    
+    driveController.DPadRight.whileHeld(VariableSpeedCommand(-0.4))
+    driveController.DPadLeft.whileHeld(VariableSpeedCommand(0.4))
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
-    driveController.RightTrigger.toggleWhenPressed(SetRPMCommand(4500))
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
 
-    driveController.RightJoystick.toggleWhenPressed(IntakeCommand())
-    driveController.LeftJoystick.toggleWhenPressed(OutakeCommand())
-
-   # driveController.Start.toggleWhenPressed(ArcFollowerCommand(6, 9, 1, 0))
+    driveController.RightJoystick.toggleWhenPressed(LoadInEmptyCommandGroup()) # Used on field
+    driveController.LeftJoystick.whenPressed(DeployIntakeCommand())
+    
+    driveController.Start.toggleWhenPressed(SetRPMCommand(2000))
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone

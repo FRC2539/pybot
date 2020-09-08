@@ -18,4 +18,4 @@ networktables.ini
 # Pip
 .pipup
 
-imgui.ini
+*.ini

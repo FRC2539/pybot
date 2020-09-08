@@ -1,14 +1,16 @@
-from wpilib.command import Command
+from wpilib.command import InstantCommand
 
 import robot
 
-class DeployIntakeCommand(Command):
+class DeployIntakeCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Deploy Intake')
 
     def initialize(self):
-        robot.pneumatics.extendIntakeSolenoid()
+        robot.intake.stopIntake()
 
-    def end(self):
-        robot.pneumatics.retractIntakeSolenoid()
+        if robot.pneumatics.isIntakeLowered():
+            robot.pneumatics.retractIntakeSolenoid()
+        else:
+            robot.pneumatics.extendIntakeSolenoid()

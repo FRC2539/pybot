@@ -15,7 +15,7 @@ class Intake(CougarSystem):
         self.intakeMotor = CANSparkMax(ports.intake.motorID, MotorType.kBrushless) # Confirm the motor type!
 
         self.intakeMotor.setIdleMode(IdleMode.kBrake)
-        self.intakeMotor.setInverted(False)
+        self.intakeMotor.setInverted(True)
 
         self.intakeMotor.burnFlash()
 
