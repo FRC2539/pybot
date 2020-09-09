@@ -18,6 +18,8 @@ class BallLauncher(CougarSystem):
         self.launcherMotors.setInverted(True)
 
         self.launching = False
+        
+        disablePrints()
 
     def launchBalls(self):
         self.launching = True

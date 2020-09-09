@@ -9,3 +9,5 @@ class Climber(Subsystem):
 
     def __init__(self):
         super().__init__('Climber')
+    
+        disablePrints()

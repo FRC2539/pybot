@@ -18,6 +18,8 @@ class Intake(CougarSystem):
         self.intakeMotor.setInverted(True)
 
         self.intakeMotor.burnFlash()
+        
+        disablePrints()
 
     def intakeBalls(self):
         self.intakeMotor.set(0.5)

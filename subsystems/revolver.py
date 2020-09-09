@@ -35,6 +35,8 @@ class Revolver(CougarSystem):
 
         self.resetRevolverEncoder()
 
+        disablePrints()
+
         #self.dropTrigger = DigitalInput(ports.revolver.limitSwitch) # The magnetic limit switch used to trigger the solenoid.
         self.frontSensor = ColorSensorV3(I2C.Port.kOnboard)
 

@@ -21,6 +21,8 @@ class Pneumatics(CougarSystem):
         self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
         self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
 
+        disablePrints()
+
     def isPressureLow(self):
         return self.pneumaticCompressor.getPressureSwitchValue()
 

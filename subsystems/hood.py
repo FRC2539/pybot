@@ -44,6 +44,8 @@ class Hood(CougarSystem):
 
         self.zeroNetworkTables()
 
+        disablePrints()
+
     def mobileHoodControl(self, y, areaControl=None):
         oldY = y
         mod = 0

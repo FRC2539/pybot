@@ -44,6 +44,8 @@ class Turret(CougarSystem):
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
 
+        disablePrints()
+
         #self.capture('position', 'getPosition')
 
         #print('\n\n received ' + str(self.get('position', 'ewwwwwwww')) + '\n\n')

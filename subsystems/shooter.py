@@ -36,6 +36,8 @@ class Shooter(CougarSystem):
 
         self.maxVel = 5800 # Experimental velocities.
         self.minVel = 2800
+        
+        disablePrints()
 
     def setRPM(self, rpm):
         self.shooting = True
