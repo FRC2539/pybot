@@ -35,8 +35,8 @@ class Hood(CougarSystem):
         self.dir = 'u'
         self.setSpeed = 0.3
 
-        self.angleMax = 250.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
-        self.angleMin = 175.00 # was 166; need to adjust these values.
+        self.angleMax = 240.00 # NOTE DO not actually make this 0 and 90. Place-holder only; make like 20, 110
+        self.angleMin = 170.00 # was 166; need to adjust these values.
         self.LLHoodTuner = 13
 
         self.parallelToGroundish = 281.0
@@ -101,7 +101,7 @@ class Hood(CougarSystem):
             return False
 
     def atLowest(self):
-        if self.getPosition() <=  self.angleMin:
+        if self.getPosition() <= self.angleMin:
             print('oof ' +  str(self.getPosition()))
             self.motor.stopMotor()
             return True

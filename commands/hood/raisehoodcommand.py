@@ -13,7 +13,7 @@ class RaiseHoodCommand(Command):
         robot.hood.raiseHood()
 
     def isFinished(self):
-        #print(robot.hood.getPosition())
+        print('h ' + str(robot.hood.getPosition()))
         return robot.hood.atHighest()
 
     def end(self):

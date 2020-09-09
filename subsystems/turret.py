@@ -25,8 +25,8 @@ class Turret(CougarSystem):
         self.motor.config_kF(0, 0.07, 0)
 
         self.max = 1365 # Max value
-        self.middle = 682.5
-        self.min = 0 # Min value
+        self.middle = 1057.5
+        self.min = 750.0 # Min value
 
         self.turretActiveMode = True
 
@@ -155,6 +155,7 @@ class Turret(CougarSystem):
         self.motor.set(ControlMode.PercentOutput, math.copysign(min([abs(x), 0.4]), x))
 
     def isLimitSwitch(self): # Limit switch is at the upper end.
+        print(not self.limitSwitch.get())
         if not self.limitSwitch.get() or self.getPosition() >= self.max + 10:
             self.stop()
             self.setMax()

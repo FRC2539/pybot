@@ -11,6 +11,9 @@ class VariableSpeedCommand(Command):
 
         self.speed = speed
 
+    def initialize(self):
+        robot.revolver.setVariableSpeed(self.speed)
+
     def execute(self):
         robot.revolver.setVariableSpeed(self.speed)
 
