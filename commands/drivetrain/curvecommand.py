@@ -44,7 +44,7 @@ class CurveCommand(Command):
             self.speedL = ( self.finishDistanceL - self.currentDistanceL ) * 1
             self.speedR = ( self.finishDistanceR - self.currentDistanceR ) * 1
             self.maxSpeed = 10000
-            self.minSpeed = 0
+            self.minSpeed = 1000
 
             if abs(self.speedL) > self.maxSpeed or abs(self.speedR) > self.maxSpeed:
                 if abs(self.speedL) > abs(self.speedR):
@@ -80,7 +80,16 @@ class CurveCommand(Command):
             self.speedR = self.speedR * -1
             robot.drivetrain.setSpeeds(self.speedL, self.speedR)
 
-            if self.currentDistanceL > self.finishDistanceL - 50 and self.currentDistanceL < self.finishDistanceL + 50:
+
+
+    def isFinished(self):
+        if self.currentDistanceL > self.finishDistanceL - 100 and self.currentDistanceL < self.finishDistanceL + 100:
                 robot.drivetrain.stop()
-            if self.currentDistanceR > self.finishDistanceR - 50 and self.currentDistanceR < self.finishDistanceR + 50:
+                return True
+        if self.currentDistanceR > self.finishDistanceR - 100 and self.currentDistanceR < self.finishDistanceR + 100:
                 robot.drivetrain.stop()
+                return True
+
+    def end(self):
+        robot.drivetrain.stop()
+

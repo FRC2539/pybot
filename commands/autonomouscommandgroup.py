@@ -11,7 +11,7 @@ from custom.config import Config
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 #from commands.drivetrain.gyromovecommand import GyroMoveCommand
-from commands.drivetrain.curveleftcommand import CurveLeftCommand
+from commands.drivetrain.curvecommand import CurveCommand
 
 class AutonomousCommandGroup(fc.CommandFlow):
     def __init__(self):
@@ -19,7 +19,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         #establish the auto modes for dashboard and use these values in auto if string check
         table = NetworkTables.getTable('Autonomous')
-        autoNames = ['Turn Test','Move Test','More Move Test']
+        autoNames = ['Turn Test','Move Test','Safety Hazard']
         autoString = ''
         for auto in autoNames:
             autoString += str(auto + '$')
@@ -33,9 +33,20 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def Test(self):#should be good for now
             #self.addSequential(MoveCommand(80))
             self.addSequential(PrintCommand("turn 90"))
-            self.addSequential(TurnCommand(90))
+            #self.addSequential(TurnCommand(90))
+            self.addSequential(CurveCommand(-125, 30, False))
+            self.addSequential(CurveCommand(-125, 30, True))
+
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Test')
         def MoveTest2(self):#should be good for now
-            self.addSequential(MoveCommand(30))
+            self.addSequential(CurveCommand(-100, 20, True))
             self.addSequential(PrintCommand("move: 30"))
+
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Safety Hazard')
+        def SafetyHazard(self):
+            self.addSequential(PrintCommand("SafetyHazard"))
+            #shooter lined up with init line, inside bumper 130in from wall
+            self.addSequential(MoveCommand(26), 2)
+            self.addSequential(CurveCommand(-90, 35, True))
+

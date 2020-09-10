@@ -10,5 +10,7 @@ class PathTestCommandGroup(fc.CommandFlow):
         super().__init__('Path Test')
 
         # Add commands here with self.addSequential() and self.addParallel()
-        #self.addSequential(CurveCommand(160, 40), 3)
-        #self.addSequential(CurveLeftCommand(160, 40), 3)
+        # self.addSequential(CurveCommand(Degrees, Radius, Right(true) or left(false)))
+        self.addSequential(CurveCommand(250, 30, True))
+        self.addSequential(CurveCommand(250, 30, False))
+

@@ -114,8 +114,8 @@ def init():
     #driveController.X.whileHeld(CurveCommand(-1200, 80))
     #driveController.B.toggleWhenPressed(OutakeCommand())
     #driveController.Y.toggleWhenPressed(DriveCommand(4000)) # really jank
-    driveController.Y.whileHeld(CurveLeftCommand(-1200, 80))
-    driveController.Y.whileHeld(PathTestCommandGroup())
+    #driveController.Y.whileHeld(CurveLeftCommand(-1200, 80))
+    driveController.Y.whenPressed(PathTestCommandGroup())
 
     driveController.LeftBumper.whileHeld(RaiseHoodCommand())
     driveController.LeftTrigger.whileHeld(LowerHoodCommand())
