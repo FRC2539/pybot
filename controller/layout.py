@@ -1,36 +1,25 @@
-from .logitechdualshock import LogitechDualShock
-from . import logicalaxes
-
-from custom.config import Config
-
-from commands.resetcommand import ResetCommand
-
-from commands.drivetrain.drivecommand import DriveCommand
-
-from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
-from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
-from commands.revolver.variablespeedcommand import VariableSpeedCommand
-
+from commands.balllauncher.extendlaunchercommand import ExtendLauncherCommand
 from commands.balllauncher.launchballscommand import LaunchBallsCommand
 from commands.balllauncher.reverseballscommand import ReverseBallsCommand
-from commands.balllauncher.extendlaunchercommand import ExtendLauncherCommand
-
-from commands.intake.intakecommand import IntakeCommand
-from commands.intake.outakecommand import OutakeCommand
-from commands.intake.kickcommand import KickCommand
-from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
-from commands.intake.deployintakecommand import DeployIntakeCommand
-
-from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
-
+from commands.hood.raisehoodcommand import RaiseHoodCommand
+from commands.intake.deployintakecommand import DeployIntakeCommand
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
+from commands.intake.outakecommand import OutakeCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
-
-from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
+from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
+from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
+from commands.revolver.variablespeedcommand import VariableSpeedCommand
 from commands.shooter.endshootingprocesscommand import EndShootingProcessCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
-
+from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
 from commands.turret.toggleturretmodecommand import ToggleTurretModeCommand
+
+from commands.resetcommand import ResetCommand
+from . import logicalaxes
+from .logitechdualshock import LogitechDualShock
+
 
 def init():
     '''
