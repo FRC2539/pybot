@@ -28,5 +28,6 @@ class StevenShooterLimelightCommand(Command):
             robot.shooter.atGoal = True
 
     def end(self):
+        robot.shooter.atGoal = False
         robot.limelight.setPipeline(1)
         robot.shooter.stopShooter()

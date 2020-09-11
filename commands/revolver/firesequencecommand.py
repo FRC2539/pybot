@@ -11,7 +11,11 @@ class FireSequenceCommand(Command):
         self.requires(robot.revolver)
         self.requires(robot.balllauncher)
 
+        robot.revolver.sequenceEngaged = False
+
     def initialize(self):
+        robot.revolver.sequenceEngaged = True
+        
         robot.revolver.resetRevolverEncoder()
         robot.pneumatics.retractBallLauncherSolenoid()
 
@@ -23,6 +27,8 @@ class FireSequenceCommand(Command):
             robot.pneumatics.extendBallLauncherSolenoid()
 
     def end(self):
+        robot.revolver.sequenceEngaged = False
+
         robot.pneumatics.retractBallLauncherSolenoid()
         robot.balllauncher.stopLauncher()
         robot.revolver.stopRevolver()

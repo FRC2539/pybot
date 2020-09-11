@@ -46,6 +46,7 @@ class Revolver(CougarSystem):
         self.dropPositions = [317.5] # The middle of the drop zones. Zones must be five degrees wide.
 
         self.isSpinning = False
+        self.sequenceEngaged = False
 
         self.gearRatio = 15 # 3:2 or vise versa
 

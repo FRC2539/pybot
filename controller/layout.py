@@ -11,6 +11,7 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
 from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
 from commands.revolver.variablespeedcommand import VariableSpeedCommand
+from commands.revolver.firesequencecommand import FireSequenceCommand
 from commands.shooter.endshootingprocesscommand import EndShootingProcessCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
@@ -82,8 +83,8 @@ def init():
     operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
     operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.RightTrigger.toggleWhenPressed(ShootWhenReadyCommand())
-    operatorController.RightBumper.toggleWhenPressed(SetRPMCommand(3500))
+    operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
+    operatorController.RightBumper.toggleWhenPressed(SudoCommandGroup()) # First 
 
     operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
     operatorController.LeftBumper.whileHeld(LowerHoodCommand())
