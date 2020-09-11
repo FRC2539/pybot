@@ -25,8 +25,8 @@ class Turret(CougarSystem):
         self.motor.config_kF(0, 0.07, 0)
 
         self.max = 1365 # Max value
-        self.middle = 1057.5
-        self.min = 750.0 # Min value
+        self.middle = 957.5
+        self.min = 650.0 # Min value
 
         self.turretActiveMode = True
 
@@ -60,9 +60,9 @@ class Turret(CougarSystem):
             self.stop()
 
     def move(self, val):
-        if self.isZeroed() and val > 0:
+        if self.isMin() and val < 0:
             self.stop() # does not let a positive direction proceed if zeroed.
-        elif self.getPosition() >= self.max and val < 0:
+        elif self.isMax() and val > 0:
             self.stop() # does not let a negative direction proceed if maxed.
         else:
             self.motor.set(val)
@@ -96,7 +96,7 @@ class Turret(CougarSystem):
 
             speed = 0.5 - (abs(self.getPosition() - self.middle) / self.max)
 
-            self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.2), direction))
+            self.motor.set(ControlMode.PercentOutput, math.copysign(max(min(0.6, abs(speed)), 0.1), direction))
 
         else:
             self.stop()

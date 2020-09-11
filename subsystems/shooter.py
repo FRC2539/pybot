@@ -21,8 +21,8 @@ class Shooter(CougarSystem):
         self.shooterMotorOne.setNeutralMode(NeutralMode.Coast)
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
 
-        self.shooterMotorOne.config_kF(0, 0.019, 0)
-        self.shooterMotorOne.config_kP(0, 0.03, 0)
+        self.shooterMotorOne.config_kF(0, 0.0462, 0)
+        self.shooterMotorOne.config_kP(0, 0.052, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
