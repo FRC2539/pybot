@@ -35,7 +35,7 @@ class DefaultCommand(Command):
         
         if robot.pneumatics.isPressureLow(): # Use heartbeat style.
             
-            if robot.shooter.shooting and robot.shooter.atGoal: 
+            if robot.shooter.atGoal: # The shooter has reached the goal. Technically, don't need to check for shooting here.
                 if robot.revolver.sequenceEngaged: 
                     robot.ledsystem.colorOneHeartbeat() # Shooting!
                 else:
@@ -44,7 +44,7 @@ class DefaultCommand(Command):
             elif robot.shooter.shooting: # Not at the goal yet.
                 robot.ledsystem.whiteHeartbeat()
                 
-            elif robot.intake.intaking: # 
+            elif robot.intake.intaking: # Going to intake balls.
                 robot.ledsystem.blueHeartbeat()
                 
             else:
@@ -52,7 +52,7 @@ class DefaultCommand(Command):
                 
         else:
             
-            if robot.shooter.shooting and robot.shooter.atGoal:
+            if robot.shooter.atGoal:
                 if robot.revolver.sequenceEngaged:
                     robot.ledsystem.colorOneStrobe() # Shooting!
                 else:
