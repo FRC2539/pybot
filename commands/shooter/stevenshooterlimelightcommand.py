@@ -13,16 +13,9 @@ class StevenShooterLimelightCommand(Command):
         self.requires(robot.shooter)
         self.close = False
 
-       # self.timer = Timer()
-
-
     def initialize(self):
+        robot.shooter.atGoal = False
         robot.limelight.setPipeline(0)
-
-
-        #self.timer.start()
-
-
 
     def execute(self):
         self.speed = 4800 - 850 * robot.limelight.getA()
@@ -30,7 +23,9 @@ class StevenShooterLimelightCommand(Command):
             self.speed = 4800
 
         robot.shooter.setRPM(self.speed)
-
+        
+        if robot.shooter.getRPM() + 30 >= self.speed: # Only needs to pass this once. Adds a tolerance of 30, in case it hovers below.
+            robot.shooter.atGoal = True
 
     def end(self):
         robot.limelight.setPipeline(1)

@@ -7,6 +7,7 @@ from commands.shooter.stevenshooterlimelightcommand import StevenShooterLimeligh
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.camtranturretlimelight import CamTranTurretLimelight
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
+from commands.revolver.firesequencecommand import FireSequenceCommand
 
 class SudoCommandGroup(CommandGroup):
 
@@ -16,6 +17,7 @@ class SudoCommandGroup(CommandGroup):
         # Add commands here with self.addSequential() and self.addParallel()
         self.addParallel(CamTranTurretLimelight())
         self.addParallel(StevenHoodLimelightCommand())
-        #self.addParallel(StevenShooterLimelightCommand())
+        self.addParallel(StevenShooterLimelightCommand())
+        self.addParallel(FireSequenceCommand())
         #self.addParallel(ShootWhenReadyCommand())
 

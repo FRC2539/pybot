@@ -33,6 +33,7 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.follow(self.shooterMotorOne) # True to invert the motor NOTE: Follow does not seem to work. REV sucks ngl.
 
         self.shooting = False
+        self.atGoal = False
 
         self.maxVel = 5800 # Experimental velocities.
         self.minVel = 2800
@@ -44,6 +45,7 @@ class Shooter(CougarSystem):
         self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))
 
     def setPercent(self, val):
+        self.shooting = True
         self.shooterMotorOne.set(ControlMode.PercentOutput, val)
 
     def reverseShooter(self):

@@ -49,5 +49,11 @@ class LEDSystem(CougarSystem):
     def whiteHeartbeat(self):
         self.set(-0.21)
 
+    def blueHeartbeat(self):
+        self.set(-0.23)
+        
+    def redHeartbeat(self):
+        self.set(-0.17)
+
     def colorOneHeartbeat(self):
         self.set(0.05)

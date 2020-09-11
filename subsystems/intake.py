@@ -19,16 +19,22 @@ class Intake(CougarSystem):
 
         self.intakeMotor.burnFlash()
         
+        self.intaking = False
+        
         disablePrints()
 
     def intakeBalls(self):
+        self.intaking = True
         self.intakeMotor.set(0.5)
 
     def outakeBalls(self):
+        self.intaking = False
         self.intakeMotor.set(-0.5)
 
     def kickBalls(self):
+        self.intaking = False
         self.intakeMotor.set(-0.1)
 
     def stopIntake(self):
+        self.intaking = False
         self.intakeMotor.stopMotor()
