@@ -16,6 +16,7 @@ from commands.shooter.endshootingprocesscommand import EndShootingProcessCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
 from commands.turret.toggleturretmodecommand import ToggleTurretModeCommand
+from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
 from commands.resetcommand import ResetCommand
 from . import logicalaxes
@@ -84,7 +85,7 @@ def init():
     operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
 
     operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
-    operatorController.RightBumper.toggleWhenPressed(SudoCommandGroup()) # First 
+    operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
 
     operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
     operatorController.LeftBumper.whileHeld(LowerHoodCommand())

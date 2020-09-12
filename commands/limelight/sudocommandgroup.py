@@ -14,7 +14,8 @@ class SudoCommandGroup(CommandGroup):
         super().__init__('Sudo')
 
         # Add commands here with self.addSequential() and self.addParallel()
-        self.addParallel(CamTranTurretLimelight())
+        #self.addParallel(CamTranTurretLimelight())
+        self.addParallel(TurretLimelightCommand())
         self.addParallel(StevenHoodLimelightCommand())
         self.addParallel(StevenShooterLimelightCommand())
         #self.addParallel(ShootWhenReadyCommand())

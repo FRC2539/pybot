@@ -17,9 +17,10 @@ class TurretLimelightCommand(Command):
 
     def execute(self):
         self.x = robot.limelight.getX()
-        self.rotate = self.x * -0.03
-        if (abs(self.rotate) > .3):
-            self.rotate = math.copysign(.3, self.rotate)
+        self.rotate = self.x * 0.03
+        self.speedLimit = .3
+        if (abs(self.rotate) > self.speedLimit):
+            self.rotate = math.copysign(self.speedLimit, self.rotate)
 
         print('r ' + str(self.rotate))
 
