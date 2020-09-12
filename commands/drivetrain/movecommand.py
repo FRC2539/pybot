@@ -98,5 +98,5 @@ class MoveCommand(Command):
 
     def end(self):
         robot.drivetrain.stop()
-        robot.drivetrain.setProfile(0)
+        #robot.drivetrain.setProfile(0)
         robot.ledsystem.turnOff()

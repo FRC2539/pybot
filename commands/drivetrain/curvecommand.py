@@ -83,6 +83,7 @@ class CurveCommand(Command):
 
 
     def isFinished(self):
+        print("Finished")
         if self.currentDistanceL > self.finishDistanceL - 100 and self.currentDistanceL < self.finishDistanceL + 100:
                 robot.drivetrain.stop()
                 return True

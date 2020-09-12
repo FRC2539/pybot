@@ -35,7 +35,10 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(PrintCommand("turn 90"))
             #self.addSequential(TurnCommand(90))
             self.addSequential(CurveCommand(-125, 30, False))
-            self.addSequential(CurveCommand(-125, 30, True))
+            self.addSequential(CurveCommand(-130, 30, True))
+            self.addSequential(MoveCommand(75))
+            self.addSequential(MoveCommand(-75))
+
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Test')
@@ -46,7 +49,12 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Safety Hazard')
         def SafetyHazard(self):
             self.addSequential(PrintCommand("SafetyHazard"))
+            #self.addSequential(MoveCommand(20), 2)
+            #self.addSequential(MoveCommand(-20), 2)
+
+
+
             #shooter lined up with init line, inside bumper 130in from wall
-            self.addSequential(MoveCommand(26), 2)
-            self.addSequential(CurveCommand(-90, 35, True))
+
+
 
