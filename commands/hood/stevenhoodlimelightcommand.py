@@ -18,9 +18,9 @@ class StevenHoodLimelightCommand(Command):
     def execute(self):
         if robot.limelight.getTape():
             if (robot.limelight.getA() > 1.289):
-                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() * robot.limelight.getA()) + 20)
+                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() * robot.limelight.getA()) + 20 + robot.hood.getAdjustment())
             else:
-                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() * robot.limelight.getA()) + 20)
+                robot.hood.setShootAngle(1.76491 * (robot.limelight.getA() * robot.limelight.getA()) + 20 +robot.hood.getAdjustment())
 
         else:
             robot.hood.stopHood()

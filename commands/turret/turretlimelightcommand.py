@@ -16,13 +16,13 @@ class TurretLimelightCommand(Command):
         robot.ledsystem.onTarget = False
 
     def execute(self):
-        self.x = robot.limelight.getX()
+        self.x = robot.limelight.getX() + robot.turret.getAdjustment()
         self.rotate = self.x * 0.03
         self.speedLimit = .3
         if (abs(self.rotate) > self.speedLimit):
             self.rotate = math.copysign(self.speedLimit, self.rotate)
 
-        print('r ' + str(self.rotate))
+        #print('r ' + str(self.rotate))
 
         robot.turret.move(self.rotate)
 

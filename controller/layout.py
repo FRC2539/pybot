@@ -72,6 +72,14 @@ def init():
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone
 
+# operatorController goals:
+# Needed buttons / controls:
+# limelight control, with individual commands or sudo command (turret, shooter, hood)
+# limelight adjustment, (hood up, down, turret left, right)
+# Spin revolver
+# Shoot balls
+# turret control - joystick
+
     operatorController.Start.whenPressed(EndShootingProcessCommand())
     operatorController.Back.whenPressed(ToggleTurretModeCommand())
 

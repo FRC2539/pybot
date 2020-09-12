@@ -44,6 +44,8 @@ class Turret(CougarSystem):
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
 
+        self.turretAdjustment = 0
+
         disablePrints()
 
         #self.capture('position', 'getPosition')
@@ -58,6 +60,18 @@ class Turret(CougarSystem):
             return False
         else:
             self.stop()
+
+    def increaseAdjustment(self, val):
+        self.adjustment = self.adjustment + val
+
+    def decreaseAdjustment(self, val):
+        self.adjustment = self.adjustment - val
+
+    def setAdjustment(self, val):
+        self.adjustment = val
+
+    def getAdjustment(self):
+        return self.adjustment
 
     def move(self, val):
         if self.isMin() and val < 0:

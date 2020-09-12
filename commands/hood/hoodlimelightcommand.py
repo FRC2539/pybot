@@ -14,7 +14,7 @@ class HoodLimelightCommand(Command):
         self.area = 0
 
     def initialize(self):
-        print('ran?')
+        #print('ran?')
         robot.limelight.setPipeline(0)
 
     def execute(self):
@@ -30,7 +30,7 @@ class HoodLimelightCommand(Command):
         return self.res
 
     def end(self):
-        print('DONE?!?!?')
+        #print('DONE?!?!?')
         robot.hood.stopHood()
 
         robot.limelight.setPipeline(1)

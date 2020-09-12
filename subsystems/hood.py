@@ -41,6 +41,7 @@ class Hood(CougarSystem):
 
         self.parallelToGroundish = 281.0
         self.llHeight = 19.5 # Height on robot.
+        self.adjustment = 0
 
         self.zeroNetworkTables()
 
@@ -53,9 +54,9 @@ class Hood(CougarSystem):
             mod = (abs(areaControl) ** -0.2) * 5  # might need to check the signs here . . .
             y += mod
 
-        print('ogY ' + str(oldY))
-        print('moodddd ' + str(mod))
-        print('yyy ' + str(y))
+        #print('ogY ' + str(oldY))
+        #print('moodddd ' + str(mod))
+        #print('yyy ' + str(y))
 
         if abs(abs(oldY) - mod) <= 0.1: # Call oldY because this is the exact offset of the sensor.'
             self.stopHood()
@@ -67,11 +68,17 @@ class Hood(CougarSystem):
     def getPosition(self):
         return self.tbEnc.getOutput() * 360
 
-    def upLLHood(self):
-        self.LLHoodTuner = self.LLHoodTuner + .1
+    def increaseAdjustment(self, val):
+        self.adjustment = self.adjustment + val
 
-    def downLLHood(self):
-        self.LLHoodTuner = self.LLHoodTuner - .1
+    def decreaseAdjustment(self, val):
+        self.adjustment = self.adjustment - val
+
+    def setAdjustment(self, val):
+        self.adjustment = val
+
+    def getAdjustment(self):
+        return self.adjustment
 
     def stopHood(self):
         self.motor.stopMotor()
