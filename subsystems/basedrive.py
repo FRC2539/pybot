@@ -212,7 +212,7 @@ class BaseDrive(CougarSystem):
             motor.setClosedLoopRampRate(0.25)
             controller = motor.getPIDController()
             for profile in range(2):
-                controller.setP(0.0000007, profile) # 0.000007 TODO: Test this new value. We want 
+                controller.setP(0.0000001, profile) # 0.000007 TODO: Test this new value. We want 
                 controller.setI(0, profile) # 0
                 controller.setD(0.0001, profile) # 0.0001
                 controller.setFF(0.0002, profile) # 0.0005

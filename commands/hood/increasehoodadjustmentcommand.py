@@ -11,7 +11,7 @@ class IncreaseHoodAdjustmentCommand(InstantCommand):
         self.requires(robot.hood)
 
 
-    def initialize(self):
+    def execute(self):
         robot.hood.increaseAdjustment(1)
 
 

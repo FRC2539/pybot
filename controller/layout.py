@@ -84,17 +84,13 @@ def init():
 # Shoot balls
 # turret control - joystick
 
-    operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
-    operatorController.LeftTrigger.toggleWhenPressed(ShootWhenReadyCommand()) # put the thingy down to shoot
-    operatorController.RightBumper.toggleWhenPressed(LaunchBallsCommand()) #revolver hopefully
-    #right trigger
-    operatorController.DPadUp.whenPressed(IncreaseHoodAdjustmentCommand())
-    operatorController.DPadRight.whenPressed(IncreaseTurretAdjustmentCommand())
-    operatorController.DPadDown.whenPressed(DecreaseHoodAdjustmentCommand())
-    operatorController.DPadLeft.whenPressed(DecreaseTurretAdjustmentCommand())
-
-
-
+    operatorController.RightBumper.toggleWhenPressed(SudoCommandGroup())
+    #operatorController.RightBumper.toggleWhenPressed(LaunchBallsCommand()) #revolver hopefully
+    ###right trigger
+    operatorController.DPadUp.whileHeld(IncreaseHoodAdjustmentCommand())
+    operatorController.DPadRight.whileHeld(IncreaseTurretAdjustmentCommand())
+    operatorController.DPadDown.whileHeld(DecreaseHoodAdjustmentCommand())
+    operatorController.DPadLeft.whileHeld(DecreaseTurretAdjustmentCommand())
 
     #operatorController.Start.whenPressed(EndShootingProcessCommand())
     #operatorController.Back.whenPressed(ToggleTurretModeCommand())
@@ -108,7 +104,7 @@ def init():
     #operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
     #operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
 
-    #operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
+    operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
     #operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
 
     #operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())

@@ -11,7 +11,7 @@ class DecreaseTurretAdjustmentCommand(InstantCommand):
         self.requires(robot.turret)
 
 
-    def initialize(self):
+    def execute(self):
         robot.turret.decreaseAdjustment(1)
 
 

@@ -17,11 +17,11 @@ class DefaultCommand(Command):
         
         # Air
         
-        if robot.pneumatics.isPressureLow() and not robot.shooter.shooting:
+        if not robot.shooter.shooting:
             robot.pneumatics.enableCLC()
             robot.pneumatics.startCompressor()
             
-        elif (robot.pneumatics.isPressureLow() or robot.pneumatics.isCompressorRunning()) and robot.shooter.shooting:
+        else:
             robot.pneumatics.stopCompressor()
             robot.pneumatics.disableCLC()
             
@@ -35,7 +35,10 @@ class DefaultCommand(Command):
         
         if robot.pneumatics.isPressureLow(): # Use heartbeat style.
             
+            print('LOWWW')
+            
             if robot.shooter.atGoal: # The shooter has reached the goal. Technically, don't need to check for shooting here.
+                print('at goal\n')
                 if robot.revolver.sequenceEngaged: 
                     robot.ledsystem.colorOneHeartbeat() # Shooting!
                 else:

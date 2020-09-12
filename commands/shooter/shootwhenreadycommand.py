@@ -10,7 +10,7 @@ class ShootWhenReadyCommand(Command):
         self.requires(robot.balllauncher)
         self.requires(robot.revolver)
 
-        self.targetRPM = targetRPM
+        self.targetRPM = 4500#targetRPM
         self.tol = tol
         self.closeShotRPM = robot.limelight.minShooterRPM
         self.swapArea = robot.limelight.swapArea

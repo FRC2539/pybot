@@ -12,5 +12,7 @@ class DeployIntakeCommand(InstantCommand):
 
         if robot.pneumatics.isIntakeLowered():
             robot.pneumatics.retractIntakeSolenoid()
+            robot.intake.stopIntake()
         else:
             robot.pneumatics.extendIntakeSolenoid()
+            robot.intake.intakeBalls()

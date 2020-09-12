@@ -44,7 +44,7 @@ class Turret(CougarSystem):
 
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
 
-        self.turretAdjustment = 0
+        self.adjustment = 0
 
         disablePrints()
 
