@@ -10,7 +10,7 @@ from custom.config import Config
 
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
-#from commands.drivetrain.gyromovecommand import GyroMoveCommand
+from commands.drivetrain.gyromovecommand import GyroMoveCommand
 from commands.drivetrain.curvecommand import CurveCommand
 
 class AutonomousCommandGroup(fc.CommandFlow):
@@ -49,12 +49,8 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Safety Hazard')
         def SafetyHazard(self):
             self.addSequential(PrintCommand("SafetyHazard"))
-            #self.addSequential(MoveCommand(20), 2)
-            #self.addSequential(MoveCommand(-20), 2)
-
-
-
-            #shooter lined up with init line, inside bumper 130in from wall
-
+            self.addSequential(MoveCommand(40), 2)
+            self.addSequential(TurnCommand(90), 2)
+            self.addSequential(MoveCommand(40), 2)
 
 

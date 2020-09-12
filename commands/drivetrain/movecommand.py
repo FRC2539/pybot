@@ -50,50 +50,36 @@ class MoveCommand(Command):
         #print('my position ' + str(robot.drivetrain.getPositions()))
 
         #print('my target: ' + str(self.targetPositions))
-        if self.avoidCollisions:
-            try:
-                if self.distance < 0:
-                    clearance = robot.drivetrain.getRearClearance()
-                else:
-                    clearance = robot.drivetrain.getFrontClearance()
+        #if self.avoidCollisions:
+            #try:
+                #if self.distance < 0:
+                    #clearance = robot.drivetrain.getRearClearance()
+                #else:
+                    #clearance = robot.drivetrain.getFrontClearance()
 
-                if not self.blocked:
-                    if clearance < 10:
-                        if self.obstacleCount >= 10:
-                            self.blocked = True
-                            self.obstacleCount = 0
-                            robot.drivetrain.stop()
-                            robot.drivetrain.move(0, 0, 0)
-                            driverhud.showAlert('Obstacle Detected')
-                        else:
-                            self.obstacleCount += 1
-                    else:
-                        self.obstacleCount = 0
+                #if not self.blocked:
+                    #if clearance < 10:
+                        #if self.obstacleCount >= 10:
+                            #self.blocked = True
+                            #self.obstacleCount = 0
+                            #robot.drivetrain.stop()
+                            #robot.drivetrain.move(0, 0, 0)
+                            #driverhud.showAlert('Obstacle Detected')
+                        #else:
+                            #self.obstacleCount += 1
+                    #else:
+                        #self.obstacleCount = 0
 
-                else:
-                    if clearance >= 20:
-                        if self.obstacleCount >= 10:
-                            self.blocked = False
-                            self.obstacleCount = 0
-                            robot.drivetrain.setPositions(self.targetPositions)
-                        else:
-                            self.obstacleCount += 1
-                    else:
-                        self.obstacleCount = 0
-
-            except NotImplementedError:
-                pass
-
-
-    def isFinished(self):
-        if self.blocked:
-            return False
-
-        if self.isTimedOut() and robot.drivetrain.atPosition(self.targetPositions, self.precision):
-            self.onTarget += 1
-        else:
-            self.onTarget = 0
-
+                #else:
+                    #if clearance >= 20:
+                        #if self.obstacleCount >= 10:
+                            #self.blocked = False
+                            #self.obstacleCount = 0
+                            #robot.drivetrain.setPositions(self.targetPositions)
+                        #else:
+                            #self.obstacleCount += 1
+                    #else:
+                        #self.obstacleCount = 0
         return self.onTarget > 5
 
     def end(self):
