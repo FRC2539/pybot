@@ -17,6 +17,10 @@ from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
 from commands.turret.toggleturretmodecommand import ToggleTurretModeCommand
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
+from commands.turret.increaseturretadjustmentcommand import IncreaseTurretAdjustmentCommand
+from commands.turret.decreaseturretadjustmentcommand import DecreaseTurretAdjustmentCommand
+from commands.hood.increasehoodadjustmentcommand import IncreaseHoodAdjustmentCommand
+from commands.hood.decreasehoodadjustmentcommand import DecreaseHoodAdjustmentCommand
 
 from commands.resetcommand import ResetCommand
 from . import logicalaxes
@@ -80,22 +84,34 @@ def init():
 # Shoot balls
 # turret control - joystick
 
-    operatorController.Start.whenPressed(EndShootingProcessCommand())
-    operatorController.Back.whenPressed(ToggleTurretModeCommand())
+    operatorController.LeftBumper.toggleWhenPressed(SudoCommandGroup())
+    operatorController.LeftTrigger.toggleWhenPressed(ShootWhenReadyCommand()) # put the thingy down to shoot
+    operatorController.RightBumper.toggleWhenPressed(LaunchBallsCommand()) #revolver hopefully
+    #right trigger
+    operatorController.DPadUp.whenPressed(IncreaseHoodAdjustmentCommand())
+    operatorController.DPadRight.whenPressed(IncreaseTurretAdjustmentCommand())
+    operatorController.DPadDown.whenPressed(DecreaseHoodAdjustmentCommand())
+    operatorController.DPadLeft.whenPressed(DecreaseTurretAdjustmentCommand())
 
-    operatorController.A.toggleWhenPressed(IntakeDirectionCommand())
-    operatorController.B.toggleWhenPressed(ShooterDirectionCommand())
-    operatorController.X.toggleWhenPressed(LaunchBallsCommand())
-    operatorController.Y.toggleWhenPressed(ReverseBallsCommand())
 
-    operatorController.DPadUp.toggleWhenPressed(ExtendLauncherCommand())
-    operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
-    operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
-    operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
 
-    operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
-    operatorController.LeftBumper.whileHeld(LowerHoodCommand())
+    #operatorController.Start.whenPressed(EndShootingProcessCommand())
+    #operatorController.Back.whenPressed(ToggleTurretModeCommand())
 
-    operatorController.LeftJoystick.toggleWhenPressed(OutakeCommand())
+    #operatorController.A.toggleWhenPressed(IntakeDirectionCommand())
+    #operatorController.B.toggleWhenPressed(ShooterDirectionCommand())
+    #operatorController.X.toggleWhenPressed(LaunchBallsCommand())
+    #operatorController.Y.toggleWhenPressed(ReverseBallsCommand())
+
+    #operatorController.DPadUp.toggleWhenPressed(ExtendLauncherCommand())
+    #operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
+    #operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
+
+    #operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
+    #operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
+
+    #operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
+    #operatorController.LeftBumper.whileHeld(LowerHoodCommand())
+
+    #operatorController.LeftJoystick.toggleWhenPressed(OutakeCommand())
