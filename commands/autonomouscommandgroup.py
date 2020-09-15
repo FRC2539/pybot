@@ -1,15 +1,13 @@
 import commandbased.flowcontrol as fc
 
-from crapthatwillneverwork.trajectorycommand import TrajectoryCommand
-from crapthatwillneverwork.ramsetecommand import RamseteCommand
+from crapthatwillneverwork.kougarkoursegenerator import KougarKourseGenerator
+from crapthatwillneverwork.kougarkourse import KougarKourse
+
+testTrajectory = KougarKourseGenerator(0)
 
 class AutonomousCommandGroup(fc.CommandFlow):
-    
+        
     def __init__(self):
         super().__init__('Autonomous')
 
-        data = TrajectoryCommand(0).getCommand()
-
-        self.addSequential(RamseteCommand(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]))
-
-        # Add commands here with self.addSequential() and self.addParallel()
+        self.addSequential(KougarKourse(testTrajectory)) # The trajectory attribute is optional now; what I have here will enable students to define a trajectory at init, instead of building it at the start. This is possible, just replace trajectoryOne with the trajectory number, but this is strongly advised against. Label/name the variables based off of what they will do.

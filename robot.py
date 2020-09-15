@@ -15,8 +15,6 @@ import shutil, sys
 from subsystems.cougarsystem import CougarSystem
 from wpilib.command import Subsystem
 
-from crapthatwillneverwork.trajectorycommand import TrajectoryCommand
-
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.revolver import Revolver as revolver

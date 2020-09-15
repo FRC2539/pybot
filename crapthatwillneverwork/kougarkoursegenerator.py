@@ -1,6 +1,8 @@
 from wpilib.trajectory import TrajectoryConfig
 from wpilib.trajectory import TrajectoryGenerator
 
+from wpilib.geometry import Pose2d
+
 from wpilib.trajectory.constraint import DifferentialDriveVoltageConstraint
 
 from wpilib.controller import SimpleMotorFeedforwardMeters, RamseteController, PIDController
@@ -9,17 +11,17 @@ from wpilib.kinematics import DifferentialDriveKinematics
 
 from trajectoryconstants import DriveConstants, AutoConstants, TrajectoryPoints, generateObjects
 
-from crapthatwillneverwork.ramsetecommand import RamseteCommand
-
 import robot
 
-class TrajectoryCommand:
+class KougarKourseGenerator:
 
     def __init__(self, desiredPointsOrID):
                         
         if type(desiredPointsOrID) == int or type(desiredPointsOrID) == float:
-            path = TrajectoryPoints.points[desiredPointsOrID] # We have a preset. 
-            
+            if isinstance(TrajectoryPoints.points[desiredPointsOrID][0], Pose2d):
+                path = TrajectoryPoints.points[desiredPointsOrID] # We have a preset. 
+            else:
+                raise TypeError("Please don't add points in that format here. Instead, replace the ID with the list.")
         else:
             # NOTE: If you choose to use custom points, remember to provide an X, Y, and rotation in degrees.
             
@@ -51,19 +53,3 @@ class TrajectoryCommand:
                                                                  path[-1],
                                                                  self.trajectoryConfig
                                                                  )
-        
-        #self.ramseteCommand = RamseteCommand(
-    def getCommand(self):
-        return [self.trajectory,
-        robot.drivetrain.getPoseMeters,
-        RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-        SimpleMotorFeedforwardMeters(DriveConstants.ksVolts,
-                                DriveConstants.kvVoltsSecondPerMeter,
-                                DriveConstants.kaVoltSecondsSquaredPerMeter),
-        self.kDriveKinematics,
-        robot.drivetrain.getWheelSpeeds,
-        PIDController(DriveConstants.kPDriveVel, 0, 0),
-        PIDController(DriveConstants.kPDriveVel, 0, 0),
-        robot.drivetrain.setVolts,
-        robot.drivetrain]
-                                        #)

@@ -1,30 +1,46 @@
 from wpilib import Timer
 
-from wpilib.controller import PIDController, RamseteController, SimpleMotorFeedforward
-
+from wpilib.controller import PIDController, RamseteController, SimpleMotorFeedforward, SimpleMotorFeedforwardMeters
 from wpilib.kinematics import ChassisSpeeds, DifferentialDriveKinematics, DifferentialDriveWheelSpeeds
-
 from wpilib.trajectory import Trajectory
 
 from wpilib.command import Command
 
-class RamseteCommand(Command):
+from trajectoryconstants import DriveConstants, AutoConstants
+
+from crapthatwillneverwork.kougarkoursegenerator import KougarKourseGenerator
+
+import robot
+
+class KougarKourse(Command):
+
+    '''
+    No touchy, touchy, my stuffy, stuffy!
+    '''
 
     def __init__(self,
                  trajectory,
-                 pose,
-                 controller,
-                 feedforward,
-                 kinematics,
-                 wheelSpeeds,
-                 leftController,
-                 rightController,
-                 outputVolts,
-                 requirements
+                 pose=robot.drivetrain.getPoseMeters,
+                 controller=RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+                 feedforward=SimpleMotorFeedforwardMeters(DriveConstants.ksVolts,
+                                DriveConstants.kvVoltsSecondPerMeter,
+                                DriveConstants.kaVoltSecondsSquaredPerMeter),
+                 kinematics=DifferentialDriveKinematics(DriveConstants.kTrackWidthMeters),
+                 wheelSpeeds=robot.drivetrain.getWheelSpeeds,
+                 leftController=PIDController(DriveConstants.kPDriveVel, 0, 0),
+                 rightController=PIDController(DriveConstants.kPDriveVel, 0, 0),
+                 outputVolts=robot.drivetrain.setVolts,
+                 requirements=robot.drivetrain
                 ):
+                     
+        if type(trajectory) == int: # Checks for an ID number to make trajectory now.
+            trajectory = KougarKourseGenerator(trajectory)
+                    
+        elif isinstance(trajectory, KougarKourseGenerator): # Checks to see if it is given the KougarKourse object.
+            trajectory = trajectory.trajectory # lol
         
         super().__init__()
-
+        
         self.timer = Timer()
         self.trajectory = trajectory
         self.pose = pose

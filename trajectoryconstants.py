@@ -24,8 +24,8 @@ AutoConstants.kRamseteZeta = 0.7
 
 TrajectoryPoints = Constant()
 
-TrajectoryPoints.points = { # Remember to format like ID 0; use an X, Y, and a rotation in degrees.
-    0 : [Pose2d(0, 0, Rotation2d(0)), Translation2d(1, 1), Translation2d(2, -1), Pose2d(3, 0, Rotation2d(0))]
+TrajectoryPoints.points = { # Remember to format like one of the two below.
+    0 : [Pose2d(0, 0, Rotation2d(0)), Translation2d(1, 1), Translation2d(2, -1), Pose2d(3, 0, Rotation2d(0))],
     }
 
 def generateObjects(self, list_):
