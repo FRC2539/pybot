@@ -12,6 +12,7 @@ class IncreaseHoodAdjustmentCommand(InstantCommand):
 
 
     def execute(self):
-        robot.hood.increaseAdjustment(1)
+        robot.hood.increaseAdjustment(.1)
+        robot.hood.updateNetworkTables()
 
 

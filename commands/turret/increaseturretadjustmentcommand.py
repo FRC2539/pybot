@@ -12,6 +12,6 @@ class IncreaseTurretAdjustmentCommand(InstantCommand):
 
 
     def execute(self):
-        robot.turret.increaseAdjustment(1)
-
+        robot.turret.increaseAdjustment(.1)
+        robot.turret.updateNetworkTables()
 

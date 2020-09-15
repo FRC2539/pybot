@@ -62,10 +62,10 @@ class Turret(CougarSystem):
             self.stop()
 
     def increaseAdjustment(self, val):
-        self.adjustment = self.adjustment + val
+        self.adjustment = self.adjustment - val
 
     def decreaseAdjustment(self, val):
-        self.adjustment = self.adjustment - val
+        self.adjustment = self.adjustment + val
 
     def setAdjustment(self, val):
         self.adjustment = val
@@ -156,6 +156,7 @@ class Turret(CougarSystem):
 
     def updateNetworkTables(self, angle=85.00):
         self.table.putNumber('TurretPosition', round(self.motor.getSelectedSensorPosition(0), 2))
+        self.table.putNumber('TurretAdjustment', round(self.adjustment, 2))
 
     def outOfRange(self):
         print(self.getPosition())
