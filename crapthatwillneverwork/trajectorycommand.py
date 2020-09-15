@@ -1,11 +1,9 @@
-from wpilib.command import Command
-
 from wpilib.trajectory import TrajectoryConfig
 from wpilib.trajectory import TrajectoryGenerator
 
 from wpilib.trajectory.constraint import DifferentialDriveVoltageConstraint
 
-from wpilib.controller import SimpleMotorFeedforward, RamseteController, PIDController
+from wpilib.controller import SimpleMotorFeedforwardMeters, RamseteController, PIDController
 
 from wpilib.kinematics import DifferentialDriveKinematics
 
@@ -15,10 +13,10 @@ from crapthatwillneverwork.ramsetecommand import RamseteCommand
 
 import robot
 
-class TrajectoryCommand(Command):
+class TrajectoryCommand:
 
     def __init__(self, desiredPointsOrID):
-        
+                        
         if type(desiredPointsOrID) == int or type(desiredPointsOrID) == float:
             path = TrajectoryPoints.points[desiredPointsOrID] # We have a preset. 
             
@@ -34,13 +32,13 @@ class TrajectoryCommand(Command):
         self.kDriveKinematics = DifferentialDriveKinematics(DriveConstants.kTrackWidthMeters)
 
         self.autoVoltageConstraint = DifferentialDriveVoltageConstraint(
-            SimpleMotorFeedforward(DriveConstants.ksVolts,
+            SimpleMotorFeedforwardMeters(DriveConstants.ksVolts,
                                    DriveConstants.kvVoltsSecondPerMeter,
                                    DriveConstants.kaVoltSecondsSquaredPerMeter),
             self.kDriveKinematics,
             10 # Max voltage.
             )
-
+            
         self.trajectoryConfig = TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
                                                  AutoConstants.kMaxAccelerationMetersPerSecondSquared,
                                                 )
@@ -53,19 +51,19 @@ class TrajectoryCommand(Command):
                                                                  path[-1],
                                                                  self.trajectoryConfig
                                                                  )
-
-        ramseteCommand = RamseteCommand(self.trajectory,
-                                        robot.drivetrain.getPose(),
-                                        RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-                                        SimpleMotorFeedforward(DriveConstants.ksVolts,
-                                                               DriveConstants.kvVoltsSecondPerMeter,
-                                                               DriveConstants.kaVoltSecondsSquaredPerMeter),
-                                        DriveConstants.kDriveKinematics,
-                                        robot.drivetrain.getWheelSpeeds,
-                                        PIDController(DriveConstants.kPDriveVel, 0, 0),
-                                        PIDController(DriveConstants.kPDriveVel, 0, 0),
-                                        robot.drivetrain.setVolts,
-                                        robot.drivetrain
-                                        )
-                                        
-        return ramseteCommand
+        
+        #self.ramseteCommand = RamseteCommand(
+    def getCommand(self):
+        return [self.trajectory,
+        robot.drivetrain.getPoseMeters,
+        RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+        SimpleMotorFeedforwardMeters(DriveConstants.ksVolts,
+                                DriveConstants.kvVoltsSecondPerMeter,
+                                DriveConstants.kaVoltSecondsSquaredPerMeter),
+        self.kDriveKinematics,
+        robot.drivetrain.getWheelSpeeds,
+        PIDController(DriveConstants.kPDriveVel, 0, 0),
+        PIDController(DriveConstants.kPDriveVel, 0, 0),
+        robot.drivetrain.setVolts,
+        robot.drivetrain]
+                                        #)

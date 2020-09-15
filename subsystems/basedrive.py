@@ -108,8 +108,8 @@ class BaseDrive(CougarSystem):
         mps = [((x / 60) / 10.71) * 0.47879 for x in self.getSpeeds()]
         return DifferentialDriveWheelSpeeds(mps[0], mps[1])
 
-    def getPose(self):
-        return self.odometry.getPoseMeters()
+    def getPoseMeters(self):
+        return self.odometry.getPose()
 
     def setVolts(self, leftPower, rightPower):
         self.activeMotors[0].setVoltage(leftPower)

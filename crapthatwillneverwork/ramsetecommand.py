@@ -22,6 +22,8 @@ class RamseteCommand(Command):
                  outputVolts,
                  requirements
                 ):
+        
+        super().__init__()
 
         self.timer = Timer()
         self.trajectory = trajectory
@@ -43,10 +45,10 @@ class RamseteCommand(Command):
         self.prevTime = 0
         initialState = self.trajectory.sample(0)
         self.prevSpeeds = self.kinematics.toWheelSpeeds(
-            ChassisSpeeds(initialState.velocityMetersPerSecond,
+            ChassisSpeeds(initialState.velocity,
                           0,
-                          initialState.curvatureRadPerMeter
-                           * initialState.velocityMetersPerSecond))
+                          initialState.curvature
+                           * initialState.velocity))
 
         self.timer.reset()
         self.timer.start()
@@ -60,35 +62,35 @@ class RamseteCommand(Command):
         dt = curTime - self.prevTime # Delta T.
 
         targetWheelSpeeds = self.kinematics.toWheelSpeeds(
-            self.follower.calculate(self.pose.get(), self.trajectory.sample(curTime)))
+            self.follower.calculate(self.pose(), self.trajectory.sample(curTime)))
 
-        leftSpeedSetpoint = targetWheelSpeeds.leftMetersPerSecond
-        rightSpeedSetpoint = targetWheelSpeeds.rightMetersPerSecond
+        leftSpeedSetpoint = targetWheelSpeeds.left
+        rightSpeedSetpoint = targetWheelSpeeds.right
 
         if self.usePID:
             leftFeedforward = self.feedforward.calculate(leftSpeedSetpoint,
-                                                        (leftSpeedSetpoint - self.prevSpeeds.leftMetersPerSecond) / dt)
+                                                        (leftSpeedSetpoint - self.prevSpeeds.left) / dt)
 
             rightFeedforward = self.feedforward.calculate(rightSpeedSetpoint,
-                                                         (rightSpeedSetpoint - self.prevSpeeds.rightMetersPerSecond) / dt)
+                                                         (rightSpeedSetpoint - self.prevSpeeds.right) / dt)
 
-            leftOutput = leftFeedforward + self.leftController.calculate(self.speeds.get().leftMetersPerSecond,
+            leftOutput = leftFeedforward + self.leftController.calculate(self.speeds().left,
                                                                          leftSpeedSetpoint)
 
-            rightOutput = rightFeedforward + self.rightController.calculate(self.speeds.get().rightMetersPerSecond,
+            rightOutput = rightFeedforward + self.rightController.calculate(self.speeds().right,
                                                                             rightSpeedSetpoint)
 
         else:
             leftOutput = leftSpeedSetpoint
             rightOutput = rightSpeedSetpoint
 
-        self.output.accept(leftOutput, rightOutput)
+        self.output(leftOutput, rightOutput)
 
         self.prevTime = curTime
         self.prevSpeeds = targetWheelSpeeds
 
     def isFinished(self):
-        return self.timer.hasElapsed(self.trajectory.getTotalTimeSeconds())
+        return self.timer.hasElapsed(self.trajectory.totalTime())
 
     def end(self):
         self.timer.stop()
