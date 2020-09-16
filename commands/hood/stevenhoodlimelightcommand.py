@@ -24,6 +24,9 @@ class StevenHoodLimelightCommand(Command):
 
         else:
             robot.hood.stopHood()
+            
+        robot.hood.updateNetworkTables()
+        
     def end(self):
         robot.limelight.setPipeline(0)
         robot.hood.stopHood()

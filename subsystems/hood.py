@@ -121,7 +121,7 @@ class Hood(CougarSystem):
         self.table.putNumber('HoodAngle', round(self.getPosition(), 2))
         self.table.putNumber('DesiredHoodAngle', round(angle, 2))
         self.table.putNumber('LaunchAngle', (((self.angleMax - self.getPosition()) / 2) + 8.84))
-        self.table.putNumber('HoodAdjustment', round(self.adjustment), 2)
+        self.table.putNumber('HoodAdjustment', round(self.adjustment, 2))
 
     def zeroNetworkTables(self):
         self.table.putNumber('HoodAngle', self.angleMin)
