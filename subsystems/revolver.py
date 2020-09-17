@@ -102,8 +102,14 @@ class Revolver(CougarSystem):
     def getZoneTwo(self):
         return self.zoneSensorTwo.getValue()
     
+    def enableRampRate(self):
+        self.motor.setOpenLoopRampRate(2)
+        
+    def disableRampRate(self):
+        self.motor.setOpenLoopRampRate(0)
+    
     def isEmpty(self):
-        return (self.getZoneOne() <= 2048 and self.getZoneTwo() <= 2048)
+        return (self.getZoneOne() <= 1024 and self.getZoneTwo() <= 1024)
 
     def isRevolving(self):
         return self.isSpinning
