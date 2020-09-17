@@ -29,6 +29,7 @@ class Turret(CougarSystem):
         self.min = 650.0 # Min value
 
         self.turretActiveMode = True
+        self.onTarget = False
 
         self.turretDeadband = 0.1
 

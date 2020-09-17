@@ -9,11 +9,10 @@ class TurretLimelightCommand(Command):
         super().__init__('Turret Limelight')
 
         self.requires(robot.turret)
-        self.turretOnTarget = False
 
     def initialize(self):
         robot.limelight.setPipeline(0)
-        robot.ledsystem.onTarget = False
+        robot.turret.onTarget = False
 
     def execute(self):
         self.x = robot.limelight.getX() + robot.turret.getAdjustment()
@@ -26,9 +25,10 @@ class TurretLimelightCommand(Command):
 
         robot.turret.move(self.rotate)
 
-        robot.ledsystem.onTarget = (robot.limelight.getX() <= 1.0)
+        robot.turret.onTarget = (robot.limelight.getX() <= 1.0)
         robot.turret.updateNetworkTables()
 
     def end(self):
         robot.turret.stop()
+        robot.turret.onTarget = False
         robot.limelight.setPipeline(1)

@@ -1,6 +1,6 @@
 from wpilib.command import Subsystem
 
-from wpilib import DigitalInput, I2C
+from wpilib import DigitalInput, AnalogInput, I2C
 
 from .cougarsystem import *
 
@@ -27,7 +27,10 @@ class Revolver(CougarSystem):
 
         source_ = wpilib.DigitalInput(ports.revolver.absoluteThroughbore)
         self.tbEnc = wpilib.DutyCycle(source_)
-
+    
+        self.zoneSensorOne = wpilib.AnalogInput(0)
+        self.zoneSensorTwo = wpilib.AnalogInput(1)
+    
         self.motor.setIdleMode(IdleMode.kBrake)
 
         self.motor.setClosedLoopRampRate(2)
@@ -92,6 +95,15 @@ class Revolver(CougarSystem):
                 return True
 
         return False
+    
+    def getZoneOne(self): # Kill me. Good thing I'm going for EE.
+        return self.zoneSensorOne.getValue()
+
+    def getZoneTwo(self):
+        return self.zoneSensorTwo.getValue()
+    
+    def isEmpty(self):
+        return (self.getZoneOne() <= 2048 and self.getZoneTwo() <= 2048)
 
     def isRevolving(self):
         return self.isSpinning
