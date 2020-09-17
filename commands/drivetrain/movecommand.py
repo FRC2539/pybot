@@ -22,8 +22,8 @@ class MoveCommand(Command):
         self.requires(robot.drivetrain)
         self.requires(robot.ledsystem)
 
-
     def _initialize(self):
+        print(self.distance)
         super()._initialize()
         self.precision = robot.drivetrain.inchesToUnits(1)
 
@@ -35,54 +35,29 @@ class MoveCommand(Command):
         self.onTarget = 0
         self.targetPositions = []
         robot.drivetrain.setProfile(1)
-        offset = robot.drivetrain.inchesToUnits(self.distance)
+        self.offset = robot.drivetrain.inchesToUnits(self.distance)
+        print('offset ' +str(self.offset))
         sign = 1
         for position in robot.drivetrain.getPositions():
-            self.targetPositions.append(position + (offset * sign))
+            self.targetPositions.append(position + (self.offset * sign))
             sign *= -1
 
-
-        #print('my target: ' + str(self.targetPositions))
+        print('my target: ' + str(self.targetPositions))
 
         robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
-        #print('my position ' + str(robot.drivetrain.getPositions()))
+        print('current pos ' + str(robot.drivetrain.getPositions()))
 
-        #print('my target: ' + str(self.targetPositions))
-        #if self.avoidCollisions:
-            #try:
-                #if self.distance < 0:
-                    #clearance = robot.drivetrain.getRearClearance()
-                #else:
-                    #clearance = robot.drivetrain.getFrontClearance()
-
-                #if not self.blocked:
-                    #if clearance < 10:
-                        #if self.obstacleCount >= 10:
-                            #self.blocked = True
-                            #self.obstacleCount = 0
-                            #robot.drivetrain.stop()
-                            #robot.drivetrain.move(0, 0, 0)
-                            #driverhud.showAlert('Obstacle Detected')
-                        #else:
-                            #self.obstacleCount += 1
-                    #else:
-                        #self.obstacleCount = 0
-
-                #else:
-                    #if clearance >= 20:
-                        #if self.obstacleCount >= 10:
-                            #self.blocked = False
-                            #self.obstacleCount = 0
-                            #robot.drivetrain.setPositions(self.targetPositions)
-                        #else:
-                            #self.obstacleCount += 1
-                    #else:
-                        #self.obstacleCount = 0
-        return self.onTarget > 5
+    def isFinished(self):
+        print(min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])]))
+        if self.offset < 0:
+            print('here')
+            print(self.targetPositions[0] >= min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])]))
+            return self.targetPositions[0] >= min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])])
+        else:
+            return self.targetPositions[0] <= min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])])
 
     def end(self):
         robot.drivetrain.stop()
-        #robot.drivetrain.setProfile(0)
-        robot.ledsystem.turnOff()
+        robot.drivetrain.setProfile(0)

@@ -28,29 +28,29 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         startingBalls = 3#Config('Autonomous/NumberOfBallsAtStart', 3)
 
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Turn Test')
-        def Test(self):#should be good for now
-            #self.addSequential(MoveCommand(80))
-            self.addSequential(PrintCommand("turn 90"))
-            #self.addSequential(TurnCommand(90))
-            self.addSequential(CurveCommand(-125, 30, False))
-            self.addSequential(CurveCommand(-130, 30, True))
-            self.addSequential(MoveCommand(75))
-            self.addSequential(MoveCommand(-75))
+        #@fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Turn Test')
+        #def Test(self):#should be good for now
+            ##self.addSequential(MoveCommand(80))
+            ##self.addSequential(PrintCommand("turn 90"))
+            ##self.addSequential(TurnCommand(90))
+            ##self.addSequential(CurveCommand(-125, 30, False))
+            ##self.addSequential(CurveCommand(-130, 30, True))
+            #self.addSequential(MoveCommand(45))
+            ##self.addSequential(MoveCommand(-45))
 
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Test')
         def MoveTest2(self):#should be good for now
-            self.addSequential(CurveCommand(-100, 20, True))
-            self.addSequential(PrintCommand("move: 30"))
+            self.addSequential(MoveCommand(120))
+            self.addSequential(MoveCommand(-120))
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Safety Hazard')
-        def SafetyHazard(self):
-            self.addSequential(PrintCommand("SafetyHazard"))
-            self.addSequential(MoveCommand(40), 2)
-            self.addSequential(TurnCommand(90), 2)
-            self.addSequential(MoveCommand(40), 2)
+
+        #@fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Safety Hazard')
+        #def SafetyHazard(self):
+            #self.addSequential(PrintCommand("SafetyHazard"))
+            #self.addSequential(MoveCommand(40), 2)
+            #self.addSequential(TurnCommand(90), 2)
+            #self.addSequential(MoveCommand(40), 2)
 
 

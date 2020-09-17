@@ -30,7 +30,7 @@ class BaseDrive(DebuggableSubsystem):
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
             self.falconP = 0.0001#Config('DriveTrain/Speed/P', 0.001) # 0.001
-            self.falconI = 0.0001#Config('DriveTrain/Speed/I', 0.00) # 0.00
+            self.falconI = 0#Config('DriveTrain/Speed/I', 0.00) # 0.00
             self.falconD = 1#Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
             self.falconF = 0.045#Config('DriveTrain/Speed/F', 0.1) # 0.1
             self.falconIZone = 0#Config('DriveTrain/Speed/IZone', 0) # 0
@@ -557,11 +557,10 @@ class BaseDrive(DebuggableSubsystem):
 
             # use the lower ones for auto moves
 
-            motor.config_kP(1, 0.03, 0)
-            motor.config_kI(1, 0.00005, 0)
+            motor.config_kP(1, 0.005, 0)
+            motor.config_kI(1, 0, 0)
             motor.config_kD(1, 0.05, 0)
-            motor.config_kF(1, 0.03, 0)
-            motor.config_IntegralZone(1, 5000, 0)
+            motor.config_kF(1, 0.003, 0)
 
             # use below for turn
 
@@ -640,15 +639,15 @@ class BaseDrive(DebuggableSubsystem):
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / 18.85#Config('DriveTrain/wheelDiameter', 6))
+        rotations = distance / 18.064 #Config('DriveTrain/wheelDiameter', 6))
 
-        return float((rotations) * 2048) * 10.71#Config('DriveTrain/ticksPerRotation', 4096))
+        return float((rotations) * 2048) * 10.71 #Config('DriveTrain/ticksPerRotation', 4096))
 
     def rotationsToInches(self, rotations):
         return (rotations / 8.45) * 18.25
 
     def ticksToInches(self, ticks):
-        return ((ticks / 2048) / 8.45) * 18.25 # 0.46355
+        return ((ticks / 2048) / 10.71) * 18.064 # 0.46355
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
