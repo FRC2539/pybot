@@ -1,11 +1,13 @@
-from .basedrive import BaseDrive
+from .falconbasedrive import FalconBaseDrive
+from .neobasedrive import NeoBaseDrive
 from ctre import ControlMode
 from wpilib.drive import RobotDriveBase
 import ports
 
-class SkidDrive(BaseDrive):
-    '''A drive base where all wheels on each side move together.'''
+competitionRobot = False
 
+class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
+    '''A drive base where all wheels on each side move together.'''
 
     def _configureMotors(self):
 
