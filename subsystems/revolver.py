@@ -109,7 +109,7 @@ class Revolver(CougarSystem):
         self.motor.setOpenLoopRampRate(0)
     
     def isEmpty(self):
-        return (self.getZoneOne() <= 1024 and self.getZoneTwo() <= 1024)
+        return (self.getZoneOne() >= 50 and self.getZoneTwo() >= 50) # It see's something when the value is about 10.
 
     def isRevolving(self):
         return self.isSpinning
