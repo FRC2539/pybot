@@ -18,7 +18,7 @@ import ports
 
 from crapthatwillneverwork.simcansparkmax import SimCANSparkMax
 
-class BaseDrive(CougarSystem):
+class NeoBaseDrive(CougarSystem):
     '''
     A general case drive train system. It abstracts away shared functionality of
     the various drive types that we can employ. Anything that can be done
