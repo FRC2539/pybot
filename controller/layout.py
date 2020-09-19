@@ -53,7 +53,7 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
 
-    driveController.A.toggleWhenPressed(IntakeCommand()) # Used at pickup station
+    driveController.A.whenPressed(IntakeCommand()) # Used at pickup station
     driveController.B.toggleWhenPressed(ShooterDirectionCommand())
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(IntakeDirectionCommand())

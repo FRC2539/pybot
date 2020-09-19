@@ -22,8 +22,10 @@ class FireSequenceCommand(Command):
         robot.revolver.resetRevolverEncoder()
         robot.pneumatics.retractBallLauncherSolenoid()
         
-        if all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
-            robot.revolver.setStaticSpeed()
+        #if all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
+            #robot.revolver.setStaticSpeed()
+        
+        robot.revolver.setStaticSpeed()
 
         self.startPos = robot.revolver.getPosition()
         self.goTo = self.startPos - 10 
@@ -32,10 +34,9 @@ class FireSequenceCommand(Command):
             self.goTo += 360
 
     def execute(self):
-        print('\ngoto\n' + str(self.goTo))
-        print('\npos\n ' + str(robot.revolver.getPosition())) 
+        print('\ntarget stat\n ' + str(robot.turret.onTarget)) 
         
-        if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
+        if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget:# and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
             self.proceed = True
             robot.revolver.setStaticSpeed()
             
