@@ -107,7 +107,7 @@ def init():
     #operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
     #operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
 
-    operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
+    operatorController.RightTrigger.toggleWhenPressed(ShooterDirectionCommand()) # Second
     #operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
 
     operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
