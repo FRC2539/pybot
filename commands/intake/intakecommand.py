@@ -1,8 +1,8 @@
-from wpilib.command import Command
+from wpilib.command import InstantCommand
 
 import robot
 
-class IntakeCommand(Command):
+class IntakeCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Intake')
@@ -10,10 +10,11 @@ class IntakeCommand(Command):
         self.requires(robot.intake)
 
     def initialize(self):
-        if not robot.pneumatics.isIntakeLowered():
-            robot.pneumatics.extendIntakeSolenoid()
+        if not robot.intake.intaking:
+            if not robot.pneumatics.isIntakeLowered():
+                robot.pneumatics.extendIntakeSolenoid()
             
-        robot.intake.intakeBalls()
-
-    def end(self):
-        robot.intake.stopIntake()
+            robot.intake.intakeBalls()
+        
+        else:
+            robot.intake.stopIntake()

@@ -37,6 +37,7 @@ class FireSequenceCommand(Command):
         print('\ntarget stat\n ' + str(robot.turret.onTarget)) 
         
         if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget:# and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
+
             self.proceed = True
             robot.revolver.setStaticSpeed()
             

@@ -10,7 +10,7 @@ import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
 #import sympy
 
 from networktables import NetworkTables
-from rev import CANSparkMax, ControlType, MotorType, IdleMode
+from ctre import WPI_TalonFX, ControlMode, NeutralMode, FeedbackDevice
 from navx import AHRS
 
 from custom.config import Config
@@ -37,20 +37,21 @@ class FalconBaseDrive(CougarSystem):
 
         try:
             self.motors = [
-                CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),
-                CANSparkMax(ports.drivetrain.frontRightMotorID, MotorType.kBrushless),
-                CANSparkMax(ports.drivetrain.backLeftMotorID, MotorType.kBrushless),
-                CANSparkMax(ports.drivetrain.backRightMotorID, MotorType.kBrushless)
+                WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
+                WPI_TalonFX(ports.drivetrain.frontRightMotorID),
+                WPI_TalonFX(ports.drivetrain.backLeftMotorID),
+                WPI_TalonFX(ports.drivetrain.backRightMotorID)
             ]
 
         except AttributeError:
             self.motors = [
-                CANSparkMax(ports.drivetrain.leftMotorID, MotorType.kBrushless),
-                CANSparkMax(ports.drivetrain.rightMotorID, MotorType.kBrushless)
+                WPI_TalonFX(ports.drivetrain.leftMotorID),
+                WPI_TalonFX(ports.drivetrain.rightMotorID)
             ]
 
         for motor in self.motors:
-            motor.setIdleMode(IdleMode.kBrake)
+            motor.setNeutralMode(NeutralMode.Brake)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -153,16 +154,14 @@ class FalconBaseDrive(CougarSystem):
                 come to a stop.
                 '''
                 for motor in self.motors:
-                    (motor.getPIDController()).setIAccum(0)
+                    motor.setIntegralAccumulator(0, 0, 0)
 
 
-            for controller, speed in zip(self.activePIDControllers, speeds):
-                print('running ')
-                controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
-                #controller.set(speed)
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(ControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(speed * self.maxPercentVBus)
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -176,7 +175,7 @@ class FalconBaseDrive(CougarSystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.getPIDController().setReference(position, ControlType.kPosition, 0, 0)
+            motor.set(ControlMode.Position, position)
 
 
     def averageError(self):
@@ -196,7 +195,7 @@ class FalconBaseDrive(CougarSystem):
 
     def resetEncoders(self):
         for motor in self.motors:
-            motor.getEncoder().setPosition(0.0)
+            motor.set(ControlMode.Position, 0.0)
 
     def stop(self):
         '''Disable all motors until set() is called again.'''
@@ -204,7 +203,6 @@ class FalconBaseDrive(CougarSystem):
             motor.stopMotor()
 
         self.lastInputs = None
-
 
     def resetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
@@ -302,12 +300,12 @@ class FalconBaseDrive(CougarSystem):
         adjustment = angleDiff * 0.006
 
         if adjustment > 0:
-            self.activeMotors[0].set(0.5 + adjustment)
-            self.activeMotors[1].set(0.5)
+            self.activeMotors[0].set(ControlMode.PercentOutput, 0.5 + adjustment)
+            self.activeMotors[1].set(ControlMode.PercentOutput, 0.5)
 
         else:
-            self.activeMotors[0].set(0.5)
-            self.activeMotors[1].set(0.5 + adjustment)
+            self.activeMotors[0].set(ControlMode.PercentOutput, 0.5)
+            self.activeMotors[1].set(ControlMode.PercentOutput, 0.5 + adjustment)
 
     def getFeetTravelled(self):
         pos = self.getPositions()
@@ -380,13 +378,11 @@ class FalconBaseDrive(CougarSystem):
 
     def getSpeeds(self):
         '''Returns the speed of each active motors.'''
-        return [x.getVelocity() for x in self.activeEncoders]
-
+        return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
     def getPositions(self):
         '''Returns the position of each active motor.'''
-        return [x.getEncoder().getPosition() for x in self.activeMotors]
-
+        return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
 
     def getFrontClearance(self):
         '''Override this in drivetrain if a distance sensor is attached.'''

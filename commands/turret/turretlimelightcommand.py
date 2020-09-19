@@ -25,7 +25,7 @@ class TurretLimelightCommand(Command):
 
         robot.turret.move(self.rotate)
 
-        robot.turret.onTarget = (robot.limelight.getX() <= 1.0)
+        robot.turret.onTarget = (abs(robot.limelight.getX()) <= 3.0)
         robot.turret.updateNetworkTables()
 
     def end(self):

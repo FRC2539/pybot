@@ -22,7 +22,11 @@ class StevenShooterLimelightCommand(Command):
         if self.speed > 4800:
             self.speed = 4800
 
+        self.speed = 6000
+
         robot.shooter.setRPM(self.speed)
+        
+        print('rpm ' + str(robot.shooter.getRPM()))
         
         if robot.shooter.getRPM() + 100 >= self.speed: # Only needs to pass this once. Adds a tolerance of 30, in case it hovers below.
             robot.shooter.atGoal = True
