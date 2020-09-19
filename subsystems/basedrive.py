@@ -73,8 +73,8 @@ class BaseDrive(CougarSystem):
         self.lastInputs = None
 
         self.setUseEncoders(True)
-        self.maxSpeed = 5500#Config('DriveTrain/maxSpeed') # 2500
-        self.speedLimit = 5500#Config('DriveTrain/normalSpeed') # 4500
+        self.maxSpeed = 6500#Config('DriveTrain/maxSpeed') # 2500
+        self.speedLimit = 6500#Config('DriveTrain/normalSpeed') # 4500
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 

@@ -34,7 +34,7 @@ class FireSequenceCommand(Command):
         print('\ngoto\n' + str(self.goTo))
         print('\npos\n ' + str(robot.revolver.getPosition())) 
         
-        if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget:
+        if abs(self.goTo - robot.revolver.getPosition()) <= 5:# and robot.turret.onTarget:
             self.proceed = True
             
         if robot.shooter.atGoal and robot.revolver.inDropZone() and self.proceed:

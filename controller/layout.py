@@ -21,6 +21,7 @@ from commands.turret.increaseturretadjustmentcommand import IncreaseTurretAdjust
 from commands.turret.decreaseturretadjustmentcommand import DecreaseTurretAdjustmentCommand
 from commands.hood.increasehoodadjustmentcommand import IncreaseHoodAdjustmentCommand
 from commands.hood.decreasehoodadjustmentcommand import DecreaseHoodAdjustmentCommand
+from commands.shooter.maketherobotshootballsandonlyshootballscommand import MakeTheRobotShootBallsAndOnlyShootBallsCommand
 
 from commands.resetcommand import ResetCommand
 from . import logicalaxes
@@ -96,6 +97,8 @@ def init():
     #operatorController.Back.whenPressed(ToggleTurretModeCommand())
 
     #operatorController.A.toggleWhenPressed(IntakeDirectionCommand())
+    operatorController.A.toggleWhenPressed(SetRPMCommand(6000))
+    operatorController.B.toggleWhenPressed(ReverseBallsCommand())
     #operatorController.B.toggleWhenPressed(ShooterDirectionCommand())
     #operatorController.X.toggleWhenPressed(LaunchBallsCommand())
     #operatorController.Y.toggleWhenPressed(ReverseBallsCommand())
@@ -107,7 +110,7 @@ def init():
     operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
     #operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
 
-    #operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
-    #operatorController.LeftBumper.whileHeld(LowerHoodCommand())
+    operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
+    operatorController.LeftBumper.whileHeld(LowerHoodCommand())
 
     #operatorController.LeftJoystick.toggleWhenPressed(OutakeCommand())
