@@ -83,7 +83,6 @@ class Turret(CougarSystem):
             self.motor.set(val)
 
     def testMove(self, val): # Don't use this.
-        print('here')
         self.updateNetworkTables()
         if (self.getPosition() < self.max - self.getPosition()):
             self.speedLimit = self.getPosition() * .0015
@@ -160,7 +159,6 @@ class Turret(CougarSystem):
         self.table.putNumber('TurretAdjustment', round(self.adjustment, 2))
 
     def outOfRange(self):
-        print(self.getPosition())
         return (self.getPosition() > self.max) or (self.getPosition() < self.min)
 
     def getPosition(self):
@@ -173,7 +171,6 @@ class Turret(CougarSystem):
         self.motor.set(ControlMode.PercentOutput, math.copysign(min([abs(x), 0.4]), x))
 
     def isLimitSwitch(self): # Limit switch is at the upper end.
-        print(not self.limitSwitch.get())
         if not self.limitSwitch.get() or self.getPosition() >= self.max + 10:
             self.stop()
             self.setMax()

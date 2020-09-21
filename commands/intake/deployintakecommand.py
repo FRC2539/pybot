@@ -6,6 +6,8 @@ class DeployIntakeCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Deploy Intake')
+        
+        self.requires(robot.intake)
 
     def initialize(self):
         robot.intake.stopIntake()

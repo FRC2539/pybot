@@ -6,11 +6,10 @@ from wpilib.geometry import Rotation2d
 from .cougarsystem import *
 
 import math
-import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
-#import sympy
+import pathlib
 
 from networktables import NetworkTables
-from ctre import WPI_TalonFX, ControlMode, NeutralMode, FeedbackDevice
+from ctre import WPI_TalonFX, TalonFXControlMode, NeutralMode, FeedbackDevice, Orchestra
 from navx import AHRS
 
 from custom.config import Config
@@ -82,9 +81,11 @@ class FalconBaseDrive(CougarSystem):
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
         self._publishPID('Position', 1)
+        self.setProfile(0)
 
         self.resetEncoders()
         self.resetPID()
+        self.establishOrchestra()
 
         self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))
 
@@ -146,6 +147,7 @@ class FalconBaseDrive(CougarSystem):
             speeds = [x / maxSpeed for x in speeds]
 
         '''Use speeds to feed motor output.'''
+                                
         if self.useEncoders:
             if not any(speeds):
                 '''
@@ -153,15 +155,15 @@ class FalconBaseDrive(CougarSystem):
                 reduce overshooting, thereby shortening the time required to
                 come to a stop.
                 '''
-                for motor in self.motors:
+                for motor in self.activeMotors:
                     motor.setIntegralAccumulator(0, 0, 0)
 
-
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
+                print('speeeeed ' + str(speed * self.speedLimit))
+                motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
+                motor.set(TalonFXControlMode.PercentOutput, speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -175,7 +177,7 @@ class FalconBaseDrive(CougarSystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.set(ControlMode.Position, position)
+            motor.set(TalonFXControlMode.Position, position)
 
 
     def averageError(self):
@@ -194,8 +196,9 @@ class FalconBaseDrive(CougarSystem):
         return self.averageError() <= tolerance
 
     def resetEncoders(self):
-        for motor in self.motors:
-            motor.set(ControlMode.Position, 0.0)
+        for motor in self.activeMotors:
+            motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+            motor.setSelectedSensorPosition(0, 0, 0)
 
     def stop(self):
         '''Disable all motors until set() is called again.'''
@@ -207,14 +210,13 @@ class FalconBaseDrive(CougarSystem):
     def resetPID(self):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
-            motor.setClosedLoopRampRate(0.25)
-            controller = motor.getPIDController()
+            motor.configClosedloopRamp(0.25, 0)
             for profile in range(2):
-                controller.setP(0.0000001, profile) # 0.000007 TODO: Test this new value. We want 
-                controller.setI(0, profile) # 0
-                controller.setD(0.0001, profile) # 0.0001
-                controller.setFF(0.0002, profile) # 0.0005
-                controller.setIZone(0, profile) # 0
+                motor.config_kP(profile, 0.001, 0) # 0.000007 TODO: Test this new value. We want 
+                motor.config_kI(profile, 0, 0) # 0
+                motor.config_kD(profile, 0.0001, 0) # 0.0001
+                motor.config_kF(profile, 0, 0) # 0.0005
+                motor.config_IntegralZone(profile, 0, 0) # 0
 
 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
@@ -300,12 +302,12 @@ class FalconBaseDrive(CougarSystem):
         adjustment = angleDiff * 0.006
 
         if adjustment > 0:
-            self.activeMotors[0].set(ControlMode.PercentOutput, 0.5 + adjustment)
-            self.activeMotors[1].set(ControlMode.PercentOutput, 0.5)
+            self.activeMotors[0].set(TalonFXControlMode.PercentOutput, 0.5 + adjustment)
+            self.activeMotors[1].set(TalonFXControlMode.PercentOutput, 0.5)
 
         else:
-            self.activeMotors[0].set(ControlMode.PercentOutput, 0.5)
-            self.activeMotors[1].set(ControlMode.PercentOutput, 0.5 + adjustment)
+            self.activeMotors[0].set(TalonFXControlMode.PercentOutput, 0.5)
+            self.activeMotors[1].set(TalonFXControlMode.PercentOutput, 0.5 + adjustment)
 
     def getFeetTravelled(self):
         pos = self.getPositions()
@@ -354,18 +356,20 @@ class FalconBaseDrive(CougarSystem):
         return degrees
 
 
-    def inchesToRotations(self, distance):
+    def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / 18.25#(math.pi * Config('DriveTrain/wheelDiameter'))
 
-        return float(rotations * 10.71)
+        return float(rotations * 10.71 * 2048) 
 
-    def rotationsToInches(self, rotations):
-        return (rotations / 10.71) * 18.25
+
+    def ticksToInches(self, rotations):
+        return ((rotations / 10.71) / 2048) * 18.25
+
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
-
+        
 
     def getTilt(self):
         return self.navX.getPitch() - self.flatAngle
@@ -380,9 +384,11 @@ class FalconBaseDrive(CougarSystem):
         '''Returns the speed of each active motors.'''
         return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
+
     def getPositions(self):
         '''Returns the position of each active motor.'''
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+
 
     def getFrontClearance(self):
         '''Override this in drivetrain if a distance sensor is attached.'''
@@ -419,6 +425,9 @@ class FalconBaseDrive(CougarSystem):
         '''If we can't use encoders, attempt to approximate that speed.'''
         self.maxPercentVBus = speed / self.maxSpeed
 
+    def setProfile(self, num):
+        for x in self.activeMotors:
+            x.selectProfileSlot(num, 0)
 
     def enableSimpleDriving(self):
         '''
@@ -478,6 +487,22 @@ class FalconBaseDrive(CougarSystem):
 
         table.addSubTableListener(updatePID, localNotify=True)
 
+    def establishOrchestra(self):
+        self.theOrchestra = Orchestra()
+        
+        for motor in self.motors:
+            self.theOrchestra.addInstrument(motor)
+
+        self.theOrchestra.loadMusic(str(pathlib.Path(__file__).absolute()) + '/swtheme.chrp')
+        
+    def playM(self):
+        self.theOrchestra.play()
+        
+    def pauseM(self):
+        self.theOrchestra.pause()
+        
+    def stopM(self):
+        self.theOrchestra.stop()
 
     def _configureMotors(self):
         '''

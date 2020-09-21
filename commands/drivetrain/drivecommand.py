@@ -19,6 +19,8 @@ class DriveCommand(Command):
 
         self.speedLimit = speedLimit
 
+        robot.drivetrain.resetPID()
+
     def initialize(self):
         robot.drivetrain.updateOdometry()
         robot.drivetrain.stop()

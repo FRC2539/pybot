@@ -20,13 +20,22 @@ class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
                 .follow(self.motors[0])
             self.motors[3] \
                 .follow(self.motors[1])
+            
+        print('following')
 
-        self.activePIDControllers = [y.getPIDController() for y in self.activeMotors]
-        self.activeEncoders = [y.getEncoder() for y in self.activeMotors]
+        try:
 
-        #'''Invert encoders'''
-        #for motor in self.activeMotors:
-            #motor.setSensorPhase(True)
+            self.activePIDControllers = [y.getPIDController() for y in self.activeMotors]
+            self.activeEncoders = [y.getEncoder() for y in self.activeMotors]
+
+        except(AttributeError):
+            
+            self.activePIDControllers = []
+            self.activeEncoders = []
+
+            '''Invert encoders'''
+            for motor in self.activeMotors:
+                motor.setSensorPhase(True)
 
 
     def _calculateSpeeds(self, x, y, rotate):

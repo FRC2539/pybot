@@ -87,7 +87,6 @@ class Hood(CougarSystem):
         self.motor.set(speed)
 
     def raiseHood(self):
-        print('hood up ' + str(self.getPosition()))
         if self.getPosition() < self.angleMax:
             self.motor.set(0.1)
         else:

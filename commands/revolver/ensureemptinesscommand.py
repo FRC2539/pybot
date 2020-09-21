@@ -10,22 +10,24 @@ class EnsureEmptinessCommand(Command):
         self.requires(robot.revolver)
 
     def initialize(self):
+        robot.pneumatics.extendIntakeSolenoid()
         if robot.revolver.isEmpty():
             robot.revolver.disableRampRate()
             robot.revolver.stopRevolver()
         else:
             robot.revolver.enableRampRate()
-            robot.revolver.setVariableSpeed(0.5)
+            robot.revolver.setVariableSpeed(-0.6)
     
     def execute(self):
-        print('signal one ' + str(robot.revolver.getZoneOne()))
         if robot.revolver.isEmpty():
             robot.revolver.disableRampRate()
             robot.revolver.stopRevolver()
         else:
             robot.revolver.enableRampRate()
-            robot.revolver.setVariableSpeed(0.5)
+            robot.revolver.setVariableSpeed(-0.6)
             
     def end(self):
+        robot.intake.stopIntake()
+        robot.pneumatics.retractIntakeSolenoid()
         robot.revolver.enableRampRate()
         robot.revolver.stopRevolver()

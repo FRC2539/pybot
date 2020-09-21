@@ -6,8 +6,6 @@ from wpilib.geometry import Rotation2d
 from .cougarsystem import *
 
 import math
-import numpy # The 'fake' math lib lol. And yes, I don't import as 'np'
-#import sympy
 
 from networktables import NetworkTables
 from rev import CANSparkMax, ControlType, MotorType, IdleMode

@@ -135,11 +135,6 @@ class Limelight(CougarSystem):
         return self.yD
 
     def bensDistance(self, llAngle):
-        print('Y ' + str(self.getY()))
-        print('angle ' + str(llAngle))
-
-        print('2 ' + str(math.tan(math.radians(llAngle))))
-
         return (98.25 - self.llHeight) / (math.tan(math.radians(llAngle + self.getY())))
 
     def updateNetworkTables(self):
