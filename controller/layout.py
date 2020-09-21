@@ -95,7 +95,16 @@ def init():
 
     operatorController.A.toggleWhenPressed(SetRPMCommand(6000))
     operatorController.B.toggleWhenPressed(ReverseBallsCommand())
-    operatorController.RightTrigger.toggleWhenPressed(FireSequenceCommand()) # Second
+    #operatorController.B.toggleWhenPressed(ShooterDirectionCommand())
+    #operatorController.X.toggleWhenPressed(LaunchBallsCommand())
+    #operatorController.Y.toggleWhenPressed(ReverseBallsCommand())
+
+    #operatorController.DPadUp.toggleWhenPressed(ExtendLauncherCommand())
+    #operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
+    #operatorController.DPadRight.toggleWhenPressed(SudoCommandGroup())
+
+    operatorController.RightTrigger.toggleWhenPressed(ShooterDirectionCommand()) 
+
     #operatorController.RightBumper.whileHeld(TurretLimelightCommand()) # First
 
     operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
