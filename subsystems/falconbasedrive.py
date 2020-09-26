@@ -58,7 +58,7 @@ class FalconBaseDrive(CougarSystem):
         self.activeMotors = []
         self._configureMotors()
 
-        self.drivetrainWidth = 23.75
+        self.drivetrainWidth = 23.95
         self.trajectoryDerivative = None
         self.trajectoryLength = None
         self.finalX = None
@@ -73,8 +73,8 @@ class FalconBaseDrive(CougarSystem):
         self.lastInputs = None
 
         self.setUseEncoders(True)
-        self.maxSpeed = 5500#Config('DriveTrain/maxSpeed') # 2500
-        self.speedLimit = 5500#Config('DriveTrain/normalSpeed') # 4500
+        self.maxSpeed = 12500#Config('DriveTrain/maxSpeed') # 2500
+        self.speedLimit = 12500#Config('DriveTrain/normalSpeed') # 4500
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 
@@ -147,7 +147,9 @@ class FalconBaseDrive(CougarSystem):
             speeds = [x / maxSpeed for x in speeds]
 
         '''Use speeds to feed motor output.'''
-                                
+
+        #self.useEncoders = False
+
         if self.useEncoders:
             if not any(speeds):
                 '''
@@ -159,7 +161,7 @@ class FalconBaseDrive(CougarSystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print('speeeeed ' + str(speed * self.speedLimit))
+                #print('speeeeed ' + str(speed * self.speedLimit))
                 motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
         else:
             for motor, speed in zip(self.activeMotors, speeds):
@@ -211,13 +213,22 @@ class FalconBaseDrive(CougarSystem):
         '''Set all PID values to 0 for profiles 0 and 1.'''
         for motor in self.activeMotors:
             motor.configClosedloopRamp(0.25, 0)
-            for profile in range(2):
-                motor.config_kP(profile, 0.001, 0) # 0.000007 TODO: Test this new value. We want 
-                motor.config_kI(profile, 0, 0) # 0
-                motor.config_kD(profile, 0.0001, 0) # 0.0001
-                motor.config_kF(profile, 0, 0) # 0.0005
-                motor.config_IntegralZone(profile, 0, 0) # 0
 
+            motor.config_kP(0, 0.05, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kI(0, 0, 0) # 0
+            motor.config_kD(0, 1, 0) # 0.0001
+            motor.config_kF(0, 0.1, 0) # 0.0005
+            motor.config_IntegralZone(0, 0, 0) # 0
+
+            motor.config_kP(1, 0.009, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kI(1, 0, 0) # 0
+            motor.config_kD(1, 0.05, 0) # 0.0001
+            motor.config_kF(1, 0.003, 0) # 0.0005
+
+            motor.config_kP(2, 0.032, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kI(2, 0, 0) # 0
+            motor.config_kD(2, 0.05, 0) # 0.0001
+            motor.config_kF(2, 0.01, 0) # 0.0005
 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         '''
@@ -358,13 +369,13 @@ class FalconBaseDrive(CougarSystem):
 
     def inchesToTicks(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / 18.25#(math.pi * Config('DriveTrain/wheelDiameter'))
+        rotations = distance / 18.064#(math.pi * Config('DriveTrain/wheelDiameter'))
 
         return float(rotations * 10.71 * 2048) 
 
 
     def ticksToInches(self, rotations):
-        return ((rotations / 10.71) / 2048) * 18.25
+        return ((rotations / 10.71) / 2048) * 18.064
 
 
     def resetTilt(self):

@@ -34,7 +34,7 @@ class FireSequenceCommand(Command):
             self.goTo += 360
 
     def execute(self):
-        print('\ntarget stat\n ' + str(robot.turret.onTarget)) 
+        #print('\ntarget stat\n ' + str(robot.turret.onTarget))
         
         if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget:# and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
 

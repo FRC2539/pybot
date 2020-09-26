@@ -4,7 +4,7 @@ from ctre import ControlMode
 from wpilib.drive import RobotDriveBase
 import ports
 
-competitionRobot = False
+competitionRobot = True
 
 class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
     '''A drive base where all wheels on each side move together.'''
@@ -21,7 +21,7 @@ class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
             self.motors[3] \
                 .follow(self.motors[1])
             
-        print('following')
+        #print('following')
 
         try:
 
