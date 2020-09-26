@@ -35,10 +35,10 @@ class DefaultCommand(Command):
         
         if robot.pneumatics.isPressureLow(): # Use heartbeat style.
             
-            print('LOWWW')
+            #print('LOWWW')
             
             if robot.shooter.atGoal: # The shooter has reached the goal. Technically, don't need to check for shooting here.
-                print('at goal\n')
+                #print('at goal\n')
                 if robot.revolver.sequenceEngaged: 
                     robot.ledsystem.colorOneHeartbeat() # Shooting!
                 else:

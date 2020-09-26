@@ -37,13 +37,13 @@ class MoveCommand(Command):
             self.targetPositions.append(position + (self.offset * sign))
             sign *= -1
 
-        print('t ' + str(self.targetPositions))
+        #print('t ' + str(self.targetPositions))
 
         robot.drivetrain.setPositions(self.targetPositions)
 
     def execute(self):
-        print('t ' + str(self.targetPositions))
-        print('c ' + str(robot.drivetrain.getPositions()))
+        #print('t ' + str(self.targetPositions))
+        #print('c ' + str(robot.drivetrain.getPositions()))
 
     def isFinished(self):
         if self.offset < 0:

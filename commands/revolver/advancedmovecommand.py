@@ -37,10 +37,10 @@ class AdvancedMoveCommand(Command):
 
 
     def execute(self):
-        print('a ' + str(robot.revolver.getAbsolute()))
-        print('nt ' + str(self.nextTarget))
+        #print('a ' + str(robot.revolver.getAbsolute()))
+        #print('nt ' + str(self.nextTarget))
 
-        print('ap ' + str(robot.revolver.atPosition(self.nextTarget)))
+        #print('ap ' + str(robot.revolver.atPosition(self.nextTarget)))
 
         self.smallJump = self.pattern[self.count]
 
@@ -49,7 +49,7 @@ class AdvancedMoveCommand(Command):
                 self.nextTarget += 0.1 * self.dirMod
                 self.dirMod *= -1
                 robot.revolver.setPosition(self.nextTarget)
-                print('set')
+                #print('set')
             else:
                 self.nextTarget += 0.2
                 robot.revolver.setPosition(self.nextTarget)

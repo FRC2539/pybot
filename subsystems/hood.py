@@ -94,7 +94,7 @@ class Hood(CougarSystem):
         self.updateNetworkTables(self.getPosition())
 
     def lowerHood(self):
-        print('hood down ' + str(self.getPosition()))
+        #print('hood down ' + str(self.getPosition()))
         if self.getPosition() > self.angleMin:
             self.motor.set(-0.1)
         else:
@@ -110,7 +110,7 @@ class Hood(CougarSystem):
 
     def atLowest(self):
         if self.getPosition() <= self.angleMin:
-            print('oof ' +  str(self.getPosition()))
+            #print('oof ' +  str(self.getPosition()))
             self.motor.stopMotor()
             return True
         else:
@@ -165,7 +165,7 @@ class Hood(CougarSystem):
                 self.setPercent(self.speed)
 
     def benCalcAngle(self, distance):
-        print('using ' + str(distance))
+        #print('using ' + str(distance))
 
         y = 0.194735542 * abs(distance) + 170.4104165
 
@@ -180,7 +180,7 @@ class Hood(CougarSystem):
         diff = self.getPosition() - desiredAngle
 
         if abs(diff) <= 3.0:
-            print('done')
+            #print('done')
             self.stopHood()
             return True
 
@@ -188,7 +188,7 @@ class Hood(CougarSystem):
 
         val = math.copysign(min(abs(max(abs(diff / 130), 0.08)), 0.3), -diff)
 
-        print(val)
+        #print(val)
 
         self.motor.set(val)
 

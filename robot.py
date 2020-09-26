@@ -79,7 +79,7 @@ class KryptonBot(CommandBasedRobot):
 
         try:
             with open('/home/lvuser/py/data.txt', 'w') as f:
-                print('len ' + str(writeThese))
+                #print('len ' + str(writeThese))
                 for listitem in writeThese:
                     f.write(str(listitem) + '\n')
         except(FileNotFoundError):

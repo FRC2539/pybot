@@ -21,7 +21,7 @@ class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
             self.motors[3] \
                 .follow(self.motors[1])
             
-        print('following')
+        #print('following')
 
         try:
 

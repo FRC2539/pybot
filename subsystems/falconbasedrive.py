@@ -161,7 +161,7 @@ class FalconBaseDrive(CougarSystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print('speeeeed ' + str(speed * self.speedLimit))
+                #print('speeeeed ' + str(speed * self.speedLimit))
                 motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
         else:
             for motor, speed in zip(self.activeMotors, speeds):
