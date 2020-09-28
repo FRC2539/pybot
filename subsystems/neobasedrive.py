@@ -155,7 +155,7 @@ class NeoBaseDrive(CougarSystem):
 
 
             for controller, speed in zip(self.activePIDControllers, speeds):
-                print('running ')
+                #print('running ')
                 controller.setReference(speed * self.speedLimit, ControlType.kVelocity, 0, 0) # 'Speed' is a percent.
                 #controller.set(speed)
         else:

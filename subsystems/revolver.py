@@ -23,8 +23,8 @@ class Revolver(CougarSystem):
 
         self.controller.setP(1, 0)
         self.controller.setI(0, 0)
-        self.controller.setD(0.001, 0)
-        self.controller.setFF(0.1, 0)
+        self.controller.setD(.001, 0)
+        self.controller.setFF(.1, 0)
         self.controller.setIZone(0, 0)
 
         source_ = wpilib.DigitalInput(ports.revolver.absoluteThroughbore)
@@ -113,3 +113,9 @@ class Revolver(CougarSystem):
 
     def isRevolving(self):
         return self.isSpinning
+
+
+    def initDefaultCommand(self):
+        from commands.revolver.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())

@@ -19,12 +19,12 @@ class CamTranTurretLimelight(Command):
     def execute(self):
         robot.turret.followTargetPID(self.goal) # Try this out tonight.
 
-        print('Goal: ' + str(self.goal)) # GOAL SHOULD NOT BE CHANGING.
+        #print('Goal: ' + str(self.goal)) # GOAL SHOULD NOT BE CHANGING.
 
-        print('At: ' +  str(robot.turret.getPosition()))
+        #print('At: ' +  str(robot.turret.getPosition()))
 
     def isFinished(self):
-        print('x' + str(robot.limelight.getX()))
+        #print('x' + str(robot.limelight.getX()))
         if ((abs(robot.limelight.getX()) < 0.1) and (robot.limelight.getTape())) or (robot.turret.outOfRange()):
             return True
 

@@ -86,7 +86,7 @@ class {subsystem}(Subsystem):
     with open('commands/resetcommand.py', 'w') as f:
         f.write(resetcommand)
 
-    print('Generated subsystem %s' % subsystem)
+    #print('Generated subsystem %s' % subsystem)
 
 
 def generateCommand():
@@ -125,9 +125,9 @@ def generateCommand():
             'Command',
             'DefaultCommand'
         ]
-        print('Select a base class:')
+        #print('Select a base class:')
         for id, cmd in enumerate(bases):
-            print('%d.) %s' % (id, cmd))
+            #print('%d.) %s' % (id, cmd))
 
         inherits = input('')
         if inherits.isdigit():
@@ -246,11 +246,11 @@ def generateCommand():
     with open('%s/%s.py' % (path, command.lower()), 'w') as f:
         f.write(content)
 
-    print('Created command %s' % command)
+    #print('Created command %s' % command)
 
 
 def error(msg):
-    print('\033[91m%s\033[0m' % msg)
+    #print('\033[91m%s\033[0m' % msg)
     sys.exit()
 
 
@@ -260,7 +260,7 @@ usage:
     {0} command [CommandName]
     {0} subsystem [SubsystemName]
 '''
-    print(usage.lstrip().format(sys.argv[0]))
+    #print(usage.lstrip().format(sys.argv[0]))
     sys.exit()
 
 

@@ -46,7 +46,7 @@ class CougarSystem(Subsystem):
                     if eval(str(line[:-1]) + '[0]') == self.name: # Checks the data file for data for the subsystem.
                         self.data[eval(str(line[:-1]) + '[1]')] = eval(str(line[:-1]) + '[2]')
 
-            print('\n\n updated ' + str(self.data) + ' \n\n\n')
+            #print('\n\n updated ' + str(self.data) + ' \n\n\n')
 
         except(FileNotFoundError):
             pass
@@ -55,7 +55,7 @@ class CougarSystem(Subsystem):
         if var in self.data:
             return self.data[var] # Returns the data recorded in disabledInit
         else:
-            print('\n\n USING DEFAULT \n\n')
+            #print('\n\n USING DEFAULT \n\n')
             return default
 
     def capture(self, var, method):

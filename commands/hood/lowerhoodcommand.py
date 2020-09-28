@@ -13,7 +13,7 @@ class LowerHoodCommand(Command):
         robot.hood.lowerHood()
 
     def isFinished(self):
-        print(robot.hood.getPosition())
+        #print(robot.hood.getPosition())
         return robot.hood.atLowest()
 
     def end(self):

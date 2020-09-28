@@ -23,6 +23,8 @@ from commands.hood.increasehoodadjustmentcommand import IncreaseHoodAdjustmentCo
 from commands.hood.decreasehoodadjustmentcommand import DecreaseHoodAdjustmentCommand
 from commands.drivetrain.boogitycommand import BoogityCommand
 from commands.shooter.maketherobotshootballsandonlyshootballscommand import MakeTheRobotShootBallsAndOnlyShootBallsCommand
+from commands.revolver.actualrevolvershakecommand import ActualRevolverShakeCommand
+from commands.revolver.revolvergobackcommand import RevolverGoBackCommand
 
 from commands.resetcommand import ResetCommand
 from . import logicalaxes
@@ -95,9 +97,8 @@ def init():
 
     operatorController.A.toggleWhenPressed(SetRPMCommand(6000))
     operatorController.B.toggleWhenPressed(ReverseBallsCommand())
-    #operatorController.B.toggleWhenPressed(ShooterDirectionCommand())
-    #operatorController.X.toggleWhenPressed(LaunchBallsCommand())
-    #operatorController.Y.toggleWhenPressed(ReverseBallsCommand())
+    operatorController.X.toggleWhenPressed(ActualRevolverShakeCommand())
+    operatorController.Y.toggleWhenPressed(RevolverGoBackCommand())
 
     #operatorController.DPadUp.toggleWhenPressed(ExtendLauncherCommand())
     #operatorController.DPadDown.toggleWhenPressed(LoadInEmptyCommandGroup())
@@ -110,4 +111,4 @@ def init():
     operatorController.LeftTrigger.whileHeld(RaiseHoodCommand())
     operatorController.LeftBumper.whileHeld(LowerHoodCommand())
     
-    operatorController.X.toggleWhenPressed(BoogityCommand())
+    #operatorController.X.toggleWhenPressed(BoogityCommand())
