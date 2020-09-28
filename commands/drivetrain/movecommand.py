@@ -29,7 +29,7 @@ class MoveCommand(Command):
         self.obstacleCount = 0
         self.blocked = False
         self.onTarget = 0
-        self.targetPositions = []
+        self.targetPositions = [] # [Left, right]
         robot.drivetrain.setProfile(1)
         self.offset = robot.drivetrain.inchesToTicks(self.distance)
         sign = 1
@@ -37,13 +37,7 @@ class MoveCommand(Command):
             self.targetPositions.append(position + (self.offset * sign))
             sign *= -1
 
-        print('t ' + str(self.targetPositions))
-
         robot.drivetrain.setPositions(self.targetPositions)
-
-    def execute(self):
-        print('t ' + str(self.targetPositions))
-        print('c ' + str(robot.drivetrain.getPositions()))
 
     def isFinished(self):
         if self.offset < 0:

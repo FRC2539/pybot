@@ -26,14 +26,13 @@ class FalconBaseDrive(CougarSystem):
 
     def __init__(self, name):
         super().__init__(name)
+        
+        disablePrints()
 
         '''
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-
-        disablePrints()
-
         try:
             self.motors = [
                 WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
@@ -161,7 +160,6 @@ class FalconBaseDrive(CougarSystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                print('speeeeed ' + str(speed * self.speedLimit))
                 motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
         else:
             for motor, speed in zip(self.activeMotors, speeds):

@@ -16,6 +16,9 @@ class Limelight(CougarSystem):
 
     def __init__(self):
         super().__init__('Limelight')
+        
+        disablePrints()
+        
         self.nt = NetworkTables.getTable('limelight')
         self.tv = Config('limelight/tv', 0)
         self.tx = Config('limelight/tx', 0)
@@ -41,8 +44,6 @@ class Limelight(CougarSystem):
 
         #self.calAngle = math.atan((self.TargetHeight-self.LimelightHeight)/self.calDistance)
         #print(str(self.calAngle))
-
-        disablePrints()
 
     def setPipeline(self, pipeline: int):
         self.nt.putNumber('pipeline', pipeline)

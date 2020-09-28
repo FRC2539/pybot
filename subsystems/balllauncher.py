@@ -11,6 +11,8 @@ class BallLauncher(CougarSystem):
 
     def __init__(self):
         super().__init__('BallLauncher')
+        
+        disablePrints()
 
         self.launcherMotors = WPI_TalonSRX(ports.balllauncher.motorID)
 
@@ -19,8 +21,6 @@ class BallLauncher(CougarSystem):
 
         self.launching = False
         
-        disablePrints()
-
     def launchBalls(self):
         self.launching = True
         self.launcherMotors.set(ControlMode.PercentOutput, 0.9)

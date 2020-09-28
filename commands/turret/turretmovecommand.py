@@ -14,7 +14,6 @@ class TurretMoveCommand(Command):
         self.requires(robot.turret)
 
     def execute(self):
-        print('pos ' + str(robot.turret.getPosition()))
         direction = logicalaxes.turretX.get() * -0.85 # This is actually 75%; the deadband calculator in accelMove drops it by the deadband (0.1)
         if (not robot.turret.isLimitSwitch() and not robot.turret.isMin()) or \
             (robot.turret.isLimitSwitch() and direction >= 0) or \
@@ -22,7 +21,6 @@ class TurretMoveCommand(Command):
             robot.turret.accelMove(direction*0.5)
             
         else:
-            print('\n\ndone\n\n')
             robot.turret.stop()
 
     def end(self):

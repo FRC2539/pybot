@@ -4,20 +4,31 @@ import builtins as __builtin__
 
 import pprint
 
+import inspect
+
 from wpilib.command import Subsystem
 
 ALLOWPRINTS = True
 
-def print(output):
-    if ALLOWPRINTS:
-        __builtin__.print(str(output))
+printsDisabled = []
+
+def print(*args, **kwargs):
+    if not inspect.stack()[1].filename in printsDisabled:
+        return __builtin__.print(*args, **kwargs)
 
 def disablePrints():
-    ALLOWPRINTS = False
+    caller = inspect.stack()[1].filename
 
+    printsDisabled.append(str(caller))
+    
 def enablePrints():
-    ALLOWPRINTS = True
-
+    caller = inspect.stack()[1].filename
+    
+    try:
+        printsDisabled.remove(str(caller))
+    except(ValueError):
+        pass
+    
 class CougarSystem(Subsystem):
 
     def __init__(self, name):

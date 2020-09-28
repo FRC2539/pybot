@@ -11,8 +11,8 @@ class Pneumatics(CougarSystem):
 
     def __init__(self):
         super().__init__('Pheumatics')
-
-        enablePrints()
+        
+        disablePrints()
 
         self.pneumaticCompressor = Compressor(ports.pneumatics.PCM)
 

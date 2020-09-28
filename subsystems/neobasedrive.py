@@ -26,12 +26,12 @@ class NeoBaseDrive(CougarSystem):
     def __init__(self, name):
         super().__init__(name)
 
+        disablePrints()
+
         '''
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-
-        disablePrints()
 
         try:
             self.motors = [

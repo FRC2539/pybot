@@ -18,6 +18,9 @@ class Turret(CougarSystem):
 
     def __init__(self):
         super().__init__('Turret')
+        
+        disablePrints()
+        
         self.motor = WPI_TalonSRX(ports.turret.motorID)
         self.motor.config_kP(0, 3.9, 0)
         self.motor.config_kI(0, 0, 0)
@@ -46,8 +49,6 @@ class Turret(CougarSystem):
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder)
 
         self.adjustment = 0
-
-        disablePrints()
 
         #self.capture('position', 'getPosition')
 

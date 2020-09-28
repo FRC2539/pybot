@@ -15,6 +15,8 @@ class Revolver(CougarSystem):
     def __init__(self):
         super().__init__('Revolver')
 
+        disablePrints()
+
         self.motor = CANSparkMax(ports.revolver.motorID, MotorType.kBrushless)
         self.encoder = self.motor.getEncoder()
         self.controller = self.motor.getPIDController()
@@ -37,8 +39,6 @@ class Revolver(CougarSystem):
         self.motor.setOpenLoopRampRate(2)
 
         self.resetRevolverEncoder()
-
-        disablePrints()
 
         #self.dropTrigger = DigitalInput(ports.revolver.limitSwitch) # The magnetic limit switch used to trigger the solenoid.
         self.frontSensor = ColorSensorV3(I2C.Port.kOnboard)

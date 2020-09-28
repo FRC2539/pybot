@@ -12,6 +12,8 @@ class Intake(CougarSystem):
     def __init__(self):
         super().__init__('Intake')
 
+        disablePrints()
+
         self.intakeMotor = CANSparkMax(ports.intake.motorID, MotorType.kBrushless) # Confirm the motor type!
 
         self.intakeMotor.setIdleMode(IdleMode.kBrake)
@@ -21,8 +23,6 @@ class Intake(CougarSystem):
         
         self.intaking = False
         
-        disablePrints()
-
     def intakeBalls(self):
         self.intaking = True
         self.intakeMotor.set(0.5)

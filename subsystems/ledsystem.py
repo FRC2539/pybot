@@ -11,10 +11,10 @@ class LEDSystem(CougarSystem):
 
     def __init__(self):
         super().__init__('LEDSystem')
+        
+        disablePrints()
 
         self.LEDController = Spark(ports.ledsystem.controllerID)
-
-        disablePrints()
 
     def set(self, f):
         self.LEDController.set(f)

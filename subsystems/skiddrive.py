@@ -21,8 +21,6 @@ class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
             self.motors[3] \
                 .follow(self.motors[1])
             
-        print('following')
-
         try:
 
             self.activePIDControllers = [y.getPIDController() for y in self.activeMotors]

@@ -11,6 +11,8 @@ class Shooter(CougarSystem):
 
     def __init__(self):
         super().__init__('Shooter')
+        
+        disablePrints()
 
         self.shooterMotorOne = WPI_TalonFX(ports.shooter.shooterMotorOneID)
         self.shooterMotorOne.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
@@ -37,8 +39,6 @@ class Shooter(CougarSystem):
 
         self.maxVel = 5800 # Experimental velocities.
         self.minVel = 2800
-        
-        disablePrints()
 
     def setRPM(self, rpm):
         self.shooting = True
