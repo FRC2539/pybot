@@ -125,9 +125,9 @@ def generateCommand():
             'Command',
             'DefaultCommand'
         ]
-        #print('Select a base class:')
+        print('Select a base class:')
         for id, cmd in enumerate(bases):
-            #print('%d.) %s' % (id, cmd))
+            print('%d.) %s' % (id, cmd))
 
         inherits = input('')
         if inherits.isdigit():
