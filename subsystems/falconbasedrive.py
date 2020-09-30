@@ -14,6 +14,7 @@ from navx import AHRS
 
 from custom.config import Config
 import ports
+import robotselection
 
 from crapthatwillneverwork.simcansparkmax import SimCANSparkMax
 

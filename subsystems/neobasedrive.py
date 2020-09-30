@@ -13,6 +13,7 @@ from navx import AHRS
 
 from custom.config import Config
 import ports
+import robotselection
 
 from crapthatwillneverwork.simcansparkmax import SimCANSparkMax
 
@@ -116,6 +117,8 @@ class NeoBaseDrive(CougarSystem):
 
     def move(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
+
+        print('\n\n\n\n\nfirm ' + str(self.motors[0].getFirmwareString()))
 
         '''
         Short-circuits the rather expensive movement calculations if the

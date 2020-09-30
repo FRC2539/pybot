@@ -1,4 +1,5 @@
 from .skiddrive import SkidDrive
+import robotselection
 
 class DriveTrain(SkidDrive):
     '''
@@ -8,3 +9,8 @@ class DriveTrain(SkidDrive):
 
     def __init__(self):
         super().__init__('DriveTrain')
+
+        if self.motors[0].getFirmwareString() == 'v0.0' and not robotselection.competitionrobot.checking: # If it's a NEO
+            robotselection.competitionrobot.status = True
+
+        robotselection.competitionrobot.checking = False

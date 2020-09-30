@@ -2,16 +2,18 @@ from .falconbasedrive import FalconBaseDrive
 from .neobasedrive import NeoBaseDrive
 from ctre import ControlMode
 from wpilib.drive import RobotDriveBase
+import robotselection
 import ports
 
-competitionRobot = True
-
-class SkidDrive(FalconBaseDrive if competitionRobot else NeoBaseDrive):
+class SkidDrive(FalconBaseDrive if robotselection.competitionrobot.status else NeoBaseDrive):
     '''A drive base where all wheels on each side move together.'''
 
     def _configureMotors(self):
 
         '''Only the front motors are active in a skid system.'''
+
+        print('\n\n'+str(issubclass(SkidDrive, FalconBaseDrive))+'\n\n\n')
+
         self.activeMotors = self.motors[0:2]
 
         '''Make the back motors follow the front.'''

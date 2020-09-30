@@ -11,6 +11,7 @@ from custom import driverhud
 import controller.layout
 import subsystems
 import shutil, sys
+import robotselection
 
 from subsystems.cougarsystem import CougarSystem
 from wpilib.command import Subsystem
@@ -39,6 +40,8 @@ class KryptonBot(CommandBasedRobot):
         self.subsystems()
         controller.layout.init()
         driverhud.init()
+
+        self.checkDrive()
 
         from commands.startupcommandgroup import StartUpCommandGroup
         StartUpCommandGroup().start()
@@ -85,10 +88,22 @@ class KryptonBot(CommandBasedRobot):
         except(FileNotFoundError):
             pass
 
+    def checkDrive(self):
+        if robotselection.competitionrobot.status:
+
+            robotselection.competitionrobot.checking = True
+
+            print('\n\n\nAlsoGood\n\n\n')
+
+            for key, var in globals().items():
+                if var == drivetrain:
+                    setattr(sys.modules['robot'], key, var())
+
     @classmethod
     def subsystems(cls):
         vars = globals()
         module = sys.modules['robot']
+
         for key, var in vars.items():
             try:
                 if issubclass(var, Subsystem) and var is not Subsystem and var is not CougarSystem:
