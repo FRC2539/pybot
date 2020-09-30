@@ -11,7 +11,6 @@ from custom import driverhud
 import controller.layout
 import subsystems
 import shutil, sys
-import robotselection
 
 from subsystems.cougarsystem import CougarSystem
 from wpilib.command import Subsystem
@@ -40,8 +39,6 @@ class KryptonBot(CommandBasedRobot):
         self.subsystems()
         controller.layout.init()
         driverhud.init()
-
-        self.checkDrive()
 
         from commands.startupcommandgroup import StartUpCommandGroup
         StartUpCommandGroup().start()

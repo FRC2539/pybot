@@ -13,7 +13,6 @@ from navx import AHRS
 
 from custom.config import Config
 import ports
-import robotselection
 
 from crapthatwillneverwork.simcansparkmax import SimCANSparkMax
 
@@ -27,8 +26,8 @@ class NeoBaseDrive(CougarSystem):
     def __init__(self, name):
         super().__init__(name)
 
-        disablePrints()
-
+        self._deleteTestController()
+        
         '''
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
@@ -118,7 +117,7 @@ class NeoBaseDrive(CougarSystem):
     def move(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
 
-        print('\n\n\n\n\nfirm ' + str(self.motors[0].getFirmwareString()))
+        print('neo moving')
 
         '''
         Short-circuits the rather expensive movement calculations if the
@@ -495,4 +494,8 @@ class NeoBaseDrive(CougarSystem):
     def _calculateSpeeds(self, x, y, rotate):
         '''Return a speed for each active motor.'''
 
+        raise NotImplementedError()
+
+    def _deleteTestController(self):
+        
         raise NotImplementedError()

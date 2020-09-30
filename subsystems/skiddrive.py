@@ -1,19 +1,24 @@
 from .falconbasedrive import FalconBaseDrive
 from .neobasedrive import NeoBaseDrive
 from ctre import ControlMode
+from rev import CANSparkMax, MotorType
 from wpilib.drive import RobotDriveBase
-import robotselection
 import ports
 
-class SkidDrive(FalconBaseDrive if robotselection.competitionrobot.status else NeoBaseDrive):
+testMax = CANSparkMax(0, MotorType.kBrushless)
+
+class SkidDrive(FalconBaseDrive if 'v0.0' in testMax.getFirmwareString() else NeoBaseDrive):
     '''A drive base where all wheels on each side move together.'''
-
+    
+    def _deleteTestController(self):      
+        try:
+            del testMax
+        except(UnboundLocalError):
+            pass
+    
     def _configureMotors(self):
-
         '''Only the front motors are active in a skid system.'''
-
-        print('\n\n'+str(issubclass(SkidDrive, FalconBaseDrive))+'\n\n\n')
-
+        
         self.activeMotors = self.motors[0:2]
 
         '''Make the back motors follow the front.'''
