@@ -513,6 +513,10 @@ class FalconBaseDrive(CougarSystem):
     def stopM(self):
         self.theOrchestra.stop()
 
+    def setSpeeds(self, speedLeft, speedRight):
+        self.activeMotors[0].set(TalonFXControlMode.Velocity, -speedLeft)
+        self.activeMotors[1].set(TalonFXControlMode.Velocity, -speedRight)
+
     def _configureMotors(self):
         '''
         Make any necessary changes to the motors and populate self.activeMotors.

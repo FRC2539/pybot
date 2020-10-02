@@ -1,6 +1,7 @@
 import commandbased.flowcontrol as fc
 
 from networktables import NetworkTables
+from custom.config import Config
 
 from crapthatwillneverwork.kougarkoursegenerator import KougarKourseGenerator
 from crapthatwillneverwork.kougarkourse import KougarKourse
@@ -8,7 +9,7 @@ from crapthatwillneverwork.kougarkourse import KougarKourse
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 #from commands.drivetrain.gyromovecommand import GyroMoveCommand
-#from commands.drivetrain.curvecommand import CurveCommand
+from commands.drivetrain.curvecommand import CurveCommand
 
 testTrajectory = KougarKourseGenerator(0)
 
@@ -32,7 +33,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def Turn(self):#should be good for now
             ##self.addSequential(MoveCommand(80))
             ##self.addSequential(PrintCommand("turn 90"))
-            self.addSequential(TurnCommand(90))
+            self.addSequential(CurveCommand(90, 60, False))
             ##self.addSequential(CurveCommand(-125, 30, False))
             ##self.addSequential(CurveCommand(-130, 30, True))
             #self.addSequential(MoveCommand(45))

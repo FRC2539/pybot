@@ -480,6 +480,9 @@ class NeoBaseDrive(CougarSystem):
 
         table.addSubTableListener(updatePID, localNotify=True)
 
+    def setSpeeds(self, speedLeft, speedRight): # DON'T USE THIS
+        self.activeMotors[0].getPIDController().setReference(speedLeft, ControlType.kVelocity, 0, 0)
+        self.activeMotors[1].getPIDController().setReference(speedRight, ControlType.kVelocity, 0, 0)
 
     def _configureMotors(self):
         '''
