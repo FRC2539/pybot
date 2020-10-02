@@ -25,8 +25,6 @@ class NeoBaseDrive(CougarSystem):
 
     def __init__(self, name):
         super().__init__(name)
-
-        self._deleteTestController()
         
         '''
         Create all motors, disable the watchdog, and turn off neutral braking
@@ -496,6 +494,3 @@ class NeoBaseDrive(CougarSystem):
 
         raise NotImplementedError()
 
-    def _deleteTestController(self):
-        
-        raise NotImplementedError()

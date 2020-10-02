@@ -27,8 +27,6 @@ class FalconBaseDrive(CougarSystem):
     def __init__(self, name):
         super().__init__(name)
         
-        self._deleteTestController()
-
         '''
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
@@ -525,9 +523,5 @@ class FalconBaseDrive(CougarSystem):
 
     def _calculateSpeeds(self, x, y, rotate):
         '''Return a speed for each active motor.'''
-        
-        raise NotImplementedError()
-
-    def _deleteTestController(self):
         
         raise NotImplementedError()
