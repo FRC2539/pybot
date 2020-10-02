@@ -33,9 +33,6 @@ class AutoPilotCommand(Command):
                 rotate = robot.drivetrain.getAngleTo(0) / 180
             else:
                 rotate = robot.drivetrain.getAngleTo(180) / 180
-                
-            if y < 0:
-                rotate *= -1
         
         robot.drivetrain.move(
             0,
