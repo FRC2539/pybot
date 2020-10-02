@@ -27,8 +27,6 @@ class FalconBaseDrive(CougarSystem):
     def __init__(self, name):
         super().__init__(name)
         
-        disablePrints()
-
         '''
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
@@ -119,6 +117,8 @@ class FalconBaseDrive(CougarSystem):
 
     def move(self, x, y, rotate):
         '''Turns coordinate arguments into motor outputs.'''
+
+        print('Falcon moving')
 
         '''
         Short-circuits the rather expensive movement calculations if the
@@ -523,5 +523,5 @@ class FalconBaseDrive(CougarSystem):
 
     def _calculateSpeeds(self, x, y, rotate):
         '''Return a speed for each active motor.'''
-
+        
         raise NotImplementedError()

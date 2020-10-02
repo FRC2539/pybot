@@ -1,5 +1,7 @@
 from wpilib.command import Command
 
+from subsystems.cougarsystem import *
+
 import robot
 from controller import logicalaxes
 from custom.config import Config, MissingConfigError
@@ -35,6 +37,7 @@ class DriveCommand(Command):
         self.slowed = False
 
     def execute(self):
+
         robot.drivetrain.updateOdometry()
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get() * 0.8

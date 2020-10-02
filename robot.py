@@ -7,9 +7,12 @@ from commandbased import CommandBasedRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
 
+from rev import MotorType, CANSparkMax
+
 from custom import driverhud
 import controller.layout
-import subsystems
+import subsystems 
+from robotselection import *
 import shutil, sys
 
 from subsystems.cougarsystem import CougarSystem
@@ -17,6 +20,7 @@ from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.drivetrain import rebuildDT
 from subsystems.revolver import Revolver as revolver
 from subsystems.balllauncher import BallLauncher as balllauncher
 from subsystems.shooter import Shooter as shooter
@@ -36,7 +40,13 @@ class KryptonBot(CommandBasedRobot):
         if RobotBase.isSimulation():
             import mockdata
 
+        self.checkDrive()
+        
+        global drivetrain
+        drivetrain = rebuildDT()
+
         self.subsystems()
+
         controller.layout.init()
         driverhud.init()
 
@@ -84,11 +94,19 @@ class KryptonBot(CommandBasedRobot):
                     f.write(str(listitem) + '\n')
         except(FileNotFoundError):
             pass
+        
+    def checkDrive(self):
+        testMotor = CANSparkMax(0, MotorType.kBrushless)
+                
+        selection.status = (testMotor.getFirmwareString()[-11:]).lower() == 'debug build' # True if Falcon (comp bot)
+                
+        del testMotor
 
     @classmethod
     def subsystems(cls):
         vars = globals()
         module = sys.modules['robot']
+        
         for key, var in vars.items():
             try:
                 if issubclass(var, Subsystem) and var is not Subsystem and var is not CougarSystem:
