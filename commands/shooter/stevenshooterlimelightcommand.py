@@ -26,12 +26,15 @@ class StevenShooterLimelightCommand(Command):
 
         robot.shooter.setRPM(self.speed)
         
+        #robot.shooter.updateNetworkTables()
+        
         #print('rpm ' + str(robot.shooter.getRPM()))
         
-        if robot.shooter.getRPM() + 100 >= self.speed: # Only needs to pass this once. Adds a tolerance of 30, in case it hovers below.
+        if abs(robot.shooter.getRPM()) + 300 >= self.speed: # Only needs to pass this once. Adds a tolerance of 30, in case it hovers below.
             robot.shooter.atGoal = True
 
     def end(self):
         robot.shooter.atGoal = False
         robot.limelight.setPipeline(1)
         robot.shooter.stopShooter()
+        robot.shooter.zeroNetworkTables()

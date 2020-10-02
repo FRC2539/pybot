@@ -72,7 +72,7 @@ class Revolver(CougarSystem):
         return (self.frontSensor.getProximity() <= 160)
 
     def inDropZone(self):
-        return (315 <= self.getPosition() <= 320)
+        return (305 <= self.getPosition() <= 330)
 
     def resetRevolverEncoder(self):
         self.encoder.setPosition(0)

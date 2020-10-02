@@ -4,6 +4,8 @@ from .cougarsystem import *
 
 from ctre import WPI_TalonFX, FeedbackDevice, ControlMode, NeutralMode
 
+from networktables import NetworkTables as nt
+
 import ports
 
 class Shooter(CougarSystem):
@@ -13,7 +15,9 @@ class Shooter(CougarSystem):
         super().__init__('Shooter')
         
         disablePrints()
-
+        
+        self.table = nt.getTable('Shooter')
+        
         self.shooterMotorOne = WPI_TalonFX(ports.shooter.shooterMotorOneID)
         self.shooterMotorOne.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
 
@@ -56,7 +60,13 @@ class Shooter(CougarSystem):
         self.shooterMotorOne.stopMotor()
 
         self.shooting = False
-        
+    
+    def updateNetworkTables(self):
+        #self.table.putNumber('ShooterRPM', round(self.getRPM(), 0))
+        pass
+    def zeroNetworkTables(self):
+        #self.table.putNumber('ShooterRPM', 0)
+        pass
     def rpmToSensor(self, rpm):
         return (rpm * 2048) / 600
     

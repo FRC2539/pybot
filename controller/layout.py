@@ -7,6 +7,7 @@ from commands.intake.deployintakecommand import DeployIntakeCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
 from commands.intake.outakecommand import OutakeCommand
+from commands.intake.kickcommand import KickCommand
 from commands.limelight.sudocommandgroup import SudoCommandGroup
 from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
 from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
@@ -76,6 +77,7 @@ def init():
     driveController.LeftJoystick.whenPressed(DeployIntakeCommand())
     
     driveController.Start.toggleWhenPressed(SetRPMCommand(5000))
+    driveController.Back.toggleWhenPressed(KickCommand())
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone

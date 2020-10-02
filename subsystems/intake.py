@@ -28,11 +28,11 @@ class Intake(CougarSystem):
         self.intakeMotor.set(0.5)
 
     def outakeBalls(self):
-        self.intaking = False
-        self.intakeMotor.set(-0.5)
+        self.intaking = True
+        self.intakeMotor.set(-0.6)
 
     def kickBalls(self):
-        self.intaking = False
+        self.intaking = True
         self.intakeMotor.set(-0.1)
 
     def stopIntake(self):

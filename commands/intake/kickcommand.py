@@ -10,7 +10,7 @@ class KickCommand(Command):
         self.requires(robot.intake)
 
     def initialize(self):
-        robot.intake.kickBalls()
+        robot.intake.outakeBalls()
 
     def end(self):
         robot.intake.stopIntake()
