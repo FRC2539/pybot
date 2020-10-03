@@ -31,6 +31,8 @@ class NeoBaseDrive(CougarSystem):
         since the PID loops will provide braking.
         '''
 
+        disablePrints()
+
         try:
             self.motors = [
                 CANSparkMax(ports.drivetrain.frontLeftMotorID, MotorType.kBrushless),

@@ -62,11 +62,13 @@ class Shooter(CougarSystem):
         self.shooting = False
     
     def updateNetworkTables(self):
-        #self.table.putNumber('ShooterRPM', round(self.getRPM(), 0))
+        self.table.putNumber('ShooterRPM', round(self.getRPM(), 0))
         pass
+    
     def zeroNetworkTables(self):
-        #self.table.putNumber('ShooterRPM', 0)
+        self.table.putNumber('ShooterRPM', 0)
         pass
+    
     def rpmToSensor(self, rpm):
         return (rpm * 2048) / 600
     

@@ -97,7 +97,7 @@ def init():
     operatorController.DPadDown.whileHeld(DecreaseHoodAdjustmentCommand())
     operatorController.DPadLeft.whileHeld(DecreaseTurretAdjustmentCommand())
 
-    operatorController.A.toggleWhenPressed(SetRPMCommand(6000))
+    operatorController.A.toggleWhenPressed(MakeTheRobotShootBallsAndOnlyShootBallsCommand())
     operatorController.B.toggleWhenPressed(ReverseBallsCommand())
     operatorController.X.toggleWhenPressed(ActualRevolverShakeCommand())
     operatorController.Y.toggleWhenPressed(RevolverGoBackCommand())

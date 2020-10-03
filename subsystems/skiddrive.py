@@ -6,7 +6,7 @@ from wpilib.drive import RobotDriveBase
 import ports
 
 def rebuild():
-    class SkidDrive(FalconBaseDrive if selection.status else NeoBaseDrive):
+    class SkidDrive(NeoBaseDrive if selection.status else NeoBaseDrive):
         '''A drive base where all wheels on each side move together.'''
 
         def _configureMotors(self):

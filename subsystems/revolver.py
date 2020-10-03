@@ -65,6 +65,7 @@ class Revolver(CougarSystem):
         self.motor.set(0.70253546253654)
 
     def stopRevolver(self):
+        print("stop revolver")
         self.isSpinning = False
         self.motor.stopMotor()
 

@@ -26,7 +26,7 @@ class StevenShooterLimelightCommand(Command):
 
         robot.shooter.setRPM(self.speed)
         
-        #robot.shooter.updateNetworkTables()
+        robot.shooter.updateNetworkTables()
         
         #print('rpm ' + str(robot.shooter.getRPM()))
         

@@ -15,6 +15,14 @@ class MakeTheRobotShootBallsAndOnlyShootBallsCommand(Command):
 
     def initialize(self):
         #print("shooting balls and only balls")
+        
+        self.startPos = robot.revolver.getPosition()
+        self.goTo = self.startPos - 10 
+        
+        self.proceed = False
+        
+        if self.goTo < 0:
+            self.goTo += 360
         pass
 
 
@@ -22,13 +30,29 @@ class MakeTheRobotShootBallsAndOnlyShootBallsCommand(Command):
         #print("executing the shooting of the balls")
         robot.shooter.setRPM(4500) # placeholder value
         robot.revolver.setStaticSpeed()
-        robot.pneumatics.extendBallLauncherSolenoid()
+        
+        robot.shooter.updateNetworkTables()
+        
+        if abs(self.goTo - robot.revolver.getPosition()) <= 5:
+            print('proceed')
+            self.proceed = True
+
+        if robot.revolver.inDropZone() and self.proceed:
+            print('shoot')
+            robot.revolver.setStaticSpeed()
+            robot.balllauncher.launchBalls()
+            robot.pneumatics.extendBallLauncherSolenoid()
+
         pass
 
 
     def end(self):
-        #print("no longer shooting balls")
+        print("no longer shooting balls")
+        robot.revolver.sequenceEngaged = False
+        self.proceed = False
+        
         robot.shooter.setRPM(0)
         robot.pneumatics.retractBallLauncherSolenoid()
         robot.revolver.stopRevolver()
-        pass
+        robot.balllauncher.stopLauncher()
+        robot.shooter.zeroNetworkTables()

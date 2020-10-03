@@ -34,22 +34,16 @@ class FireSequenceCommand(Command):
             self.goTo += 360
 
     def execute(self):
-        print('\ntarget stat\n ' + str(robot.turret.onTarget))
-        print('revPos: '+str(robot.revolver.getPosition()))
         if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget and not self.proceed:# and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
-            print('proceed')
             self.proceed = True
         
-        print(robot.shooter.getRPM())
-        print('d' + str(robot.revolver.inDropZone()))
-        
         if robot.shooter.atGoal and robot.revolver.inDropZone() and self.proceed:
-            print('shoot')
             robot.revolver.setStaticSpeed()
             robot.balllauncher.launchBalls()
             robot.pneumatics.extendBallLauncherSolenoid()
 
     def end(self):
+        print("fireseq end")
         robot.revolver.sequenceEngaged = False
         self.proceed = False
 
