@@ -2,7 +2,7 @@ from .cougarsystem import *
 
 from wpilib.command import Subsystem
 
-from wpilib import Compressor, DoubleSolenoid
+from wpilib import Compressor, DoubleSolenoid, Watchdog
 
 import ports
 
@@ -20,7 +20,7 @@ class Pneumatics(CougarSystem):
 
         self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
         self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
-
+                
         disablePrints()
 
     def isPressureLow(self):

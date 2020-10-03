@@ -23,6 +23,7 @@ from commands.turret.decreaseturretadjustmentcommand import DecreaseTurretAdjust
 from commands.hood.increasehoodadjustmentcommand import IncreaseHoodAdjustmentCommand
 from commands.hood.decreasehoodadjustmentcommand import DecreaseHoodAdjustmentCommand
 from commands.drivetrain.boogitycommand import BoogityCommand
+from commands.drivetrain.autopilotcommand import AutoPilotCommand
 from commands.shooter.maketherobotshootballsandonlyshootballscommand import MakeTheRobotShootBallsAndOnlyShootBallsCommand
 from commands.revolver.actualrevolvershakecommand import ActualRevolverShakeCommand
 from commands.revolver.revolvergobackcommand import RevolverGoBackCommand
@@ -70,8 +71,7 @@ def init():
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
 
-    driveController.LeftBumper.whileHeld(RaiseHoodCommand())
-    driveController.LeftTrigger.whileHeld(LowerHoodCommand())
+    driveController.LeftTrigger.whileHeld(AutoPilotCommand())
 
     driveController.RightJoystick.toggleWhenPressed(LoadInEmptyCommandGroup()) # Used on field
     driveController.LeftJoystick.whenPressed(DeployIntakeCommand())
