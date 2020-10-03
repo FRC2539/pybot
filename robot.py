@@ -12,15 +12,13 @@ from rev import MotorType, CANSparkMax
 from custom import driverhud
 import controller.layout
 import subsystems 
-from robotselection import *
 import shutil, sys
 
 from subsystems.cougarsystem import CougarSystem
 from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
-from subsystems.drivetrain import DriveTrain as drivetrain
-from subsystems.drivetrain import rebuildDT
+
 from subsystems.revolver import Revolver as revolver
 from subsystems.balllauncher import BallLauncher as balllauncher
 from subsystems.shooter import Shooter as shooter
@@ -32,6 +30,9 @@ from subsystems.turret import Turret as turret
 from subsystems.limelight import Limelight as limelight
 from subsystems.climber import Climber as climber
 
+from subsystems.falconbasedrive import FalconBaseDrive
+from subsystems.neobasedrive import NeoBaseDrive
+
 class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
 
@@ -40,11 +41,24 @@ class KryptonBot(CommandBasedRobot):
         if RobotBase.isSimulation():
             import mockdata
 
-        self.checkDrive()
+        from subsystems.drivetrain import selectAgain
+        from subsystems.skiddrive import selectDT
+                
+        if self.checkDrive():
+                        
+            skClass = selectDT(FalconBaseDrive)
+            dtClass = selectAgain(skClass)
+            
+            setattr(sys.modules['robot'], 'drivetrain', dtClass())
+            
+        else:
+            skClass = selectDT(NeoBaseDrive)
+            dtClass = selectAgain(skClass)
+            
+            setattr(sys.modules['robot'], 'drivetrain', dtClass())
+            
+        del self.testMotor
         
-        global drivetrain
-        drivetrain = rebuildDT()
-
         self.subsystems()
 
         controller.layout.init()
@@ -81,9 +95,12 @@ class KryptonBot(CommandBasedRobot):
             try:
                 if issubclass(var, CougarSystem) and var is not CougarSystem:
                     object_ = getattr(module, key)
-                    for data in object_.writeOnDisable:
-                        writeThese.append([data[0], data[1], eval('object_' + str(data[2]))])
-
+                    try:
+                        for data in object_.writeOnDisable:
+                            writeThese.append([data[0], data[1], eval('object_' + str(data[2]))])
+                    except(AttributeError):
+                        pass
+                    
             except(TypeError):
                 continue
 
@@ -96,12 +113,12 @@ class KryptonBot(CommandBasedRobot):
             pass
         
     def checkDrive(self):
-        testMotor = CANSparkMax(0, MotorType.kBrushless)
-                
-        selection.status = (testMotor.getFirmwareString()[-11:]).lower() == 'debug build' # True if Falcon (comp bot)
-                
-        del testMotor
-
+        self.testMotor = CANSparkMax(1, MotorType.kBrushless)
+        
+        print(self.testMotor.getFirmwareString()[-11:].lower())
+        
+        return (self.testMotor.getFirmwareString()[-11:]).lower() == 'debug build' # True if Falcon (comp bot)
+    
     @classmethod
     def subsystems(cls):
         vars = globals()
@@ -109,7 +126,7 @@ class KryptonBot(CommandBasedRobot):
         
         for key, var in vars.items():
             try:
-                if issubclass(var, Subsystem) and var is not Subsystem and var is not CougarSystem:
+                if issubclass(var, Subsystem) and var is not Subsystem and var is not CougarSystem and var is not FalconBaseDrive and var is not NeoBaseDrive and var:
                     try:
                         setattr(module, key, var())
                     except TypeError as e:

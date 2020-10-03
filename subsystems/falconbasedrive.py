@@ -31,6 +31,7 @@ class FalconBaseDrive(CougarSystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
+                        
         try:
             self.motors = [
                 WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
@@ -119,6 +120,7 @@ class FalconBaseDrive(CougarSystem):
         '''Turns coordinate arguments into motor outputs.'''
 
         print('Falcon moving')
+        print(self.getAngle())
 
         '''
         Short-circuits the rather expensive movement calculations if the
@@ -223,10 +225,10 @@ class FalconBaseDrive(CougarSystem):
             motor.config_kD(1, 0.05, 0) # 0.0001
             motor.config_kF(1, 0.003, 0) # 0.0005
 
-            motor.config_kP(2, 0.032, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(2, 0.03, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(2, 0, 0) # 0
             motor.config_kD(2, 0.05, 0) # 0.0001
-            motor.config_kF(2, 0.01, 0) # 0.0005
+            motor.config_kF(2, 0.008, 0) # 0.0005
 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         '''

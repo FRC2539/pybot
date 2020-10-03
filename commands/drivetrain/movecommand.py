@@ -39,7 +39,7 @@ class MoveCommand(Command):
 
         robot.drivetrain.setPositions(self.targetPositions)
 
-    def isFinished(self):
+    def isFinished(self):        
         if self.offset < 0:
             return self.targetPositions[0] >= min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])])
         else:

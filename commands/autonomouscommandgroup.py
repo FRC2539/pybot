@@ -29,22 +29,22 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         startingBalls = 3#Config('Autonomous/NumberOfBallsAtStart', 3)
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Turn')
-        def Turn(self):#should be good for now
-            ##self.addSequential(MoveCommand(80))
-            ##self.addSequential(PrintCommand("turn 90"))
-            self.addSequential(CurveCommand(90, 60, False))
-            ##self.addSequential(CurveCommand(-125, 30, False))
-            ##self.addSequential(CurveCommand(-130, 30, True))
-            #self.addSequential(MoveCommand(45))
-            ##self.addSequential(MoveCommand(-45))
+        #@fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Turn')
+        #def Turn(self):#should be good for now
+            ###self.addSequential(MoveCommand(80))
+            ###self.addSequential(PrintCommand("turn 90"))
+            #self.addSequential(CurveCommand(90, 60, False))
+            ###self.addSequential(CurveCommand(-125, 30, False))
+            ###self.addSequential(CurveCommand(-130, 30, True))
+            ##self.addSequential(MoveCommand(45))
+            ###self.addSequential(MoveCommand(-45))
 
 
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move')
+        @fc.IF(lambda: True)#str(Config('Autonomous/autoModeSelect')) == 'Move')
         def Move(self):#should be good for now
             self.addSequential(MoveCommand(120))
-            #self.addSequential(TurnCommand(90))
+            self.addSequential(TurnCommand(90))
             self.addSequential(MoveCommand(-120))
 
 
