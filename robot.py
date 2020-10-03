@@ -43,10 +43,9 @@ class KryptonBot(CommandBasedRobot):
 
         from subsystems.drivetrain import selectAgain
         from subsystems.skiddrive import selectDT
-        
-        print('\n\n\n\n\n' +  str(self.checkDrive()) + '\n\n\n\n')
-        
+                
         if self.checkDrive():
+                        
             skClass = selectDT(FalconBaseDrive)
             dtClass = selectAgain(skClass)
             
@@ -115,7 +114,9 @@ class KryptonBot(CommandBasedRobot):
         
     def checkDrive(self):
         self.testMotor = CANSparkMax(1, MotorType.kBrushless)
-                
+        
+        print(self.testMotor.getFirmwareString()[-11:].lower())
+        
         return (self.testMotor.getFirmwareString()[-11:]).lower() == 'debug build' # True if Falcon (comp bot)
     
     @classmethod

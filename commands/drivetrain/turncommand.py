@@ -15,14 +15,18 @@ class TurnCommand(MoveCommand):
 
         super().__init__(degrees, False, name)
 
+        robot.drivetrain.resetGyro()
+
         self.degrees = degrees
         self.drivetrainWidth = 27.75
 
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
 
-        robot.drivetrain.resetGyro()
         robot.drivetrain.setProfile(2)
+        robot.drivetrain.resetGyro()
+        
+        self.goal = (robot.drivetrain.getAngle() + self.degrees) % 360
 
         offset = math.copysign(self._calculateDisplacement(), self.degrees)
 
@@ -34,13 +38,21 @@ class TurnCommand(MoveCommand):
         robot.drivetrain.setPositions(self.targetPositions)
 
     def isFinished(self):
-        return abs(robot.drivetrain.getAngleTo(self.degrees)) <= 1
+        
+        for x in range(1000):
+        
+            print('\n\n\n\n\n\n goal ' + str(self.goal))
+            print('\n\n\n\n\n\n my ang ' + str(robot.drivetrain.getAngle()))
+        
+        if self.degrees < 0:
+            return robot.drivetrain.getAngleTo(self.goal) < 0                       
+        else:
+            return robot.drivetrain.getAngleTo(self.goal) > 0
 
     def end(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
-
-
+    
     def _calculateDisplacement(self):
         '''
         In order to avoid having a separate ticksPerDegree, we calculate it
