@@ -27,7 +27,7 @@ class AutoPilotCommand(Command):
         y = logicalaxes.driveY.get() * 0.8
         
         if not self.engaged: # Allows it to find it only once.
-            self.engaged = (abs(self.currentHeading - 180) <= 30) or (not 330 >= self.currentHeading >= 30) # 15 degrees of freedom on both sides. 
+            self.engaged = (abs(self.currentHeading - 180) <= 45) or (not 315 >= self.currentHeading >= 45) # 15 degrees of freedom on both sides.
             rotate = logicalaxes.driveRotate.get() * 0.45
         else:
             
