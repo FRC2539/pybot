@@ -12,11 +12,12 @@ class IntakeCommand(InstantCommand):
         self.requires(robot.intake)
 
     def initialize(self):        
-        if not robot.intake.intaking:
-            if not robot.pneumatics.isIntakeLowered():
-                robot.pneumatics.extendIntakeSolenoid()
-            
-            robot.intake.intakeBalls()
-        
-        else:
+        robot.intake.stopIntake()
+
+        if robot.pneumatics.isIntakeLowered():
+            robot.pneumatics.retractIntakeSolenoid()
             robot.intake.stopIntake()
+        else:
+            robot.pneumatics.extendIntakeSolenoid()
+            robot.intake.intakeBalls()
+

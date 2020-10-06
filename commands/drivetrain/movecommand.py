@@ -23,7 +23,10 @@ class MoveCommand(Command):
 
     def _initialize(self):
         super()._initialize()
-        self.precision = robot.drivetrain.inchesToTicks(1)
+        try:
+            self.precision = robot.drivetrain.inchesToTicks(1)
+        except:
+            self.precision = robot.drivetrain.inchesToRotations(1)
 
     def initialize(self):
         self.obstacleCount = 0
@@ -31,7 +34,11 @@ class MoveCommand(Command):
         self.onTarget = 0
         self.targetPositions = [] # [Left, right]
         robot.drivetrain.setProfile(1)
-        self.offset = robot.drivetrain.inchesToTicks(self.distance)
+        try:
+            self.offset = robot.drivetrain.inchesToTicks(self.distance)
+        except:
+            self.offset = robot.drivetrain.inchesToRotations(self.distance)
+            
         sign = 1
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + (self.offset * sign))

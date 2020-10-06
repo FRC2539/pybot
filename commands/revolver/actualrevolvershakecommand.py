@@ -13,7 +13,7 @@ class ActualRevolverShakeCommand(Command):
         
     def initialize(self):
         self.iterations = 0
-        self.maxIter = 32
+        self.maxIter = 12
         robot.revolver.setVariableSpeed(.7)
         robot.revolver.motor.setClosedLoopRampRate(0.1)
         robot.revolver.motor.setOpenLoopRampRate(0.1)

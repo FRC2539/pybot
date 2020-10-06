@@ -486,6 +486,9 @@ class NeoBaseDrive(CougarSystem):
         self.activeMotors[0].getPIDController().setReference(speedLeft, ControlType.kVelocity, 0, 0)
         self.activeMotors[1].getPIDController().setReference(speedRight, ControlType.kVelocity, 0, 0)
 
+    def setProfile(self, num):
+        return
+    
     def _configureMotors(self):
         '''
         Make any necessary changes to the motors and populate self.activeMotors.

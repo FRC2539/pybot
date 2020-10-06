@@ -51,7 +51,8 @@ class MakeTheRobotShootBallsAndOnlyShootBallsCommand(Command):
         robot.revolver.sequenceEngaged = False
         self.proceed = False
         
-        robot.shooter.setRPM(0)
+        #robot.shooter.setRPM(500)
+        robot.shooter.stopShooter()
         robot.pneumatics.retractBallLauncherSolenoid()
         robot.revolver.stopRevolver()
         robot.balllauncher.stopLauncher()

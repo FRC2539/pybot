@@ -74,10 +74,9 @@ def init():
     driveController.LeftTrigger.whileHeld(AutoPilotCommand())
 
     driveController.RightJoystick.toggleWhenPressed(LoadInEmptyCommandGroup()) # Used on field
-    driveController.LeftJoystick.whenPressed(DeployIntakeCommand())
+    driveController.LeftJoystick.whenPressed(KickCommand())
     
     driveController.Start.toggleWhenPressed(SetRPMCommand(5000))
-    driveController.Back.toggleWhenPressed(KickCommand())
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone
