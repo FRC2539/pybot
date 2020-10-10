@@ -14,7 +14,9 @@ class DefaultCommand(Command):
         robot.ledsystem.rainbowLava()
 
     def execute(self):
-        
+
+        print('analog ' + str(robot.pneumatics.getAnalogPressureSensor()))
+
         # Air
         
         if not robot.shooter.shooting:

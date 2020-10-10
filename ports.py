@@ -39,6 +39,7 @@ shooter.shooterMotorTwoID = 9
 pneumatics = PortsList()
 
 pneumatics.PCM = 0
+pneumatics.pressureSensor = 2
 
 ledsystem = PortsList()
 
