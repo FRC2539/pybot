@@ -1,4 +1,4 @@
-from .movecommand import MoveCommand
+from .movecommandold import MoveCommandOld
 
 import robot
 from custom.config import Config
@@ -6,7 +6,7 @@ from custom.config import Config
 import math
 
 
-class TurnCommandOld(MoveCommand):
+class TurnCommandOld(MoveCommandOld):
     '''Allows autonomous turning using the drive base encoders.'''
 
     def __init__(self, degrees, name=None):
