@@ -24,6 +24,7 @@ class Pneumatics(CougarSystem):
         self.pressureSensor = AnalogInput(ports.pneumatics.pressureSensor)
 
         self.maxPressure = 110
+        self.supplyVolt = 4.942
 
         disablePrints()
 
@@ -64,7 +65,7 @@ class Pneumatics(CougarSystem):
         self.pneumaticCompressor.stop()
 
     def getAnalogPressureSensor(self):
-        return self.pressureSensor.getVoltage()
+        return 250 * (self.pressureSensor.getVoltage() / self.supplyVolt) - 25
 
     def isFull(self):
         return self.pressureSensor.getValue() >= self.maxPressure

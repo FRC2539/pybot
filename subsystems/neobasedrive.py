@@ -354,13 +354,13 @@ class NeoBaseDrive(CougarSystem):
         return degrees
 
 
-    def inchesToRotations(self, distance):
+    def inchesToUnits(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / 18.25#(math.pi * Config('DriveTrain/wheelDiameter'))
 
         return float(rotations * 10.71)
 
-    def rotationsToInches(self, rotations):
+    def unitsToInches(self, rotations):
         return (rotations / 10.71) * 18.25
 
     def resetTilt(self):

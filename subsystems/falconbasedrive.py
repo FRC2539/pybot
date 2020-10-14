@@ -200,7 +200,7 @@ class FalconBaseDrive(CougarSystem):
     def resetEncoders(self):
         for motor in self.activeMotors:
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
-            motor.setSelectedSensorPosition(0, 0, 0)
+            motor.setSelectedSensorPosition(0, 0, 50)
 
     def stop(self):
         '''Disable all motors until set() is called again.'''
@@ -220,15 +220,15 @@ class FalconBaseDrive(CougarSystem):
             motor.config_kF(0, 0.1, 0) # 0.0005
             motor.config_IntegralZone(0, 0, 0) # 0
 
-            motor.config_kP(1, 0.009, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(1, 0.02, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(1, 0, 0) # 0
-            motor.config_kD(1, 0.05, 0) # 0.0001
-            motor.config_kF(1, 0.003, 0) # 0.0005
+            motor.config_kD(1, 1, 0) # 0.0001
+            motor.config_kF(1, 0.05, 0) # 0.0005
 
-            motor.config_kP(2, 0.03, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(2, 0.026, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(2, 0, 0) # 0
             motor.config_kD(2, 0.05, 0) # 0.0001
-            motor.config_kF(2, 0.008, 0) # 0.0005
+            motor.config_kF(2, 0.007, 0) # 0.0005
 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         '''
@@ -367,14 +367,14 @@ class FalconBaseDrive(CougarSystem):
         return degrees
 
 
-    def inchesToTicks(self, distance):
+    def inchesToUnits(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
         rotations = distance / 18.064#(math.pi * Config('DriveTrain/wheelDiameter'))
 
         return float(rotations * 10.71 * 2048) 
 
 
-    def ticksToInches(self, rotations):
+    def unitsToInches(self, rotations):
         return ((rotations / 10.71) / 2048) * 18.064
 
 

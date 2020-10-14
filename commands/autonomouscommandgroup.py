@@ -43,9 +43,9 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         @fc.IF(lambda: True)#str(Config('Autonomous/autoModeSelect')) == 'Move')
         def Move(self):#should be good for now
-            self.addSequential(MoveCommand(120))
+            self.addSequential(MoveCommand(60))
             self.addSequential(TurnCommand(90))
-            self.addSequential(MoveCommand(-120))
+            self.addSequential(MoveCommand(30))
 
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Turn Move')
