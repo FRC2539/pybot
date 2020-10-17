@@ -9,7 +9,7 @@ import math
 import pathlib
 
 from networktables import NetworkTables
-from ctre import WPI_TalonFX, TalonFXControlMode, NeutralMode, FeedbackDevice, Orchestra
+from ctre import WPI_TalonFX, ControlMode, NeutralMode, FeedbackDevice, Orchestra
 from navx import AHRS
 
 from custom.config import Config
@@ -79,7 +79,7 @@ class FalconBaseDrive(CougarSystem):
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
         self._publishPID('Position', 1)
-        self.setProfile(0)
+        self.setProfile(1)
 
         self.resetEncoders()
         self.resetPID()
@@ -162,10 +162,10 @@ class FalconBaseDrive(CougarSystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(TalonFXControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
+                motor.set(ControlMode.Velocity, speed * self.speedLimit) # 'Speed' is a percent.
         else:
             for motor, speed in zip(self.activeMotors, speeds):
-                motor.set(TalonFXControlMode.PercentOutput, speed * self.maxPercentVBus)
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
 
     def setPositions(self, positions):
@@ -179,7 +179,10 @@ class FalconBaseDrive(CougarSystem):
 
         self.stop()
         for motor, position in zip(self.activeMotors, positions):
-            motor.set(TalonFXControlMode.Position, position)
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
 
 
     def averageError(self):
@@ -220,10 +223,10 @@ class FalconBaseDrive(CougarSystem):
             motor.config_kF(0, 0.1, 0) # 0.0005
             motor.config_IntegralZone(0, 0, 0) # 0
 
-            motor.config_kP(1, 0.02, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(1, 0.09, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(1, 0, 0) # 0
-            motor.config_kD(1, 1, 0) # 0.0001
-            motor.config_kF(1, 0.05, 0) # 0.0005
+            motor.config_kD(1, 0, 0) # 0.0001
+            motor.config_kF(1, 0.09, 0) # 0.0005
 
             motor.config_kP(2, 0.026, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(2, 0, 0) # 0
@@ -313,12 +316,12 @@ class FalconBaseDrive(CougarSystem):
         adjustment = angleDiff * 0.006
 
         if adjustment > 0:
-            self.activeMotors[0].set(TalonFXControlMode.PercentOutput, 0.5 + adjustment)
-            self.activeMotors[1].set(TalonFXControlMode.PercentOutput, 0.5)
+            self.activeMotors[0].set(ControlMode.PercentOutput, 0.5 + adjustment)
+            self.activeMotors[1].set(ControlMode.PercentOutput, 0.5)
 
         else:
-            self.activeMotors[0].set(TalonFXControlMode.PercentOutput, 0.5)
-            self.activeMotors[1].set(TalonFXControlMode.PercentOutput, 0.5 + adjustment)
+            self.activeMotors[0].set(ControlMode.PercentOutput, 0.5)
+            self.activeMotors[1].set(ControlMode.PercentOutput, 0.5 + adjustment)
 
     def getFeetTravelled(self):
         pos = self.getPositions()
@@ -516,8 +519,8 @@ class FalconBaseDrive(CougarSystem):
         self.theOrchestra.stop()
 
     def setSpeeds(self, speedLeft, speedRight):
-        self.activeMotors[0].set(TalonFXControlMode.Velocity, -speedLeft)
-        self.activeMotors[1].set(TalonFXControlMode.Velocity, -speedRight)
+        self.activeMotors[0].set(ControlMode.Velocity, -speedLeft)
+        self.activeMotors[1].set(ControlMode.Velocity, -speedRight)
 
     def _configureMotors(self):
         '''
