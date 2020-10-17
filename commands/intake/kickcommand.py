@@ -1,8 +1,8 @@
-from wpilib.command import Command
+from wpilib.command import InstantCommand
 
 import robot
 
-class KickCommand(Command):
+class KickCommand(InstantCommand):
 
     def __init__(self):
         super().__init__('Kick Command')
@@ -11,6 +11,7 @@ class KickCommand(Command):
 
     def initialize(self):
         robot.intake.stopIntake()
+        print(robot.pneumatics.isIntakeLowered())
 
         if robot.pneumatics.isIntakeLowered():
             robot.pneumatics.retractIntakeSolenoid()

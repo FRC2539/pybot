@@ -53,6 +53,9 @@ class Revolver(CougarSystem):
 
         self.gearRatio = 15 # 3:2 or vise versa
 
+    def setCustomRR(self, rr):
+        self.motor.setOpenLoopRampRate(rr)
+
     def getPosition(self):
         return self.tbEnc.getOutput() * 360
 
@@ -62,7 +65,7 @@ class Revolver(CougarSystem):
 
     def setStaticSpeed(self):
         self.isSpinning = True
-        self.motor.set(0.70253546253654)
+        self.motor.set(0.60253546253654)
 
     def stopRevolver(self):
         print("stop revolver")

@@ -17,7 +17,7 @@ class DefaultCommand(Command):
         
         # Air
         
-        if not robot.shooter.shooting:
+        if not robot.shooter.shooting and not robot.intake.intaking:
             robot.pneumatics.enableCLC()
             robot.pneumatics.startCompressor()
             
