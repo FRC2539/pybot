@@ -17,7 +17,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         
     def __init__(self):
         super().__init__('Autonomous')
-
+        
         #establish the auto modes for dashboard and use these values in auto if string check
         table = NetworkTables.getTable('Autonomous')
         autoNames = ['Turn','Move','Move Turn Move']
@@ -43,14 +43,26 @@ class AutonomousCommandGroup(fc.CommandFlow):
 
         @fc.IF(lambda: True)#str(Config('Autonomous/autoModeSelect')) == 'Move')
         def Move(self):#should be good for now
-            self.addSequential(MoveCommand(120))
-            self.addSequential(TurnCommand(90))
-            self.addSequential(MoveCommand(-120))
-
+            
+            #power shooter
+            self.addSequential(MoveCommand(72))
+            
+            #shoot
+            #lower intake
+            #power shooter
+            
+            self.addSequential(TurnCommand(-45))
+            self.addSequential(MoveCommand(32))
+            self.addSequential(TurnCommand(45))
+            self.addSequential(MoveCommand(186))
+            #pick up balls 
+            
+            self.addSequential(MoveCommand(-186))
+            self.addSequential(TurnCommand(-15))
+            #shoot
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Turn Move')
         def MTM(self):
-            pass
             #self.addSequential(PrintCommand("SafetyHazard"))
             self.addSequential(MoveCommand(40), 2)
             self.addSequential(TurnCommand(90), 2)

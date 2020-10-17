@@ -35,6 +35,8 @@ class DriveCommand(Command):
 
         self.lastY = None
         self.slowed = False
+        
+        robot.drivetrain.setProfile(0)
 
     def execute(self):
 

@@ -5,53 +5,47 @@ import robot
 
 class MoveCommand(Command):
 
-    def __init__(self, distance, avoidCollisions=True, name=None):
+    def __init__(self, distance, avoidCollisions=False, name=None):
         '''
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
         '''
 
         if name is None:
-            name = 'Move %f inches' % distance
+            name = 'Move Old %f inches' % distance
 
         super().__init__(name, 0.2)
 
         self.distance = distance
-        self.blocked = False
-        self.avoidCollisions = avoidCollisions
+        self.tolerance = 300
+        
+        self.stationary = False
         self.requires(robot.drivetrain)
 
     def _initialize(self):
         super()._initialize()
-        try:
-            self.precision = robot.drivetrain.inchesToTicks(1)
-        except:
-            self.precision = robot.drivetrain.inchesToRotations(1)
+        self.precision = robot.drivetrain.inchesToUnits(1)
 
     def initialize(self):
-        self.obstacleCount = 0
-        self.blocked = False
-        self.onTarget = 0
-        self.targetPositions = [] # [Left, right]
-        robot.drivetrain.setProfile(1)
-        try:
-            self.offset = robot.drivetrain.inchesToTicks(self.distance)
-        except:
-            self.offset = robot.drivetrain.inchesToRotations(self.distance)
-            
+
+        self.targetPositions = []
+        self.offset = robot.drivetrain.inchesToUnits(self.distance)
         sign = 1
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + (self.offset * sign))
             sign *= -1
 
+        print('my target: ' + str(self.targetPositions))
+
         robot.drivetrain.setPositions(self.targetPositions)
-
-    def isFinished(self):        
-        if self.offset < 0:
-            return self.targetPositions[0] >= min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])])
-        else:
-            return self.targetPositions[0] <= min([abs(robot.drivetrain.getPositions()[0]), abs(robot.drivetrain.getPositions()[1])])
-
+        
+    def execute(self):
+        print('LEFT TARGET: ' + str(self.targetPositions[0]))
+        print('LEFT POS: ' + str(robot.drivetrain.getPositions()[0]))
+        
+    def isFinished(self):
+        return abs(self.targetPositions[0] - robot.drivetrain.getPositions()[0]) < self.tolerance
+        
     def end(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)

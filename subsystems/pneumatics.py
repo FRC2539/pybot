@@ -2,7 +2,7 @@ from .cougarsystem import *
 
 from wpilib.command import Subsystem
 
-from wpilib import Compressor, DoubleSolenoid, Watchdog
+from wpilib import Compressor, DoubleSolenoid, Watchdog, AnalogInput
 
 import ports
 
@@ -18,9 +18,14 @@ class Pneumatics(CougarSystem):
 
         self.pneumaticCompressor.setClosedLoopControl(True) # Enables and ensures automatic compressor activity.
 
-        self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
-        self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
+        self.ballLauncherSolenoid = None#DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
+        self.intakeSolenoid = None#DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
                 
+        self.pressureSensor = AnalogInput(ports.pneumatics.pressureSensor)
+
+        self.maxPressure = 110
+        self.supplyVolt = 4.942
+
         disablePrints()
 
     def isPressureLow(self):
@@ -58,6 +63,12 @@ class Pneumatics(CougarSystem):
 
     def stopCompressor(self):
         self.pneumaticCompressor.stop()
+
+    def getAnalogPressureSensor(self):
+        return 250 * (self.pressureSensor.getVoltage() / self.supplyVolt) - 25
+
+    def isFull(self):
+        return self.pressureSensor.getValue() >= self.maxPressure
 
     def initDefaultCommand(self):
         from commands.pneumatics.defaultcommand import DefaultCommand
