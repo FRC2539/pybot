@@ -65,7 +65,7 @@ class Revolver(CougarSystem):
 
     def setStaticSpeed(self):
         self.isSpinning = True
-        self.motor.set(0.60253546253654)
+        self.motor.set(0.50253546253654)
 
     def stopRevolver(self):
         print("stop revolver")

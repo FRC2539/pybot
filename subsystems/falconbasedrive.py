@@ -6,7 +6,7 @@ from wpilib.geometry import Rotation2d
 from .cougarsystem import *
 
 import math
-import pathlib
+import os
 
 from networktables import NetworkTables
 from ctre import WPI_TalonFX, ControlMode, NeutralMode, FeedbackDevice, Orchestra
@@ -31,7 +31,9 @@ class FalconBaseDrive(CougarSystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-                        
+        
+        disablePrints()
+        
         try:
             self.motors = [
                 WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
@@ -504,10 +506,27 @@ class FalconBaseDrive(CougarSystem):
     def establishOrchestra(self):
         self.theOrchestra = Orchestra()
         
+        self.currentSong = 0
+        
+        self.path = '/home/lvuser/py/music/'
+        
+        self.songs = { 
+            'songthree.chrp' : 'IDK',
+            'RickRoll.chrp' : 'Never Gonna Give You Up',
+            'BillieJean.chrp' : 'Billie Jean',
+            'WantItThatWay.chrp' : 'I Want it That Way',
+            'BohemianRhapsody.chrp' : 'Bohemian Rhapsody',
+            'Pirate.chrp' : 'Pirates of the Carribean: He\'s a Pirate',
+            'Journey.chrp' : 'Don\' Stop Believing'
+                     }
+        
         for motor in self.motors:
             self.theOrchestra.addInstrument(motor)
-
-        self.theOrchestra.loadMusic(str(pathlib.Path(__file__).absolute()) + '/swtheme.chrp')
+        
+        self.loadSong(list(self.songs.keys())[0]) # Initial song
+    
+    def loadSong(self, file_):
+        self.theOrchestra.loadMusic(self.path + file_)
         
     def playM(self):
         self.theOrchestra.play()
@@ -517,6 +536,28 @@ class FalconBaseDrive(CougarSystem):
         
     def stopM(self):
         self.theOrchestra.stop()
+        
+    def cycleLeft(self):
+        self.currentSong -= 1
+        
+        if self.currentSong < 0:
+            self.currentSong = len(list(self.songs.keys())) - 1
+            
+        self.loadSong(list(self.songs.keys())[self.currentSong])
+
+        print('\n\nNow Playing: ' + str(list(self.songs.items())[self.currentSong]) + '\n\n')
+        
+    
+    def cycleRight(self):
+        self.currentSong += 1
+        
+        if self.currentSong > len(list(self.songs.keys())) - 1:
+            self.currentSong = 0
+            
+        self.loadSong(list(self.songs.keys())[self.currentSong])
+
+        print('\n\nNow Playing: ' + str(list(self.songs.items())[self.currentSong]) + '\n\n')
+
 
     def setSpeeds(self, speedLeft, speedRight):
         self.activeMotors[0].set(ControlMode.Velocity, -speedLeft)

@@ -1,11 +1,15 @@
 from wpilib.command import Command
 
+from subsystems.cougarsystem import *
+
 import robot
 
 class DefaultCommand(Command):
 
     def __init__(self):
         super().__init__('Default for pneumatics')
+
+        disablePrints()
 
         self.requires(robot.ledsystem)
         self.requires(robot.pneumatics)

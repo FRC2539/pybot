@@ -18,8 +18,8 @@ class Pneumatics(CougarSystem):
 
         self.pneumaticCompressor.setClosedLoopControl(True) # Enables and ensures automatic compressor activity.
 
-        self.ballLauncherSolenoid = None#DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
-        self.intakeSolenoid = None#DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
+        self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
+        self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
                 
         self.pressureSensor = AnalogInput(ports.pneumatics.pressureSensor)
 
