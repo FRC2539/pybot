@@ -1,11 +1,15 @@
 from wpilib.command import Command
 
+from subsystems.cougarsystem import *
+
 import robot
 
 class DefaultCommand(Command):
 
     def __init__(self):
         super().__init__('Default for pneumatics')
+
+        disablePrints()
 
         self.requires(robot.ledsystem)
         self.requires(robot.pneumatics)
@@ -19,7 +23,7 @@ class DefaultCommand(Command):
 
         # Air
         
-        if not robot.shooter.shooting:
+        if not robot.shooter.shooting and not robot.intake.intaking:
             robot.pneumatics.enableCLC()
             robot.pneumatics.startCompressor()
             

@@ -1,29 +1,41 @@
 from commands.balllauncher.extendlaunchercommand import ExtendLauncherCommand
 from commands.balllauncher.launchballscommand import LaunchBallsCommand
 from commands.balllauncher.reverseballscommand import ReverseBallsCommand
+
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
+
 from commands.intake.deployintakecommand import DeployIntakeCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
 from commands.intake.outakecommand import OutakeCommand
 from commands.intake.kickcommand import KickCommand
+
 from commands.limelight.sudocommandgroup import SudoCommandGroup
+
 from commands.revolver.intakedirectioncommand import IntakeDirectionCommand
 from commands.revolver.shooterdirectioncommand import ShooterDirectionCommand
 from commands.revolver.variablespeedcommand import VariableSpeedCommand
 from commands.revolver.firesequencecommand import FireSequenceCommand
+
 from commands.shooter.endshootingprocesscommand import EndShootingProcessCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.shooter.shootwhenreadycommand import ShootWhenReadyCommand
+
 from commands.turret.toggleturretmodecommand import ToggleTurretModeCommand
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 from commands.turret.increaseturretadjustmentcommand import IncreaseTurretAdjustmentCommand
 from commands.turret.decreaseturretadjustmentcommand import DecreaseTurretAdjustmentCommand
+
 from commands.hood.increasehoodadjustmentcommand import IncreaseHoodAdjustmentCommand
 from commands.hood.decreasehoodadjustmentcommand import DecreaseHoodAdjustmentCommand
+
 from commands.drivetrain.boogitycommand import BoogityCommand
 from commands.drivetrain.autopilotcommand import AutoPilotCommand
+from commands.drivetrain.musiccommand import MusicCommand
+from commands.drivetrain.cyclesongleft import CycleSongLeft
+from commands.drivetrain.cyclesongright import CycleSongRight
+
 from commands.shooter.maketherobotshootballsandonlyshootballscommand import MakeTheRobotShootBallsAndOnlyShootBallsCommand
 from commands.revolver.actualrevolvershakecommand import ActualRevolverShakeCommand
 from commands.revolver.revolvergobackcommand import RevolverGoBackCommand
@@ -58,6 +70,7 @@ def init():
     logicalaxes.turretX = operatorController.RightX
 
     driveController.Back.whenPressed(ResetCommand())
+    driveController.Start.toggleWhenPressed(MusicCommand())
 
     driveController.A.whenPressed(IntakeCommand()) # Used at pickup station
     driveController.B.toggleWhenPressed(ShooterDirectionCommand())
@@ -66,8 +79,8 @@ def init():
 
     driveController.DPadUp.toggleWhenPressed(SudoCommandGroup())
     
-    driveController.DPadRight.whileHeld(VariableSpeedCommand(-0.4))
-    driveController.DPadLeft.whileHeld(VariableSpeedCommand(0.4))
+    driveController.DPadRight.whenPressed(CycleSongRight())#whileHeld(VariableSpeedCommand(-0.4))
+    driveController.DPadLeft.whenPressed(CycleSongLeft())#whileHeld(VariableSpeedCommand(0.4))
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
 
@@ -76,7 +89,7 @@ def init():
     driveController.RightJoystick.toggleWhenPressed(LoadInEmptyCommandGroup()) # Used on field
     driveController.LeftJoystick.whenPressed(KickCommand())
     
-    driveController.Start.toggleWhenPressed(SetRPMCommand(5000))
+    #driveController.Start.toggleWhenPressed(SetRPMCommand(5000))
 
     # The controller for non-driving subsystems of the robot
     # actually just the driver controller but some stuff is switched (A and B, left trigger and bumper) and a command is gone

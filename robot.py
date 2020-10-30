@@ -37,6 +37,7 @@ class KryptonBot(CommandBasedRobot):
     '''Implements a Command Based robot design'''
 
     def robotInit(self):
+        print("robot init")
         '''Set up everything we need for a working robot.'''
         if RobotBase.isSimulation():
             import mockdata
@@ -68,6 +69,7 @@ class KryptonBot(CommandBasedRobot):
         StartUpCommandGroup().start()
 
     def autonomousInit(self):
+        print("robot auto init")
         '''This function is called each time autonomous mode starts.'''
 
         # Send field data to the dashboard

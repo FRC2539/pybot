@@ -8,5 +8,5 @@ class LoadInEmptyCommandGroup(fc.CommandFlow):
     def __init__(self):
         super().__init__('Load In Empty')
 
-        self.addParallel(IntakeCommand())
+        #self.addParallel(IntakeCommand())
         self.addParallel(EnsureEmptinessCommand())

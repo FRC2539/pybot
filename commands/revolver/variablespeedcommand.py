@@ -7,7 +7,7 @@ class VariableSpeedCommand(Command):
     def __init__(self, speed):
         super().__init__()
 
-        self.requires(robot.revolver)
+        #self.requires(robot.revolver)
 
         self.speed = speed
 
