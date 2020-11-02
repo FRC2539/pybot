@@ -25,7 +25,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         #establish the auto modes for dashboard and use these values in auto if string check
         table = NetworkTables.getTable('Autonomous')
         #autoNames = ['Turn', 'Move', 'Move Turn Move', 'CollectFromTrench', 'GetOffLine']
-        autoNames = ['GetOffLine', 'CollectFromTrench']
+        autoNames = ['GetOffLine', 'CollectFromTrench', 'StealFromTrench']
         autoString = ''
         for auto in autoNames:
             autoString += str(auto + '$')
@@ -37,7 +37,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def getOffLine(self): # should be good for now
             self.addSequential(PrintCommand("Get Off Line"))
             # get off line
-            self.addSequential(MoveCommand(24))
+            self.addSequential(TurnCommand(90))#MoveCommand(24))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
         def collectFromTrench(self):#should be good for now
@@ -58,7 +58,24 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(MoveCommand(-186))
             self.addSequential(TurnCommand(-15))
             #shoot
-
+            
+            
+            # Steal from enemy trench
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'StealFromTrench')
+        def stealFromTrench(self):
+            self.addSequential(PrintCommand('StealFromTrench'))
+            # Collect Balls
+            self.addSequential(MoveCommand(84))
+            self.addSequential(TurnCommand(55))
+            self.addSequential(MoveCommand(48))
+            # Move to shoot
+            self.addSequential(TurnCommand(10))
+            self.addSequential(MoveCommand(-228))
+            self.addSequential(TurnCommand(-55))
+            self.addSequential(MoveCommand(-60))
+            
+            
+            
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Turn Move')
         def MTM(self):
             self.addSequential(PrintCommand("Move Turn Move"))

@@ -9,8 +9,6 @@ class DefaultCommand(Command):
     def __init__(self):
         super().__init__('Default for pneumatics')
 
-        disablePrints()
-
         self.requires(robot.ledsystem)
         self.requires(robot.pneumatics)
 
@@ -19,17 +17,15 @@ class DefaultCommand(Command):
 
     def execute(self):
 
-        print('analog ' + str(robot.pneumatics.getAnalogPressureSensor()))
-
         # Air
         
-        if not robot.shooter.shooting and not robot.intake.intaking:
-            robot.pneumatics.enableCLC()
+        print(robot.pneumatics.getAnalogPressureSensor())
+        
+        if not robot.shooter.shooting and not robot.intake.intaking and robot.pneumatics.isPressureLow():
             robot.pneumatics.startCompressor()
             
-        else:
+        elif robot.pneumatics.isFull():
             robot.pneumatics.stopCompressor()
-            robot.pneumatics.disableCLC()
             
         # LEDs
         
@@ -39,10 +35,10 @@ class DefaultCommand(Command):
         # WHITE to let you know shooter isn't at speed yet, GREEN then to let you know at speed and ready,
         # just continue with the FireSequence command. Then, the ORANGE should be shooting balls.
         
-        if robot.pneumatics.isPressureLow(): # Use heartbeat style.
-            
-            #print('LOWWW')
-            
+        if robot.pneumatics.isCompressorRunning(): # Use heartbeat style.
+                        
+            print('LOW')
+                        
             if robot.shooter.atGoal: # The shooter has reached the goal. Technically, don't need to check for shooting here.
                 #print('at goal\n')
                 if robot.revolver.sequenceEngaged: 
@@ -60,6 +56,8 @@ class DefaultCommand(Command):
                 robot.ledsystem.redHeartbeat() # Compressor should be running, because we ain't shooting. Intake will mask the compressor running however.
                 
         else:
+            
+            print('HIGH')
             
             if robot.shooter.atGoal:
                 if robot.revolver.sequenceEngaged:

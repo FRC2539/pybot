@@ -87,6 +87,8 @@ class FalconBaseDrive(CougarSystem):
         self.resetPID()
         self.establishOrchestra()
 
+        self.tolerance = 300
+
         self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))
 
     def initDefaultCommand(self):
@@ -169,8 +171,10 @@ class FalconBaseDrive(CougarSystem):
             for motor, speed in zip(self.activeMotors, speeds):
                 motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
+    def doneMoving(self, targets):
+        return abs(targets[0] - self.getPositions()[0]) < self.tolerance
 
-    def setPositions(self, positions):
+    def setPositions(self, positions, falconOverride=False, neoOverride=False, selectedPID=2):
         '''
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
@@ -180,13 +184,19 @@ class FalconBaseDrive(CougarSystem):
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
         self.stop()
-        for motor, position in zip(self.activeMotors, positions):
-            motor.selectProfileSlot(1, 0)
-            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-            motor.configMotionAcceleration(int(self.speedLimit), 0)
-            motor.set(ControlMode.MotionMagic, position)
-
-
+        if not falconOverride:
+            for motor, position in zip(self.activeMotors, positions):
+                motor.selectProfileSlot(1, 0)
+                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+                motor.configMotionAcceleration(int(self.speedLimit), 0)
+                motor.set(ControlMode.MotionMagic, position)
+        else:
+            for motor, position in zip(self.activeMotors, positions):
+                motor.selectProfileSlot(2, 0)
+                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+                motor.configMotionAcceleration(int(self.speedLimit), 0)
+                motor.set(ControlMode.MotionMagic, position)
+                
     def averageError(self):
         '''Find the average distance between setpoint and current position.'''
         error = 0
@@ -225,15 +235,15 @@ class FalconBaseDrive(CougarSystem):
             motor.config_kF(0, 0.1, 0) # 0.0005
             motor.config_IntegralZone(0, 0, 0) # 0
 
-            motor.config_kP(1, 0.09, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(1, 0.4, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(1, 0, 0) # 0
             motor.config_kD(1, 0, 0) # 0.0001
-            motor.config_kF(1, 0.09, 0) # 0.0005
+            motor.config_kF(1, 0.25, 0) # 0.0005
 
-            motor.config_kP(2, 0.026, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(2, 0.5, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(2, 0, 0) # 0
-            motor.config_kD(2, 0.05, 0) # 0.0001
-            motor.config_kF(2, 0.007, 0) # 0.0005
+            motor.config_kD(2, 0, 0) # 0.0001
+            motor.config_kF(2, 0.2, 0) # 0.0005
 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         '''
@@ -370,7 +380,6 @@ class FalconBaseDrive(CougarSystem):
             degrees += 360
 
         return degrees
-
 
     def inchesToUnits(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
@@ -517,7 +526,9 @@ class FalconBaseDrive(CougarSystem):
             'WantItThatWay.chrp' : 'I Want it That Way',
             'BohemianRhapsody.chrp' : 'Bohemian Rhapsody',
             'Pirate.chrp' : 'Pirates of the Carribean: He\'s a Pirate',
-            'Journey.chrp' : 'Don\' Stop Believing'
+            'Journey.chrp' : 'Don\' Stop Believing',
+            'mk.chrp' : 'Mariokart Main Title',
+            'QueenWATCl.chrp' : 'We are the Champions' 
                      }
         
         for motor in self.motors:
@@ -526,7 +537,8 @@ class FalconBaseDrive(CougarSystem):
         self.loadSong(list(self.songs.keys())[0]) # Initial song
     
     def loadSong(self, file_):
-        self.theOrchestra.loadMusic(self.path + file_)
+        if self.theOrchestra.loadMusic(self.path + file_) != 0: # The loader returned an error if it's not zero.
+            print('\n\nThe music did not load. Ensure the file and path are correct.\n\n')
         
     def playM(self):
         self.theOrchestra.play()
@@ -557,7 +569,7 @@ class FalconBaseDrive(CougarSystem):
         self.loadSong(list(self.songs.keys())[self.currentSong])
 
         print('\n\nNow Playing: ' + str(list(self.songs.items())[self.currentSong]) + '\n\n')
-
+        
 
     def setSpeeds(self, speedLeft, speedRight):
         self.activeMotors[0].set(ControlMode.Velocity, -speedLeft)

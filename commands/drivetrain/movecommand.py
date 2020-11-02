@@ -17,7 +17,6 @@ class MoveCommand(Command):
         super().__init__(name, 0.2)
 
         self.distance = distance
-        self.tolerance = 300
         
         self.stationary = False
         self.requires(robot.drivetrain)
@@ -30,6 +29,7 @@ class MoveCommand(Command):
 
         self.targetPositions = []
         self.offset = robot.drivetrain.inchesToUnits(self.distance)
+                
         sign = 1
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + (self.offset * sign))
@@ -44,8 +44,9 @@ class MoveCommand(Command):
         print('LEFT POS: ' + str(robot.drivetrain.getPositions()[0]))
         
     def isFinished(self):
-        return abs(self.targetPositions[0] - robot.drivetrain.getPositions()[0]) < self.tolerance
+        return robot.drivetrain.doneMoving(self.targetPositions)
         
     def end(self):
+        print('DONE')
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)

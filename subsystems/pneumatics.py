@@ -16,20 +16,20 @@ class Pneumatics(CougarSystem):
 
         self.pneumaticCompressor = Compressor(ports.pneumatics.PCM)
 
-        self.pneumaticCompressor.setClosedLoopControl(True) # Enables and ensures automatic compressor activity.
+        self.pneumaticCompressor.setClosedLoopControl(False) # Enables and ensures automatic compressor activity.
 
         self.ballLauncherSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 0, 1) # Forward (0), extends it.
         self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
                 
         self.pressureSensor = AnalogInput(ports.pneumatics.pressureSensor)
 
-        self.maxPressure = 110
+        self.maxPressure = 120 # It will only go to 110 if you use the RIGHT method.
         self.supplyVolt = 4.942
 
         disablePrints()
 
     def isPressureLow(self):
-        return self.pneumaticCompressor.getPressureSwitchValue()
+        return not self.isReasonable()#self.pneumaticCompressor.getPressureSwitchValue()
 
     def isCompressorRunning(self):
         return self.pneumaticCompressor.enabled()
@@ -66,9 +66,12 @@ class Pneumatics(CougarSystem):
 
     def getAnalogPressureSensor(self):
         return 250 * (self.pressureSensor.getVoltage() / self.supplyVolt) - 25
-
+    
+    def isReasonable(self):
+        return int(self.getAnalogPressureSensor()) >= self.maxPressure - 30
+    
     def isFull(self):
-        return self.pressureSensor.getValue() >= self.maxPressure
+        return int(self.getAnalogPressureSensor()) >= self.maxPressure - 15
 
     def initDefaultCommand(self):
         from commands.pneumatics.defaultcommand import DefaultCommand

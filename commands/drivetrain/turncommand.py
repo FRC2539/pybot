@@ -31,10 +31,10 @@ class TurnCommand(MoveCommand):
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset)
 
-        robot.drivetrain.setPositions(self.targetPositions)
-
-        for x in range(1000):
-            print('ran initi')
+        if self.fDegrees < 20:
+            robot.drivetrain.setPositions(self.targetPositions, falconOverride=True, neoOverride=True)
+        else:
+            robot.drivetrain.setPositions(self.targetPositions, neoOverride=True)
 
     def end(self):
         robot.drivetrain.stop()
