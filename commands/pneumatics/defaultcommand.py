@@ -21,11 +21,11 @@ class DefaultCommand(Command):
         
         print(robot.pneumatics.getAnalogPressureSensor())
         
-        if not robot.shooter.shooting and not robot.intake.intaking and robot.pneumatics.isPressureLow():
+        if not robot.shooter.shooting and not robot.intake.intaking and robot.pneumatics.isPressureLow(): # If our pressure is low, run this. 
             robot.pneumatics.startCompressor()
             
-        elif robot.pneumatics.isFull():
-            robot.pneumatics.stopCompressor()
+        else:
+            robot.pneumatics.stopCompressor() # Call this just to ensure the compressor is always stopped. 
             
         # LEDs
         
@@ -36,11 +36,10 @@ class DefaultCommand(Command):
         # just continue with the FireSequence command. Then, the ORANGE should be shooting balls.
         
         if robot.pneumatics.isCompressorRunning(): # Use heartbeat style.
-                        
-            print('LOW')
-                        
+                                                
             if robot.shooter.atGoal: # The shooter has reached the goal. Technically, don't need to check for shooting here.
                 #print('at goal\n')
+                
                 if robot.revolver.sequenceEngaged: 
                     robot.ledsystem.colorOneHeartbeat() # Shooting!
                 else:
@@ -55,11 +54,10 @@ class DefaultCommand(Command):
             else:
                 robot.ledsystem.redHeartbeat() # Compressor should be running, because we ain't shooting. Intake will mask the compressor running however.
                 
-        else:
-            
-            print('HIGH')
-            
+        else: # Use standard style. 
+                        
             if robot.shooter.atGoal:
+                
                 if robot.revolver.sequenceEngaged:
                     robot.ledsystem.colorOneStrobe() # Shooting!
                 else:
@@ -75,4 +73,4 @@ class DefaultCommand(Command):
                 robot.ledsystem.rainbowLava() # The default, good to go setting.
         
     def end(self):
-        robot.ledsystem.off()
+        robot.ledsystem.off() # Turn the LEDs off when we're done with the robot. 

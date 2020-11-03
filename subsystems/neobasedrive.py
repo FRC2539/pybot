@@ -6,6 +6,7 @@ from wpilib.geometry import Rotation2d
 from .cougarsystem import *
 
 import math
+import numpy
 
 from networktables import NetworkTables
 from rev import CANSparkMax, ControlType, MotorType, IdleMode, CANPIDController
@@ -238,27 +239,22 @@ class NeoBaseDrive(CougarSystem):
             controller.setFF(0, 2) # 0.0005
             controller.setIZone(0, 2) # 0
             
+            
     def doneMoving(self, targets):
-        print('1' + str(abs(targets[0] - self.getPositions()[0]) < self.tolerance))
-        print(abs(self.getSpeeds()[0]) < 3.0)
-        
-        return abs(targets[0] - self.getPositions()[0]) < self.tolerance and abs(self.getSpeeds()[0]) < 3.0
-
+        return (abs(targets[0] - self.getPositions()[0]) < self.tolerance) and (abs(self.getSpeeds()[0]) < 3.0)
+                                                                                
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
-        '''
-        Use matrices and points to solve for the constants of our custom cubic polynomial (ax^3 + bx^2 + cx + d).
+        
+        # Use matrices and points to solve for the constants of our custom cubic polynomial (ax^3 + bx^2 + cx + d).
+        # Screw me.
 
-        Screw me.
-
-        [x1^3  x1^2 x1 1]
-        [x2^3  x2^2 x2 1]
-        [3x1^2 2x1  1  0]
-        [3x2^2 2x2  1  0]
-
-        '''
+        # [x1^3  x1^2 x1 1]
+        # [x2^3  x2^2 x2 1]
+        # [3x1^2 2x1  1  0]
+        # [3x2^2 2x2  1  0]
 
         if not special:
-
+        
             matrixOne = numpy.array(
                 [[           0,         0,    0, 1],
                 [    xTwo ** 3, xTwo ** 2, xTwo, 1],
