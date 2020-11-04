@@ -4,6 +4,8 @@ from wpilib.command import Subsystem
 
 from wpilib import Compressor, DoubleSolenoid, Watchdog, AnalogInput
 
+from networktables import NetworkTables as nt
+
 import ports
 
 class Pneumatics(CougarSystem):
@@ -13,6 +15,8 @@ class Pneumatics(CougarSystem):
         super().__init__('Pheumatics')
         
         disablePrints()
+        
+        self.table = nt.getTable('Pneumatics')
 
         self.pneumaticCompressor = Compressor(ports.pneumatics.PCM)
 
@@ -72,6 +76,9 @@ class Pneumatics(CougarSystem):
     
     def isFull(self):
         return int(self.getAnalogPressureSensor()) >= self.maxPressure - 15
+    
+    def updatePressure(self):
+        self.table.putNumber('Pressure', int(self.getAnalogPressureSensor()))
 
     def initDefaultCommand(self):
         from commands.pneumatics.defaultcommand import DefaultCommand

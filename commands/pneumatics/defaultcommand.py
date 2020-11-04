@@ -19,13 +19,14 @@ class DefaultCommand(Command):
 
         # Air
         
-        print(robot.pneumatics.getAnalogPressureSensor())
+        robot.pneumatics.updatePressure()
         
-        if not robot.shooter.shooting and not robot.intake.intaking and robot.pneumatics.isPressureLow(): # If our pressure is low, run this. 
-            robot.pneumatics.startCompressor()
+        if not robot.shooter.shooting and not robot.intake.intaking: # If our pressure is low, run this. 
+            robot.pneumatics.enableCLC()
             
         else:
-            robot.pneumatics.stopCompressor() # Call this just to ensure the compressor is always stopped. 
+            robot.pneumatics.disableCLC() # Call this just to ensure the compressor is always stopped. 
+            robot.pneumatics.stopCompressor()
             
         # LEDs
         
