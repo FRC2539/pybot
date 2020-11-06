@@ -233,7 +233,7 @@ class NeoBaseDrive(CougarSystem):
             controller.setFF(0.0, 1) # 0.0005
             controller.setIZone(0, 1) # 0
             
-            controller.setP(0.1, 2) # 0.000007 TODO: Test this new value. We want 
+            controller.setP(0.25, 2) # 0.000007 TODO: Test this new value. We want 
             controller.setI(0, 2) # 0
             controller.setD(0, 2) # 0.0001
             controller.setFF(0, 2) # 0.0005

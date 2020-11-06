@@ -75,6 +75,7 @@ class FalconBaseDrive(CougarSystem):
         self.setUseEncoders(True)
         self.maxSpeed = 12500#Config('DriveTrain/maxSpeed') # 2500
         self.speedLimit = 12500#Config('DriveTrain/normalSpeed') # 4500
+        self.autoSpeedLimit = 16000
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
 
@@ -87,7 +88,7 @@ class FalconBaseDrive(CougarSystem):
         self.resetPID()
         self.establishOrchestra()
 
-        self.tolerance = 300
+        self.tolerance = 200
 
         self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))
 
@@ -186,15 +187,15 @@ class FalconBaseDrive(CougarSystem):
         self.stop()
         if not falconOverride:
             for motor, position in zip(self.activeMotors, positions):
-                motor.selectProfileSlot(1, 0)
-                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-                motor.configMotionAcceleration(int(self.speedLimit), 0)
+                motor.selectProfileSlot(2, 0)
+                motor.configMotionCruiseVelocity(int(self.autoSpeedLimit), 0)
+                motor.configMotionAcceleration(int(self.autoSpeedLimit), 0)
                 motor.set(ControlMode.MotionMagic, position)
         else:
             for motor, position in zip(self.activeMotors, positions):
                 motor.selectProfileSlot(2, 0)
-                motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
-                motor.configMotionAcceleration(int(self.speedLimit), 0)
+                motor.configMotionCruiseVelocity(int(self.autoSpeedLimit), 0)
+                motor.configMotionAcceleration(int(self.autoSpeedLimit), 0)
                 motor.set(ControlMode.MotionMagic, position)
                 
     def averageError(self):
@@ -235,15 +236,15 @@ class FalconBaseDrive(CougarSystem):
             motor.config_kF(0, 0.1, 0) # 0.0005
             motor.config_IntegralZone(0, 0, 0) # 0
 
-            motor.config_kP(1, 0.4, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(1, 0.2, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(1, 0, 0) # 0
             motor.config_kD(1, 0, 0) # 0.0001
-            motor.config_kF(1, 0.25, 0) # 0.0005
+            motor.config_kF(1, 0, 0) # 0.0005
 
-            motor.config_kP(2, 0.5, 0) # 0.000007 TODO: Test this new value. We want
+            motor.config_kP(2, 0.33, 0) # 0.000007 TODO: Test this new value. We want
             motor.config_kI(2, 0, 0) # 0
-            motor.config_kD(2, 0, 0) # 0.0001
-            motor.config_kF(2, 0.2, 0) # 0.0005
+            motor.config_kD(2, 0.001, 0) # 0.0001
+            motor.config_kF(2, 0.015, 0) # 0.0005
 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         '''

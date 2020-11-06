@@ -13,6 +13,12 @@ from commands.drivetrain.turncommand import TurnCommand
 #from commands.drivetrain.gyromovecommand import GyroMoveCommand
 from commands.drivetrain.curvecommand import CurveCommand
 
+from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
+
+from commands.shooter.setrpmcommand import SetRPMCommand
+from commands.shooter.stevenshooterlimelightcommand import StevenShooterLimelightCommand
+
+from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 #testTrajectory = KougarKourseGenerator(0)
 
@@ -37,7 +43,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def getOffLine(self): # should be good for now
             self.addSequential(PrintCommand("Get Off Line"))
             # get off line
-            self.addSequential(TurnCommand(90))#MoveCommand(24))
+            self.addSequential(TurnCommand(45))#MoveCommand(24))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
         def collectFromTrench(self):#should be good for now
@@ -71,8 +77,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             # Move to shoot
             self.addSequential(TurnCommand(10))
             self.addSequential(MoveCommand(-228))
-            self.addSequential(TurnCommand(-55))
-            self.addSequential(MoveCommand(-60))
+            self.addSequential(TurnCommand(-65))
             
             
             

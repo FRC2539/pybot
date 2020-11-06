@@ -36,6 +36,10 @@ class MoveCommand(Command):
             sign *= -1
 
         robot.drivetrain.setPositions(self.targetPositions)
+    
+    def execute(self):
+        print('t ' +  str(self.targetPositions))
+        print('pos ' + str(robot.drivetrain.getPositions()))
         
     def isFinished(self):
         return robot.drivetrain.doneMoving(self.targetPositions)
