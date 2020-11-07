@@ -79,11 +79,13 @@ class NeoBaseDrive(CougarSystem):
         self._publishPID('Speed', 0)
         self._publishPID('Position', 1)
 
+        self.indexOneP = 0.04 # Standard P value for the first slot.
+
         self.resetEncoders()
         self.resetPID()
         
-        self.tolerance = 0.5
-
+        self.tolerance = 0.6
+        
         disablePrints()
 
         self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))
@@ -221,19 +223,19 @@ class NeoBaseDrive(CougarSystem):
             
             controller = motor.getPIDController()
             
-            controller.setP(0.0000001, 0) # 0.000007 TODO: Test this new value. We want 
+            controller.setP(0.0000001, 0) # 0.000007 
             controller.setI(0, 0) # 0
             controller.setD(0.0001, 0) # 0.0001
             controller.setFF(0.0002, 0) # 0.0005
             controller.setIZone(0, 0) # 0
 
-            controller.setP(0.04, 1) # 0.000007 TODO: Test this new value. We want 
+            controller.setP(self.indexOneP, 1) # 0.04 0.0075
             controller.setI(0, 1) # 0
-            controller.setD(0.01, 1) # 0.0001
-            controller.setFF(0.0, 1) # 0.0005
+            controller.setD(0.01, 1) # 0.01
+            controller.setFF(0, 1) # 0.0
             controller.setIZone(0, 1) # 0
             
-            controller.setP(0.25, 2) # 0.000007 TODO: Test this new value. We want 
+            controller.setP(0.15, 2) # 0.000007
             controller.setI(0, 2) # 0
             controller.setD(0, 2) # 0.0001
             controller.setFF(0, 2) # 0.0005
@@ -426,7 +428,14 @@ class NeoBaseDrive(CougarSystem):
         done lightly, as many commands rely on encoder information.
         '''
         self.useEncoders = useEncoders
+        
+    def setStandardP(self):
+        for motor in self.activeMotors:
+            motor.getPIDController().setP(self.indexOneP, 1)
 
+    def setSlowP(self):        
+        for motor in self.activeMotors:
+            motor.getPIDController().setP(0.033, 1)
 
     def setSpeedLimit(self, speed):
         '''

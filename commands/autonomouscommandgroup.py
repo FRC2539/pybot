@@ -1,5 +1,6 @@
-from wpilib.command import PrintCommand
+from wpilib.command import PrintCommand, WaitCommand
 from wpilib import DriverStation as _ds
+
 import commandbased.flowcontrol as fc
 
 from networktables import NetworkTables
@@ -10,10 +11,13 @@ from custom.config import Config
 
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.setspeedcommand import SetSpeedCommand
 #from commands.drivetrain.gyromovecommand import GyroMoveCommand
+from commands.drivetrain.movewhileintakingcommandgroup import MoveWhileIntakingCommandGroup
 from commands.drivetrain.curvecommand import CurveCommand
 
 from commands.intake.loadinemptycommandgroup import LoadInEmptyCommandGroup
+from commands.intake.lowerintakecommand import LowerIntakeCommand
 
 from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.shooter.stevenshooterlimelightcommand import StevenShooterLimelightCommand
@@ -43,7 +47,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def getOffLine(self): # should be good for now
             self.addSequential(PrintCommand("Get Off Line"))
             # get off line
-            self.addSequential(TurnCommand(45))#MoveCommand(24))
+            self.addSequential(MoveCommand(24))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
         def collectFromTrench(self):#should be good for now
@@ -73,7 +77,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
             # Collect Balls
             self.addSequential(MoveCommand(84))
             self.addSequential(TurnCommand(55))
-            self.addSequential(MoveCommand(48))
+            self.addSequential(MoveWhileIntakingCommandGroup(48))
             # Move to shoot
             self.addSequential(TurnCommand(10))
             self.addSequential(MoveCommand(-228))

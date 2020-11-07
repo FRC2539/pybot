@@ -32,12 +32,10 @@ class AutoPilotCommand(Command):
         else:
             
             if not 90 < self.currentHeading < 270:
-                rotate = robot.drivetrain.getAngleTo(0) / 90
+                rotate = robot.drivetrain.getAngleTo(0) / 75
             else:
-                rotate = robot.drivetrain.getAngleTo(180) / 90
-        
-        print('rrrrrrrr ' +  str(rotate))
-        
+                rotate = robot.drivetrain.getAngleTo(180) / 75
+                
         robot.drivetrain.move(
             0,
             y,
