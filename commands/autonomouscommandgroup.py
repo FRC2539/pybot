@@ -35,7 +35,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         #establish the auto modes for dashboard and use these values in auto if string check
         table = NetworkTables.getTable('Autonomous')
         #autoNames = ['Turn', 'Move', 'Move Turn Move', 'CollectFromTrench', 'GetOffLine']
-        autoNames = ['GetOffLine', 'CollectFromTrench', 'StealFromTrench']
+        autoNames = ['GetOffLine', 'CollectFromTrench', 'StealFromTrench', 'Auto1']
         autoString = ''
         for auto in autoNames:
             autoString += str(auto + '$')
@@ -47,7 +47,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def getOffLine(self): # should be good for now
             self.addSequential(PrintCommand("Get Off Line"))
             # get off line
-            self.addSequential(MoveCommand(24))
+            self.addSequential(MoveCommand(48))#MoveWhileIntakingCommandGroup(120))
 
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
         def collectFromTrench(self):#should be good for now
@@ -75,14 +75,15 @@ class AutonomousCommandGroup(fc.CommandFlow):
         def stealFromTrench(self):
             self.addSequential(PrintCommand('StealFromTrench'))
             # Collect Balls
+            self.addParallel(LowerIntakeCommand())
             self.addSequential(MoveCommand(84))
-            self.addSequential(TurnCommand(55))
+            self.addSequential(TurnCommand(52))
             self.addSequential(MoveWhileIntakingCommandGroup(48))
             # Move to shoot
             self.addSequential(TurnCommand(10))
             self.addSequential(MoveCommand(-228))
-            self.addSequential(TurnCommand(-65))
-            
+            self.addSequential(TurnCommand(-62))
+            #self.addSequential(SudoCommandGroup(), 10)
             
             
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Turn Move')
@@ -92,10 +93,11 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(TurnCommand(90), 2)
             self.addSequential(MoveCommand(-40), 2)
 
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Auto 1')
+        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Auto1')
         def auto1(self):#should be good for now
-            self.addSequential(PrintCommand("Auto 1"))
-            self.addSequential(MoveCommand(80))
+            self.addSequential(SudoCommandGroup(), 10)
+            ##self.addSequential(PrintCommand("Auto 1"))
+            ##self.addSequential(MoveCommand(80))
             
             ##self.addSequential(TurnCommand(90))
             #self.addSequential(CurveCommand(-125, 30, False))

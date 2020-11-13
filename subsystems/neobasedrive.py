@@ -74,7 +74,7 @@ class NeoBaseDrive(CougarSystem):
         self.speedLimit = 6500#Config('DriveTrain/normalSpeed') # 4500
         self.deadband = 0.04 # Deadband of 2%
         self.maxPercentVBus = 1
-
+        
         '''Allow changing CAN Talon settings from dashboard'''
         self._publishPID('Speed', 0)
         self._publishPID('Position', 1)
@@ -183,10 +183,10 @@ class NeoBaseDrive(CougarSystem):
         
         if not neoOverride:
             for motor, position in zip(self.activeMotors, positions):
-                motor.getPIDController().setReference(position, ControlType.kPosition, 1, 0)
+                motor.getPIDController().setReference(position, ControlType.kSmartMotion, 1, 0)
         else:
             for motor, position in zip(self.activeMotors, positions):
-                motor.getPIDController().setReference(position, ControlType.kPosition, selectedPID, 0)
+                motor.getPIDController().setReference(position, ControlType.kSmartMotion, selectedPID, 0)
 
     def averageError(self):
         '''Find the average distance between setpoint and current position.'''
@@ -229,10 +229,10 @@ class NeoBaseDrive(CougarSystem):
             controller.setFF(0.0002, 0) # 0.0005
             controller.setIZone(0, 0) # 0
 
-            controller.setP(self.indexOneP, 1) # 0.04 0.0075
+            controller.setP(0.00095, 1) # 0.04 0.0075
             controller.setI(0, 1) # 0
-            controller.setD(0.01, 1) # 0.01
-            controller.setFF(0, 1) # 0.0
+            controller.setD(0.5, 1) # 0.01
+            controller.setFF(0.001, 1) # 0.0
             controller.setIZone(0, 1) # 0
             
             controller.setP(0.15, 2) # 0.000007
@@ -241,9 +241,16 @@ class NeoBaseDrive(CougarSystem):
             controller.setFF(0, 2) # 0.0005
             controller.setIZone(0, 2) # 0
             
+            controller.setOutputRange(-1, 1)
+            
+            controller.setSmartMotionAccelStrategy(CANPIDController.AccelStrategy.kTrapezoidal, 1)
+            controller.setSmartMotionMaxVelocity(6000, 1)
+            controller.setSmartMotionMaxAccel(1250, 1)
+            controller.setSmartMotionMinOutputVelocity(0, 1)
+            controller.setSmartMotionAllowedClosedLoopError(0.175, 1)
             
     def doneMoving(self, targets):
-        return (abs(targets[0] - self.getPositions()[0]) < self.tolerance) and (abs(self.getSpeeds()[0]) < 3.0)
+        return (abs(targets[0] - self.getPositions()[0]) < 0.18)
                                                                                 
     def generatePolynomial(self, xOne, yOne, xTwo, yTwo, yPrimeOne, yPrimeTwo, special):
         
@@ -381,7 +388,7 @@ class NeoBaseDrive(CougarSystem):
 
     def inchesToUnits(self, distance):
         '''Converts a distance in inches into a number of encoder ticks.'''
-        rotations = distance / 18.25#(math.pi * Config('DriveTrain/wheelDiameter'))
+        rotations = distance / 17.278 #(math.pi * Config('DriveTrain/wheelDiameter'))
 
         return float(rotations * 10.71)
 
@@ -435,7 +442,7 @@ class NeoBaseDrive(CougarSystem):
 
     def setSlowP(self):        
         for motor in self.activeMotors:
-            motor.getPIDController().setP(0.033, 1)
+            motor.getPIDController().setP(0.03, 1)
 
     def setSpeedLimit(self, speed):
         '''

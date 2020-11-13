@@ -38,6 +38,7 @@ class MoveCommand(Command):
         robot.drivetrain.setPositions(self.targetPositions)
     
     def execute(self):
+        print('d ' +  str(self.distance))
         print('t ' +  str(self.targetPositions))
         print('pos ' + str(robot.drivetrain.getPositions()))
         

@@ -17,12 +17,6 @@ class ManageBallsMoveCommand(Command):
         
     def initialize(self):
         
-        try:
-            robot.drivetrain.setSlowP()
-        
-        except(AttributeError):
-            pass
-        
         robot.intake.intakeBalls()
         
         robot.revolver.setCustomRR(0.5)
@@ -49,7 +43,7 @@ class ManageBallsMoveCommand(Command):
         
         print('t ' +  str(self.targetPositions))
         print('pos ' + str(robot.drivetrain.getPositions()))
-        
+    
     def isFinished(self):
         return robot.drivetrain.doneMoving(self.targetPositions)
         

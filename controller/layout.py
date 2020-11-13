@@ -79,8 +79,8 @@ def init():
 
     driveController.DPadUp.toggleWhenPressed(SudoCommandGroup())
     
-    driveController.DPadRight.whenPressed(CycleSongRight())#whileHeld(VariableSpeedCommand(-0.4))
-    driveController.DPadLeft.whenPressed(CycleSongLeft())#whileHeld(VariableSpeedCommand(0.4))
+    driveController.DPadRight.whileHeld(VariableSpeedCommand(-0.4))
+    driveController.DPadLeft.whileHeld(VariableSpeedCommand(0.4))
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
 
