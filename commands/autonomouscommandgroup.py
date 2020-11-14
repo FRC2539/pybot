@@ -8,7 +8,8 @@ from custom.config import Config
 
 #from crapthatwillneverwork.kougarkoursegenerator import KougarKourseGenerator
 #from crapthatwillneverwork.kougarkourse import KougarKourse
-
+27.0.0.1/8 scope host lo
+       valid_lft forever p
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
@@ -41,36 +42,30 @@ class AutonomousCommandGroup(fc.CommandFlow):
             autoString += str(auto + '$')
         autoString = autoString[:-1]
         table.putString('autoModes', autoString)
-        print('as ' + str(Config('Autonomous/autoModeSelect','nope')))
-            
+        
+        #   Gets off the line
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'GetOffLine')
         def getOffLine(self): # should be good for now
-            self.addSequential(PrintCommand("Get Off Line"))
-            # get off line
-            self.addSequential(MoveCommand(48))#MoveWhileIntakingCommandGroup(120))
-
+            self.addSequential(MoveCommand(48))
+            
+        # Collect balls from our trench
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
-        def collectFromTrench(self):#should be good for now
+        def collectFromTrench(self):
             self.addSequential(PrintCommand("CollectFromTrench"))
-            #power shooter
             self.addSequential(MoveCommand(36))
-            
-            #shoot
-            #lower intake
-            #power shooter
-            
+            #   Shoots initial balls
+            self.addSequential(SudoCommandGroup(), 10)
+            self.addParallel(LowerIntakeCommand())
             self.addSequential(TurnCommand(-45))
-            self.addSequential(MoveCommand(32))
+            self.addSequential(MoveWhileIntakingCommandGroup(32))
             self.addSequential(TurnCommand(45))
-            self.addSequential(MoveCommand(186))
-            #pick up balls 
-            
+            #   Pick up balls in our trench
+            self.addSequential(MoveWhileIntakingCommandGroup(186))
             self.addSequential(MoveCommand(-186))
             self.addSequential(TurnCommand(-15))
-            #shoot
+            self.addSequential(SudoCommandGroup(), 10)
             
-            
-            # Steal from enemy trench
+        #   Steals two balls from enemy trench
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'StealFromTrench')
         def stealFromTrench(self):
             self.addSequential(PrintCommand('StealFromTrench'))
@@ -78,29 +73,12 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addParallel(LowerIntakeCommand())
             self.addSequential(MoveCommand(84))
             self.addSequential(TurnCommand(52))
+            #   Pick up balls in enemy trench
             self.addSequential(MoveWhileIntakingCommandGroup(48))
-            # Move to shoot
             self.addSequential(TurnCommand(10))
-            self.addSequential(MoveCommand(-228))
-            self.addSequential(TurnCommand(-62))
-            #self.addSequential(SudoCommandGroup(), 10)
-            
-            
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Move Turn Move')
-        def MTM(self):
-            self.addSequential(PrintCommand("Move Turn Move"))
-            self.addSequential(MoveCommand(40), 2)
-            self.addSequential(TurnCommand(90), 2)
-            self.addSequential(MoveCommand(-40), 2)
-
-        @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'Auto1')
-        def auto1(self):#should be good for now
+            self.addSeq uential(MoveCommand(-228))
+            self.addSequential(TurnCommand(-60))
             self.addSequential(SudoCommandGroup(), 10)
-            ##self.addSequential(PrintCommand("Auto 1"))
-            ##self.addSequential(MoveCommand(80))
             
-            ##self.addSequential(TurnCommand(90))
-            #self.addSequential(CurveCommand(-125, 30, False))
-            ##self.addSequential(CurveCommand(-130, 30, True))
-            #self.addSequential(MoveCommand(45))
-            ##self.addSequential(MoveCommand(-45))
+            
+      
