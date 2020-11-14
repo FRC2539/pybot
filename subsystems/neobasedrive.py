@@ -229,10 +229,10 @@ class NeoBaseDrive(CougarSystem):
             controller.setFF(0.0002, 0) # 0.0005
             controller.setIZone(0, 0) # 0
 
-            controller.setP(0.00095, 1) # 0.04 0.0075
+            controller.setP(0.00045, 1) # 0.04 0.0075
             controller.setI(0, 1) # 0
             controller.setD(0.5, 1) # 0.01
-            controller.setFF(0.001, 1) # 0.0
+            controller.setFF(0, 1) # 0.0
             controller.setIZone(0, 1) # 0
             
             controller.setP(0.15, 2) # 0.000007
@@ -244,8 +244,8 @@ class NeoBaseDrive(CougarSystem):
             controller.setOutputRange(-1, 1)
             
             controller.setSmartMotionAccelStrategy(CANPIDController.AccelStrategy.kTrapezoidal, 1)
-            controller.setSmartMotionMaxVelocity(6000, 1)
-            controller.setSmartMotionMaxAccel(1250, 1)
+            controller.setSmartMotionMaxVelocity(5450, 1)
+            controller.setSmartMotionMaxAccel(1450, 1)
             controller.setSmartMotionMinOutputVelocity(0, 1)
             controller.setSmartMotionAllowedClosedLoopError(0.175, 1)
             

@@ -17,7 +17,7 @@ class TurnCommand(MoveCommand):
 
         self.degrees = degrees
         self.fDegrees = abs(self.degrees)
-        self.drivetrainWidth = 35 # Not really, still trying to figure crap out.
+        self.drivetrainWidth = 33 # Not really, still trying to figure crap out.
 
     def initialize(self):
         '''Calculates new positions by offseting the current ones.'''
@@ -31,7 +31,7 @@ class TurnCommand(MoveCommand):
         for position in robot.drivetrain.getPositions():
             self.targetPositions.append(position + offset)
 
-        robot.drivetrain.setPositions(self.targetPositions, falconOverride=True, neoOverride=True)
+        robot.drivetrain.setPositions(self.targetPositions)
         
     def execute(self):
         print('pos ' + str(robot.drivetrain.getPositions()))

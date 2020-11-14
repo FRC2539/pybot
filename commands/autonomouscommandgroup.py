@@ -8,8 +8,7 @@ from custom.config import Config
 
 #from crapthatwillneverwork.kougarkoursegenerator import KougarKourseGenerator
 #from crapthatwillneverwork.kougarkourse import KougarKourse
-27.0.0.1/8 scope host lo
-       valid_lft forever p
+
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
@@ -35,8 +34,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         #print('auto init: '+ Config('Autonomous/autoModeSelect'))
         #establish the auto modes for dashboard and use these values in auto if string check
         table = NetworkTables.getTable('Autonomous')
-        #autoNames = ['Turn', 'Move', 'Move Turn Move', 'CollectFromTrench', 'GetOffLine']
-        autoNames = ['GetOffLine', 'CollectFromTrench', 'StealFromTrench', 'Auto1']
+        autoNames = ['GetOffLine', 'CollectFromTrench', 'StealFromTrench']
         autoString = ''
         for auto in autoNames:
             autoString += str(auto + '$')
@@ -46,7 +44,7 @@ class AutonomousCommandGroup(fc.CommandFlow):
         #   Gets off the line
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'GetOffLine')
         def getOffLine(self): # should be good for now
-            self.addSequential(MoveCommand(48))
+            self.addSequential(TurnCommand(90))
             
         # Collect balls from our trench
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
@@ -65,19 +63,20 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(TurnCommand(-15))
             self.addSequential(SudoCommandGroup(), 10)
             
-        #   Steals two balls from enemy trench
+        # Steals two balls from enemy trench
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'StealFromTrench')
         def stealFromTrench(self):
             self.addSequential(PrintCommand('StealFromTrench'))
             # Collect Balls
             self.addParallel(LowerIntakeCommand())
-            self.addSequential(MoveCommand(84))
-            self.addSequential(TurnCommand(52))
+            self.addSequential(WaitCommand(1))
+            self.addSequential(MoveCommand(54))
+            self.addSequential(TurnCommand(30))
             #   Pick up balls in enemy trench
             self.addSequential(MoveWhileIntakingCommandGroup(48))
             self.addSequential(TurnCommand(10))
-            self.addSeq uential(MoveCommand(-228))
-            self.addSequential(TurnCommand(-60))
+            self.addSequential(MoveCommand(-228))
+            self.addSequential(TurnCommand(-45))
             self.addSequential(SudoCommandGroup(), 10)
             
             
