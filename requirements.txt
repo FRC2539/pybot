@@ -6,4 +6,4 @@ robotpy-commands-v1
 robotpy-rev
 robotpy-rev-color
 numpy 
-git+https://github.com/robotpy/robotpy-wpilib.git@pyi-fixes
+git+https://github.com/robotpy/robotpy-wpilib.git@2020

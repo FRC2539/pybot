@@ -22,8 +22,6 @@ class StevenShooterLimelightCommand(Command):
         if self.speed > 4800:
             self.speed = 4800
 
-        self.speed = 6000
-
         robot.shooter.setRPM(self.speed)
         
         robot.shooter.updateNetworkTables()
