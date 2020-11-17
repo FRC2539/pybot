@@ -52,6 +52,8 @@ class Revolver(CougarSystem):
         self.sequenceEngaged = False
 
         self.gearRatio = 15 # 3:2 or vise versa
+        
+        self.defaultCheck = False
 
     def setCustomRR(self, rr):
         self.motor.setOpenLoopRampRate(rr)
@@ -117,7 +119,12 @@ class Revolver(CougarSystem):
 
     def isRevolving(self):
         return self.isSpinning
-
+    
+    def enableDefaultChecking(self):
+        self.defaultCheck = True
+        
+    def disableDefaultChecking(self):
+        self.defaultCheck = False
 
     def initDefaultCommand(self):
         from commands.revolver.defaultcommand import DefaultCommand
