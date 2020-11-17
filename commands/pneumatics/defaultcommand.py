@@ -28,6 +28,16 @@ class DefaultCommand(Command):
             robot.pneumatics.disableCLC() # Call this just to ensure the compressor is always stopped. 
             robot.pneumatics.stopCompressor()
             
+        # Intake / Revolver
+        
+        # Runs the auto intake during autonomous.
+        
+        if robot.revolver.defaultCheck:
+            if robot.revolver.isEmpty():
+                robot.revolver.stopRevolver()
+            else:
+                robot.revolver.setVariableSpeed(-0.2)
+            
         # LEDs
         
         # Shooting should look like:
