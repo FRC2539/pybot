@@ -2,10 +2,10 @@ from wpilib.command import InstantCommand
 
 import robot
 
-class DisableCompessorCommand(InstantCommand):
+class DisableCompressorCommand(InstantCommand):
 
     def __init__(self):
-        super().__init__('Disable Compessor')
+        super().__init__('Disable Compressor')
 
     def initialize(self):
         robot.pneumatics.disableCLC()
