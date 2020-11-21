@@ -64,13 +64,13 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(MoveCommand(60))
             #   Shoots initial balls
             self.addSequential(SudoCommandGroup(), 10)
-            self.addSequential(MakeTheRobotShootBallsAndOnlyShootBallsCommand())
             #   Pick up balls in our trench
             self.addParallel(LowerIntakeCommand())
             self.addParallel(SetSlowCommand())
             self.addParallel(EnableAutoCheckCommand())
             self.addParallel(IntakeCommand())
             self.addSequential(MoveWhileIntakingCommandGroup(186))
+            #   Move towards goal
             self.addSequential(MoveCommand(-186))
             self.addSequential(TurnCommand(-15))
             self.addSequential(SudoCommandGroup(), 10)
