@@ -2,7 +2,6 @@ from wpilib.command import InstantCommand
 
 import robot
 
-
 class DisableAutoCheckCommand(InstantCommand):
 
     def __init__(self):
@@ -10,8 +9,7 @@ class DisableAutoCheckCommand(InstantCommand):
 
         self.requires(robot.revolver)
 
-
     def initialize(self):
-        pass
+        robot.revolver.disableDefaultChecking()
 
 

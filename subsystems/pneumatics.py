@@ -45,7 +45,7 @@ class Pneumatics(CougarSystem):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kReverse)
 
     def isIntakeLowered(self):
-        return (self.intakeSolenoid.get() == DoubleSolenoid.Value.kForward)
+        return not (self.intakeSolenoid.get() == DoubleSolenoid.Value.kForward)
 
     def extendBallLauncherSolenoid(self):
         self.ballLauncherSolenoid.set(DoubleSolenoid.Value.kForward)

@@ -163,7 +163,7 @@ def generateCommand():
     requirements = subsystem.strip().lower().split()
 
     for subsystem in requirements:
-        if not hasattr(robot, subsystem):
+        if not hasattr(robot, subsystem) and not subsystem == 'drivetrain':
             error('Unknown subsystem %s' % subsystem)
 
     if command == 'DefaultCommand':

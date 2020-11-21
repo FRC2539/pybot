@@ -229,7 +229,7 @@ class NeoBaseDrive(CougarSystem):
             controller.setFF(0.0002, 0) # 0.0005
             controller.setIZone(0, 0) # 0
 
-            controller.setP(0.00045, 1) # 0.04 0.0075
+            controller.setP(0.0005, 1) # 0.04 0.0075
             controller.setI(0, 1) # 0
             controller.setD(0.5, 1) # 0.01
             controller.setFF(0, 1) # 0.0
@@ -245,9 +245,21 @@ class NeoBaseDrive(CougarSystem):
             
             controller.setSmartMotionAccelStrategy(CANPIDController.AccelStrategy.kTrapezoidal, 1)
             controller.setSmartMotionMaxVelocity(5450, 1)
-            controller.setSmartMotionMaxAccel(1450, 1)
+            controller.setSmartMotionMaxAccel(2800, 1)
             controller.setSmartMotionMinOutputVelocity(0, 1)
-            controller.setSmartMotionAllowedClosedLoopError(0.175, 1)
+            controller.setSmartMotionAllowedClosedLoopError(0.125, 1)
+            
+    def setNormalSpeed(self):
+            for motor in self.activeMotors:
+                controller = motor.getPIDController()
+                
+                controller.setSmartMotionMaxVelocity(5450, 1)
+                
+    def setSlowSpeed(self, speed):
+        for motor in self.activeMotors:
+            controller = motor.getPIDController()
+            
+            controller.setSmartMotionMaxVelocity(speed, 1)
             
     def doneMoving(self, targets):
         return (abs(targets[0] - self.getPositions()[0]) < 0.18)

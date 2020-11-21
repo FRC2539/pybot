@@ -11,6 +11,8 @@ class DefaultCommand(Command):
 
         self.requires(robot.ledsystem)
         self.requires(robot.pneumatics)
+        
+        robot.pneumatics.override = False
 
     def initalize(self):
         robot.ledsystem.rainbowLava()
@@ -21,7 +23,7 @@ class DefaultCommand(Command):
         
         robot.pneumatics.updatePressure()
         
-        if not robot.shooter.shooting and not robot.intake.intaking: # If our pressure is low, run this. 
+        if not robot.shooter.shooting and not robot.intake.intaking and not robot.pneumatics.override: # If our pressure is low, run this. 
             robot.pneumatics.enableCLC()
             
         else:

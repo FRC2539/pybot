@@ -8,4 +8,5 @@ class EnableCompressorCommand(InstantCommand):
         super().__init__('Enable Compressor')
 
     def initialize(self):
+        robot.pneumatics.override = False
         robot.pneumatics.enableCLC()
