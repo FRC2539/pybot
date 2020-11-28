@@ -94,6 +94,7 @@ class Hood(CougarSystem):
         self.updateNetworkTables(self.getPosition())
 
     def lowerHood(self):
+        print('hood ' + str(self.getPosition()))
         if self.getPosition() > self.angleMin:
             self.motor.set(-0.1)
         else:

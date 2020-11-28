@@ -15,9 +15,11 @@ class IntakeCommand(InstantCommand):
         robot.intake.stopIntake()
 
         if robot.pneumatics.isIntakeLowered():
+            print('LOWERED')
             robot.pneumatics.retractIntakeSolenoid()
             robot.intake.stopIntake()
         else:
+            print('HIGH')
             robot.pneumatics.extendIntakeSolenoid()
             robot.intake.intakeBalls()
-
+        

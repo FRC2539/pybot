@@ -11,7 +11,6 @@ class KickCommand(InstantCommand):
 
     def initialize(self):
         robot.intake.stopIntake()
-        print(robot.pneumatics.isIntakeLowered())
 
         if robot.pneumatics.isIntakeLowered():
             robot.pneumatics.retractIntakeSolenoid()
