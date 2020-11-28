@@ -35,6 +35,8 @@ from commands.drivetrain.autopilotcommand import AutoPilotCommand
 from commands.drivetrain.musiccommand import MusicCommand
 from commands.drivetrain.cyclesongleft import CycleSongLeft
 from commands.drivetrain.cyclesongright import CycleSongRight
+from commands.drivetrain.recordmovecommand import RecordMoveCommand
+from commands.drivetrain.setpointcommand import SetPointCommand
 
 from commands.shooter.maketherobotshootballsandonlyshootballscommand import MakeTheRobotShootBallsAndOnlyShootBallsCommand
 from commands.revolver.actualrevolvershakecommand import ActualRevolverShakeCommand
@@ -84,10 +86,11 @@ def init():
 
     driveController.RightBumper.toggleWhenPressed(ExtendLauncherCommand())
 
-    driveController.LeftTrigger.whileHeld(AutoPilotCommand())
+    driveController.LeftTrigger.toggleWhenPressed(RecordMoveCommand())
+    driveController.A.whenPressed(SetPointCommand())
 
-    driveController.RightJoystick.toggleWhenPressed(LoadInEmptyCommandGroup()) # Used on field
-    driveController.LeftJoystick.whenPressed(KickCommand())
+    driveController.RightJoystick.whenPressed(KickCommand()) # Used on field
+    driveController.LeftJoystick.whenPressed(IntakeCommand())
     
     #driveController.Start.toggleWhenPressed(SetRPMCommand(5000))
 

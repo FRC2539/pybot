@@ -86,6 +86,8 @@ class NeoBaseDrive(CougarSystem):
         
         self.tolerance = 0.6
         
+        self.capturedPoints = []
+        
         disablePrints()
 
         self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))

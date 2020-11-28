@@ -89,7 +89,8 @@ class FalconBaseDrive(CougarSystem):
         self.establishOrchestra()
 
         self.tolerance = 200
-
+        self.capturedPoints = []
+        
         self.odometry = DifferentialDriveOdometry(Rotation2d.fromDegrees(self.getHeadingWithLimit()))
 
     def initDefaultCommand(self):

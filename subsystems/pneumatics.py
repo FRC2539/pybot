@@ -26,6 +26,8 @@ class Pneumatics(CougarSystem):
         self.intakeSolenoid = DoubleSolenoid(ports.pneumatics.PCM, 2, 3)
                 
         self.pressureSensor = AnalogInput(ports.pneumatics.pressureSensor)
+        
+        self.intakeLow = False
 
         self.maxPressure = 120 # It will only go to 110 if you use the RIGHT method.
         self.supplyVolt = 4.942
@@ -45,7 +47,10 @@ class Pneumatics(CougarSystem):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kReverse)
 
     def isIntakeLowered(self):
-        return not (self.intakeSolenoid.get() == DoubleSolenoid.Value.kForward)
+        return (self.intakeSolenoid.get() == DoubleSolenoid.Value.kForward) or (not self.intakeSolenoid.get() == DoubleSolenoid.Value.kOff)
+
+    def getRaw(self):
+        return self.intakeSolenoid.get()
 
     def extendBallLauncherSolenoid(self):
         self.ballLauncherSolenoid.set(DoubleSolenoid.Value.kForward)

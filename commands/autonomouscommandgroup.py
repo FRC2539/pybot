@@ -76,7 +76,6 @@ class AutonomousCommandGroup(fc.CommandFlow):
             
             #   Shoots initial balls
             self.addSequential(SudoCommandGroup(), 10)
-            
             #   Pick up balls in our trench
             self.addParallel(EnableAutoCheckCommand())
             self.addParallel(IntakeCommand())
@@ -88,6 +87,10 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addParallel(SetRPMCommand(4500))
             self.addParallel(SpinUpRevolverCommand())
             self.addSequential(MoveCommand(-180))
+            self.addSequential(MoveWhileIntakingCommandGroup(186))
+            #   Move towards goal
+            self.addSequential(MoveCommand(-186))
+            self.addSequential(TurnCommand(-15))
             self.addSequential(SudoCommandGroup(), 10)
             self.addParallel(EnableCompressorCommand())
             
