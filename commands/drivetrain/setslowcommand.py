@@ -4,7 +4,7 @@ import robot
 
 class SetSlowCommand(InstantCommand):
 
-    def __init__(self, speed=4000):
+    def __init__(self, speed=2000):
         super().__init__('Set Fast')
 
         self.requires(robot.drivetrain)

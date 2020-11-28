@@ -28,6 +28,7 @@ from commands.pneumatics.enablecompressorcommand import EnableCompressorCommand
 
 from commands.revolver.enableautocheckcommand import EnableAutoCheckCommand
 from commands.revolver.disableautocheckcommand import DisableAutoCheckCommand
+from commands.revolver.spinuprevolvercommand import SpinUpRevolverCommand
 
 from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.shooter.stevenshooterlimelightcommand import StevenShooterLimelightCommand
@@ -55,25 +56,40 @@ class AutonomousCommandGroup(fc.CommandFlow):
         #   Gets off the line
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'GetOffLine')
         def getOffLine(self): # should be good for now
-            self.addSequential(MoveCommand(108))
+            self.addSequential(SetSlowCommand())
+            self.addSequential(MoveCommand(60))
+            self.addSequential(SetNormalCommand())
+            self.addSequential(MoveCommand(-60))
             
         # Collect balls from our trench
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
         def collectFromTrench(self):
             self.addSequential(PrintCommand("CollectFromTrench"))
-            self.addSequential(MoveCommand(60))
+            self.addParallel(LowerIntakeCommand())
+            self.addParallel(DisableCompressorCommand())
+            
+            #   Shoots initial balls
+            self.addParallel(SetRPMCommand(4500))
+            
+            self.addSequential(MoveCommand(36))
+            self.addSequential(SetSlowCommand())
+            
             #   Shoots initial balls
             self.addSequential(SudoCommandGroup(), 10)
-            self.addSequential(MakeTheRobotShootBallsAndOnlyShootBallsCommand())
+            
             #   Pick up balls in our trench
-            self.addParallel(LowerIntakeCommand())
-            self.addParallel(SetSlowCommand())
             self.addParallel(EnableAutoCheckCommand())
             self.addParallel(IntakeCommand())
-            self.addSequential(MoveWhileIntakingCommandGroup(186))
-            self.addSequential(MoveCommand(-186))
-            self.addSequential(TurnCommand(-15))
+            self.addSequential(MoveCommand(216))
+            #   Move towards goal
+            self.addSequential(SetNormalCommand())
+            self.addParallel(DisableAutoCheckCommand())
+            self.addParallel(RaiseIntakeCommand())
+            self.addParallel(SetRPMCommand(4500))
+            self.addParallel(SpinUpRevolverCommand())
+            self.addSequential(MoveCommand(-180))
             self.addSequential(SudoCommandGroup(), 10)
+            self.addParallel(EnableCompressorCommand())
             
         # Steals two balls from enemy trench
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'StealFromTrench')
@@ -99,6 +115,4 @@ class AutonomousCommandGroup(fc.CommandFlow):
             self.addSequential(TurnCommand(-70))
             self.addSequential(SudoCommandGroup(), 10)
             self.addSequential(MakeTheRobotShootBallsAndOnlyShootBallsCommand())
-            
-            
-      
+            self.addParallel(EnableCompressorCommand())

@@ -20,10 +20,6 @@ class FireSequenceCommand(Command):
         robot.revolver.sequenceEngaged = True
         
         robot.revolver.resetRevolverEncoder()
-        robot.pneumatics.retractBallLauncherSolenoid()
-        
-        #if all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
-            #robot.revolver.setStaticSpeed()
         
         robot.revolver.setStaticSpeed()
 

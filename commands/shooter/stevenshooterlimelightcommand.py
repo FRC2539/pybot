@@ -22,7 +22,7 @@ class StevenShooterLimelightCommand(Command):
         if self.speed > 4800:
             self.speed = 4800
             
-        self.speed = 5600
+        self.speed = 3000 #5600
 
         robot.shooter.setRPM(self.speed)
         

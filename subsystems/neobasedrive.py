@@ -175,7 +175,9 @@ class NeoBaseDrive(CougarSystem):
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
         '''
-
+        
+        
+        
         if not self.useEncoders:
             raise RuntimeError('Cannot set position. Encoders are disabled.')
 
@@ -260,6 +262,8 @@ class NeoBaseDrive(CougarSystem):
             controller = motor.getPIDController()
             
             controller.setSmartMotionMaxVelocity(speed, 1)
+            #controller.setSmartMotionMaxAccel(500, 1)
+            
             
     def doneMoving(self, targets):
         return (abs(targets[0] - self.getPositions()[0]) < 0.18)
