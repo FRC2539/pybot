@@ -24,11 +24,6 @@ class StevenShooterLimelightCommand(Command):
             
         print(str(self.speed) + " t " + str(robot.shooter.getRPM())) 
             
-<<<<<<< HEAD
-        self.speed = 3000 #5600
-
-=======
->>>>>>> 101f1f372bb1aea121908a083069ffe3a4e39afa
         robot.shooter.setRPM(self.speed)
         
         robot.shooter.updateNetworkTables()
