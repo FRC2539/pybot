@@ -11,7 +11,7 @@ from commands.revolver.firesequencecommand import FireSequenceCommand
 
 class SudoCommandGroup(CommandGroup):
 
-    def __init__(self):
+    def __init__(self, autoEnd=True):
         super().__init__('Sudo')
 
         # Add commands here with self.addSequential() and self.addParallel()
@@ -19,6 +19,6 @@ class SudoCommandGroup(CommandGroup):
         self.addParallel(TurretLimelightCommand())
         self.addParallel(StevenHoodLimelightCommand())
         self.addParallel(StevenShooterLimelightCommand())
-        self.addSequential(FireSequenceCommand())
+        self.addSequential(FireSequenceCommand(autoEnd))
         #self.addParallel(ShootWhenReadyCommand())
 
