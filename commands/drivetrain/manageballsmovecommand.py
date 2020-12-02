@@ -41,8 +41,8 @@ class ManageBallsMoveCommand(Command):
         else:
             robot.revolver.setVariableSpeed(-0.2)
         
-        print('t ' +  str(self.targetPositions))
-        print('pos ' + str(robot.drivetrain.getPositions()))
+        #print('t ' +  str(self.targetPositions))
+        #print('pos ' + str(robot.drivetrain.getPositions()))
     
     def isFinished(self):
         return robot.drivetrain.doneMoving(self.targetPositions)

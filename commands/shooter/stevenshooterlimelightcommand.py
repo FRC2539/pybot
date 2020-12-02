@@ -18,11 +18,11 @@ class StevenShooterLimelightCommand(Command):
         robot.limelight.setPipeline(0)
 
     def execute(self):
-        self.speed = 5600 - 800 * robot.limelight.getA()
+        self.speed = 5600 * robot.limelight.getA()
         if self.speed > 5600:
             self.speed = 5600
             
-        print(str(self.speed) + " t " + str(robot.shooter.getRPM())) 
+        #print(str(self.speed) + " t " + str(robot.shooter.getRPM())) 
             
         robot.shooter.setRPM(self.speed)
         

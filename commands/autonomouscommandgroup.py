@@ -65,32 +65,25 @@ class AutonomousCommandGroup(fc.CommandFlow):
         @fc.IF(lambda: str(Config('Autonomous/autoModeSelect')) == 'CollectFromTrench')
         def collectFromTrench(self):
             self.addSequential(PrintCommand("CollectFromTrench"))
-            self.addParallel(LowerIntakeCommand())
             self.addParallel(DisableCompressorCommand())
             
             #   Shoots initial balls
             self.addParallel(SetRPMCommand(4500))
-            
             self.addSequential(MoveCommand(36))
             self.addSequential(SetSlowCommand())
-            
-            #   Shoots initial balls
-            self.addSequential(SudoCommandGroup(), 10)
+            self.addSequential(SudoCommandGroup(), 8)
             #   Pick up balls in our trench
             self.addParallel(EnableAutoCheckCommand())
             self.addParallel(IntakeCommand())
-            self.addSequential(MoveCommand(216))
             #   Move towards goal
+            self.addSequential(MoveCommand(180)) #  8 ball - 216
             self.addSequential(SetNormalCommand())
             self.addParallel(DisableAutoCheckCommand())
             self.addParallel(RaiseIntakeCommand())
             self.addParallel(SetRPMCommand(4500))
             self.addParallel(SpinUpRevolverCommand())
-            self.addSequential(MoveCommand(-180))
-            self.addSequential(MoveWhileIntakingCommandGroup(186))
             #   Move towards goal
-            self.addSequential(MoveCommand(-186))
-            self.addSequential(TurnCommand(-15))
+            self.addSequential(MoveCommand(-144)) # 8 ball - 180
             self.addSequential(SudoCommandGroup(), 10)
             self.addParallel(EnableCompressorCommand())
             

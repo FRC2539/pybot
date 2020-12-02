@@ -46,8 +46,8 @@ class TurnCommand(MoveCommand):
             robot.revolver.stopRevolver()
         else:
             robot.revolver.setVariableSpeed(-0.2)
-        print('pos ' + str(robot.drivetrain.getPositions()))
-        print('tar ' + str(self.targetPositions))
+        #print('pos ' + str(robot.drivetrain.getPositions()))
+        #print('tar ' + str(self.targetPositions))
 
     def end(self):
         robot.drivetrain.stop()

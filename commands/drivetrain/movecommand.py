@@ -38,12 +38,12 @@ class MoveCommand(Command):
         robot.drivetrain.setPositions(self.targetPositions)
     
     def execute(self):
-        print('d ' +  str(self.distance))
-        print('t ' +  str(self.targetPositions))
-        print('pos ' + str(robot.drivetrain.getPositions()))
+        #print('d ' +  str(self.distance))
+        #print('t ' +  str(self.targetPositions))
+        #print('pos ' + str(robot.drivetrain.getPositions()))
         
-    def isFinished(self):
-        return robot.drivetrain.doneMoving(self.targetPositions)
+        def isFinished(self):
+            return robot.drivetrain.doneMoving(self.targetPositions)
         
     def end(self):
         robot.drivetrain.stop()

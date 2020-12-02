@@ -21,6 +21,9 @@ class DefaultCommand(Command):
 
         # Air
         
+        #print(robot.pneumatics.intakeSolenoid.get())
+        #print(robot.pneumatics.isIntakeLowered())
+        
         robot.pneumatics.updatePressure()
         
         if not robot.shooter.shooting and not robot.intake.intaking and not robot.pneumatics.override: # If our pressure is low, run this. 

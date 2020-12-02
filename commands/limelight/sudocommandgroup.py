@@ -19,6 +19,6 @@ class SudoCommandGroup(CommandGroup):
         self.addParallel(TurretLimelightCommand())
         self.addParallel(StevenHoodLimelightCommand())
         self.addParallel(StevenShooterLimelightCommand())
-        self.addParallel(FireSequenceCommand())
+        self.addSequential(FireSequenceCommand())
         #self.addParallel(ShootWhenReadyCommand())
 
