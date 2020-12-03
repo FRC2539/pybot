@@ -56,6 +56,23 @@ class FireSequenceCommand(Command):
                 self.lastPos = robot.revolver.getPosition()
         
         return False
+    
+    def isFinishedV2(self): # I thought of an issue; if the grabber skips a ball, it won't shoot it. Try both?
+        if self.beganLaunching and self.autoEnd:
+            if not robot.revolver.sawItAt() == -1:
+                lastSeen = robot.revolver.sawItAt()
+                self.loopedOnce = False # Found a new target, so reset this. 
+            
+            if self.loopedOnce:
+                if robot.revolver.getPosition() > self.shootUntil: # Might need to invert. 
+                    return True # We done. 
+            else:
+                if self.lastPos > robot.revolver.getPosition(): # The revolver just went from 359 to 0. Might need to invert.
+                    self.loopedOnce = True 
+                    
+                self.lastPos = robot.revolver.getPosition()
+        
+        return False
 
     def end(self):
         robot.revolver.sequenceEngaged = False

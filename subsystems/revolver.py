@@ -54,6 +54,7 @@ class Revolver(CougarSystem):
         self.gearRatio = 15 # 3:2 or vise versa
         
         self.defaultCheck = False
+        self.seen = False
 
     def setCustomRR(self, rr):
         self.motor.setOpenLoopRampRate(rr)
@@ -120,6 +121,15 @@ class Revolver(CougarSystem):
     def isRevolving(self):
         return self.isSpinning
     
+    def sawItAt(self):
+        if not self.zoneSensorOne.getValue() >= 50 and not self.seen:
+            yield self.getPosition()
+            self.seen = True
+            
+        elif self.zoneSensorOne.getVaue() >= 50:
+            yield -1 # Don't have anything
+            self.seen = False
+            
     def enableDefaultChecking(self):
         self.defaultCheck = True
         
