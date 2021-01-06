@@ -79,7 +79,7 @@ def init():
     driveController.X.toggleWhenPressed(LaunchBallsCommand())
     driveController.Y.toggleWhenPressed(IntakeDirectionCommand())
 
-    driveController.DPadUp.toggleWhenPressed(SudoCommandGroup())
+    driveController.DPadUp.toggleWhenPressed(SudoCommandGroup(False))
     
     driveController.DPadRight.whileHeld(VariableSpeedCommand(-0.4))
     driveController.DPadLeft.whileHeld(VariableSpeedCommand(0.4))
@@ -105,7 +105,7 @@ def init():
 # Shoot balls
 # turret control - joystick
 
-    operatorController.RightBumper.toggleWhenPressed(SudoCommandGroup())
+    operatorController.RightBumper.toggleWhenPressed(SudoCommandGroup(False))
 
     operatorController.DPadUp.whileHeld(IncreaseHoodAdjustmentCommand())
     operatorController.DPadRight.whileHeld(IncreaseTurretAdjustmentCommand())

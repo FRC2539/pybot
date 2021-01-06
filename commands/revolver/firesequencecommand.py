@@ -5,7 +5,7 @@ import robot
 
 class FireSequenceCommand(Command):
 
-    def __init__(self):
+    def __init__(self, autoEnd):
         super().__init__('Fire Sequence')
 
         self.requires(robot.revolver)
@@ -13,7 +13,12 @@ class FireSequenceCommand(Command):
 
         robot.revolver.sequenceEngaged = False
         self.proceed = False
+<<<<<<< HEAD
         self.launchingBegun = False
+=======
+        self.beganLaunching = False
+        self.autoEnd = autoEnd
+>>>>>>> 64b54fc60d2e4e0289bfaaa0b07903851c28e18e
 
     def initialize(self):
         self.proceed = False
@@ -38,19 +43,54 @@ class FireSequenceCommand(Command):
             robot.revolver.setStaticSpeed()
             robot.balllauncher.launchBalls()
             robot.pneumatics.extendBallLauncherSolenoid()
+<<<<<<< HEAD
             self.launchingBegun = True
 
     def isFinished(self):
         self.current = robot.revolver.getPosition()
         
+        self.beganLaunching = True
+        self.loopedOnce = False
+        self.shootUntil = robot.revolver.getPosition() + 15 # Invert if need to reverse.
+        self.lastPos = robot.revolver.getPosition()
         
+    #def isFinished(self):
+        #if self.beganLaunching and self.autoEnd:
+            #if self.loopedOnce:
+                #if robot.revolver.getPosition() > self.shootUntil: # Might need to invert. 
+                    #return True # We done. 
+            #else:
+                #if self.lastPos > robot.revolver.getPosition(): # The revolver just went from 359 to 0. Might need to invert.
+                    #self.loopedOnce = True 
+                    
+                #self.lastPos = robot.revolver.getPosition()
+        
+        #return False
+    
+    #def isFinishedV2(self): # I thought of an issue; if the grabber skips a ball, it won't shoot it. Try both?
+        #if self.beganLaunching and self.autoEnd:
+            #if not robot.revolver.sawItAt() == -1:
+                #lastSeen = robot.revolver.sawItAt()
+                #self.loopedOnce = False # Found a new target, so reset this. 
+            
+            #if self.loopedOnce:
+                #if robot.revolver.getPosition() > self.shootUntil: # Might need to invert. 
+                    #return True # We done. 
+            #else:
+                #if self.lastPos > robot.revolver.getPosition(): # The revolver just went from 359 to 0. Might need to invert.
+                    #self.loopedOnce = True 
+                    
+                #self.lastPos = robot.revolver.getPosition()
+        
+        #return False
 
     def end(self):
-        print("fireseq end")
         robot.revolver.sequenceEngaged = False
         self.proceed = False
-        self.launchingBegun = False
         
+        self.beganLaunching = False
+        self.loopedOnce = False
+
         robot.pneumatics.retractBallLauncherSolenoid()
         robot.balllauncher.stopLauncher()
         robot.revolver.stopRevolver()
