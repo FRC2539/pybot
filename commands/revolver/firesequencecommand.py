@@ -13,6 +13,7 @@ class FireSequenceCommand(Command):
 
         robot.revolver.sequenceEngaged = False
         self.proceed = False
+        self.launchingBegun = False
 
     def initialize(self):
         self.proceed = False
@@ -37,12 +38,19 @@ class FireSequenceCommand(Command):
             robot.revolver.setStaticSpeed()
             robot.balllauncher.launchBalls()
             robot.pneumatics.extendBallLauncherSolenoid()
+            self.launchingBegun = True
+
+    def isFinished(self):
+        self.current = robot.revolver.getPosition()
+        
+        
 
     def end(self):
         print("fireseq end")
         robot.revolver.sequenceEngaged = False
         self.proceed = False
-
+        self.launchingBegun = False
+        
         robot.pneumatics.retractBallLauncherSolenoid()
         robot.balllauncher.stopLauncher()
         robot.revolver.stopRevolver()
