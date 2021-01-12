@@ -1,3 +1,4 @@
+
 # Optimized Code
 *.py[cod]
 __pycache__
@@ -20,3 +21,4 @@ networktables.ini
 
 # VSCode
 .vscode/
+.idea
