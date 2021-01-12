@@ -29,10 +29,10 @@ class BaseDrive(DebuggableSubsystem):
         if compBot:
             # WARNING: ALL PID's need to be finalized (even NEO's [taken from 9539 2019]).
 
-            self.falconP = 0.0001#Config('DriveTrain/Speed/P', 0.001) # 0.001
+            self.falconP = 0.003#Config('DriveTrain/Speed/P', 0.001) # 0.001
             self.falconI = 0#Config('DriveTrain/Speed/I', 0.00) # 0.00
             self.falconD = 1#Config('DriveTrain/Speed/D', 0.01) # was 5.00 # 0.01
-            self.falconF = 0.045#Config('DriveTrain/Speed/F', 0.1) # 0.1
+            self.falconF = 0.05#Config('DriveTrain/Speed/F', 0.1) # 0.1
             self.falconIZone = 0#Config('DriveTrain/Speed/IZone', 0) # 0
 
             #self.bensGloriousOrchestra = Orchestra()
@@ -182,8 +182,8 @@ class BaseDrive(DebuggableSubsystem):
         self.moveDone = False
 
         self.setUseEncoders(True)
-        self.maxSpeed = 12250#Config('DriveTrain/maxSpeed', 1)
-        self.speedLimit = 12250#Config('DriveTrain/normalSpeed')
+        self.maxSpeed = 16250#Config('DriveTrain/maxSpeed', 1)
+        self.speedLimit = 16250#Config('DriveTrain/normalSpeed')
         self.deadband = Config('DriveTrain/deadband', 0.05)
         self.maxPercentVBus = 1 # used when encoders are not enabled in percent.
 
@@ -341,7 +341,7 @@ class BaseDrive(DebuggableSubsystem):
         coordinates have not changed.
         '''
 
-        #print('check')
+        print('\n\ncheck')
 
         if [x, y, rotate] == self.lastInputs:
             return
@@ -369,6 +369,11 @@ class BaseDrive(DebuggableSubsystem):
 
 
         '''Use speeds to feed motor output.'''
+        
+        self.useEncoders = False
+        
+        print(self.falconGetVelocity())
+        
         if self.useEncoders:
             if not any(speeds):
                 '''
@@ -380,6 +385,7 @@ class BaseDrive(DebuggableSubsystem):
                     motor.setIntegralAccumulator(0, 0, 0)
 
             for motor, speed in zip(self.activeMotors, speeds):
+                print(speed)
                 motor.set(TalonFXControlMode.Velocity, speed * self.maxSpeed) # make this velocity
 
         else:
