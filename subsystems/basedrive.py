@@ -25,17 +25,17 @@ class BaseDrive(Subsystem):
         since the PID loops will provide braking.
         '''
         try:
-            self.motors = [
-                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
+            self.motors = [ # This actually won't be used this year.
+                WPI_TalonSRX(ports.drivetrain.frontLeftDriveID),
+                WPI_TalonSRX(ports.drivetrain.frontRightDriveID),
+                WPI_TalonSRX(ports.drivetrain.backLeftDriveID),
+                WPI_TalonSRX(ports.drivetrain.backRightDriveID)
             ]
 
         except AttributeError:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.leftMotorID),
-                WPI_TalonSRX(ports.drivetrain.rightMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontLeftDriveID),
+                WPI_TalonSRX(ports.drivetrain.frontRightDriveID),
             ]
 
         for motor in self.motors:
@@ -86,6 +86,8 @@ class BaseDrive(Subsystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
+        
+        print('no, no')
         if [x, y, rotate] == self.lastInputs:
             return
 

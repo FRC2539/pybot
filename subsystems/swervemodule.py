@@ -1,5 +1,5 @@
 from ctre import WPI_TalonFX, CANCoder, NeutralMode, TalonFXControlMode, \
-TalonFXFeedbackDevice, AbsoluteSensorRange, RemoteSensorSource
+FeedbackDevice, AbsoluteSensorRange, RemoteSensorSource
 
 class SwerveModule:
     
@@ -9,7 +9,7 @@ class SwerveModule:
         
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
         self.driveMotor.setSafetyEnabled(False)
-        self.driveMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor)
+        self.driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
     
         self.dPk = 0.001
         self.dIk = 0
@@ -24,7 +24,7 @@ class SwerveModule:
         
         self.turnMotor.setNeutralMode(NeutralMode.Brake)
         self.turnMotor.setSafetyEnabled(False)
-        self.turnMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 0) # Set the feedback sensor as remote.
+        self.turnMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 0, 0) # Set the feedback sensor as remote.
         self.turnMotor.configRemoteFeedbackFilter(canCoderID, RemoteSensorSource.CANCoder, 0, 0) # Configure and select CANCoder. 
         
         self.tPk = 0.001
@@ -55,12 +55,26 @@ class SwerveModule:
         This will set the speed of the drive motor to a set velocity.
         '''
         self.driveMotor.set(TalonFXControlMode.Velocity, speed * self.speedLimit)
+        
+    def stopModule(self):
+        '''
+        Stop the motors within the module.
+        '''
+        self.turnMotor.stopMotor()
+        self.driveMotor.stopMotor()
     
     def inchesToDriveTicks(self, inches):
         pass
     
     def driveTicksToInches(self, ticks):
         pass
+    
+    def setModuleProfile(self, profile):
+        '''
+        Which PID profile to use.
+        '''
+        self.turnMotor.selectProfileSlot(profile, 0)
+        self.driveMotor.selectProfileSlot(profile, 0)
     
     def setPID(self):
         '''

@@ -12,9 +12,9 @@ class SwerveDrive(BaseDrive):
         
         self.isFieldOriented = True
     
-        self.wheelBase = 0 # These are distances across the robot; horizontal, vertical, diagonal.
-        self.trackWidth = 0
-        self.radius = 0
+        self.wheelBase = 23.5 # These are distances across the robot; horizontal, vertical, diagonal.
+        self.trackWidth = 23.5
+        self.r = math.sqrt(self.wheelBase ** 2 + self.trackWidth ** 2)
         
         self.modules = [
             SwerveModule(ports.drivetrain.frontLeftDriveID, ports.drivetrain.frontLeftTurnID, # Front left module.
@@ -31,31 +31,40 @@ class SwerveDrive(BaseDrive):
                         ]
     
     def _configureMotors(self):
-        pass
+        '''
+        Configures the motors. Shouldn't need this. 
+        '''
+        
+        self.activeMotors = self.motors[0:2] # Don't actually need these, this just keeps basedrive happy. 
     
     def _calculateSpeeds(self, x, y, rotate):
         '''
-        Gonna take thsi nice and slow. Declaring variables to be simple,
-        should try to walk through while coding. Reference the Ether whitepaper on
-        Chief Delphi for the explanation for the calculations.
+        Gonna take this nice and slow. Declaring variables to be simple,
+        should try to walk through while coding. 
         '''
+        x = 0
+        y = 0
+        rotate = 1
         
-        angle = math.atan(y / x)
-        
-        if self.isFieldOriented:
-            angle = angle - math.radians(self.normalizeGyro(self.getAngle()))
+        theta = self.getAngle() * (math.pi / 180)
             
-        A = x - angle * (self.wheelBase / self.radius)
-        B = x + angle * (self.wheelBase / self.radius)
-        C = y - angle * (self.trackWidth / self.radius)
-        D = y + angle * (self.trackWidth / self.radius)
+        if self.isFieldOriented:
+            
+            temp = y * math.cos(theta) + x * math.sin(theta) # just the new y value being temporarily stored.
+            x = -y * math.sin(theta) + x * math.cos(theta)
+            y = temp
+            
+        A = x - rotate * (self.wheelBase / self.r)
+        B = x + rotate * (self.wheelBase / self.r)
+        C = y - rotate * (self.trackWidth / self.r)
+        D = y + rotate * (self.trackWidth / self.r)
         
         ws1 = math.sqrt(B**2 + D**2) # Front left speed
         ws2 = math.sqrt(B**2 + C**2) # Front right speed
         ws3 = math.sqrt(A**2 + D**2) # Back left speed
         ws4 = math.sqrt(A**2 + C**2) # Back right speed
         
-        wa1 = math.atan2(B, D) * 180 / math.pi # Front left angle
+        wa1 = math.atan2(B, D) * 180 / math.pi # Front left angle (degrees)
         wa2 = math.atan2(B, C) * 180 / math.pi # Front right angle
         wa3 = math.atan2(A, D) * 180 / math.pi # Back left angle
         wa4 = math.atan2(A, C) * 180 / math.pi # Back right angle
@@ -63,36 +72,46 @@ class SwerveDrive(BaseDrive):
         speeds = [ws1, ws2, ws3, ws4] # Should be in order.
         angles = [wa1, wa2, wa3, wa4] # Should be in order.
         
+        newSpeeds = speeds # Do NOT delete! This IS used!
+        newAngles = [] # Do NOT delete! This IS
+        
         maxSpeed = max(speeds) # Find the largest speed.
-        minSpeed = min(speeds)
+        minSpeed = min(speeds) # Find the smallest speed.
         
         if maxSpeed > 1: # Normalize speeds if greater than 1, but keep then consistent with each other.
-            for speed in speeds:
-                speed /= maxSpeed
+            speeds[:] = [speed / maxSpeed for speed in speeds]
         
         if minSpeed < -1: # Normalize speeds if less than -1, but keep then consitent with each other.
-            for speed in speeds:
-                speed /= minSpeed *-1
+            speeds[:] = [speed / minSpeed * -1 for speed in speeds]
 
         magnitude = math.sqrt((x**2) + (y**2))
         if magnitude > 1:
             magnitude = 1
+        
+        speeds[:] = [speed * magnitude for speed in speeds]
+        
+        for angle in angles:
+            if angle < 0:
+                newAngles.append(angle + 360)
+            else:
+                newAngles.append(angle)
+
             
-        for speed in speeds:
-            speed *= magnitude
+        print(newSpeeds)
+        print('a ' + str(newAngles))
             
-        return speeds, angles
-                
+        return newSpeeds, newAngles
+                    
     def move(self, x, y, rotate):
         '''
         Turns coordinate arguments into motor outputs.
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
-        
+                
         if [x, y, rotate] == self.lastInputs:
             return
-
+        
         self.lastInputs = [x, y, rotate]
 
         '''Prevent drift caused by small input values'''
@@ -108,6 +127,14 @@ class SwerveDrive(BaseDrive):
 
     def normalizeGyro(self, a):
         return (a - (math.floor(a / 360) * 360))
+    
+    def stop(self):
+        for module in self.modules:
+            module.stopModule()
+            
+    def setProfile(self, profile):
+        for module in self.modules:
+            module.setModuleProfile(profile)
 
     def setFieldOriented(self, fieldCentric=True):
         self.isFieldOriented = fieldCentric
