@@ -22,3 +22,4 @@ networktables.ini
 # VSCode
 .vscode/
 .idea
+imgui.ini

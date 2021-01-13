@@ -33,6 +33,8 @@ class SwerveModule:
         self.tFk = 0
         self.tIZk = 0
         
+        self.driveMotorGearRatio = 6.86 # 6.86 motor rotations per wheel rotation.
+        
         self.speedLimit = speedLimit # Pass the speed limit at instantiation so we can drive more easily. 
         
         self.setPID()

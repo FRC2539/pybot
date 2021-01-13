@@ -42,8 +42,8 @@ class SwerveDrive(BaseDrive):
         Gonna take this nice and slow. Declaring variables to be simple,
         should try to walk through while coding. 
         '''
-        x = 0
-        y = 0
+        x = 1
+        y = 1
         rotate = 1
         
         theta = self.getAngle() * (math.pi / 180)
@@ -69,8 +69,8 @@ class SwerveDrive(BaseDrive):
         wa3 = math.atan2(A, D) * 180 / math.pi # Back left angle
         wa4 = math.atan2(A, C) * 180 / math.pi # Back right angle
         
-        speeds = [ws1, ws2, ws3, ws4] # Should be in order.
-        angles = [wa1, wa2, wa3, wa4] # Should be in order.
+        speeds = [ws1, ws2, ws3, ws4] # It is in order.
+        angles = [wa1, wa2, wa3, wa4] # It is in order.
         
         newSpeeds = speeds # Do NOT delete! This IS used!
         newAngles = [] # Do NOT delete! This IS
@@ -95,10 +95,6 @@ class SwerveDrive(BaseDrive):
                 newAngles.append(angle + 360)
             else:
                 newAngles.append(angle)
-
-            
-        print(newSpeeds)
-        print('a ' + str(newAngles))
             
         return newSpeeds, newAngles
                     
