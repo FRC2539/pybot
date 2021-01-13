@@ -11,7 +11,17 @@ class PortsList:
 drivetrain = PortsList()
 
 '''CAN IDs for motors'''
-drivetrain.frontLeftMotorID = 1
-drivetrain.frontRightMotorID = 3
-drivetrain.backLeftMotorID = 2
-drivetrain.backRightMotorID = 4
+drivetrain.frontLeftDriveID = 1
+drivetrain.frontRightDriveID = 3
+drivetrain.backLeftDriveID = 2
+drivetrain.backRightDriveID = 4
+
+drivetrain.frontLeftTurnID = 5
+drivetrain.frontRightTurnID = 6
+drivetrain.backLeftTurnID = 7
+drivetrain.backRightTurnID = 8
+
+drivetrain.fronLeftCANCoder = 9
+drivetrain.fronRightCANCoder = 10
+drivetrain.backLeftCANCoder = 11
+drivetrain.backRightCANCoder = 12
