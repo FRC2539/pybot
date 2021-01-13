@@ -7,8 +7,9 @@ from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
 from navx import AHRS
 
 from custom.config import Config
-import ports
+from .swervemodule import SwerveModule
 
+import ports
 
 class BaseDrive(Subsystem):
     '''
@@ -24,22 +25,15 @@ class BaseDrive(Subsystem):
         Create all motors, disable the watchdog, and turn off neutral braking
         since the PID loops will provide braking.
         '''
-        try:
-            self.motors = [
-                WPI_TalonSRX(ports.drivetrain.frontLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.frontRightMotorID),
-                WPI_TalonSRX(ports.drivetrain.backLeftMotorID),
-                WPI_TalonSRX(ports.drivetrain.backRightMotorID),
-            ]
+        self.modules = [
+            SwerveModule(ports.drivetrain.frontLeftMotorID),
+            SwerveModule(ports.drivetrain.frontRightMotorID),
+            SwerveModule(ports.drivetrain.backLeftMotorID),
+            SwerveModule(ports.drivetrain.backRightMotorID),
+        ]
 
-        except AttributeError:
-            self.motors = [
-                WPI_TalonSRX(ports.drivetrain.leftMotorID),
-                WPI_TalonSRX(ports.drivetrain.rightMotorID),
-            ]
-
-        for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Coast)
+        for motor in self.modules:
+            motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
