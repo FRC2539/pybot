@@ -102,7 +102,7 @@ class SwerveDrive(BaseDrive):
             magnitude = 1
         
         speeds[:] = [speed * magnitude for speed in speeds] # Ensures that the speeds of the motors are relevant to the joystick input.
-            
+
         print(newSpeeds)
         print('a ' + str(angles))
             
@@ -144,10 +144,10 @@ class SwerveDrive(BaseDrive):
 
     def setFieldOriented(self, fieldCentric=True):
         self.isFieldOriented = fieldCentric
-    '''    
+    
     def getModuleSpeeds(self):
         return [module.getWheelSpeed() for module in self.modules]
     
     def getModuleAngles(self):
         return [module.getWheelAngle() for module in self.modules]
-    '''
+    

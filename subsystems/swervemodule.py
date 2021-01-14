@@ -25,7 +25,7 @@ class SwerveModule:
         self.dIZk = 0 # Integral Zone for the drive
         
         self.cancoder = CANCoder(canCoderID) # Declare and setup the remote encoder. 
-        self.cancoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360, 0)
+        self.cancoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180, 0)
     
         self.turnMotor = WPI_TalonFX(turnMotorID) # Declare and setup turn motor.
         
@@ -107,6 +107,3 @@ class SwerveModule:
             self.turnMotor.config_kD(slot, self.tDk, 0)
             self.turnMotor.config_kF(slot, self.tFk, 0)
             self.turnMotor.config_IntegralZone(slot, self.tIZk, 0)
-            
-            
-            
