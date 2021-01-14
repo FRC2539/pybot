@@ -10,6 +10,11 @@ class SwerveDrive(BaseDrive):
     def __init__(self, name):
         super().__init__(name)
         
+        '''
+        The constructor for the class. When returning lists, it should follow like:
+        [front left, front right, back left, back right]
+        '''
+        
         self.isFieldOriented = True
     
         self.wheelBase = 23.5 # These are distances across the robot; horizontal, vertical, diagonal.
@@ -42,19 +47,27 @@ class SwerveDrive(BaseDrive):
         Gonna take this nice and slow. Declaring variables to be simple,
         should try to walk through while coding. 
         '''
-        x = 1
+        x = 1 # These are just values for testing purposes.
         y = 1
         rotate = 1
         
-        theta = self.getAngle() * (math.pi / 180)
+        '''
+        'self.getAngle()' is the robot's heading, 
+        multiply it by pi over 180 to convert to radians.
+        '''
+        theta = self.getAngle() * (math.pi / 180) 
             
-        if self.isFieldOriented:
+        if self.isFieldOriented: # Are we field-centric, as opposed to robot-centric. A tank drive is robot-centric, for example. 
             
             temp = y * math.cos(theta) + x * math.sin(theta) # just the new y value being temporarily stored.
             x = -y * math.sin(theta) + x * math.cos(theta)
             y = temp
             
-        A = x - rotate * (self.wheelBase / self.r)
+        '''
+        The bottom part is the most confusing part, but it basically uses ratios and vectors with the 
+        pythagorean theorem to calculate the velocities.
+        '''
+        A = x - rotate * (self.wheelBase / self.r) # Use variables to simplify it.
         B = x + rotate * (self.wheelBase / self.r)
         C = y - rotate * (self.trackWidth / self.r)
         D = y + rotate * (self.trackWidth / self.r)
@@ -69,34 +82,31 @@ class SwerveDrive(BaseDrive):
         wa3 = math.atan2(A, D) * 180 / math.pi # Back left angle
         wa4 = math.atan2(A, C) * 180 / math.pi # Back right angle
         
-        speeds = [ws1, ws2, ws3, ws4] # It is in order.
-        angles = [wa1, wa2, wa3, wa4] # It is in order.
+        speeds = [ws1, ws2, ws3, ws4] # It is in order (FL, FR, BL, BR).
+        angles = [wa1, wa2, wa3, wa4] # It is in order (FL, FR, BL, BR).
         
         newSpeeds = speeds # Do NOT delete! This IS used!
-        newAngles = [] # Do NOT delete! This IS
+        newAngles = angles
         
         maxSpeed = max(speeds) # Find the largest speed.
         minSpeed = min(speeds) # Find the smallest speed.
         
-        if maxSpeed > 1: # Normalize speeds if greater than 1, but keep then consistent with each other.
-            speeds[:] = [speed / maxSpeed for speed in speeds]
+        if maxSpeed > 1: # Normalize speeds if greater than 1, but keep then consistent with each other. 
+            speeds[:] = [speed / maxSpeed for speed in speeds] # We can do this by dividing ALL by the largest value. 
         
-        if minSpeed < -1: # Normalize speeds if less than -1, but keep then consitent with each other.
-            speeds[:] = [speed / minSpeed * -1 for speed in speeds]
+        if minSpeed < -1: # Normalize speeds if less than -1, but keep then consitent with each other. 
+            speeds[:] = [speed / minSpeed * -1 for speed in speeds] # We can do this by dividing ALL by the smallest value. The negative maintains the signs.
 
-        magnitude = math.sqrt((x**2) + (y**2))
+        magnitude = math.sqrt((x**2) + (y**2)) # Pythagorean theorem, vector of joystick. 
         if magnitude > 1:
             magnitude = 1
         
-        speeds[:] = [speed * magnitude for speed in speeds]
-        
-        for angle in angles:
-            if angle < 0:
-                newAngles.append(angle + 360)
-            else:
-                newAngles.append(angle)
+        speeds[:] = [speed * magnitude for speed in speeds] # Ensures that the speeds of the motors are relevant to the joystick input.
             
-        return newSpeeds, newAngles
+        print(newSpeeds)
+        print('a ' + str(angles))
+            
+        return newSpeeds, angles # Return the calculated speed and angles.
                     
     def move(self, x, y, rotate):
         '''
@@ -104,7 +114,7 @@ class SwerveDrive(BaseDrive):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
-                
+        
         if [x, y, rotate] == self.lastInputs:
             return
         
@@ -134,3 +144,10 @@ class SwerveDrive(BaseDrive):
 
     def setFieldOriented(self, fieldCentric=True):
         self.isFieldOriented = fieldCentric
+    '''    
+    def getModuleSpeeds(self):
+        return [module.getWheelSpeed() for module in self.modules]
+    
+    def getModuleAngles(self):
+        return [module.getWheelAngle() for module in self.modules]
+    '''

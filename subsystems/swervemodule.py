@@ -5,19 +5,26 @@ class SwerveModule:
     
     def __init__(self, driveMotorID, turnMotorID, canCoderID, speedLimit): # Get the ports of the devices for a module.
         
+        '''
+        The class constructor.
+        
+        TODO:
+        - Organize method definitions into logical order.
+        '''
+        
         self.driveMotor = WPI_TalonFX(driveMotorID) # Declare and setup drive motor.
         
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
         self.driveMotor.setSafetyEnabled(False)
         self.driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
     
-        self.dPk = 0.001
-        self.dIk = 0
-        self.dDk = 0
-        self.dFk = 0
-        self.dIZk = 0
+        self.dPk = 0.001 # P gain for the drive. 
+        self.dIk = 0 # I gain for the drive
+        self.dDk = 0 # D gain for the drive
+        self.dFk = 0 # Feedforward gain for the drive
+        self.dIZk = 0 # Integral Zone for the drive
         
-        self.cancoder = CANCoder(canCoderID)
+        self.cancoder = CANCoder(canCoderID) # Declare and setup the remote encoder. 
         self.cancoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360, 0)
     
         self.turnMotor = WPI_TalonFX(turnMotorID) # Declare and setup turn motor.
@@ -27,18 +34,18 @@ class SwerveModule:
         self.turnMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 0, 0) # Set the feedback sensor as remote.
         self.turnMotor.configRemoteFeedbackFilter(canCoderID, RemoteSensorSource.CANCoder, 0, 0) # Configure and select CANCoder. 
         
-        self.tPk = 0.001
-        self.tIk = 0
-        self.tDk = 0
-        self.tFk = 0
-        self.tIZk = 0
+        self.tPk = 0.001 # P gain for the turn.
+        self.tIk = 0 # I gain for the turn.
+        self.tDk = 0 # D gain for the turn.
+        self.tFk = 0 # Feedforward gain for the turn.
+        self.tIZk = 0 # Integral Zone for the turn.
         
         self.driveMotorGearRatio = 6.86 # 6.86 motor rotations per wheel rotation.
         
         self.speedLimit = speedLimit # Pass the speed limit at instantiation so we can drive more easily. 
         
         self.setPID()
-        
+                
     def getWheelAngle(self):
         '''
         Get wheel angle relative to the robot.
@@ -51,6 +58,12 @@ class SwerveModule:
         0 degrees is facing forward. This will accept 0 - 360!
         '''
         self.turnMotor.set(TalonFXControlMode.Position, angle)
+        
+    def getWheelSpeed(self):
+        '''
+        Get the speed of this specific module.
+        '''
+        return self.driveMotor.getSelectedSensorVelocity() # Returns ticks per 0.1 seconds (100 mS). 
         
     def setWheelSpeed(self, speed):
         '''
