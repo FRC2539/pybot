@@ -1,6 +1,10 @@
 from ctre import WPI_TalonFX, CANCoder, NeutralMode, TalonFXControlMode, \
 FeedbackDevice, AbsoluteSensorRange, RemoteSensorSource
 
+import math
+
+import constants
+
 class SwerveModule:
     
     def __init__(self, driveMotorID, turnMotorID, canCoderID, speedLimit): # Get the ports of the devices for a module.
@@ -18,11 +22,11 @@ class SwerveModule:
         self.driveMotor.setSafetyEnabled(False)
         self.driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
     
-        self.dPk = 0.001 # P gain for the drive. 
-        self.dIk = 0 # I gain for the drive
-        self.dDk = 0 # D gain for the drive
-        self.dFk = 0 # Feedforward gain for the drive
-        self.dIZk = 0 # Integral Zone for the drive
+        self.dPk = constants.drivetrain.dPk # P gain for the drive. 
+        self.dIk = constants.drivetrain.dIk # I gain for the drive
+        self.dDk = constants.drivetrain.dDk # D gain for the drive
+        self.dFk = constants.drivetrain.dFFk # Feedforward gain for the drive
+        self.dIZk = constants.drivetrain.dIZk # Integral Zone for the drive
         
         self.cancoder = CANCoder(canCoderID) # Declare and setup the remote encoder. 
         self.cancoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180, 0)
@@ -34,13 +38,17 @@ class SwerveModule:
         self.turnMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 0, 0) # Set the feedback sensor as remote.
         self.turnMotor.configRemoteFeedbackFilter(canCoderID, RemoteSensorSource.CANCoder, 0, 0) # Configure and select CANCoder. 
         
-        self.tPk = 0.001 # P gain for the turn.
-        self.tIk = 0 # I gain for the turn.
-        self.tDk = 0 # D gain for the turn.
-        self.tFk = 0 # Feedforward gain for the turn.
-        self.tIZk = 0 # Integral Zone for the turn.
+        self.tPk = constants.drivetrain.tPk # P gain for the turn.
+        self.tIk = constants.drivetrain.tIk # I gain for the turn.
+        self.tDk = constants.drivetrain.tDk # D gain for the turn.
+        self.tFk = constants.drivetrain.tFFk # Feedforward gain for the turn.
+        self.tIZk = constants.drivetrain.tIZk # Integral Zone for the turn.
         
-        self.driveMotorGearRatio = 6.86 # 6.86 motor rotations per wheel rotation.
+        self.wheelDiameter = constants.drivetrain.wheelDiameter # The diamter, in inches, of our driving wheels. 
+        self.circ = self.wheelDiameter * math.pi # The circumference of our driving wheel.
+        
+        self.driveMotorGearRatio = constants.drivetrain.driveMotorGearRatio # 6.86 motor rotations per wheel rotation (on y-axis).
+        self.turnMotorGearRatio = constants.drivetrain.turnMotorGearRatio # 12.8 motor rotations per wheel rotation (on x-axis).
         
         self.speedLimit = speedLimit # Pass the speed limit at instantiation so we can drive more easily. 
         
@@ -79,10 +87,14 @@ class SwerveModule:
         self.driveMotor.stopMotor()
     
     def inchesToDriveTicks(self, inches):
-        pass
+        wheelRotations = inches / self.circ # Find the number of wheel rotations by dividing the distance into the circumference. 
+        motorRotations = wheelRotations * self.driveMotorGearRatio # Find out how many motor rotations this number is.
+        return motorRotations * 2048 # 2048 ticks in one Falcon rotation.
     
     def driveTicksToInches(self, ticks):
-        pass
+        motorRotations = ticks / 2048
+        wheelRotations = motorRotations / self.driveMotorGearRatio
+        return wheelRotations * self.circ # Basically just worked backwards from the sister method above.
     
     def setModuleProfile(self, profile):
         '''

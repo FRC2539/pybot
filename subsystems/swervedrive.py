@@ -2,6 +2,7 @@ from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
 
 import ports
+import constants
 
 import math
 
@@ -17,8 +18,8 @@ class SwerveDrive(BaseDrive):
         
         self.isFieldOriented = True
     
-        self.wheelBase = 23.5 # These are distances across the robot; horizontal, vertical, diagonal.
-        self.trackWidth = 23.5
+        self.wheelBase = constants.drivetrain.wheelBase # These are distances across the robot; horizontal, vertical, diagonal.
+        self.trackWidth = constants.drivetrain.trackWidth
         self.r = math.sqrt(self.wheelBase ** 2 + self.trackWidth ** 2)
         
         self.modules = [
@@ -47,10 +48,7 @@ class SwerveDrive(BaseDrive):
         Gonna take this nice and slow. Declaring variables to be simple,
         should try to walk through while coding. 
         '''
-        x = 1 # These are just values for testing purposes.
-        y = 1
-        rotate = 1
-        
+
         '''
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
