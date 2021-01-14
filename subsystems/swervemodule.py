@@ -87,11 +87,17 @@ class SwerveModule:
         self.driveMotor.stopMotor()
     
     def inchesToDriveTicks(self, inches):
+        '''
+        Convert inches to the robot's understandable 'tick' unit. 
+        '''
         wheelRotations = inches / self.circ # Find the number of wheel rotations by dividing the distance into the circumference. 
         motorRotations = wheelRotations * self.driveMotorGearRatio # Find out how many motor rotations this number is.
         return motorRotations * 2048 # 2048 ticks in one Falcon rotation.
     
     def driveTicksToInches(self, ticks):
+        '''
+        Convert 'ticks', robot units, to imperial unit inches. 
+        '''
         motorRotations = ticks / 2048
         wheelRotations = motorRotations / self.driveMotorGearRatio
         return wheelRotations * self.circ # Basically just worked backwards from the sister method above.
