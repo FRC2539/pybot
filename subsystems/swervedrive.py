@@ -1,3 +1,4 @@
+from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
 
@@ -12,15 +13,21 @@ class SwerveDrive(BaseDrive):
         super().__init__(name)
         
         '''
+        "Rollers? Where we're going, we don't need 'rollers'." - Ben Bistline, 2021
+        
         The constructor for the class. When returning lists, it should follow like:
         [front left, front right, back left, back right]
         '''
+        
+        disablePrints()
         
         self.isFieldOriented = True
     
         self.wheelBase = constants.drivetrain.wheelBase # These are distances across the robot; horizontal, vertical, diagonal.
         self.trackWidth = constants.drivetrain.trackWidth
         self.r = math.sqrt(self.wheelBase ** 2 + self.trackWidth ** 2)
+        
+        self.speedLimit = constants.drivetrain.speedLimit # Override the basedrive without editing the file. 
         
         self.modules = [
             SwerveModule(ports.drivetrain.frontLeftDriveID, ports.drivetrain.frontLeftTurnID, # Front left module.
@@ -100,9 +107,6 @@ class SwerveDrive(BaseDrive):
             magnitude = 1
         
         speeds[:] = [speed * magnitude for speed in speeds] # Ensures that the speeds of the motors are relevant to the joystick input.
-
-        print(newSpeeds)
-        print('a ' + str(angles))
             
         return newSpeeds, angles # Return the calculated speed and angles.
                     
@@ -143,9 +147,26 @@ class SwerveDrive(BaseDrive):
     def setFieldOriented(self, fieldCentric=True):
         self.isFieldOriented = fieldCentric
     
-    def getModuleSpeeds(self):
-        return [module.getWheelSpeed() for module in self.modules]
+    def getSpeeds(self, inIPS=True): # Defaults to giving in inches per second. 
+        return [module.getWheelSpeed(inIPS) for module in self.modules]
     
-    def getModuleAngles(self):
+    def setSpeeds(self, speeds: list): # Set a speed in inches per second. 
+        for module, speed in zip(self.modules, speeds):
+            module.setWheelSpeed(speed)
+    
+    def getModuleAngles(self): # Add module in front, not to be confused with gyro! Returns degrees.
         return [module.getWheelAngle() for module in self.modules]
+    
+    def setModuleAngles(self, angles: list): # Set a list of different angles.
+        for module, angle in zip(self.modules, angles):
+            module.setWheelAngle(angle)
+    
+    def getPositions(self, inInches=True): # Defaults to giving in inches.
+        return [module.getModulePosition(inInches) for module in self.modules]
+    
+    def setPositions(self, positions: list): # Remember, provide these in inches. It will go forward/back x many inches.
+        for module, position in zip(self.modules, positions):
+            module.setModulePosition(position)
+    
+    
     

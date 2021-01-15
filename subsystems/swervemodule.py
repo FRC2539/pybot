@@ -50,7 +50,7 @@ class SwerveModule:
         self.driveMotorGearRatio = constants.drivetrain.driveMotorGearRatio # 6.86 motor rotations per wheel rotation (on y-axis).
         self.turnMotorGearRatio = constants.drivetrain.turnMotorGearRatio # 12.8 motor rotations per wheel rotation (on x-axis).
         
-        self.speedLimit = speedLimit # Pass the speed limit at instantiation so we can drive more easily. 
+        self.speedLimit = speedLimit # Pass the speed limit at instantiation so we can drive more easily. In inches per second.  
         
         self.setPID()
                 
@@ -67,17 +67,39 @@ class SwerveModule:
         '''
         self.turnMotor.set(TalonFXControlMode.Position, angle)
         
-    def getWheelSpeed(self):
+    def getWheelSpeed(self, inIPS=True):
         '''
         Get the speed of this specific module.
         '''
-        return self.driveMotor.getSelectedSensorVelocity() # Returns ticks per 0.1 seconds (100 mS). 
+        if inIPS:
+            return self.ticksPerTenthToInchesPerSecond(self.driveMotor.getSelectedSensorVelocity()) 
+        # Returns ticks per 0.1 seconds (100 mS). 
         
+        return self.driveMotor.getSelectedSensorVelocity()
+    
     def setWheelSpeed(self, speed):
         '''
-        This will set the speed of the drive motor to a set velocity.
+        This will set the speed of the drive motor to a set velocity. Given in inches per second. 
         '''
-        self.driveMotor.set(TalonFXControlMode.Velocity, speed * self.speedLimit)
+        self.driveMotor.set(TalonFXControlMode.Velocity, self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit))
+        
+    def getModulePosition(self, inInches=True):
+        '''
+        Returns the position of the module in ticks or inches. Do it here since we
+        will be doing it here when we set it anyway. Doing so should also simplify the
+        move command :).
+        '''
+        if inInches:
+            return self.driveTicksToInches(self.driveMotor.getSelectedSensorPosition()) # Returns the distance in inches.
+        
+        return self.driveMotor.getSelectedSensorPosition() # Returns the distance in ticks. 
+    
+    def setModulePosition(self, distance):
+        '''
+        I highly advise against setting different distances for each module!
+        Provide the distance in inches.
+        '''
+        self.driveMotor.set(TalonFXControlMode.Position, self.getModulePosition(False) + self.inchesToDriveTicks(distance))
         
     def stopModule(self):
         '''
@@ -96,11 +118,23 @@ class SwerveModule:
     
     def driveTicksToInches(self, ticks):
         '''
-        Convert 'ticks', robot units, to imperial unit inches. 
+        Convert 'ticks', robot units, to the imperial unit, inches. 
         '''
         motorRotations = ticks / 2048
         wheelRotations = motorRotations / self.driveMotorGearRatio
         return wheelRotations * self.circ # Basically just worked backwards from the sister method above.
+    
+    def inchesPerSecondToTicksPerTenth(self, inchesPerSecond):
+        '''
+        Convert a common velocity to falcon-interprettable
+        '''
+        return self.inchesToDriveTicks(inchesPerSecond / 10)
+    
+    def ticksPerTenthToInchesPerSecond(self, ticksPerTenth):
+        '''
+        Convert a robot velocity to a legible one. 
+        '''
+        return self.driveTicksToInches(ticksPerTenth * 10)
     
     def setModuleProfile(self, profile):
         '''

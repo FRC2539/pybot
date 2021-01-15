@@ -13,7 +13,6 @@ class Shooter(Subsystem):
         super().__init__('Shooter')
 
         # TODO learn what this does
-        disablePrints()
 
         self.table = nt.getTable('Shooter')
 
@@ -68,17 +67,15 @@ class Shooter(Subsystem):
             self.shooterMotorOne.set(ControlMode.PercentOutput, -0.4)
 
         def stopShooter(self):
-            self.shooting = FalseS
+            self.shooting = False
             self.shooterMotorOne.stopMotor()
 
         def updateNetworkTables(self):
             # Send the current average RPM to network tables.
             self.table.putNumber('ShooterRPM', round(self.getRPM(), 0))
-            pass
-
+            
         def zeroNetworkTables(self):
-            self.table.putNumber('ShooterRPM'. 0)
-            pass
+            self.table.putNumber('ShooterRPM', 0)
 
         def rpmToSensor(self, rpm):
             return (rpm * 2048) / 600

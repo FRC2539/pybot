@@ -29,3 +29,5 @@ drivetrain.wheelDiameter = 4
 
 drivetrain.wheelBase = 23.5
 drivetrain.trackWidth = 23.5
+
+drivetrain.speedLimit = 160.0 # in inches per second (if you have feet per second, divide by 12!)

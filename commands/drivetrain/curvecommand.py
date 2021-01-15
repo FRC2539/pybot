@@ -7,7 +7,7 @@ import robot
 
 class CurveCommand(Command):
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, maxSpeed):
         
         '''
         My strategy going into this is to going to be distances and heading:
@@ -28,6 +28,13 @@ class CurveCommand(Command):
         
         super().__init__('Curve')
         
+        self.maxSpeed = maxSpeed # The speed for the trajectory. 
+        
+        if x >= 0: # Check the outermost motor's distance. 
+            self.idToCheck = 0 # Check the front left motor if curving right. 
+        else:
+            self.idToCheck = 1 # Check the front right motor if curving left. 
+        
         self.x = x # End x-coordinate
         self.y = y # End y-coordinate
         self.z = math.sqrt((self.x**2) + (self.y)**2) # The hypotenuse between start and goal, the chord. 
@@ -44,18 +51,22 @@ class CurveCommand(Command):
         self.requires(robot.drivetrain)
 
     def initialize(self):
-        pass
-
-
+        self.startingPosition = robot.drivetrain.getPositions()[self.idToCheck]
+        
     def execute(self):
-        self.currentAL = 0 # Update this with the encoders. Current arc length.
         self.desiredHeading = self.calcPosition()
+        self.currentAL = robot.drivetrain.getPositions() # Update this with the encoders. Current arc length.
+
+        robot.drivetrain.setUniformAngle(self.desiredHeading)
         
     def isFinished(self):
-        pass
+        if abs(robot.drivetrain.getPositions[self.idToCheck] - self.startingPosition) >= self.totalArcLength:
+            return True
+        
+        return False
 
     def end(self):
-        pass
+        robot.drivetrain.stop()
     
     def calcPosition(self):
         self.currentCA = (self.currentAL / self.totalArcLength) * self.b # Current central angle in degrees of where we are along path. 

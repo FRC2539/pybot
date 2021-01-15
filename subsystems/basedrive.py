@@ -1,16 +1,15 @@
-from wpilib.command import Subsystem
-
 import math
 
 from networktables import NetworkTables
 from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
 from navx import AHRS
 
+from .cougarsystem import *
 from custom.config import Config
 import ports
 
 
-class BaseDrive(Subsystem):
+class BaseDrive(CougarSystem):
     '''
     A general case drive train system. It abstracts away shared functionality of
     the various drive types that we can employ. Anything that can be done
