@@ -13,12 +13,9 @@ class FireSequenceCommand(Command):
 
         robot.revolver.sequenceEngaged = False
         self.proceed = False
-<<<<<<< HEAD
-        self.launchingBegun = False
-=======
+
         self.beganLaunching = False
         self.autoEnd = autoEnd
->>>>>>> 64b54fc60d2e4e0289bfaaa0b07903851c28e18e
 
     def initialize(self):
         self.proceed = False
@@ -36,14 +33,13 @@ class FireSequenceCommand(Command):
             self.goTo += 360
 
     def execute(self):
-        if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget and not self.proceed:# and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
-            self.proceed = True
+        #if abs(self.goTo - robot.revolver.getPosition()) <= 5 and robot.turret.onTarget and not self.proceed:# and all(abs(x) <= 10 for x in robot.drivetrain.getSpeeds()):
+            #self.proceed = True
         
-        if robot.shooter.atGoal and robot.revolver.inDropZone() and self.proceed:
+        if robot.shooter.atGoal: #and robot.revolver.inDropZone() and self.proceed:
             robot.revolver.setStaticSpeed()
             robot.balllauncher.launchBalls()
             robot.pneumatics.extendBallLauncherSolenoid()
-<<<<<<< HEAD
             self.launchingBegun = True
 
     def isFinished(self):
