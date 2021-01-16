@@ -12,7 +12,7 @@ class StevenHoodLimelightCommand(Command):
 
 
     def initialize(self):
-        robot.limelight.setPipeline(1)
+        robot.limelight.setPipeline(0)
 
 
     def execute(self):
@@ -28,5 +28,5 @@ class StevenHoodLimelightCommand(Command):
         robot.hood.updateNetworkTables()
         
     def end(self):
-        robot.limelight.setPipeline(0)
+        robot.limelight.setPipeline(1)
         robot.hood.stopHood()
