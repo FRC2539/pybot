@@ -33,31 +33,30 @@ class Limelight(CougarSystem):
         self.nt.putNumber('pipeline', pipeline)
 
     def getY(self):
+        # Return the x value to correct for the limelight being rotated.
         return self.nt.getEntry('tx').getDouble(0)
 
     def getX(self):
+        # Return the y value to correct for the limelight being rotated.
         return self.nt.getEntry('ty').getDouble(0)
 
     def getA(self):
         return self.nt.getEntry('ta').getDouble(0)
 
     def getTape(self):
+        # Return whether or not tape is being detected by the limelight.
         if (self.nt.getEntry('tv').getDouble(0) == 1):
             return True
         return False
 
     def takeSnapShot(self):
+        # Have the limelight take a snapshot.
+        # These can be viewed by connecting to the limelight.
         self.nt.putNumber('snapshot', 1)
 
-    def generateVelocity(self, area, limit, longShot=False): 
-        # Return the calculated velocity based off of the distance, in inches.
-        return min(self.minShooterRPM + (limit - abs(area) / 0.0007), self.maxShooterRPM)
-
-    def areaDistance(self):
-        self.aDistance = math.log(self.getA(), .992924) + 221.996
-        return self.aDistance
-
     def onTarget(self):
+        # The limelight is on target if it can see tape
+        # and the tape is centered in limelight's field of view.
         if self.getTape():
             if self.getX() < .75:
                 return True
@@ -66,16 +65,5 @@ class Limelight(CougarSystem):
         else:
             return False
 
-    def getCamTran(self):
-        return self.nt.getEntry('camTran').getDoubleArray([])
-
     def updateNetworkTables(self):
-        self.driveTable.putNumberArray('camTran', self.getCamTran())
-        self.driveTable.putNumber('distance', self.calcDistance())
-    
-    # TODO reconsider adding this if there is a turret and other methods use it.
-    # def getFeildAngle(self):
-    #     self.goal = robot.turret.getFieldPosition()
-    #     self.aimed = robot.turret.getPosition()
-    #     self.theta = ((self.goal - self.aimed)*360)/4096 + self.getX()
-    #     return self.theta
+        pass
