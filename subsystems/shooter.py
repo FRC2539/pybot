@@ -1,4 +1,4 @@
-from wpilib.command import Subsystem
+from .cougarsystem import *
 
 from ctre import WPI_TalonFX, FeedbackDevice, ControlMode, NeutralMode
 
@@ -6,13 +6,11 @@ from networktables import NetworkTables as nt
 
 import ports
 
-class Shooter(Subsystem):
+class Shooter(CougarSystem):
     '''Controls the robot's shooter.'''
 
     def __init__(self):
         super().__init__('Shooter')
-
-        # TODO learn what this does
 
         self.table = nt.getTable('Shooter')
 
@@ -46,7 +44,6 @@ class Shooter(Subsystem):
         self.atGoal = False
 
         # Set the range of velocities. 
-        # These may need to be tweaked.
         self.maxVel = 5800
         self.minVel = 2800
 
