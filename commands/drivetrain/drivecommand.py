@@ -46,5 +46,3 @@ class DriveCommand(Command):
             logicalaxes.rotate.get()
         )
 
-        print(robot.drivetrain.speeds)
-        print('a ' + str(robot.drivetrain.angles))

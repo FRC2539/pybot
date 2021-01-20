@@ -51,16 +51,24 @@ class CurveCommand(Command):
         self.requires(robot.drivetrain)
 
     def initialize(self):
+        print('starting ') 
+        print('total arc length ' + str(self.totalArcLength))
+        print('central angle ' + str(self.b))
+        print('checking id ' + str(self.idToCheck))
+        print('chord length ' + str(self.z))
         self.startingPosition = robot.drivetrain.getPositions()[self.idToCheck]
+        print('starting position ' + str(self.startingPosition))
         
     def execute(self):
-        self.desiredHeading = self.calcPosition()
-        self.currentAL = robot.drivetrain.getPositions() # Update this with the encoders. Current arc length.
+        self.currentAL = robot.drivetrain.getPositions()[self.idToCheck] # Update this with the encoders. Current arc length.
 
-        robot.drivetrain.setUniformAngle(self.desiredHeading)
+        self.desiredHeading = self.calcPosition()
+        print('dh ' + str(self.desiredHeading))
+
+        robot.drivetrain.setModuleAngles(self.desiredHeading)
         
     def isFinished(self):
-        if abs(robot.drivetrain.getPositions[self.idToCheck] - self.startingPosition) >= self.totalArcLength:
+        if abs(robot.drivetrain.getPositions()[self.idToCheck] - self.startingPosition) >= self.totalArcLength:
             return True
         
         return False

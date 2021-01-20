@@ -6,6 +6,7 @@ from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
+from commands.drivetrain.curvecommand import CurveCommand
 
 from commands.resetcommand import ResetCommand
 
@@ -29,6 +30,7 @@ def init():
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
     
+    driveControllerOne.BottomThumb.toggleWhenPressed(CurveCommand(120, 120, 60)) # (120, 120) @ max of 60 in/sec
     driveControllerOne.RightThumb.whenPressed(ToggleFieldOrientationCommand())
 
     # The controller for non-driving subsystems of the robot
