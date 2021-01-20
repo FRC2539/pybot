@@ -1,5 +1,5 @@
 from .logitechdualshock import LogitechDualShock
-from thrustmasterjoystick import ThrustmasterJoystick
+from .thrustmasterjoystick import ThrustmasterJoystick
 from . import logicalaxes
 
 from custom.config import Config
@@ -26,10 +26,6 @@ def init():
     logicalaxes.forward = driveControllerOne.Y
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
-
-    driveControllerOne.Back.whenPressed(ResetCommand())
-    driveControllerOne.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
