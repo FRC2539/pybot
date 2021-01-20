@@ -7,7 +7,7 @@ import robot
 
 class CurveCommand(Command):
 
-    def __init__(self, x, y, maxSpeed):
+    def __init__(self, *argv):
         
         '''
         My strategy going into this is to going to be distances and heading:
@@ -28,7 +28,12 @@ class CurveCommand(Command):
         
         super().__init__('Curve')
         
-        self.maxSpeed = maxSpeed # The speed for the trajectory. 
+        self.neededLoops = len(argv) - 2 # Subtract one because of the maxSpeed, another because we're about to do one. Should be at least zero!
+        
+        self.maxSpeed = argv[-1] # The speed for the trajectory. Always the last argument.  
+        
+        x = argv[0]
+        y = argv[1]
         
         if x >= 0: # Check the outermost motor's distance. 
             self.idToCheck = 0 # Check the front left motor if curving right. 
@@ -75,7 +80,10 @@ class CurveCommand(Command):
 
     def end(self):
         robot.drivetrain.stop()
-    
+        if self.neededLoops > 0:
+            self.neededLoops -= 1
+            pass
+            
     def calcPosition(self):
         self.currentCA = (self.currentAL / self.totalArcLength) * self.b # Current central angle in degrees of where we are along path. 
         self.currentCL = 2 * self.radius * math.sin((self.currentCA / 2) * (math.pi / 180)) # Current chord length. 'a' on my paper.
@@ -92,3 +100,6 @@ class CurveCommand(Command):
     def getSlopeToSet(self, x): 
         return (math.atan((-x / (math.sqrt(self.radius**2 - x**2))))) * 180 / math.pi
         # Return the slope in degrees using first derivative. 
+
+def needRepeat(x, y, maxSpeed):
+    pass

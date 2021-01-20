@@ -21,7 +21,7 @@ drivetrain.frontRightTurnID = 6
 drivetrain.backLeftTurnID = 7
 drivetrain.backRightTurnID = 8
 
-drivetrain.frontLeftCANCoder = 9
+drivetrain.frontLeftCANCoder = 1
 drivetrain.frontRightCANCoder = 10
 drivetrain.backLeftCANCoder = 11
 drivetrain.backRightCANCoder = 12
