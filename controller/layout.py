@@ -5,6 +5,8 @@ from . import logicalaxes
 from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
+from commands.drivetrain.togglefieldorientationcommand import ToggleFieldOrientationCommand
+
 from commands.resetcommand import ResetCommand
 
 
@@ -20,16 +22,15 @@ def init():
     '''
 
     # The controller for driving the robot
-    driveControllerOne = ThrustmasterJoystick(0)
-    driveControllerTwo = ThrustmasterJoystick(1)
+    driveControllerOne = ThrustmasterJoystick(0) # The left hand controller
+    driveControllerTwo = ThrustmasterJoystick(1) # The right hand controller
 
     logicalaxes.forward = driveControllerOne.Y
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
 
     driveControllerOne.Back.whenPressed(ResetCommand())
-    driveControllerOne.X.toggleWhenPressed(DriveCommand(Config('DriveTrain/preciseSpeed')))
-
+    driveControllerOne.RightThumb.whenPressed(ToggleFieldOrientationCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
