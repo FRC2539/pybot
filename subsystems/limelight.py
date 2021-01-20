@@ -54,16 +54,17 @@ class Limelight(CougarSystem):
         # These can be viewed by connecting to the limelight.
         self.nt.putNumber('snapshot', 1)
 
-    def onTarget(self):
-        # The limelight is on target if it can see tape
-        # and the tape is centered in limelight's field of view.
-        if self.getTape():
-            if self.getX() < .75:
-                return True
-            else:
-                return False
-        else:
-            return False
+    # Not currently in use
+    # def onTarget(self):
+    #     # The limelight is on target if it can see tape
+    #     # and the tape is centered in limelight's field of view.
+    #     if self.getTape():
+    #         if abs(self.getX()) < 2.0:
+    #             return True
+    #         else:
+    #             return False
+    #     else:
+    #         return False
 
     def updateNetworkTables(self):
         pass
