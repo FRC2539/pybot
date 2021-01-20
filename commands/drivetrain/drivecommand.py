@@ -21,16 +21,8 @@ class DriveCommand(Command):
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
-        try:
-            robot.drivetrain.setSpeedLimit(self.speedLimit)
-        except (ValueError, MissingConfigError):
-            print('Could not set speed to %s' % self.speedLimit)
-            driverhud.showAlert('Drive Train is not configured')
-            robot.drivetrain.enableSimpleDriving()
-
         self.lastY = None
         self.slowed = False
-
 
     def execute(self):
         # Avoid quick changes in direction
@@ -53,3 +45,6 @@ class DriveCommand(Command):
             y,
             logicalaxes.rotate.get()
         )
+
+        print(robot.drivetrain.speeds)
+        print('a ' + str(robot.drivetrain.angles))

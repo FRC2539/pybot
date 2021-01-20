@@ -43,6 +43,9 @@ class SwerveDrive(BaseDrive):
                          ports.drivetrain.backRightCANCoder, self.speedLimit)
                         ]
     
+        self.angles = []
+        self.speeds = []
+    
     def _configureMotors(self):
         '''
         Configures the motors. Shouldn't need this. 
@@ -60,7 +63,7 @@ class SwerveDrive(BaseDrive):
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
         '''
-        theta = self.getAngle() * (math.pi / 180) 
+        theta = -90 * (math.pi / 180) 
             
         if self.isFieldOriented: # Are we field-centric, as opposed to robot-centric. A tank drive is robot-centric, for example. 
             
@@ -108,6 +111,7 @@ class SwerveDrive(BaseDrive):
         
         speeds[:] = [speed * magnitude for speed in speeds] # Ensures that the speeds of the motors are relevant to the joystick input.
             
+        print(type(newSpeeds))
         return newSpeeds, angles # Return the calculated speed and angles.
                     
     def move(self, x, y, rotate):
@@ -116,7 +120,7 @@ class SwerveDrive(BaseDrive):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         '''
-        
+                
         if [x, y, rotate] == self.lastInputs:
             return
         
@@ -126,13 +130,23 @@ class SwerveDrive(BaseDrive):
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
         rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
-
-        speeds, angles = self._calculateSpeeds(x, y, rotate)
-
-        for module, speed, angle in zip(self.modules, speeds, angles): # You're going to need encoders, so only focus here.
-            module.setWheelAngle(angle)
-            module.setWheelSpeed(speed)
-
+        
+        self.speeds, self.angles = self._calculateSpeeds(x, y, rotate)
+        
+        if x == 0 and y == 0 and rotate != 0: # The robot won't apply power if it's just rotate (fsr?!)
+            self.speeds = rotate
+            #for module, angle in zip(self.modules, angles): # You're going to need encoders, so only focus here.
+                #module.setWheelAngle(angle)
+                #module.setWheelSpeed(rotate)
+                
+            pass
+        
+        else:
+            #for module, speed, angle in zip(self.modules, speeds, angles): # You're going to need encoders, so only focus here.
+                #module.setWheelAngle(angle)
+                #module.setWheelSpeed(speed)
+            pass
+            
     def normalizeGyro(self, a):
         return (a - (math.floor(a / 360) * 360))
     

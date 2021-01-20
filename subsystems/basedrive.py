@@ -86,7 +86,8 @@ class BaseDrive(CougarSystem):
         coordinates have not changed.
         '''
         
-        print('no, no')
+        print('please god no')
+        
         if [x, y, rotate] == self.lastInputs:
             return
 
