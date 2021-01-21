@@ -28,12 +28,16 @@ class CurveCommand(Command):
         
         super().__init__('Curve')
         
-        self.neededLoops = len(argv) - 2 # Subtract one because of the maxSpeed, another because we're about to do one. Should be at least zero!
+        robot.drivetrain.stop() # Stop it just to make sure we ain't moving after a previous command. 
         
-        self.maxSpeed = argv[-1] # The speed for the trajectory. Always the last argument.  
+        self.argv = argv
         
-        x = argv[0]
-        y = argv[1]
+        self.needLoop = len(self.argv) - 2 > 0# Subtract one because of the maxSpeed, another because we're about to do one. Should be at least zero!
+        
+        self.maxSpeed = self.argv[-1] # The speed for the trajectory. Always the last argument.  
+        
+        x = self.argv[0][0] # The first value in the first list.
+        y = self.argv[0][1] # The second value in the first list.
         
         if x >= 0: # Check the outermost motor's distance. 
             self.idToCheck = 0 # Check the front left motor if curving right. 
@@ -73,16 +77,12 @@ class CurveCommand(Command):
         robot.drivetrain.setModuleAngles(self.desiredHeading)
         
     def isFinished(self):
-        if abs(robot.drivetrain.getPositions()[self.idToCheck] - self.startingPosition) >= self.totalArcLength:
-            return True
-        
-        return False
-
+        return abs(robot.drivetrain.getPositions()[self.idToCheck] - self.startingPosition) >= self.totalArcLength
+            
     def end(self):
         robot.drivetrain.stop()
-        if self.neededLoops > 0:
-            self.neededLoops -= 1
-            pass
+        if self.needLoop:
+            needRepeat(self.argv[1:], self.maxSpeed) # This should give the next command all of the trajectories  excluding the one we just did.  
             
     def calcPosition(self):
         self.currentCA = (self.currentAL / self.totalArcLength) * self.b # Current central angle in degrees of where we are along path. 
@@ -101,5 +101,5 @@ class CurveCommand(Command):
         return (math.atan((-x / (math.sqrt(self.radius**2 - x**2))))) * 180 / math.pi
         # Return the slope in degrees using first derivative. 
 
-def needRepeat(x, y, maxSpeed):
-    pass
+def needRepeat(lists, maxSpeed):
+    CurveCommand(lists, maxSpeed)

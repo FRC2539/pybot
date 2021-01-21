@@ -30,7 +30,7 @@ def init():
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
     
-    driveControllerOne.BottomThumb.toggleWhenPressed(CurveCommand(120, 120, 60)) # (120, 120) @ max of 60 in/sec
+    driveControllerOne.BottomThumb.toggleWhenPressed(CurveCommand([120, 120], [120, 120], 60)) # (120, 120) @ max of 60 in/sec
     driveControllerOne.RightThumb.whenPressed(ToggleFieldOrientationCommand())
 
     # The controller for non-driving subsystems of the robot
