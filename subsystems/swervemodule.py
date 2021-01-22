@@ -1,5 +1,5 @@
 from ctre import WPI_TalonFX, CANCoder, NeutralMode, TalonFXControlMode, \
-FeedbackDevice, AbsoluteSensorRange, RemoteSensorSource
+FeedbackDevice, AbsoluteSensorRange, RemoteSensorSource, SensorInitializationStrategy
 
 import math
 
@@ -37,6 +37,7 @@ class SwerveModule:
         self.turnMotor.setSafetyEnabled(False)
         self.turnMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 0, 0) # Set the feedback sensor as remote.
         self.turnMotor.configRemoteFeedbackFilter(canCoderID, RemoteSensorSource.CANCoder, 0, 0) # Configure and select CANCoder. 
+        self.turnMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition, 0) # Should remember invite. 
         
         self.tPk = constants.drivetrain.tPk # P gain for the turn.
         self.tIk = constants.drivetrain.tIk # I gain for the turn.
