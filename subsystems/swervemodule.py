@@ -62,7 +62,9 @@ class SwerveModule:
         '''
         Get wheel angle relative to the robot.
         '''
-        return self.turnMotor.getSelectedSensorPosition(0) # Returns absolute position of CANCoder. 
+        #return self.turnMotor.getSelectedSensorPosition(0) # Returns absolute position of CANCoder. 
+        #return self.cancoder.getAbsolutePosition()
+        return (self.turnMotor.getSensorCollection().getIntegratedSensorAbsolutePosition()/constants.drivetrain.driveMotorGearRatio)
         
     def setWheelAngle(self, angle):
         '''
