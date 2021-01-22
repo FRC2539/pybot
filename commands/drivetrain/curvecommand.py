@@ -7,7 +7,7 @@ import robot
 
 class CurveCommand(Command):
 
-    def __init__(self, x, y, maxSpeed):
+    def __init__(self, *argv):
         
         '''
         My strategy going into this is to going to be distances and heading:
@@ -28,7 +28,16 @@ class CurveCommand(Command):
         
         super().__init__('Curve')
         
-        self.maxSpeed = maxSpeed # The speed for the trajectory. 
+        robot.drivetrain.stop() # Stop it just to make sure we ain't moving after a previous command. 
+        
+        self.argv = argv
+        
+        self.needLoop = len(self.argv) - 2 > 0# Subtract one because of the maxSpeed, another because we're about to do one. Should be at least zero!
+        
+        self.maxSpeed = self.argv[-1] # The speed for the trajectory. Always the last argument.  
+        
+        x = self.argv[0][0] # The first value in the first list.
+        y = self.argv[0][1] # The second value in the first list.
         
         if x >= 0: # Check the outermost motor's distance. 
             self.idToCheck = 0 # Check the front left motor if curving right. 
@@ -51,23 +60,30 @@ class CurveCommand(Command):
         self.requires(robot.drivetrain)
 
     def initialize(self):
+        print('starting ') 
+        print('total arc length ' + str(self.totalArcLength))
+        print('central angle ' + str(self.b))
+        print('checking id ' + str(self.idToCheck))
+        print('chord length ' + str(self.z))
         self.startingPosition = robot.drivetrain.getPositions()[self.idToCheck]
+        print('starting position ' + str(self.startingPosition))
         
     def execute(self):
-        self.desiredHeading = self.calcPosition()
-        self.currentAL = robot.drivetrain.getPositions() # Update this with the encoders. Current arc length.
+        self.currentAL = robot.drivetrain.getPositions()[self.idToCheck] # Update this with the encoders. Current arc length.
 
-        robot.drivetrain.setUniformAngle(self.desiredHeading)
+        self.desiredHeading = self.calcPosition()
+        print('dh ' + str(self.desiredHeading))
+
+        robot.drivetrain.setModuleAngles(self.desiredHeading)
         
     def isFinished(self):
-        if abs(robot.drivetrain.getPositions[self.idToCheck] - self.startingPosition) >= self.totalArcLength:
-            return True
-        
-        return False
-
+        return abs(robot.drivetrain.getPositions()[self.idToCheck] - self.startingPosition) >= self.totalArcLength
+            
     def end(self):
         robot.drivetrain.stop()
-    
+        if self.needLoop:
+            needRepeat(self.argv[1:], self.maxSpeed) # This should give the next command all of the trajectories  excluding the one we just did.  
+            
     def calcPosition(self):
         self.currentCA = (self.currentAL / self.totalArcLength) * self.b # Current central angle in degrees of where we are along path. 
         self.currentCL = 2 * self.radius * math.sin((self.currentCA / 2) * (math.pi / 180)) # Current chord length. 'a' on my paper.
@@ -84,3 +100,6 @@ class CurveCommand(Command):
     def getSlopeToSet(self, x): 
         return (math.atan((-x / (math.sqrt(self.radius**2 - x**2))))) * 180 / math.pi
         # Return the slope in degrees using first derivative. 
+
+def needRepeat(lists, maxSpeed):
+    CurveCommand(lists, maxSpeed)

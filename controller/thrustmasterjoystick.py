@@ -5,7 +5,7 @@ class ThrustmasterJoystick(GenericController):
     Thrustmaster joystick
     '''
     
-    buttonNames = {
+    namedButtons = {
         
         'Trigger': 1,
         'BottomThumb': 2,
