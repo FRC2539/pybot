@@ -151,9 +151,8 @@ class SwerveDrive(BaseDrive):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
-
         if [x, y, rotate] == self.lastInputs:
-            return
+            pass  # return
 
         self.lastInputs = [x, y, rotate]
 
@@ -163,6 +162,8 @@ class SwerveDrive(BaseDrive):
         rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds, angles = self._calculateSpeeds(x, y, rotate)
+
+        self.modules[0].setWheelAngle(angles[0])
 
         if (
             x == 0 and y == 0 and rotate != 0

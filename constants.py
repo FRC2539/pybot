@@ -20,10 +20,10 @@ drivetrain.dDk = 0
 drivetrain.dFFk = 0
 drivetrain.dIZk = 0
 
-drivetrain.tPk = 0.001
+drivetrain.tPk = 0.02
 drivetrain.tIk = 0
-drivetrain.tDk = 0
-drivetrain.tFFk = 0
+drivetrain.tDk = 0.01
+drivetrain.tFFk = 0.0001
 drivetrain.tIZk = 0
 
 drivetrain.driveMotorGearRatio = 6.86
@@ -39,4 +39,4 @@ drivetrain.speedLimit = (
 )
 
 drivetrain.encoderConfig = CANCoderConfiguration()
-drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
+drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180

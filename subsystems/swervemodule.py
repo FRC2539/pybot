@@ -90,9 +90,8 @@ class SwerveModule:
         'truePosition' is the angle of the wheel in pseudo-absolute encoder
         ticks.
         """
-        truePosition = (self.cancoder.getAbsolutePosition() / 360) * (
-            2048 * self.turnMotorGearRatio
-        )  # Take our position as a
+        truePosition = self.degreesToTurnTicks(self.cancoder.getAbsolutePosition())
+        # Take our position as a
         # percent and then multiplies it by the total number of ticks (motor units) in one full wheel rotation.
         self.turnMotor.getSensorCollection().setIntegratedSensorPosition(truePosition)
 
@@ -109,9 +108,57 @@ class SwerveModule:
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. This will accept 0 - 360!
         """
-        self.turnMotor.set(
-            TalonFXControlMode.Position, self.degreesToTurnTicks(angle % 360)
-        )
+
+        #print("go " + str(self.degreesToTurnTicks(angle % 360)))
+        #print("at " + str(self.turnMotor.getSelectedSensorPosition(0)))
+
+        currentAngle = self.getWheelAngle() % 360
+        goto = angle % 360
+        
+        if goto != 0:
+            
+            mult = 1 # C
+            x = abs(currentAngle - goto)
+            z = 360 - x
+            
+            if x < z:
+                diff = x
+            else:
+                diff = z
+            
+            if x > 180: # This means we must have passed 360. 
+                if goto > currentAngle: # Choose direction.
+                    mult = -1 # CC
+            else:
+                if currentAngle > goto: # Choose direction.
+                    mult = -1
+                
+            #z = 360 - abs(currentAngle - goto)
+            #x = abs(currentAngle - goto)
+
+            #if z < x:
+                #print('z')
+                #diff = self.degreesToTurnTicks(z)
+            #else:
+                #print('x')
+                #diff = self.degreesToTurnTicks(x)
+
+            print('at: ' + str(self.turnMotor.getSelectedSensorPosition(0)))
+            print('goto: ' + str(self.degreesToTurnTicks(diff * mult)))
+            
+            self.turnMotor.set(
+                TalonFXControlMode.Position,
+                self.turnMotor.getSelectedSensorPosition(0) + (diff * mult),
+            )
+
+        # print('go to ' +  str(angle)) Works but really slow and inaccurate - I need PID.
+
+        # offset = abs(angle - self.getWheelAngle())
+
+        # print(offset / 450)
+
+        # self.turnMotor.set(TalonFXControlMode.PercentOutput, math.copysign(offset / 450, angle - self.getWheelAngle()))
+
         # The modulo operator makes sure it's 0-360, even if it comes -180-180.
 
     def getWheelSpeed(self, inIPS=True):
