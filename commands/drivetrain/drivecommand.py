@@ -6,17 +6,17 @@ from custom.config import Config, MissingConfigError
 from custom import driverhud
 import math
 
-logicalaxes.registerAxis('forward')
-logicalaxes.registerAxis('strafe')
-logicalaxes.registerAxis('rotate')
+logicalaxes.registerAxis("forward")
+logicalaxes.registerAxis("strafe")
+logicalaxes.registerAxis("rotate")
+
 
 class DriveCommand(Command):
     def __init__(self, speedLimit):
-        super().__init__('DriveCommand %s' % speedLimit)
+        super().__init__("DriveCommand %s" % speedLimit)
 
         self.requires(robot.drivetrain)
         self.speedLimit = speedLimit
-
 
     def initialize(self):
         robot.drivetrain.stop()
@@ -40,10 +40,10 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        #robot.drivetrain.move(
-            #logicalaxes.strafe.get(),
-            #y,
-            #logicalaxes.rotate.get()
-        #)
-        
+        # robot.drivetrain.move(
+        # logicalaxes.strafe.get(),
+        # y,
+        # logicalaxes.rotate.get()
+        # )
+
         print(robot.drivetrain.getModuleAngles())

@@ -1,14 +1,16 @@
 from ctre import CANCoderConfiguration, AbsoluteSensorRange
 
+
 class Constants:
     pass
 
-'''
+
+"""
 Use this class to declare variables that may have to be 
 adjusted a lot. This makes it more global and easier to find. 
 Please note that this is not the ports.py. That should host 
 IDs for the CANbus, sensors, PWM, and the liking. 
-'''
+"""
 
 drivetrain = Constants()
 
@@ -32,7 +34,9 @@ drivetrain.wheelDiameter = 4
 drivetrain.wheelBase = 23.5
 drivetrain.trackWidth = 23.5
 
-drivetrain.speedLimit = 160.0 # in inches per second (if you have feet per second, divide by 12!)
+drivetrain.speedLimit = (
+    160.0  # in inches per second (if you have feet per second, divide by 12!)
+)
 
 drivetrain.encoderConfig = CANCoderConfiguration()
-drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180
+drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360

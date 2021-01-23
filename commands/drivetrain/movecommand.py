@@ -3,16 +3,16 @@ from custom import driverhud
 from custom.config import MissingConfigError
 import robot
 
-class MoveCommand(Command):
 
+class MoveCommand(Command):
     def __init__(self, distance, avoidCollisions=True, name=None):
-        '''
+        """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
-        '''
+        """
 
         if name is None:
-            name = 'Move %f inches' % distance
+            name = "Move %f inches" % distance
 
         super().__init__(name, 0.2)
 
@@ -21,11 +21,9 @@ class MoveCommand(Command):
         self.avoidCollisions = avoidCollisions
         self.requires(robot.drivetrain)
 
-
     def _initialize(self):
         super()._initialize()
         self.precision = robot.drivetrain.inchesToTicks(1)
-
 
     def initialize(self):
         self.obstacleCount = 0
@@ -39,7 +37,6 @@ class MoveCommand(Command):
             sign *= -1
 
         robot.drivetrain.setPositions(self.targetPositions)
-
 
     def execute(self):
         if self.avoidCollisions:
@@ -56,7 +53,7 @@ class MoveCommand(Command):
                             self.obstacleCount = 0
                             robot.drivetrain.stop()
                             robot.drivetrain.move(0, 0, 0)
-                            driverhud.showAlert('Obstacle Detected')
+                            driverhud.showAlert("Obstacle Detected")
                         else:
                             self.obstacleCount += 1
                     else:
@@ -75,7 +72,6 @@ class MoveCommand(Command):
 
             except NotImplementedError:
                 pass
-
 
     def isFinished(self):
         if self.blocked:

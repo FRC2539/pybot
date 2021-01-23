@@ -6,21 +6,26 @@ from networktables import NetworkTables as nt
 
 import ports
 
+
 class Shooter(CougarSystem):
-    '''Controls the robot's shooter.'''
+    """Controls the robot's shooter."""
 
     def __init__(self):
-        super().__init__('Shooter')
+        super().__init__("Shooter")
 
-        self.table = nt.getTable('Shooter')
+        self.table = nt.getTable("Shooter")
 
         # Initialize the first motor.
         self.shooterMotorOne = WPI_TalonFX(ports.shooter.shooterMotorOneID)
-        self.shooterMotorOne.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+        self.shooterMotorOne.configSelectedFeedbackSensor(
+            FeedbackDevice.IntegratedSensor, 0, 0
+        )
 
         # Initialize the second motor.
         self.shooterMotorTwo = WPI_TalonFX(ports.shooter.shooterMotorTwoID)
-        self.shooterMotorTwo.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+        self.shooterMotorTwo.configSelectedFeedbackSensor(
+            FeedbackDevice.IntegratedSensor, 0, 0
+        )
 
         # Set the behavior for when both motors are in "neutral", or are not being moved.
         self.shooterMotorOne.setNeutralMode(NeutralMode.Coast)
@@ -32,7 +37,7 @@ class Shooter(CougarSystem):
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
-        
+
         self.shooterMotorOne.setInverted(False)
         self.shooterMotorTwo.setInverted(True)
 
@@ -43,7 +48,7 @@ class Shooter(CougarSystem):
         self.shooting = False
         self.atGoal = False
 
-        # Set the range of velocities. 
+        # Set the range of velocities.
         self.maxVel = 5800
         self.minVel = 2800
 
@@ -69,10 +74,10 @@ class Shooter(CougarSystem):
 
         def updateNetworkTables(self):
             # Send the current average RPM to network tables.
-            self.table.putNumber('ShooterRPM', round(self.getRPM(), 0))
-            
+            self.table.putNumber("ShooterRPM", round(self.getRPM(), 0))
+
         def zeroNetworkTables(self):
-            self.table.putNumber('ShooterRPM', 0)
+            self.table.putNumber("ShooterRPM", 0)
 
         def rpmToSensor(self, rpm):
             return (rpm * 2048) / 600

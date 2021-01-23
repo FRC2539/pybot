@@ -11,12 +11,12 @@ from commands.network.alertcommand import AlertCommand
 
 from custom.config import Config
 
+
 class ConfigurePIDCommandGroup(CommandGroup):
-
     def __init__(self):
-        super().__init__('Configure PID')
+        super().__init__("Configure PID")
 
-        output = '''
+        output = """
 Your F and P values have been configured. However, P is probably too small.
 Use MoveCommand to drive the robot a set distance. (If you have not already done
 so, calculate and set Encoder Ticks per Inch.) Keep doubling the P value until
@@ -29,17 +29,15 @@ the average error is less than 10.
 
 For details see the Motion Magic Closed-Loop Walkthrough section of the Talon
 SRX Software Reference Manual.
-        '''
+        """
 
-        self.addSequential(AlertCommand('Do not disable the robot!'))
+        self.addSequential(AlertCommand("Do not disable the robot!"))
         self.addSequential(WaitCommand(1))
-        self.addSequential(
-            AlertCommand('Enable netconsole for details', 'Info')
-        )
+        self.addSequential(AlertCommand("Enable netconsole for details", "Info"))
         self.addSequential(WaitCommand(2))
-        self.addSequential(PrintCommand('Zeroing PID Values'))
+        self.addSequential(PrintCommand("Zeroing PID Values"))
         self.addSequential(ResetPIDCommand())
-        self.addSequential(PrintCommand('Calculating Max Speed'))
+        self.addSequential(PrintCommand("Calculating Max Speed"))
         self.addSequential(SetUseEncodersCommand(False))
         self.addSequential(MoveYCommand(1))
         self.addSequential(WaitCommand(2))
@@ -49,22 +47,20 @@ SRX Software Reference Manual.
         self.addSequential(MoveYCommand(-1))
         self.addSequential(WaitCommand(2))
         self.addSequential(CalculateMaxSpeedCommand())
-        self.addSequential(PrintCommand('Testing PID driving'))
+        self.addSequential(PrintCommand("Testing PID driving"))
         self.addSequential(SetUseEncodersCommand(True))
-        self.addSequential(SetSpeedCommand(Config('DriveTrain/normalSpeed')))
+        self.addSequential(SetSpeedCommand(Config("DriveTrain/normalSpeed")))
         self.addSequential(MoveYCommand(1))
         self.addSequential(WaitCommand(2))
         self.addSequential(MoveYCommand(0))
         self.addSequential(WaitCommand(2))
-        self.addSequential(SetSpeedCommand(Config('DriveTrain/preciseSpeed')))
+        self.addSequential(SetSpeedCommand(Config("DriveTrain/preciseSpeed")))
         self.addSequential(MoveYCommand(-1))
         self.addSequential(WaitCommand(2))
         self.addSequential(MoveYCommand(0))
         self.addSequential(WaitCommand(2))
-        self.addSequential(PrintCommand('Generating starting P value'))
+        self.addSequential(PrintCommand("Generating starting P value"))
         self.addSequential(CalculateErrorCommand(1))
         self.addSequential(CalculateErrorCommand(-1))
         self.addSequential(PrintCommand(output.strip()))
-        self.addSequential(
-            AlertCommand('You may now disable the robot', 'Info')
-        )
+        self.addSequential(AlertCommand("You may now disable the robot", "Info"))
