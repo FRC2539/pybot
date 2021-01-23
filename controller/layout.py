@@ -9,6 +9,7 @@ from commands.drivetrain.togglefieldorientationcommand import (
     ToggleFieldOrientationCommand,
 )
 from commands.drivetrain.curvecommand import CurveCommand
+from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 
 from commands.resetcommand import ResetCommand
 
@@ -32,6 +33,7 @@ def init():
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
 
+    driveControllerOne.RightThumb.whenPressed(ZeroCANCodersCommand())
     driveControllerOne.BottomThumb.toggleWhenPressed(
         CurveCommand([120, 120], [120, 120], 60)
     )  # (120, 120) @ max of 60 in/sec

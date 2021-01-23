@@ -13,18 +13,43 @@ class PortsList:
 
 drivetrain = PortsList()
 
+# The PDP is/should be ID 16.
+
 """CAN IDs for motors"""
-drivetrain.frontLeftDriveID = 1
-drivetrain.frontRightDriveID = 43
-drivetrain.backLeftDriveID = 42
-drivetrain.backRightDriveID = 4
+drivetrain.frontLeftDriveID = 0
+drivetrain.frontRightDriveID = 2
+drivetrain.backLeftDriveID = 1
+drivetrain.backRightDriveID = 3
 
-drivetrain.frontLeftTurnID = 2
+drivetrain.frontLeftTurnID = 4
 drivetrain.frontRightTurnID = 6
-drivetrain.backLeftTurnID = 7
-drivetrain.backRightTurnID = 8
+drivetrain.backLeftTurnID = 5
+drivetrain.backRightTurnID = 7
 
-drivetrain.frontLeftCANCoder = 3
-drivetrain.frontRightCANCoder = 10
-drivetrain.backLeftCANCoder = 11
-drivetrain.backRightCANCoder = 12
+drivetrain.frontLeftCANCoder = 17
+drivetrain.frontRightCANCoder = 19
+drivetrain.backLeftCANCoder = 18
+drivetrain.backRightCANCoder = 20
+
+limelight = PortsList()
+limelight.port = 8
+
+ballsystem = PortsList()
+ballsystem.motorOneID = 9
+ballsystem.motorTwoID = 13
+
+turret = PortsList()
+turret.motorID = 10
+
+hood = PortsList()
+hood.motorID = 11
+
+intake = PortsList()
+intake.motorID = 12
+
+shooter = PortsList()
+shooter.motorOneID = 14
+shooter.motorTwoID = 15
+
+pcm = PortsList()
+pcm.port = 21
