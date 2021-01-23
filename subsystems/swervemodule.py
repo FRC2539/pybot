@@ -25,10 +25,16 @@ class SwerveModule:
 
         TODO:
         - Organize method definitions into logical order.
+        - Get the position of the motor on startup with CANCoder,
+          then, convert that to IntegratedSensor ticks, and 
+          set that as the integrated sensor's current 
+          position. At that point, we should be able to use 
+          the TalonFX and its integrated sensor to 
+          control the position. 
         """
-
-        self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
-
+        
+        self.driveMotor = WPI_TalonFX(driveMotorID) # Declare and setup drive motor.
+        
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
         self.driveMotor.setSafetyEnabled(False)
         self.driveMotor.configSelectedFeedbackSensor(
@@ -95,10 +101,8 @@ class SwerveModule:
         """
         Get wheel angle relative to the robot.
         """
-        return self.turnMotor.getSelectedSensorPosition(
-            0
-        )  # Returns absolute position of CANCoder.
-
+        return self.cancoder.getAbsolutePosition()  # Returns absolute position of CANCoder.
+        
     def setWheelAngle(self, angle):
         """
         This will set the angle of the wheel, relative to the robot.
