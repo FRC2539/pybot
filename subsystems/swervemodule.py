@@ -109,43 +109,43 @@ class SwerveModule:
         0 degrees is facing forward. This will accept 0 - 360!
         """
 
-        #print("go " + str(self.degreesToTurnTicks(angle % 360)))
-        #print("at " + str(self.turnMotor.getSelectedSensorPosition(0)))
+        # print("go " + str(self.degreesToTurnTicks(angle % 360)))
+        # print("at " + str(self.turnMotor.getSelectedSensorPosition(0)))
 
         currentAngle = self.getWheelAngle() % 360
         goto = angle % 360
-        
+
         if goto != 0:
-            
-            mult = 1 # C
+
+            mult = 1  # C
             x = abs(currentAngle - goto)
             z = 360 - x
-            
+
             if x < z:
                 diff = x
             else:
                 diff = z
-            
-            if x > 180: # This means we must have passed 360. 
-                if goto > currentAngle: # Choose direction.
-                    mult = -1 # CC
+
+            if x > 180:  # This means we must have passed 360.
+                if goto > currentAngle:  # Choose direction.
+                    mult = -1  # CC
             else:
-                if currentAngle > goto: # Choose direction.
+                if currentAngle > goto:  # Choose direction.
                     mult = -1
-                
-            #z = 360 - abs(currentAngle - goto)
-            #x = abs(currentAngle - goto)
 
-            #if z < x:
-                #print('z')
-                #diff = self.degreesToTurnTicks(z)
-            #else:
-                #print('x')
-                #diff = self.degreesToTurnTicks(x)
+            # z = 360 - abs(currentAngle - goto)
+            # x = abs(currentAngle - goto)
 
-            print('at: ' + str(self.turnMotor.getSelectedSensorPosition(0)))
-            print('goto: ' + str(self.degreesToTurnTicks(diff * mult)))
-            
+            # if z < x:
+            # print('z')
+            # diff = self.degreesToTurnTicks(z)
+            # else:
+            # print('x')
+            # diff = self.degreesToTurnTicks(x)
+
+            print("at: " + str(self.turnMotor.getSelectedSensorPosition(0)))
+            print("goto: " + str(self.degreesToTurnTicks(diff * mult)))
+
             self.turnMotor.set(
                 TalonFXControlMode.Position,
                 self.turnMotor.getSelectedSensorPosition(0) + (diff * mult),
