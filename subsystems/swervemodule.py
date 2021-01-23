@@ -26,15 +26,15 @@ class SwerveModule:
         TODO:
         - Organize method definitions into logical order.
         - Get the position of the motor on startup with CANCoder,
-          then, convert that to IntegratedSensor ticks, and 
-          set that as the integrated sensor's current 
-          position. At that point, we should be able to use 
-          the TalonFX and its integrated sensor to 
-          control the position. 
+          then, convert that to IntegratedSensor ticks, and
+          set that as the integrated sensor's current
+          position. At that point, we should be able to use
+          the TalonFX and its integrated sensor to
+          control the position.
         """
-        
-        self.driveMotor = WPI_TalonFX(driveMotorID) # Declare and setup drive motor.
-        
+
+        self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
+
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
         self.driveMotor.setSafetyEnabled(False)
         self.driveMotor.configSelectedFeedbackSensor(
@@ -54,9 +54,7 @@ class SwerveModule:
 
         self.turnMotor.setNeutralMode(NeutralMode.Brake)
         self.turnMotor.setSafetyEnabled(False)
-        self.turnMotor.configIntegratedSensorInitializationStrategy(
-            SensorInitializationStrategy.BootToAbsolutePosition, 0
-        )  # Should remember invite.
+
         self.turnMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )  # Set the feedback sensor as remote.
@@ -83,7 +81,8 @@ class SwerveModule:
 
         self.speedLimit = speedLimit  # Pass the speed limit at instantiation so we can drive more easily. In inches per second.
 
-        self.setPID()
+        self.setPID()  # Sets the PID slots to values from the constants file.
+        self.setModuleProfile(0)  # Sets the PID profile for the module to follow.
 
     def updateWheelAngle(self):
         """
@@ -101,14 +100,19 @@ class SwerveModule:
         """
         Get wheel angle relative to the robot.
         """
-        return self.cancoder.getAbsolutePosition()  # Returns absolute position of CANCoder.
-        
+        return (
+            self.cancoder.getAbsolutePosition()
+        )  # Returns absolute position of CANCoder.
+
     def setWheelAngle(self, angle):
         """
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. This will accept 0 - 360!
         """
-        self.turnMotor.set(TalonFXControlMode.Position, angle)
+        self.turnMotor.set(
+            TalonFXControlMode.Position, self.degreesToTurnTicks(angle % 360)
+        )
+        # The modulo operator makes sure it's 0-360, even if it comes -180-180.
 
     def getWheelSpeed(self, inIPS=True):
         """
@@ -124,7 +128,8 @@ class SwerveModule:
 
     def setWheelSpeed(self, speed):
         """
-        This will set the speed of the drive motor to a set velocity. Given in inches per second.
+        This will set the speed of the drive motor to a set velocity. 'speed' is given as a
+        percent, which is multiplied by 'self.speedLimit', a max speed in inches per second.
         """
         self.driveMotor.set(
             TalonFXControlMode.Velocity,
@@ -196,6 +201,15 @@ class SwerveModule:
         Convert a robot velocity to a legible one.
         """
         return self.driveTicksToInches(ticksPerTenth * 10)
+
+    def degreesToTurnTicks(self, degrees):
+        """
+        Convert the degrees read by something like a joystick or CANCoder to a
+        Falcon-settable value (ticks). This is for the turn motor!
+        """
+        return (degrees / 360) * (2048 * self.turnMotorGearRatio)
+        # Take a position, makes it a percent, and then multiplies it by the
+        # total number of ticks (motor units) in one full wheel rotation.
 
     def setModuleProfile(self, profile):
         """

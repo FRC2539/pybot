@@ -20,6 +20,7 @@ from subsystems.drivetrain import DriveTrain as drivetrain
 
 from commands.drivetrain.updatewheelanglescommand import UpdateWheelAnglesCommand
 
+
 class KryptonBot(CommandBasedRobot):
     """Implements a Command Based robot design"""
 
@@ -38,7 +39,7 @@ class KryptonBot(CommandBasedRobot):
         StartUpCommandGroup().start()
 
     def teleopInit(self):
-        UpdateWheelAnglesCommand().start() # Updates the encoder positons on boot and re-enable.
+        UpdateWheelAnglesCommand().start()  # Updates the encoder positons on boot and re-enable.
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""

@@ -19,8 +19,6 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        disablePrints()
-
         self.isFieldOriented = True
 
         self.wheelBase = (
@@ -34,27 +32,27 @@ class SwerveDrive(BaseDrive):
         )  # Override the basedrive without editing the file.
 
         self.modules = [
-            SwerveModule( # Front left module.
+            SwerveModule(  # Front left module.
                 ports.drivetrain.frontLeftDriveID,
-                ports.drivetrain.frontLeftTurnID, 
+                ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
             ),
-            SwerveModule( # Front right module.
+            SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
-                ports.drivetrain.frontRightTurnID,  
+                ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
             ),
-            SwerveModule( # Back left module.
+            SwerveModule(  # Back left module.
                 ports.drivetrain.backLeftDriveID,
-                ports.drivetrain.backLeftTurnID,  
+                ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
             ),
-            SwerveModule( # Back right module.
+            SwerveModule(  # Back right module.
                 ports.drivetrain.backRightDriveID,
-                ports.drivetrain.backRightTurnID,  
+                ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
             ),
@@ -181,9 +179,6 @@ class SwerveDrive(BaseDrive):
             # module.setWheelSpeed(speed)
             pass
 
-    def normalizeGyro(self, a):
-        return a - (math.floor(a / 360) * 360)
-
     def stop(self):
         for module in self.modules:
             module.stopModule()
@@ -229,3 +224,7 @@ class SwerveDrive(BaseDrive):
     ):  # Remember, provide these in inches. It will go forward/back x many inches.
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
+
+    def setModuleProfiles(self, id_=0):
+        for module in self.modules:
+            module.setModuleProfile(id_)

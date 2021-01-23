@@ -40,10 +40,4 @@ class DriveCommand(Command):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        # robot.drivetrain.move(
-        # logicalaxes.strafe.get(),
-        # y,
-        # logicalaxes.rotate.get()
-        # )
-
-        print(robot.drivetrain.getModuleAngles())
+        robot.drivetrain.move(logicalaxes.strafe.get(), y, logicalaxes.rotate.get())
