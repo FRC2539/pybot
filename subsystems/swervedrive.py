@@ -201,7 +201,7 @@ class SwerveDrive(BaseDrive):
     def updateModuleAngles(self):
         for module in self.modules:
             module.updateWheelAngle()
-            
+
     def updateCANCoders(self, positions: list):
         for module, position in zip(self.modules, positions):
             module.updateCANCoder(position)

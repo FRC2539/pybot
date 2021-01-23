@@ -94,10 +94,10 @@ class SwerveModule:
         # Take our position as a
         # percent and then multiplies it by the total number of ticks (motor units) in one full wheel rotation.
         self.turnMotor.getSensorCollection().setIntegratedSensorPosition(truePosition)
-        
+
     def updateCANCoder(self, val):
         """
-        Updates the value of the CANCoder. This is how we "zero" the entire swerve. 
+        Updates the value of the CANCoder. This is how we "zero" the entire swerve.
         """
         self.cancoder.setPosition(val, 0)
 
