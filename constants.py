@@ -14,22 +14,22 @@ IDs for the CANbus, sensors, PWM, and the liking.
 
 drivetrain = Constants()
 
-drivetrain.dPk = 0.01
+drivetrain.dPk = 0.04
 drivetrain.dIk = 0
-drivetrain.dDk = 0
+drivetrain.dDk = 0.3
 drivetrain.dFFk = 0
 drivetrain.dIZk = 0
 
-drivetrain.tPk = 10
+drivetrain.tPk = 20
 drivetrain.tIk = 0
-drivetrain.tDk = 100
+drivetrain.tDk = 0
 drivetrain.tFFk = 0
 drivetrain.tIZk = 0
 
 drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
 
-drivetrain.motionAcceleration = 10000
+drivetrain.motionAcceleration = 1000
 drivetrain.motionCruiseVelocity = 800
 
 drivetrain.wheelDiameter = 4
@@ -42,4 +42,5 @@ drivetrain.speedLimit = (
 )
 
 drivetrain.encoderConfig = CANCoderConfiguration()
-drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180
+drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
+drivetrain.encoderConfig.sensorDirection = False

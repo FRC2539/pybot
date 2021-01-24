@@ -152,7 +152,7 @@ class SwerveDrive(BaseDrive):
         coordinates have not changed.
         """
         if [x, y, rotate] == self.lastInputs:
-            pass  # return
+            return
 
         self.lastInputs = [x, y, rotate]
 
@@ -164,6 +164,8 @@ class SwerveDrive(BaseDrive):
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
         newSpeed = self.modules[0].setWheelAngle(angles[0], speeds[0])
+        self.modules[0].setWheelSpeed(newSpeed)
+        #self.modules[0].setWheelSpeed(newSpeed / 2)
         # print('new speed ' + str(newSpeed))
         # if (
         # x == 0 and y == 0 and rotate != 0

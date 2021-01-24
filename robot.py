@@ -19,6 +19,7 @@ from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 
 from commands.drivetrain.updatewheelanglescommand import UpdateWheelAnglesCommand
+from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 
 
 class KryptonBot(CommandBasedRobot):
@@ -37,10 +38,11 @@ class KryptonBot(CommandBasedRobot):
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().start()
+        ZeroCANCodersCommand().start()
 
     def teleopInit(self):
-        UpdateWheelAnglesCommand().start()  # Updates the encoder positons on boot and re-enable.
-
+        UpdateWheelAnglesCommand().start()
+        
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 

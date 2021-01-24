@@ -63,9 +63,12 @@ class SwerveModule:
         self.turnMotor.configMotionAcceleration(
             constants.drivetrain.motionAcceleration, 0
         )
+        
+        self.turnMotor.configRemoteFeedbackFilter(self.cancoder, 0, 0)
+        self.turnMotor.configSelectedFeedbackCoefficient(360 / 4096, 0, 0)
 
         self.turnMotor.configSelectedFeedbackSensor(
-            FeedbackDevice.IntegratedSensor, 0, 0
+            FeedbackDevice.RemoteSensor0, 0, 0
         )  # Set the feedback sensor as remote.
 
         self.tPk = constants.drivetrain.tPk  # P gain for the turn.
@@ -92,6 +95,8 @@ class SwerveModule:
 
         self.setPID()  # Sets the PID slots to values from the constants file.
         self.setModuleProfile(0)  # Sets the PID profile for the module to follow.
+        
+        self.updateWheelAngle()
 
     def updateWheelAngle(self):
         """
@@ -108,7 +113,9 @@ class SwerveModule:
         """
         Updates the value of the CANCoder. This is how we "zero" the entire swerve.
         """
-        self.cancoder.setPosition(val, 0)
+        self.cancoder.configMagnetOffset(val)
+        #self.cancoder.setPosition(0.0)
+        print('just reconfigured ' + str(self.cancoder.getAbsolutePosition()))
 
     def getWheelAngle(self):
         """
@@ -123,25 +130,32 @@ class SwerveModule:
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. Angles should be given -180 - 180.
         """
-        ticks = self.turnMotorGearRatio * 2048
-
-        angle /= 360  # This makes it -0.5 to 0.5
-
-        newAngle = angle * ticks
-
-        currentPos = self.turnMotor.getSelectedSensorPosition(0)
-        positionError = (newAngle - currentPos) % (ticks)
-
-        isInverted = abs(positionError) > 0.25 * (ticks)
-        if isInverted:
-            positionError -= math.copysign(0.5 * ticks, positionError)
-            driveSpeed = -driveSpeed  # Invert the drive.
-
-        print(
-            "setting " + str(currentPos + positionError) + " speed " + str(driveSpeed)
-        )
-        self.turnMotor.set(TalonFXControlMode.MotionMagic, currentPos + positionError)
-
+        
+        angle += 180
+        currentAngle = self.getWheelAngle()
+        currentAngle = self.turnMotor.getSelectedSensorPosition(0)
+        self.addcounter =0
+        self.minuscounter =0
+        self.loop = True
+        self.change = self.addcounter - self.minuscounter
+        angle += 360* self.change
+        while (self.loop):
+            self.tempangle = angle + 360
+            self.tempangle2 = angle - 360
+            if abs(currentAngle- self.tempangle) < abs(currentAngle - angle):
+                angle = self.tempangle
+                self.addcounter += 1
+            elif abs(currentAngle- self.tempangle2) < abs(currentAngle - angle):
+                angle = self.tempangle2
+                self.minuscounter +=1
+            else:
+                self.loop = False
+        diff = currentAngle - angle
+        print('diff ' + str(diff))
+        print('goto ' + str(angle))
+        print('cc?: ' + str(currentAngle))
+        self.turnMotor.set(TalonFXControlMode.MotionMagic, angle)#self.turnMotor.getSelectedSensorPosition(0) + diff)
+        
         return driveSpeed
 
     def getWheelSpeed(self, inIPS=True):
@@ -161,7 +175,6 @@ class SwerveModule:
         This will set the speed of the drive motor to a set velocity. 'speed' is given as a
         percent, which is multiplied by 'self.speedLimit', a max speed in inches per second.
         """
-        print(self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit * 0.5))
         self.driveMotor.set(
             TalonFXControlMode.Velocity,
             self.inchesPerSecondToTicksPerTenth(
