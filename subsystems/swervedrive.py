@@ -163,10 +163,8 @@ class SwerveDrive(BaseDrive):
 
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
-        print("a " + str(angles))
-
-        self.modules[0].setWheelAngle(angles[0])
-
+        newSpeed = self.modules[0].setWheelAngle(angles[0], speeds[0])
+        # print('new speed ' + str(newSpeed))
         # if (
         # x == 0 and y == 0 and rotate != 0
         # ):  # The robot won't apply power if it's just rotate (fsr?!)

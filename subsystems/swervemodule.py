@@ -55,10 +55,14 @@ class SwerveModule:
         self.turnMotor.setNeutralMode(NeutralMode.Brake)
         self.turnMotor.setSafetyEnabled(False)
 
-        self.turnMotor.configAllowableClosedloopError(0, 10, 0)
+        self.turnMotor.configAllowableClosedloopError(0, 0, 0)  # No errors allowed!
 
-        self.turnMotor.configMotionCruiseVelocity(15000, 0)
-        self.turnMotor.configMotionAcceleration(1500, 0)
+        self.turnMotor.configMotionCruiseVelocity(
+            constants.drivetrain.motionCruiseVelocity, 0
+        )
+        self.turnMotor.configMotionAcceleration(
+            constants.drivetrain.motionAcceleration, 0
+        )
 
         self.turnMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
@@ -114,12 +118,31 @@ class SwerveModule:
             self.cancoder.getAbsolutePosition()
         )  # Returns absolute position of CANCoder.
 
-    def setWheelAngle(self, angle):
+    def setWheelAngle(self, angle, driveSpeed):
         """
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. Angles should be given -180 - 180.
         """
-        pass
+        ticks = self.turnMotorGearRatio * 2048
+
+        angle /= 360  # This makes it -0.5 to 0.5
+
+        newAngle = angle * ticks
+
+        currentPos = self.turnMotor.getSelectedSensorPosition(0)
+        positionError = (newAngle - currentPos) % (ticks)
+
+        isInverted = abs(positionError) > 0.25 * (ticks)
+        if isInverted:
+            positionError -= math.copysign(0.5 * ticks, positionError)
+            driveSpeed = -driveSpeed  # Invert the drive.
+
+        print(
+            "setting " + str(currentPos + positionError) + " speed " + str(driveSpeed)
+        )
+        self.turnMotor.set(TalonFXControlMode.MotionMagic, currentPos + positionError)
+
+        return driveSpeed
 
     def getWheelSpeed(self, inIPS=True):
         """
