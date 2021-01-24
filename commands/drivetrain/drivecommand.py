@@ -41,5 +41,3 @@ class DriveCommand(Command):
                 self.lastY = y
 
         robot.drivetrain.move(logicalaxes.strafe.get(), y, logicalaxes.rotate.get())
-
-        # print(robot.drivetrain.getModuleAngles())

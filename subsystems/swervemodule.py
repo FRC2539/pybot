@@ -54,6 +54,11 @@ class SwerveModule:
 
         self.turnMotor.setNeutralMode(NeutralMode.Brake)
         self.turnMotor.setSafetyEnabled(False)
+        
+        self.turnMotor.configAllowableClosedloopError(0, 10, 0)
+        
+        self.turnMotor.configMotionCruiseVelocity(15000, 0)
+        self.turnMotor.configMotionAcceleration(1500, 0)
 
         self.turnMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
@@ -115,57 +120,41 @@ class SwerveModule:
         0 degrees is facing forward. This will accept 0 - 360!
         """
 
-        # print("go " + str(self.degreesToTurnTicks(angle % 360)))
-        # print("at " + str(self.turnMotor.getSelectedSensorPosition(0)))
-
         currentAngle = self.getWheelAngle() % 360
         goto = angle % 360
+        
+        diff = self.degreesToTurnTicks(currentAngle - goto)
 
-        if goto != 0:
 
-            mult = 1  # C
-            x = abs(currentAngle - goto)
-            z = 360 - x
+        mult = 1  # C
+        x = abs(currentAngle - goto)
 
-            if x < z:
-                diff = x
-            else:
-                diff = z
+        if x > 180:  # This means we must have passed 360.
+            if goto > currentAngle:  # Choose direction.
+                mult = -1  # CC
+        else:
+            if currentAngle > goto:  # Choose direction.
+                mult = -1
 
-            if x > 180:  # This means we must have passed 360.
-                if goto > currentAngle:  # Choose direction.
-                    mult = -1  # CC
-            else:
-                if currentAngle > goto:  # Choose direction.
-                    mult = -1
+        # z = 360 - abs(currentAngle - goto)
+        # x = abs(currentAngle - goto)
 
-            # z = 360 - abs(currentAngle - goto)
-            # x = abs(currentAngle - goto)
+        # if z < x:
+        # print('z')
+        # diff = self.degreesToTurnTicks(z)
+        # else:
+        # print('x')
+        # diff = self.degreesToTurnTicks(x)
 
-            # if z < x:
-            # print('z')
-            # diff = self.degreesToTurnTicks(z)
-            # else:
-            # print('x')
-            # diff = self.degreesToTurnTicks(x)
-
-            print("at: " + str(self.turnMotor.getSelectedSensorPosition(0)))
-            print("goto: " + str(self.degreesToTurnTicks(diff * mult)))
-
-            self.turnMotor.set(
-                TalonFXControlMode.Position,
-                self.turnMotor.getSelectedSensorPosition(0) + (diff * mult),
-            )
-
-        # print('go to ' +  str(angle)) Works but really slow and inaccurate - I need PID.
-
-        # offset = abs(angle - self.getWheelAngle())
-
-        # print(offset / 450)
-
-        # self.turnMotor.set(TalonFXControlMode.PercentOutput, math.copysign(offset / 450, angle - self.getWheelAngle()))
-
-        # The modulo operator makes sure it's 0-360, even if it comes -180-180.
+        print("at: " + str(self.turnMotor.getSelectedSensorPosition(0)))
+        print("goto: " + str(self.turnMotor.getClosedLoopTarget(0)))
+        
+        print('error: ' + str(self.turnMotor.getClosedLoopError(0)))
+        
+        self.turnMotor.set(
+            TalonFXControlMode.MotionMagic,
+            (self.degreesToTurnTicks(goto))
+        )
 
     def getWheelSpeed(self, inIPS=True):
         """
@@ -184,9 +173,12 @@ class SwerveModule:
         This will set the speed of the drive motor to a set velocity. 'speed' is given as a
         percent, which is multiplied by 'self.speedLimit', a max speed in inches per second.
         """
+        print(self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit * 0.5))
         self.driveMotor.set(
             TalonFXControlMode.Velocity,
-            self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit),
+            self.inchesPerSecondToTicksPerTenth(
+                speed * self.speedLimit * 0.5
+            ),  # Set half of the normal speed temporarily.
         )
 
     def getModulePosition(self, inInches=True):
@@ -260,7 +252,7 @@ class SwerveModule:
         Convert the degrees read by something like a joystick or CANCoder to a
         Falcon-settable value (ticks). This is for the turn motor!
         """
-        return (degrees / 360) * (2048 * self.turnMotorGearRatio)
+        return ((degrees % 360) / 360) * (2048 * self.turnMotorGearRatio)
         # Take a position, makes it a percent, and then multiplies it by the
         # total number of ticks (motor units) in one full wheel rotation.
 

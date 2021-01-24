@@ -14,15 +14,15 @@ IDs for the CANbus, sensors, PWM, and the liking.
 
 drivetrain = Constants()
 
-drivetrain.dPk = 0.001
+drivetrain.dPk = 0.01
 drivetrain.dIk = 0
 drivetrain.dDk = 0
 drivetrain.dFFk = 0
 drivetrain.dIZk = 0
 
-drivetrain.tPk = 0.02
+drivetrain.tPk = 0.17
 drivetrain.tIk = 0
-drivetrain.tDk = 0.01
+drivetrain.tDk = 0.2
 drivetrain.tFFk = 0.0001
 drivetrain.tIZk = 0
 
@@ -35,7 +35,7 @@ drivetrain.wheelBase = 23.5
 drivetrain.trackWidth = 23.5
 
 drivetrain.speedLimit = (
-    160.0  # in inches per second (if you have feet per second, divide by 12!)
+    160.0  # in inches per second (if you have feet per second, multiply by 12!)
 )
 
 drivetrain.encoderConfig = CANCoderConfiguration()
