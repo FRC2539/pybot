@@ -27,4 +27,4 @@ class ThrustmasterJoystick(GenericController):
 
     namedAxes = {"X": 0, "Y": 1, "Z": 2, "Slider": 3}
 
-    invertedAxes = ["Y", "Slider"]
+    invertedAxes = ["Slider"]

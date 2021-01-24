@@ -17,7 +17,7 @@ import constants
 
 class SwerveModule:
     def __init__(
-        self, driveMotorID, turnMotorID, canCoderID, speedLimit
+        self, driveMotorID, turnMotorID, canCoderID, speedLimit, offset, invertedDrive=False
     ):  # Get the ports of the devices for a module.
 
         """
@@ -37,6 +37,7 @@ class SwerveModule:
 
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
         self.driveMotor.setSafetyEnabled(False)
+        self.driveMotor.setInverted(invertedDrive)
         self.driveMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
@@ -49,6 +50,8 @@ class SwerveModule:
 
         self.cancoder = CANCoder(canCoderID)  # Declare and setup the remote encoder.
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
+        self.cancoder.setPositionToAbsolute()
+        self.cancoder.configMagnetOffset(offset)
 
         self.turnMotor = WPI_TalonFX(turnMotorID)  # Declare and setup turn motor.
 
@@ -125,20 +128,21 @@ class SwerveModule:
             self.cancoder.getAbsolutePosition()
         )  # Returns absolute position of CANCoder.
 
-    def setWheelAngle(self, angle, driveSpeed):
+    def setWheelAngle(self, angle):
         """
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. Angles should be given -180 - 180.
         """
-        
         angle += 180
-        currentAngle = self.getWheelAngle()
+        
+        angle = (angle + 180) % 360 # Takes the opposite so right isn't left. 
+        
         currentAngle = self.turnMotor.getSelectedSensorPosition(0)
-        self.addcounter =0
-        self.minuscounter =0
+        self.addcounter = 0 # Counts how many times we exceed 360.
+        self.minuscounter = 0 # Counts how many times we go below 0.
         self.loop = True
         self.change = self.addcounter - self.minuscounter
-        angle += 360* self.change
+        angle += 360 * self.change
         while (self.loop):
             self.tempangle = angle + 360
             self.tempangle2 = angle - 360
@@ -147,17 +151,12 @@ class SwerveModule:
                 self.addcounter += 1
             elif abs(currentAngle- self.tempangle2) < abs(currentAngle - angle):
                 angle = self.tempangle2
-                self.minuscounter +=1
+                self.minuscounter += 1
             else:
                 self.loop = False
-        diff = currentAngle - angle
-        print('diff ' + str(diff))
-        print('goto ' + str(angle))
-        print('cc?: ' + str(currentAngle))
+        
         self.turnMotor.set(TalonFXControlMode.MotionMagic, angle)#self.turnMotor.getSelectedSensorPosition(0) + diff)
         
-        return driveSpeed
-
     def getWheelSpeed(self, inIPS=True):
         """
         Get the speed of this specific module.

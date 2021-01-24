@@ -38,7 +38,6 @@ class KryptonBot(CommandBasedRobot):
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().start()
-        ZeroCANCodersCommand().start()
 
     def teleopInit(self):
         UpdateWheelAnglesCommand().start()

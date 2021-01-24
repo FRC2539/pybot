@@ -14,10 +14,10 @@ IDs for the CANbus, sensors, PWM, and the liking.
 
 drivetrain = Constants()
 
-drivetrain.dPk = 0.04
+drivetrain.dPk = 0.0085
 drivetrain.dIk = 0
-drivetrain.dDk = 0.3
-drivetrain.dFFk = 0
+drivetrain.dDk = 0
+drivetrain.dFFk = 0.25 # 1?
 drivetrain.dIZk = 0
 
 drivetrain.tPk = 20
