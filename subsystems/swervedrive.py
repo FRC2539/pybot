@@ -163,25 +163,25 @@ class SwerveDrive(BaseDrive):
 
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
-        print('a ' + str(angles))
-        
+        print("a " + str(angles))
+
         self.modules[0].setWheelAngle(angles[0])
 
-        #if (
-            #x == 0 and y == 0 and rotate != 0
-        #):  # The robot won't apply power if it's just rotate (fsr?!)
-            #for module, angle in zip(
-                #self.modules, angles
-            #):  # You're going to need encoders, so only focus here.
-                #module.setWheelAngle(angle)
-                #module.setWheelSpeed(rotate)
+        # if (
+        # x == 0 and y == 0 and rotate != 0
+        # ):  # The robot won't apply power if it's just rotate (fsr?!)
+        # for module, angle in zip(
+        # self.modules, angles
+        # ):  # You're going to need encoders, so only focus here.
+        # module.setWheelAngle(angle)
+        # module.setWheelSpeed(rotate)
 
-        #else:
-            #for module, speed, angle in zip(
-                #self.modules, speeds, angles
-            #):  # You're going to need encoders, so only focus here.
-                #module.setWheelAngle(angle)
-                #module.setWheelSpeed(speed)
+        # else:
+        # for module, speed, angle in zip(
+        # self.modules, speeds, angles
+        # ):  # You're going to need encoders, so only focus here.
+        # module.setWheelAngle(angle)
+        # module.setWheelSpeed(speed)
 
     def stop(self):
         for module in self.modules:

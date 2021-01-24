@@ -54,9 +54,9 @@ class SwerveModule:
 
         self.turnMotor.setNeutralMode(NeutralMode.Brake)
         self.turnMotor.setSafetyEnabled(False)
-        
+
         self.turnMotor.configAllowableClosedloopError(0, 10, 0)
-        
+
         self.turnMotor.configMotionCruiseVelocity(15000, 0)
         self.turnMotor.configMotionAcceleration(1500, 0)
 
@@ -117,44 +117,9 @@ class SwerveModule:
     def setWheelAngle(self, angle):
         """
         This will set the angle of the wheel, relative to the robot.
-        0 degrees is facing forward. This will accept 0 - 360!
+        0 degrees is facing forward. Angles should be given -180 - 180.
         """
-
-        currentAngle = self.getWheelAngle() % 360
-        goto = angle % 360
-        
-        diff = self.degreesToTurnTicks(currentAngle - goto)
-
-
-        mult = 1  # C
-        x = abs(currentAngle - goto)
-
-        if x > 180:  # This means we must have passed 360.
-            if goto > currentAngle:  # Choose direction.
-                mult = -1  # CC
-        else:
-            if currentAngle > goto:  # Choose direction.
-                mult = -1
-
-        # z = 360 - abs(currentAngle - goto)
-        # x = abs(currentAngle - goto)
-
-        # if z < x:
-        # print('z')
-        # diff = self.degreesToTurnTicks(z)
-        # else:
-        # print('x')
-        # diff = self.degreesToTurnTicks(x)
-
-        print("at: " + str(self.turnMotor.getSelectedSensorPosition(0)))
-        print("goto: " + str(self.turnMotor.getClosedLoopTarget(0)))
-        
-        print('error: ' + str(self.turnMotor.getClosedLoopError(0)))
-        
-        self.turnMotor.set(
-            TalonFXControlMode.MotionMagic,
-            (self.degreesToTurnTicks(goto))
-        )
+        pass
 
     def getWheelSpeed(self, inIPS=True):
         """
