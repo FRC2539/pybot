@@ -18,3 +18,5 @@ class ZeroCANCodersCommand(InstantCommand):
         offsets = [-angle for angle in robot.drivetrain.getModuleAngles()]
 
         robot.drivetrain.updateCANCoders(offsets)
+        
+        print('my angles (zeroes)' + str(robot.drivetrain.getModuleAngles()))
