@@ -18,7 +18,6 @@ from wpilib.command import Subsystem
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 
-from commands.drivetrain.updatewheelanglescommand import UpdateWheelAnglesCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 
 
@@ -39,9 +38,6 @@ class KryptonBot(CommandBasedRobot):
 
         StartUpCommandGroup().start()
 
-    def teleopInit(self):
-        UpdateWheelAnglesCommand().start()
-        
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 

@@ -17,7 +17,13 @@ import constants
 
 class SwerveModule:
     def __init__(
-        self, driveMotorID, turnMotorID, canCoderID, speedLimit, offset, invertedDrive=False
+        self,
+        driveMotorID,
+        turnMotorID,
+        canCoderID,
+        speedLimit,
+        offset,
+        invertedDrive=False,
     ):  # Get the ports of the devices for a module.
 
         """
@@ -50,8 +56,6 @@ class SwerveModule:
 
         self.cancoder = CANCoder(canCoderID)  # Declare and setup the remote encoder.
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
-        self.cancoder.setPositionToAbsolute()
-        self.cancoder.configMagnetOffset(offset)
 
         self.turnMotor = WPI_TalonFX(turnMotorID)  # Declare and setup turn motor.
 
@@ -66,7 +70,7 @@ class SwerveModule:
         self.turnMotor.configMotionAcceleration(
             constants.drivetrain.motionAcceleration, 0
         )
-        
+
         self.turnMotor.configRemoteFeedbackFilter(self.cancoder, 0, 0)
         self.turnMotor.configSelectedFeedbackCoefficient(360 / 4096, 0, 0)
 
@@ -98,27 +102,16 @@ class SwerveModule:
 
         self.setPID()  # Sets the PID slots to values from the constants file.
         self.setModuleProfile(0)  # Sets the PID profile for the module to follow.
-        
-        self.updateWheelAngle()
-
-    def updateWheelAngle(self):
-        """
-        Get the wheel's actual position when we turn-on/enable the robot.
-        'truePosition' is the angle of the wheel in pseudo-absolute encoder
-        ticks.
-        """
-        truePosition = self.degreesToTurnTicks(self.cancoder.getAbsolutePosition())
-        # Take our position as a
-        # percent and then multiplies it by the total number of ticks (motor units) in one full wheel rotation.
-        self.turnMotor.getSensorCollection().setIntegratedSensorPosition(truePosition)
 
     def updateCANCoder(self, val):
         """
         Updates the value of the CANCoder. This is how we "zero" the entire swerve.
         """
         self.cancoder.configMagnetOffset(val)
-        #self.cancoder.setPosition(0.0)
-        print('just reconfigured ' + str(self.cancoder.getAbsolutePosition()))
+        print(
+            "just reconfigured (hopefully zero) "
+            + str(self.cancoder.getAbsolutePosition())
+        )
 
     def getWheelAngle(self):
         """
@@ -134,29 +127,31 @@ class SwerveModule:
         0 degrees is facing forward. Angles should be given -180 - 180.
         """
         angle += 180
-        
-        angle = (angle + 180) % 360 # Takes the opposite so right isn't left. 
-        
+
+        angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
+
         currentAngle = self.turnMotor.getSelectedSensorPosition(0)
-        self.addcounter = 0 # Counts how many times we exceed 360.
-        self.minuscounter = 0 # Counts how many times we go below 0.
+        self.addcounter = 0  # Counts how many times we exceed 360.
+        self.minuscounter = 0  # Counts how many times we go below 0.
         self.loop = True
         self.change = self.addcounter - self.minuscounter
         angle += 360 * self.change
-        while (self.loop):
+        while self.loop:
             self.tempangle = angle + 360
             self.tempangle2 = angle - 360
-            if abs(currentAngle- self.tempangle) < abs(currentAngle - angle):
+            if abs(currentAngle - self.tempangle) < abs(currentAngle - angle):
                 angle = self.tempangle
                 self.addcounter += 1
-            elif abs(currentAngle- self.tempangle2) < abs(currentAngle - angle):
+            elif abs(currentAngle - self.tempangle2) < abs(currentAngle - angle):
                 angle = self.tempangle2
                 self.minuscounter += 1
             else:
                 self.loop = False
-        
-        self.turnMotor.set(TalonFXControlMode.MotionMagic, angle)#self.turnMotor.getSelectedSensorPosition(0) + diff)
-        
+
+        self.turnMotor.set(
+            TalonFXControlMode.MotionMagic, angle
+        )  # self.turnMotor.getSelectedSensorPosition(0) + diff)
+
     def getWheelSpeed(self, inIPS=True):
         """
         Get the speed of this specific module.

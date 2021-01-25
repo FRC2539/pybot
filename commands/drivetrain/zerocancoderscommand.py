@@ -4,14 +4,17 @@ import robot
 
 
 class ZeroCANCodersCommand(InstantCommand):
-    def __init__(self, CANCoderVals: list = [-71.0, 0.0, 0.0, 0.0]):
+    def __init__(self):
         super().__init__("Zero CANCoders")
 
-        # Doesn't work. Maybe it can't use it while its being used?
+        """
+        Used to zero the CANCoders. Ensure all wheels are straight, then 
+        call this command. 
+        """
 
-        self.positions = CANCoderVals
+        self.requires(robot.drivetrain)
 
     def initialize(self):
-        robot.drivetrain.updateCANCoders(self.positions)
-        robot.drivetrain.updateModuleAngles()
-        print("Zeroed CANCoders!")
+        offsets = [-angle for angle in robot.drivetrain.getModuleAngles()]
+
+        robot.drivetrain.updateCANCoders(offsets)

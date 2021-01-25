@@ -1,4 +1,8 @@
-from ctre import CANCoderConfiguration, AbsoluteSensorRange
+from ctre import (
+    CANCoderConfiguration,
+    AbsoluteSensorRange,
+    SensorInitializationStrategy,
+)
 
 
 class Constants:
@@ -17,7 +21,7 @@ drivetrain = Constants()
 drivetrain.dPk = 0.0085
 drivetrain.dIk = 0
 drivetrain.dDk = 0
-drivetrain.dFFk = 0.25 # 1?
+drivetrain.dFFk = 0.25  # 1?
 drivetrain.dIZk = 0
 
 drivetrain.tPk = 20
@@ -43,4 +47,7 @@ drivetrain.speedLimit = (
 
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
+drivetrain.encoderConfig.initializationStrategy = (
+    SensorInitializationStrategy.BootToAbsolutePosition
+)
 drivetrain.encoderConfig.sensorDirection = False
