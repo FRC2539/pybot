@@ -130,7 +130,7 @@ class SwerveModule:
 
         angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
 
-        currentAngle = self.turnMotor.getSelectedSensorPosition(0) # TODO: Make this the "self.getWheelAngle()""
+        currentAngle = self.getWheelAngle()
         self.addcounter = 0  # Counts how many times we exceed 360.
         self.minuscounter = 0  # Counts how many times we go below 0.
         self.loop = True

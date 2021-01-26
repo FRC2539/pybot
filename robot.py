@@ -18,8 +18,6 @@ from wpilib.command import Subsystem
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 
-from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
-
 
 class KryptonBot(CommandBasedRobot):
     """Implements a Command Based robot design"""
@@ -31,9 +29,11 @@ class KryptonBot(CommandBasedRobot):
             import mockdata
 
         self.subsystems()
+
         controller.layout.init()
         driverhud.init()
 
+        from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().start()

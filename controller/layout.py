@@ -33,7 +33,7 @@ def init():
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.RightThumb.whenPressed(ZeroCANCodersCommand())
+    driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
     driveControllerOne.BottomThumb.toggleWhenPressed(
         CurveCommand([120, 120], [120, 120], 60)
     )  # (120, 120) @ max of 60 in/sec
