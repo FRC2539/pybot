@@ -37,14 +37,14 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -187.0,
+                -251.37,
             ),
             SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
-                -273,
+                -271.9,
                 invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
@@ -52,14 +52,14 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
-                -42,
+                -38.8,
             ),
             SwerveModule(  # Back right module.
                 ports.drivetrain.backRightDriveID,
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -129,
+                -130.6,
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -98,7 +98,7 @@ class SwerveDrive(BaseDrive):
             y = temp
 
         """
-        The bottom part is the most confusing part, but it basically uses ratios and vectors with the 
+        The bottom part is the most confusing part, but it basically uses ratios and vectors with the
         pythagorean theorem to calculate the velocities.
         """
         A = x - rotate * (self.wheelBase / self.r)  # Use variables to simplify it.
@@ -121,6 +121,8 @@ class SwerveDrive(BaseDrive):
 
         newSpeeds = speeds  # Do NOT delete! This IS used!
         newAngles = angles
+
+        print("a " + str(newAngles))
 
         maxSpeed = max(speeds)  # Find the largest speed.
         minSpeed = min(speeds)  # Find the smallest speed.
@@ -157,7 +159,7 @@ class SwerveDrive(BaseDrive):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
-        if [x, y, rotate] == self.lastInputs:
+        if [x, y, rotate] == self.lastInputs or [x, y, rotate] == [0, 0, 0]:
             return
 
         self.lastInputs = [x, y, rotate]
@@ -169,21 +171,21 @@ class SwerveDrive(BaseDrive):
 
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
-        if (
-            x == 0 and y == 0 and rotate != 0
-        ):  # The robot won't apply power if it's just rotate (fsr?!)
-            for module, angle in zip(
-                self.modules, angles
-            ):  # You're going to need encoders, so only focus here.
-                module.setWheelAngle(angle + 180)
-                module.setWheelSpeed(rotate)
+        # if (
+        # x == 0 and y == 0 and rotate != 0
+        # ):  # The robot won't apply power if it's just rotate (fsr?!)
+        # for module, angle in zip(
+        # self.modules, angles
+        # ):  # You're going to need encoders, so only focus here.
+        # module.setWheelAngle(angle + 180)
+        # module.setWheelSpeed(rotate)
 
-        else:
-            for module, speed, angle in zip(
-                self.modules, speeds, angles
-            ):  # You're going to need encoders, so only focus here.
-                module.setWheelAngle(angle)
-                module.setWheelSpeed(speed)
+        # else:
+        # for module, speed, angle in zip(
+        # self.modules, speeds, angles
+        # ):  # You're going to need encoders, so only focus here.
+        # module.setWheelAngle(angle)
+        # module.setWheelSpeed(speed)
 
     def stop(self):
         for module in self.modules:

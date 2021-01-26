@@ -22,7 +22,7 @@ class SwerveModule:
         turnMotorID,
         canCoderID,
         speedLimit,
-        offset,
+        offset=None,
         invertedDrive=False,
     ):  # Get the ports of the devices for a module.
 
@@ -55,7 +55,11 @@ class SwerveModule:
         self.dIZk = constants.drivetrain.dIZk  # Integral Zone for the drive
 
         self.cancoder = CANCoder(canCoderID)  # Declare and setup the remote encoder.
+        self.cancoder.setPositionToAbsolute()
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
+
+        if offset is not None:
+            self.cancoder.configMagnetOffset(offset)
 
         self.turnMotor = WPI_TalonFX(turnMotorID)  # Declare and setup turn motor.
 
@@ -107,18 +111,14 @@ class SwerveModule:
         """
         Updates the value of the CANCoder. This is how we "zero" the entire swerve.
         """
-        self.cancoder.configMagnetOffset(val)
-        print(
-            "just reconfigured (hopefully zero) "
-            + str(self.cancoder.getAbsolutePosition())
-        )
+        print("just reconfigured (hopefully zero) " + str(self.getWheelAngle()))
 
     def getWheelAngle(self):
         """
         Get wheel angle relative to the robot.
         """
         return (
-            self.cancoder.getAbsolutePosition()
+            self.cancoder.getPosition()  # Do NOT call self.cancoder.getAbsolutePosition(). Wanna kms.
         )  # Returns absolute position of CANCoder.
 
     def setWheelAngle(self, angle):
@@ -130,7 +130,7 @@ class SwerveModule:
 
         angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
 
-        currentAngle = self.turnMotor.getSelectedSensorPosition(0)
+        currentAngle = self.getWheelAngle()
         self.addcounter = 0  # Counts how many times we exceed 360.
         self.minuscounter = 0  # Counts how many times we go below 0.
         self.loop = True

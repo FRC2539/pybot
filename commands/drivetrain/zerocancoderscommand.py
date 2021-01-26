@@ -1,10 +1,10 @@
-from wpilib.command import InstantCommand
+from wpilib.command import Command
 
 import robot
 
 
-class ZeroCANCodersCommand(InstantCommand):
-    def __init__(self):
+class ZeroCANCodersCommand(Command):
+    def __init__(self, offsets=[-255.9375, -271.9, -41.8, -130.1]):
         super().__init__("Zero CANCoders")
 
         """
@@ -14,9 +14,14 @@ class ZeroCANCodersCommand(InstantCommand):
 
         self.requires(robot.drivetrain)
 
-    def initialize(self):
-        offsets = [-angle for angle in robot.drivetrain.getModuleAngles()]
+        self.offsets = offsets
 
-        robot.drivetrain.updateCANCoders(offsets)
-        
-        print('my angles (zeroes)' + str(robot.drivetrain.getModuleAngles()))
+    def initialize(self):
+        print("the fuck aren't you running")
+
+        robot.drivetrain.updateCANCoders(self.offsets)
+
+        print("my angles (zeroes)" + str(robot.drivetrain.getModuleAngles()))
+
+    def end(self):
+        pass
