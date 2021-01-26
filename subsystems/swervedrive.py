@@ -83,6 +83,9 @@ class SwerveDrive(BaseDrive):
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
         """
+        
+        #TODO: Try this tonight: x = -x # Invert this way so we don't invert the rotate too. 
+        
         theta = self.getAngleTo(0) * (
             math.pi / 180
         )  # Gets the offset to zero, -180 to 180.
