@@ -82,8 +82,7 @@ class SwerveDrive(BaseDrive):
         """
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
-        """
-        #rotate = -rotate
+
         
         theta = self.getAngleTo(0) * (
             math.pi / 180
@@ -112,8 +111,7 @@ class SwerveDrive(BaseDrive):
         ws3 = math.sqrt(A ** 2 + D ** 2)  # Back left speed
         ws4 = math.sqrt(A ** 2 + C ** 2)  # Back right speed
 
-        wa1 = math.atan2(B, D) * 180 / math.pi   # Front left angle (degrees)
-        wa2 = math.atan2(B, C) * 180 / math.pi # Front right angle
+
         wa3 = math.atan2(A, D) * 180 / math.pi  # Back left angle
         wa4 = math.atan2(A, C) * 180 / math.pi  # Back right angle
 
