@@ -169,7 +169,7 @@ class SwerveDrive(BaseDrive):
         """Prevent drift caused by small input values"""
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
-        rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
+        rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
         #print('modified'+str(rotate))
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
@@ -187,7 +187,7 @@ class SwerveDrive(BaseDrive):
         self.modules, speeds, angles
         ):  # You're going to need encoders, so only focus here.
                 module.setWheelAngle(angle)
-                module.setWheelSpeed(abs(speed))
+                module.setWheelSpeed(abs(math.sqrt(speed**2+rotate**2)))
 
     def stop(self):
         for module in self.modules:
