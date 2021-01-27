@@ -83,6 +83,8 @@ class SwerveDrive(BaseDrive):
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
         """
+        #rotate = -rotate
+        
         theta = self.getAngleTo(0) * (
             math.pi / 180
         )  # Gets the offset to zero, -180 to 180.
@@ -91,9 +93,7 @@ class SwerveDrive(BaseDrive):
             self.isFieldOriented
         ):  # Are we field-centric, as opposed to robot-centric. A tank drive is robot-centric, for example.
 
-            temp = y * math.cos(theta) + x * math.sin(
-                theta
-            )  # just the new y value being temporarily stored.
+            temp = y * math.cos(theta) + x * math.sin(theta)  # just the new y value being temporarily stored.
             x = -y * math.sin(theta) + x * math.cos(theta)
             y = temp
 
@@ -101,6 +101,7 @@ class SwerveDrive(BaseDrive):
         The bottom part is the most confusing part, but it basically uses ratios and vectors with the
         pythagorean theorem to calculate the velocities.
         """
+        print(str(rotate))
         A = x - rotate * (self.wheelBase / self.r)  # Use variables to simplify it.
         B = x + rotate * (self.wheelBase / self.r)
         C = y - rotate * (self.trackWidth / self.r)
@@ -111,13 +112,13 @@ class SwerveDrive(BaseDrive):
         ws3 = math.sqrt(A ** 2 + D ** 2)  # Back left speed
         ws4 = math.sqrt(A ** 2 + C ** 2)  # Back right speed
 
-        wa1 = math.atan2(B, D) * 180 / math.pi  # Front left angle (degrees)
-        wa2 = math.atan2(B, C) * 180 / math.pi  # Front right angle
+        wa1 = math.atan2(B, D) * 180 / math.pi   # Front left angle (degrees)
+        wa2 = math.atan2(B, C) * 180 / math.pi # Front right angle
         wa3 = math.atan2(A, D) * 180 / math.pi  # Back left angle
         wa4 = math.atan2(A, C) * 180 / math.pi  # Back right angle
 
-        speeds = [ws1, ws2, ws3, ws4]  # It is in order (FL, FR, BL, BR).
-        angles = [wa1, wa2, wa3, wa4]  # It is in order (FL, FR, BL, BR).
+        speeds = [ws2, ws1, ws4, ws3]  # It is in order (FL, FR, BL, BR).
+        angles = [wa2, wa1, wa4, wa3]  # It is in order (FL, FR, BL, BR).
 
         newSpeeds = speeds  # Do NOT delete! This IS used!
         newAngles = angles
@@ -163,29 +164,30 @@ class SwerveDrive(BaseDrive):
             return
 
         self.lastInputs = [x, y, rotate]
+        #print(str(rotate))
 
         """Prevent drift caused by small input values"""
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
         rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
-
+        #print('modified'+str(rotate))
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
-        # if (
-        # x == 0 and y == 0 and rotate != 0
-        # ):  # The robot won't apply power if it's just rotate (fsr?!)
-        # for module, angle in zip(
-        # self.modules, angles
-        # ):  # You're going to need encoders, so only focus here.
-        # module.setWheelAngle(angle + 180)
-        # module.setWheelSpeed(rotate)
+        if (
+        x == 0 and y == 0 and rotate != 0
+        ):  # The robot won't apply power if it's just rotate (fsr?!)
+            for module, angle in zip(
+            self.modules, angles
+        ):  # You're going to need encoders, so only focus here.
+                module.setWheelAngle(angle)
+                module.setWheelSpeed(abs(rotate))
 
-        # else:
-        # for module, speed, angle in zip(
-        # self.modules, speeds, angles
-        # ):  # You're going to need encoders, so only focus here.
-        # module.setWheelAngle(angle)
-        # module.setWheelSpeed(speed)
+        else:
+            for module, speed, angle in zip(
+        self.modules, speeds, angles
+        ):  # You're going to need encoders, so only focus here.
+                module.setWheelAngle(angle)
+                module.setWheelSpeed(abs(speed))
 
     def stop(self):
         for module in self.modules:

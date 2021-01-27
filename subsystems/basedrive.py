@@ -50,7 +50,10 @@ class BaseDrive(CougarSystem):
 
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
+        
+        self.setGyroAngle(-90)
         self.resetGyro()
+        
         self.flatAngle = 0
 
         """A record of the last arguments to move()"""
@@ -182,7 +185,6 @@ class BaseDrive(CougarSystem):
 
     def resetGyro(self):
         """Force the navX to consider the current angle to be zero degrees."""
-
         self.setGyroAngle(0)
 
     def setGyroAngle(self, angle):

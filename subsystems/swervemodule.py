@@ -125,10 +125,10 @@ class SwerveModule:
         """
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. Angles should be given -180 - 180.
-        """
-        angle += 180
+        #"""
+        #angle += 180
 
-        angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
+        #angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
 
         currentAngle = self.getWheelAngle()
         self.addcounter = 0  # Counts how many times we exceed 360.

@@ -26,6 +26,7 @@ class DriveCommand(Command):
 
     def execute(self):
         # Avoid quick changes in direction
+        print(robot.drivetrain.getAngle())
         y = logicalaxes.forward.get()
         if self.lastY is None:
             self.lastY = y
