@@ -5,7 +5,7 @@ import robot
 
 
 class MoveCommand(Command):
-    def __init__(self, distance, avoidCollisions=True, name=None):
+    def __init__(self, distance, angle=0, tolerance=3,  name=None):
         """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -16,70 +16,52 @@ class MoveCommand(Command):
 
         super().__init__(name, 0.2)
 
-        self.distance = distance
+        self.distance = -distance
+        self.angle = angle
+        self.tol = tolerance # Angle tolerance in degrees.
+        
         self.blocked = False
-        self.avoidCollisions = avoidCollisions
         self.requires(robot.drivetrain)
 
-    def _initialize(self):
-        super()._initialize()
-        self.precision = robot.drivetrain.inchesToTicks(1)
-
     def initialize(self):
-        self.obstacleCount = 0
-        self.blocked = False
-        self.onTarget = 0
-        self.targetPositions = []
-        offset = robot.drivetrain.inchesToTicks(self.distance)
-        sign = 1
-        for position in robot.drivetrain.getPositions():
-            self.targetPositions.append(position + offset * sign)
-            sign *= -1
+        robot.drivetrain.setModuleProfiles(1, turn=False)
 
-        robot.drivetrain.setPositions(self.targetPositions)
+        self.count = 0
+        self.startPos = robot.drivetrain.getPositions()
+        
+        robot.drivetrain.setModuleAngles(self.angle)
 
     def execute(self):
-        if self.avoidCollisions:
-            try:
-                if self.distance < 0:
-                    clearance = robot.drivetrain.getRearClearance()
+        self.count = 0
+        if self.count != 4:
+            for currentAngle in robot.drivetrain.getModuleAngles():
+                if abs(currentAngle - self.angle) < self.tol or abs(currentAngle - self.angle - 360)< self.tol:
+                    self.count += 1
                 else:
-                    clearance = robot.drivetrain.getFrontClearance()
-
-                if not self.blocked:
-                    if clearance < 10:
-                        if self.obstacleCount >= 10:
-                            self.blocked = True
-                            self.obstacleCount = 0
-                            robot.drivetrain.stop()
-                            robot.drivetrain.move(0, 0, 0)
-                            driverhud.showAlert("Obstacle Detected")
-                        else:
-                            self.obstacleCount += 1
-                    else:
-                        self.obstacleCount = 0
-
-                else:
-                    if clearance >= 20:
-                        if self.obstacleCount >= 10:
-                            self.blocked = False
-                            self.obstacleCount = 0
-                            robot.drivetrain.setPositions(self.targetPositions)
-                        else:
-                            self.obstacleCount += 1
-                    else:
-                        self.obstacleCount = 0
-
-            except NotImplementedError:
-                pass
-
+                    continue
+                    
+                
+        if self.count == 4: # All angles aligned.
+            robot.drivetrain.setPositions([
+                self.distance, 
+                self.distance,
+                self.distance,
+                self.distance
+                ])
+            
+            robot.drivetrain.setModuleAngles(self.angle)
+        
     def isFinished(self):
-        if self.blocked:
-            return False
-
-        if self.isTimedOut() and robot.drivetrain.atPosition(self.precision):
-            self.onTarget += 1
-        else:
-            self.onTarget = 0
-
-        return self.onTarget > 5
+        count = 0
+        for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
+            if abs(position - (start + self.distance) ) < 1:
+                count += 1
+            else:
+                return False
+                
+        if count == 4:
+            return True
+    
+    def end(self):
+        robot.drivetrain.stop()
+        robot.drivetrain.setModuleProfiles(0, turn=False)

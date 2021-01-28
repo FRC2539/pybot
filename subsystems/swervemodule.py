@@ -47,6 +47,8 @@ class SwerveModule:
         self.driveMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
+        
+        self.driveMotor.setSelectedSensorPosition(0)
 
         self.dPk = constants.drivetrain.dPk  # P gain for the drive.
         self.dIk = constants.drivetrain.dIk  # I gain for the drive
@@ -54,8 +56,18 @@ class SwerveModule:
         self.dFk = constants.drivetrain.dFFk  # Feedforward gain for the drive
         self.dIZk = constants.drivetrain.dIZk  # Integral Zone for the drive
 
+        self.sdPk = constants.drivetrain.sdPk  # P gain for the drive.
+        self.sdIk = constants.drivetrain.sdIk  # I gain for the drive
+        self.sdDk = constants.drivetrain.sdDk  # D gain for the drive
+        self.sdFk = constants.drivetrain.sdFFk  # Feedforward gain for the drive
+        self.sdIZk = constants.drivetrain.sdIZk  # Integral Zone for the drive
+
         self.cancoder = CANCoder(canCoderID)  # Declare and setup the remote encoder.
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
+        #self.cancoder.setPositionToAbsolute()
+        
+        if offset is not None:
+            self.cancoder.configMagnetOffset(offset)
 
         self.turnMotor = WPI_TalonFX(turnMotorID)  # Declare and setup turn motor.
 
@@ -107,18 +119,19 @@ class SwerveModule:
         """
         Updates the value of the CANCoder. This is how we "zero" the entire swerve.
         """
-        self.cancoder.configMagnetOffset(val)
-        print(
-            "just reconfigured (hopefully zero) "
-            + str(self.cancoder.getAbsolutePosition())
-        )
-
+        #self.cancoder.configMagnetOffset(val)
+        #print(
+            #"just reconfigured (hopefully zero) "
+            #+ str(self.cancoder.getPosition())
+        #)
+        pass
+    
     def getWheelAngle(self):
         """
         Get wheel angle relative to the robot.
         """
         return (
-            self.cancoder.getAbsolutePosition()
+            self.cancoder.getPosition()
         )  # Returns absolute position of CANCoder.
 
     def setWheelAngle(self, angle):
@@ -251,26 +264,33 @@ class SwerveModule:
         # Take a position, makes it a percent, and then multiplies it by the
         # total number of ticks (motor units) in one full wheel rotation.
 
-    def setModuleProfile(self, profile):
+    def setModuleProfile(self, profile, drive=True, turn=True):
         """
         Which PID profile to use.
         """
-        self.turnMotor.selectProfileSlot(profile, 0)
-        self.driveMotor.selectProfileSlot(profile, 0)
+        if turn:
+            self.turnMotor.selectProfileSlot(profile, 0)
+        if drive:
+            self.driveMotor.selectProfileSlot(profile, 0)
 
     def setPID(self):
         """
         Set the PID constants for the module.
         """
-        for slot in range(2):
-            self.driveMotor.config_kP(slot, self.dPk, 0)
-            self.driveMotor.config_kI(slot, self.dIk, 0)
-            self.driveMotor.config_kD(slot, self.dDk, 0)
-            self.driveMotor.config_kF(slot, self.dFk, 0)
-            self.driveMotor.config_IntegralZone(slot, self.dIZk, 0)
+        self.driveMotor.config_kP(0, self.dPk, 0)
+        self.driveMotor.config_kI(0, self.dIk, 0)
+        self.driveMotor.config_kD(0, self.dDk, 0)
+        self.driveMotor.config_kF(0, self.dFk, 0)
+        self.driveMotor.config_IntegralZone(0, self.dIZk, 0)
 
-            self.turnMotor.config_kP(slot, self.tPk, 0)
-            self.turnMotor.config_kI(slot, self.tIk, 0)
-            self.turnMotor.config_kD(slot, self.tDk, 0)
-            self.turnMotor.config_kF(slot, self.tFk, 0)
-            self.turnMotor.config_IntegralZone(slot, self.tIZk, 0)
+        self.driveMotor.config_kP(1, self.sdPk, 0)
+        self.driveMotor.config_kI(1, self.sdIk, 0)
+        self.driveMotor.config_kD(1, self.sdDk, 0)
+        self.driveMotor.config_kF(1, self.sdFk, 0)
+        self.driveMotor.config_IntegralZone(1, self.sdIZk, 0)
+
+        self.turnMotor.config_kP(0, self.tPk, 0)
+        self.turnMotor.config_kI(0, self.tIk, 0)
+        self.turnMotor.config_kD(0, self.tDk, 0)
+        self.turnMotor.config_kF(0, self.tFk, 0)
+        self.turnMotor.config_IntegralZone(0, self.tIZk, 0)

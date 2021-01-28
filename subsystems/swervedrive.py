@@ -37,14 +37,14 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -251.37,
+                -255.85,
             ),
             SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
-                -271.9,
+                -273.87,
                 invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
@@ -52,14 +52,14 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
-                -38.8,
+                -41.57,
             ),
             SwerveModule(  # Back right module.
                 ports.drivetrain.backRightDriveID,
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -130.6,
+                -129.9,
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -82,7 +82,7 @@ class SwerveDrive(BaseDrive):
         """
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
-
+        """
         
         theta = self.getAngleTo(0) * (
             math.pi / 180
@@ -100,7 +100,6 @@ class SwerveDrive(BaseDrive):
         The bottom part is the most confusing part, but it basically uses ratios and vectors with the
         pythagorean theorem to calculate the velocities.
         """
-        print(str(rotate))
         A = x - rotate * (self.wheelBase / self.r)  # Use variables to simplify it.
         B = x + rotate * (self.wheelBase / self.r)
         C = y - rotate * (self.trackWidth / self.r)
@@ -111,7 +110,8 @@ class SwerveDrive(BaseDrive):
         ws3 = math.sqrt(A ** 2 + D ** 2)  # Back left speed
         ws4 = math.sqrt(A ** 2 + C ** 2)  # Back right speed
 
-
+        wa1 = math.atan2(B, D) * 180 / math.pi  # Front left angle
+        wa2 = math.atan2(B, C) * 180 / math.pi  # Front right angle
         wa3 = math.atan2(A, D) * 180 / math.pi  # Back left angle
         wa4 = math.atan2(A, C) * 180 / math.pi  # Back right angle
 
@@ -120,8 +120,6 @@ class SwerveDrive(BaseDrive):
 
         newSpeeds = speeds  # Do NOT delete! This IS used!
         newAngles = angles
-
-        print("a " + str(newAngles))
 
         maxSpeed = max(speeds)  # Find the largest speed.
         minSpeed = min(speeds)  # Find the smallest speed.
@@ -158,7 +156,11 @@ class SwerveDrive(BaseDrive):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
-        if [x, y, rotate] == self.lastInputs or [x, y, rotate] == [0, 0, 0]:
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+        
+        if [x, y, rotate] == self.lastInputs:
             return
 
         self.lastInputs = [x, y, rotate]
@@ -211,7 +213,7 @@ class SwerveDrive(BaseDrive):
 
     def getModuleAngles(self):
         # Add module in front, not to be confused with gyro! Returns degrees.
-        return [module.getWheelAngle() for module in self.modules]
+        return [module.getWheelAngle() % 360 for module in self.modules]
 
     def setModuleAngles(self, angles: list):  # Set a list of different angles.
         for module, angle in zip(self.modules, angles):
@@ -232,6 +234,6 @@ class SwerveDrive(BaseDrive):
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
 
-    def setModuleProfiles(self, id_=0):
+    def setModuleProfiles(self, id_=0, drive=True, turn=True):
         for module in self.modules:
-            module.setModuleProfile(id_)
+            module.setModuleProfile(id_, drive, turn)

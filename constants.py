@@ -24,7 +24,13 @@ drivetrain.dDk = 0
 drivetrain.dFFk = 0.25  # 1?
 drivetrain.dIZk = 0
 
-drivetrain.tPk = 20
+drivetrain.sdPk = 0.0045
+drivetrain.sdIk = 0 
+drivetrain.sdDk = 0
+drivetrain.sdFFk = 0
+drivetrain.sdIZk = 0
+
+drivetrain.tPk = 20.05
 drivetrain.tIk = 0
 drivetrain.tDk = 0
 drivetrain.tFFk = 0
