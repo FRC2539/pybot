@@ -20,7 +20,7 @@ class MoveCommand(Command):
         self.angle = angle
         self.tol = tolerance # Angle tolerance in degrees.
         
-        self.blocked = False
+        self.moveSet = False
         self.requires(robot.drivetrain)
 
     def initialize(self):
@@ -33,7 +33,7 @@ class MoveCommand(Command):
 
     def execute(self):
         self.count = 0
-        if self.count != 4:
+        if self.count != 4 and not self.moveSet:
             for currentAngle in robot.drivetrain.getModuleAngles():
                 if abs(currentAngle - self.angle) < self.tol or abs(currentAngle - self.angle - 360)< self.tol:
                     self.count += 1
@@ -49,7 +49,9 @@ class MoveCommand(Command):
                 self.distance
                 ])
             
-            robot.drivetrain.setModuleAngles(self.angle)
+            self.moveSet = True
+            
+        robot.drivetrain.setModuleAngles(self.angle)
         
     def isFinished(self):
         count = 0
@@ -65,3 +67,4 @@ class MoveCommand(Command):
     def end(self):
         robot.drivetrain.stop()
         robot.drivetrain.setModuleProfiles(0, turn=False)
+        self.moveSet = False

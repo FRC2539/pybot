@@ -50,6 +50,9 @@ class SwerveModule:
         
         self.driveMotor.setSelectedSensorPosition(0)
 
+        self.driveMotor.configMotionCruiseVelocity(constants.drivetrain.driveMotionCruiseVelocity, 0)
+        self.driveMotor.configMotionAcceleration(constants.drivetrain.driveMotionAcceleration, 0)
+
         self.dPk = constants.drivetrain.dPk  # P gain for the drive.
         self.dIk = constants.drivetrain.dIk  # I gain for the drive
         self.dDk = constants.drivetrain.dDk  # D gain for the drive
@@ -77,10 +80,10 @@ class SwerveModule:
         self.turnMotor.configAllowableClosedloopError(0, 0, 0)  # No errors allowed!
 
         self.turnMotor.configMotionCruiseVelocity(
-            constants.drivetrain.motionCruiseVelocity, 0
+            constants.drivetrain.turnMotionCruiseVelocity, 0
         )
         self.turnMotor.configMotionAcceleration(
-            constants.drivetrain.motionAcceleration, 0
+            constants.drivetrain.turnMotionAcceleration, 0
         )
 
         self.turnMotor.configRemoteFeedbackFilter(self.cancoder, 0, 0)
@@ -210,7 +213,7 @@ class SwerveModule:
         Provide the distance in inches.
         """
         self.driveMotor.set(
-            TalonFXControlMode.Position,
+            TalonFXControlMode.MotionMagic,
             self.getModulePosition(False) + self.inchesToDriveTicks(distance),
         )
 

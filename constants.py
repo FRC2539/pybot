@@ -24,7 +24,7 @@ drivetrain.dDk = 0
 drivetrain.dFFk = 0.25  # 1?
 drivetrain.dIZk = 0
 
-drivetrain.sdPk = 0.0045
+drivetrain.sdPk = 0.11
 drivetrain.sdIk = 0 
 drivetrain.sdDk = 0
 drivetrain.sdFFk = 0
@@ -39,8 +39,11 @@ drivetrain.tIZk = 0
 drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
 
-drivetrain.motionAcceleration = 1000
-drivetrain.motionCruiseVelocity = 800
+drivetrain.driveMotionAcceleration = 10000
+drivetrain.driveMotionCruiseVelocity = 16000
+
+drivetrain.turnMotionAcceleration = 1000
+drivetrain.turnMotionCruiseVelocity = 800
 
 drivetrain.wheelDiameter = 4
 
