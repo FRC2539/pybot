@@ -83,7 +83,7 @@ class SwerveDrive(BaseDrive):
         'self.getAngle()' is the robot's heading, 
         multiply it by pi over 180 to convert to radians.
         """
-        
+
         theta = self.getAngleTo(0) * (
             math.pi / 180
         )  # Gets the offset to zero, -180 to 180.
@@ -92,7 +92,9 @@ class SwerveDrive(BaseDrive):
             self.isFieldOriented
         ):  # Are we field-centric, as opposed to robot-centric. A tank drive is robot-centric, for example.
 
-            temp = y * math.cos(theta) + x * math.sin(theta)  # just the new y value being temporarily stored.
+            temp = y * math.cos(theta) + x * math.sin(
+                theta
+            )  # just the new y value being temporarily stored.
             x = -y * math.sin(theta) + x * math.cos(theta)
             y = temp
 
@@ -159,35 +161,35 @@ class SwerveDrive(BaseDrive):
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
-        
+
         if [x, y, rotate] == self.lastInputs:
             return
 
         self.lastInputs = [x, y, rotate]
-        #print(str(rotate))
+        # print(str(rotate))
 
         """Prevent drift caused by small input values"""
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
         rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
-        #print('modified'+str(rotate))
+        # print('modified'+str(rotate))
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
         if (
-        x == 0 and y == 0 and rotate != 0
+            x == 0 and y == 0 and rotate != 0
         ):  # The robot won't apply power if it's just rotate (fsr?!)
             for module, angle in zip(
-            self.modules, angles
-        ):  # You're going to need encoders, so only focus here.
+                self.modules, angles
+            ):  # You're going to need encoders, so only focus here.
                 module.setWheelAngle(angle)
                 module.setWheelSpeed(abs(rotate))
 
         else:
             for module, speed, angle in zip(
-        self.modules, speeds, angles
-        ):  # You're going to need encoders, so only focus here.
+                self.modules, speeds, angles
+            ):  # You're going to need encoders, so only focus here.
                 module.setWheelAngle(angle)
-                module.setWheelSpeed(abs(math.sqrt(speed**2+rotate**2)))
+                module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
 
     def stop(self):
         for module in self.modules:

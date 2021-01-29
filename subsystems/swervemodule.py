@@ -47,11 +47,15 @@ class SwerveModule:
         self.driveMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
-        
+
         self.driveMotor.setSelectedSensorPosition(0)
 
-        self.driveMotor.configMotionCruiseVelocity(constants.drivetrain.driveMotionCruiseVelocity, 0)
-        self.driveMotor.configMotionAcceleration(constants.drivetrain.driveMotionAcceleration, 0)
+        self.driveMotor.configMotionCruiseVelocity(
+            constants.drivetrain.driveMotionCruiseVelocity, 0
+        )
+        self.driveMotor.configMotionAcceleration(
+            constants.drivetrain.driveMotionAcceleration, 0
+        )
 
         self.dPk = constants.drivetrain.dPk  # P gain for the drive.
         self.dIk = constants.drivetrain.dIk  # I gain for the drive
@@ -67,8 +71,8 @@ class SwerveModule:
 
         self.cancoder = CANCoder(canCoderID)  # Declare and setup the remote encoder.
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
-        #self.cancoder.setPositionToAbsolute()
-        
+        # self.cancoder.setPositionToAbsolute()
+
         if offset is not None:
             self.cancoder.configMagnetOffset(offset)
 
@@ -122,29 +126,27 @@ class SwerveModule:
         """
         Updates the value of the CANCoder. This is how we "zero" the entire swerve.
         """
-        #self.cancoder.configMagnetOffset(val)
-        #print(
-            #"just reconfigured (hopefully zero) "
-            #+ str(self.cancoder.getPosition())
-        #)
+        # self.cancoder.configMagnetOffset(val)
+        # print(
+        # "just reconfigured (hopefully zero) "
+        # + str(self.cancoder.getPosition())
+        # )
         pass
-    
+
     def getWheelAngle(self):
         """
         Get wheel angle relative to the robot.
         """
-        return (
-            self.cancoder.getPosition()
-        )  # Returns absolute position of CANCoder.
+        return self.cancoder.getPosition()  # Returns absolute position of CANCoder.
 
     def setWheelAngle(self, angle):
         """
         This will set the angle of the wheel, relative to the robot.
         0 degrees is facing forward. Angles should be given -180 - 180.
         #"""
-        #angle += 180
+        # angle += 180
 
-        #angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
+        # angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
 
         currentAngle = self.getWheelAngle()
         self.addcounter = 0  # Counts how many times we exceed 360.
