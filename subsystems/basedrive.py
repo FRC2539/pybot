@@ -187,6 +187,10 @@ class BaseDrive(CougarSystem):
         """Force the navX to consider the current angle to be zero degrees."""
         self.setGyroAngle(0)
 
+    def setModuleSpeed(self, speed):
+        pass
+    
+    
     def setGyroAngle(self, angle):
         """Tweak the gyro reading."""
 
