@@ -189,8 +189,7 @@ class BaseDrive(CougarSystem):
 
     def setModuleSpeed(self, speed):
         pass
-    
-    
+
     def setGyroAngle(self, angle):
         """Tweak the gyro reading."""
 
